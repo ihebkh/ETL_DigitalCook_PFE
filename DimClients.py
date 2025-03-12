@@ -52,6 +52,7 @@ def transform_data(mongo_data):
             continue  
         seen_matricules.add(matricule)
         transformed_data.append({
+            "_id": id,
             "matricule": matricule,
             "nom": record.get("nom"),
             "prenom": record.get("prenom"),
@@ -67,6 +68,7 @@ def transform_data(mongo_data):
             "niveau_etude_actuelle": record.get("profile", {}).get("niveau_etude_actuelle", None),
             "disponibilite": record.get("profile", {}).get("disponibilite", None)
         })
+        print(f"Transformed {(transformed_data)} ")
     return transformed_data
 
 def load_into_postgres(data):

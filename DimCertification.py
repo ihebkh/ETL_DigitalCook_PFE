@@ -12,13 +12,8 @@ def get_mongodb_connection():
     return client, mongo_db, collection
 
 def get_postgres_connection():
-    return psycopg2.connect(
-        dbname="DW_DigitalCook",
-        user="postgres",
-        password="admin",
-        host="localhost",
-        port="5432"
-    )
+    # Establish a connection to PostgreSQL
+    return psycopg2.connect(dbname="DW_DigitalCook", user='postgres', password='admin', host='localhost', port='5432')
 
 def generate_certification_code(existing_codes):
     if not existing_codes:
@@ -38,7 +33,7 @@ def validate_year_month(year, month):
 
 def extract_from_mongodb():
     client, _, collection = get_mongodb_connection()
-    mongo_data = collection.find({}, {"_id": 0, "profile.certifications": 1})
+    mongo_data = collection.find({}, {"_id": 1, "profile.certifications": 1})
 
     certifications = set() 
 
@@ -52,6 +47,11 @@ def extract_from_mongodb():
                         nom = certif.get("nomCertification", "").strip()
                         year = certif.get("year", "").strip()
                         month = certif.get("month", "").strip()
+
+                        # Debugging: print the extracted certification data
+                        print(f"Extracted Certification Data - Nom: {nom}, Year: {year}, Month: {month}")
+
+                        # Validate and process year and month
                         year, month = validate_year_month(year, month)
 
                         if nom:
@@ -59,7 +59,10 @@ def extract_from_mongodb():
 
     client.close()
     
-    print(" Certifications extraites :", certifications)
+    print("Certifications extraites :")
+    for certification in certifications:
+        print(f"Nom: {certification[0]}, Year: {certification[1]}, Month: {certification[2]}")  # Display each certification
+    
     return [{"certificationCode": None, "nom": c[0], "year": c[1], "month": c[2]} for c in certifications]
 
 def load_into_postgres(data):

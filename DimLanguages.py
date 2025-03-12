@@ -32,31 +32,48 @@ def generate_langue_code(existing_codes):
 
 def extract_from_mongodb():
     client, _, collection = get_mongodb_connection()
-    mongo_data = collection.find({}, {"_id": 0, "profile.languages": 1})
+    mongo_data = collection.find({}, {"_id": 0, "profile.languages": 1, "simpleProfile.languages": 1})
 
     languages = []
-    existing_labels = set()  
+    existing_labels = set()
+
     for user in mongo_data:
-        if isinstance(user, dict) and "profile" in user and isinstance(user["profile"], dict):
-            language_list = user["profile"].get("languages", [])
+        if isinstance(user, dict):
+            if "profile" in user and isinstance(user["profile"], dict):
+                language_list = user["profile"].get("languages", [])
+                if isinstance(language_list, list):
+                    for lang in language_list:
+                        if isinstance(lang, dict):
+                            label = lang.get("label", "").strip()
+                            level = lang.get("level", "").strip()
 
-            if isinstance(language_list, list):  
-                for lang in language_list:
-                    if isinstance(lang, dict):  
-                        label = lang.get("label", "").strip()
-                        level = lang.get("level", "").strip()
+                            if label and level and label not in existing_labels:
+                                existing_labels.add(label)
+                                languages.append({
+                                    "langue_code": None,
+                                    "label": label,
+                                    "level": level
+                                })
+            
+            if "simpleProfile" in user and isinstance(user["simpleProfile"], dict):
+                language_list = user["simpleProfile"].get("languages", [])
+                if isinstance(language_list, list):
+                    for lang in language_list:
+                        if isinstance(lang, dict):
+                            label = lang.get("label", "").strip()
+                            level = lang.get("level", "").strip()
 
-                        if label and level and label not in existing_labels:
-                            existing_labels.add(label)
-                            languages.append({
-                                "langue_code": None,  
-                                "label": label,
-                                "level": level
-                            })
+                            if label and level and label not in existing_labels:
+                                existing_labels.add(label)
+                                languages.append({
+                                    "langue_code": None,
+                                    "label": label,
+                                    "level": level
+                                })
 
     client.close()
     
-    print(" Langues extraites :", languages)  
+    print("Langues extraites:", languages)
     return languages
 
 def load_into_postgres(data):
@@ -77,21 +94,22 @@ def load_into_postgres(data):
     SET level = %s
     WHERE langue_code = %s;
     """
-
     for record in data:
-        if record["langue_code"] is None:  
+        if record["langue_code"] is None:
             record["langue_code"] = generate_langue_code(existing_codes)
-            existing_codes.add(record["langue_code"])  
+            existing_codes.add(record["langue_code"])
 
         values = (
             record["langue_code"],
             record["label"],
             record["level"],
         )
+
         cur.execute("""
         SELECT 1 FROM dim_languages
         WHERE label = %s AND level = %s
         """, (record["label"], record["level"]))
+
         if cur.fetchone():
             print(f" Mise à jour de l'intérêt : {values}")
             cur.execute(update_query, (record["level"], record["langue_code"]))
@@ -102,7 +120,6 @@ def load_into_postgres(data):
     conn.commit()
     cur.close()
     conn.close()
-
 def main():
     print("--- Extraction et chargement des langues ---")
     
@@ -110,9 +127,9 @@ def main():
     
     if raw_data:
         load_into_postgres(raw_data)
-        print(" Données insérées/mises à jour avec succès dans PostgreSQL.")
+        print("Données insérées/mises à jour avec succès dans PostgreSQL.")
     else:
-        print(" Aucune donnée à insérer.")
+        print("Aucune donnée à insérer.")
 
 if __name__ == "__main__":
     main()
