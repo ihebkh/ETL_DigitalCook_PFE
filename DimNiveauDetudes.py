@@ -42,7 +42,7 @@ def generate_diplome_code(existing_codes):
 
 def extract_from_mongodb():
     client, _, collection = get_mongodb_connection()
-    mongo_data = collection.find({}, {"_id": 0, "profile.niveauDetudes": 1})
+    mongo_data = collection.find({}, {"_id": 0, "profile.niveauDetudes": 1, "simpleProfile.niveauDetudes": 1})
 
     niveaux_etudes = []
     
@@ -52,7 +52,25 @@ def extract_from_mongodb():
             
             if isinstance(niveau_list, list):
                 for niveau in niveau_list:
-                    if isinstance(niveau, dict):  
+                    if isinstance(niveau, dict) and niveau.get("label"):
+                        niveaux_etudes.append({
+                            "diplome_code": None,  
+                            "label": niveau.get("label"),
+                            "universite": niveau.get("universite"),
+                            "start_year": safe_int(niveau.get("du", {}).get("year", "")),
+                            "start_month": safe_int(niveau.get("du", {}).get("month", "")),
+                            "end_year": safe_int(niveau.get("au", {}).get("year", "")),
+                            "end_month": safe_int(niveau.get("au", {}).get("month", "")),
+                            "nom_diplome": niveau.get("nomDiplome"),
+                            "pays": niveau.get("pays"),
+                        })
+
+        if isinstance(user, dict) and "simpleProfile" in user and isinstance(user["simpleProfile"], dict):
+            niveau_list = user["simpleProfile"].get("niveauDetudes", [])
+            
+            if isinstance(niveau_list, list):
+                for niveau in niveau_list:
+                    if isinstance(niveau, dict) and niveau.get("label"):
                         niveaux_etudes.append({
                             "diplome_code": None,  
                             "label": niveau.get("label"),
@@ -89,6 +107,10 @@ def load_into_postgres(data):
     """
 
     for record in data:
+        if not any([record.get("label"), record.get("universite"), record.get("nom_diplome")]):
+            print(f"Skipping record with missing essential data: {record}")
+            continue
+
         if record["diplome_code"] is None:  
             record["diplome_code"] = generate_diplome_code(existing_codes)
             existing_codes.add(record["diplome_code"])  

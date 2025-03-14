@@ -30,18 +30,27 @@ def generate_competence_code(existing_codes):
 
 def extract_from_mongodb():
     client, _, collection = get_mongodb_connection()
-    mongo_data = collection.find({}, {"_id": 0, "profile.competenceGenerales": 1})
+    mongo_data = collection.find({}, {"_id": 0, "profile.competenceGenerales": 1, "simpleProfile.competenceGenerales": 1})
 
     competences = set()
 
     for user in mongo_data:
-        if isinstance(user, dict) and "profile" in user and isinstance(user["profile"], dict):
-            user_competences = user["profile"].get("competenceGenerales", [])
+        if isinstance(user, dict):
+            # Processing profile competences
+            if "profile" in user and isinstance(user["profile"], dict):
+                user_competences = user["profile"].get("competenceGenerales", [])
+                if isinstance(user_competences, list):
+                    for competence in user_competences:
+                        if isinstance(competence, str) and competence.strip(): 
+                            competences.add(competence.strip())
 
-            if isinstance(user_competences, list):
-                for competence in user_competences:
-                    if isinstance(competence, str) and competence.strip(): 
-                        competences.add(competence.strip())
+            # Processing simpleProfile competences
+            if "simpleProfile" in user and isinstance(user["simpleProfile"], dict):
+                user_competences = user["simpleProfile"].get("competenceGenerales", [])
+                if isinstance(user_competences, list):
+                    for competence in user_competences:
+                        if isinstance(competence, str) and competence.strip(): 
+                            competences.add(competence.strip())
 
     client.close()
     

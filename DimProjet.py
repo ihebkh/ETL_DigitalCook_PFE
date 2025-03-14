@@ -5,13 +5,13 @@ def get_mongodb_connection():
     MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
     MONGO_DB = "PowerBi"
     MONGO_COLLECTION = "frontusers"
-
+    
     client = MongoClient(MONGO_URI)
     mongo_db = client[MONGO_DB]
     collection = mongo_db[MONGO_COLLECTION]
     return client, mongo_db, collection
 
-def get_postgres_connection():
+def get_postgresql_connection():
     return psycopg2.connect(
         dbname="DW_DigitalCook",
         user="postgres",
@@ -27,7 +27,7 @@ def safe_int(value):
         return None
 
 def get_existing_projects():
-    conn = get_postgres_connection()
+    conn = get_postgresql_connection()
     cur = conn.cursor()
     cur.execute("SELECT nom_projet, entreprise, code_projet FROM dim_projet")
     existing_projects = {(row[0], row[1]): row[2] for row in cur.fetchall()}
@@ -46,15 +46,31 @@ def generate_project_code(existing_codes):
 
 def extract_from_mongodb():
     client, _, collection = get_mongodb_connection()
-    mongo_data = collection.find({}, {"_id": 0, "profile.projets": 1})
+    mongo_data = collection.find({}, {"_id": 0, "profile.projets": 1, "simpleProfile.projets": 1})
 
     projects = []
     
     for user in mongo_data:
         if isinstance(user, dict) and "profile" in user and isinstance(user["profile"], dict):
-            projets_list = user["profile"].get("projets", [])
-            
-            if isinstance(projets_list, list):
+            profile = user["profile"]
+            if "projets" in profile:
+                projets_list = profile["projets"]
+                for project in projets_list:
+                    if isinstance(project, dict): 
+                        projects.append({
+                            "nom_projet": project.get("nomProjet"),
+                            "year_start": safe_int(project.get("dateDebut", {}).get("year", "")),
+                            "month_start": safe_int(project.get("dateDebut", {}).get("month", "")),
+                            "year_end": safe_int(project.get("dateFin", {}).get("year", "")),
+                            "month_end": safe_int(project.get("dateFin", {}).get("month", "")),
+                            "entreprise": project.get("entreprise"),
+                            "code_projet": None 
+                        })
+        
+        if isinstance(user, dict) and "simpleProfile" in user and isinstance(user["simpleProfile"], dict):
+            simpleProfile = user["simpleProfile"]
+            if "projets" in simpleProfile:
+                projets_list = simpleProfile["projets"]
                 for project in projets_list:
                     if isinstance(project, dict): 
                         projects.append({
@@ -90,7 +106,7 @@ def transform_data(mongo_data, existing_projects):
     return list(unique_projects.values())
 
 def load_into_postgres(data):
-    conn = get_postgres_connection()
+    conn = get_postgresql_connection()
     cur = conn.cursor()
 
     insert_query = """

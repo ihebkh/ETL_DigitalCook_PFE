@@ -15,36 +15,40 @@ def get_postgres_connection():
 
 def extract_from_mongodb():
     client, _, collection = get_mongodb_connection()
-    mongo_data = list(collection.find({}, {"_id": 0, "profile": 1}))
+    mongo_data = list(collection.find({}, {"_id": 0, "profile": 1, "simpleProfile": 1})) 
     client.close()
     return mongo_data
 
 def transform_data(mongo_data):
     transformed_data = []
-    visa_counter = 1  
+    visa_counter = 1
 
     for record in mongo_data:
-        profile = record.get("profile", {})
-        visas = profile.get("visa", [])
+        profiles = [record.get("profile", {})]
+        simple_profile = record.get("simpleProfile", {})
+        if simple_profile:
+            profiles.append(simple_profile)
 
-        for visa in visas:
-            if not visa:
-                continue
+        for profile_item in profiles:
+            visas = profile_item.get("visa", [])
 
-            transformed_data.append({
-                "visa_code": f"VISA{str(visa_counter).zfill(2)}",  
-                "visa_type": visa.get("type", "").strip() or None,
-                "date_entree": visa.get("dateEntree"),
-                "date_sortie": visa.get("dateSortie"),
-                "destination": visa.get("destination", "").strip() or None,
-                "duree": visa.get("dureeValidite", {}).get("duree", 0),
-                "duree_type": visa.get("dureeValidite", {}).get("type", "").strip() or None,
-                "nb_entree": visa.get("nbEntree", "").strip() or None
-            })
-            visa_counter += 1  
+            for visa in visas:
+                if not visa:
+                    continue 
+                
+                transformed_data.append({
+                    "visa_code": f"VISA{str(visa_counter).zfill(2)}",
+                    "visa_type": visa.get("type", "").strip() or None,
+                    "date_entree": visa.get("dateEntree"),
+                    "date_sortie": visa.get("dateSortie"),
+                    "destination": visa.get("destination", "").strip() or None,
+                    "duree": visa.get("dureeValidite", {}).get("duree", 0),
+                    "duree_type": visa.get("dureeValidite", {}).get("type", "").strip() or None,
+                    "nb_entree": visa.get("nbEntree", "").strip() or None
+                })
+                visa_counter += 1
 
     return transformed_data
-
 
 def load_into_postgres(data):
     conn = get_postgres_connection()
@@ -61,6 +65,7 @@ def load_into_postgres(data):
         duree = EXCLUDED.duree,
         duree_type = EXCLUDED.duree_type,
         nb_entree = EXCLUDED.nb_entree
+    RETURNING visacode, visa_type, date_entree, date_sortie, destination, duree, duree_type, nb_entree, xmin;
     """
 
     for record in data:
@@ -75,6 +80,12 @@ def load_into_postgres(data):
             record["nb_entree"]
         )
         cur.execute(insert_query, values)
+        result = cur.fetchone()
+        if result:
+            if result[-1] == 0:
+                print(f"Inserted new record: {result}")
+            else:
+                print(f"Updated existing record: {result}")
 
     conn.commit()
     cur.close()
@@ -89,7 +100,10 @@ def main():
 
     transformed_data = transform_data(raw_data)
     if transformed_data:
-        print(" Données transformées :", transformed_data)
+        print(" Données transformées :")
+        for record in transformed_data:
+            print(f"visa_code: {record['visa_code']}, visa_type: {record['visa_type']}, date_entree: {record['date_entree']}, date_sortie: {record['date_sortie']}, destination: {record['destination']}, duree: {record['duree']}, duree_type: {record['duree_type']}, nb_entree: {record['nb_entree']}")
+        
         load_into_postgres(transformed_data)
         print(" Données insérées/mises à jour avec succès dans PostgreSQL.")
     else:
