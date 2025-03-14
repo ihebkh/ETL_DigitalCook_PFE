@@ -1,6 +1,6 @@
 import psycopg2
 from pymongo import MongoClient
-import re  # Pour filtrer les codes valides
+import re
 
 def get_mongodb_connection():
     MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
@@ -22,7 +22,6 @@ def get_postgres_connection():
     )
 
 def generate_interests_code(existing_codes):
-    # Filtrer les codes valides (par exemple, INT001, INT002, etc.)
     valid_codes = [code for code in existing_codes if re.match(r"^INT\d{3}$", code)]
     
     if not valid_codes:
@@ -34,33 +33,35 @@ def generate_interests_code(existing_codes):
 
 def extract_from_mongodb():
     client, _, collection = get_mongodb_connection()
-    mongo_data = collection.find({}, {"_id": 0, "profile.interests": 1})
+    mongo_data = collection.find({}, {"_id": 0, "matricule": 1, "profile.interests": 1, "simpleProfile.interests": 1})
 
-    interests = set() 
+    interests = set()
 
     for user in mongo_data:
-        if isinstance(user, dict) and "profile" in user and isinstance(user["profile"], dict):
-            user_interests = user["profile"].get("interests", [])
-
-            if isinstance(user_interests, list):
-                for interest in user_interests:
-                    if isinstance(interest, str) and interest.strip(): 
-                        interests.add(interest.strip())
+        if isinstance(user, dict):
+            if "profile" in user and isinstance(user["profile"], dict):
+                user_interests = user["profile"].get("interests", [])
+                if isinstance(user_interests, list):
+                    for interest in user_interests:
+                        if isinstance(interest, str) and interest.strip():
+                            interests.add(interest.strip())
+            if "simpleProfile" in user and isinstance(user["simpleProfile"], dict):
+                user_interests = user["simpleProfile"].get("interests", [])
+                if isinstance(user_interests, list):
+                    for interest in user_interests:
+                        if isinstance(interest, str) and interest.strip():
+                            interests.add(interest.strip())
 
     client.close()
     
-    print(" Intérêts extraits :", interests) 
+    print(" Intérêts extraits :", interests)
     return [{"interestsCode": None, "interests": i} for i in interests]
 
 def load_into_postgres(data):
     conn = get_postgres_connection()
     cur = conn.cursor()
-
-    # Récupérer les intérêts déjà existants dans la base de données
     cur.execute("SELECT interests FROM Dim_interests")
     existing_interests = {row[0] for row in cur.fetchall()}
-
-    # Récupérer les codes existants
     cur.execute("SELECT interestsCode FROM Dim_interests")
     existing_codes = {row[0] for row in cur.fetchall()}
 
@@ -77,19 +78,14 @@ def load_into_postgres(data):
     """
 
     for record in data:
-        # Générer un code unique pour l'intérêt
         if record["interestsCode"] is None:
             record["interestsCode"] = generate_interests_code(existing_codes)
             existing_codes.add(record["interestsCode"])
-
-        # Vérifier si l'intérêt existe déjà
         if record["interests"] in existing_interests:
             print(f" Mise à jour de l'intérêt : {record['interests']}")
-            # Mettre à jour l'intérêt existant
             cur.execute(update_query, (record["interests"], record["interestsCode"]))
         else:
             print(f" Insertion de l'intérêt : {record['interests']}")
-            # Insérer un nouvel intérêt
             cur.execute(insert_query, (record["interestsCode"], record["interests"]))
 
     conn.commit()

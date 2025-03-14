@@ -1,6 +1,17 @@
 import psycopg2
 from pymongo import MongoClient
 
+# Function to get the PostgreSQL connection
+def get_postgres_connection():
+    return psycopg2.connect(
+        dbname="DW_DigitalCook",
+        user='postgres',
+        password='admin',
+        host='localhost',
+        port='5432'
+    )
+
+# Function to get the MongoDB connection
 def get_mongodb_connection():
     MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
     MONGO_DB = "PowerBi"
@@ -13,139 +24,241 @@ def get_mongodb_connection():
     secteur_collection = mongo_db[MONGO_SECTEUR_COLLECTION]
     return client, mongo_db, collection, secteur_collection
 
-def get_postgresql_connection():
-    conn = psycopg2.connect(
-        dbname="DW_DigitalCook",
-        user="postgres",
-        password="admin",
-        host="localhost",
-        port="5432"
-    )
-    return conn
+# Function to generate a unique factcode
+def generate_factcode(counter):
+    return f"fact{counter:04d}"
 
-def get_secteur_pk_from_postgres(rome_code):
-    conn = get_postgresql_connection()
-    cursor = conn.cursor()
+# Function to retrieve client_fk from PostgreSQL using matricule
+def get_client_fk_from_postgres(matricule):
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT client_pk 
+        FROM public.dim_client 
+        WHERE matricule = %s;
+    """, (str(matricule),))
     
-    query = "SELECT secteur_pk FROM public.dim_secteur WHERE romecode_jobs = %s"
-    cursor.execute(query, (rome_code,))
-    result = cursor.fetchone()
+    result = cur.fetchone()
     
-    cursor.close()
+    cur.close()
     conn.close()
     
     if result:
-        return result[0]  
+        return result[0]  # Return client_fk if found
     else:
-        return None 
+        return None  # No client_fk found
 
-def insert_or_update_experience(codeexperience, role, entreprise, start_year, start_month, end_year, end_month, pays, secteur_fk, ville, type_contrat):
-    start_year = int(start_year) if start_year and start_year != "" else None
-    start_month = int(start_month) if start_month and start_month != "" else None
-    end_year = int(end_year) if end_year and end_year != "" else None
-    end_month = int(end_month) if end_month and end_month != "" else None
-
-    conn = get_postgresql_connection()
-    cursor = conn.cursor()
-
-    query = """
-        INSERT INTO public.dim_experience 
-        (codeexperience, role, entreprise, start_year, start_month, end_year, end_month, pays, fk_secteur, ville, typecontrat)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        ON CONFLICT (codeexperience) DO UPDATE SET
-            role = EXCLUDED.role,
-            entreprise = EXCLUDED.entreprise,
-            start_year = EXCLUDED.start_year,
-            start_month = EXCLUDED.start_month,
-            end_year = EXCLUDED.end_year,
-            end_month = EXCLUDED.end_month,
-            pays = EXCLUDED.pays,
-            fk_secteur = EXCLUDED.fk_secteur,
-            ville = EXCLUDED.ville,
-            typecontrat = EXCLUDED.typecontrat
-        RETURNING codeexperience, xmin;
-    """
+# Function to get competence_fk from PostgreSQL based on competence name
+def get_competence_fk_from_postgres(competence_name):
+    conn = get_postgres_connection()
+    cur = conn.cursor()
     
-    cursor.execute(query, (codeexperience, role, entreprise, start_year, start_month, end_year, end_month, pays, secteur_fk, ville, type_contrat))
-    conn.commit()
+    competence_name = competence_name.strip().lower()  # Normalize the competence name
+    
+    cur.execute("""
+        SELECT competence_pk 
+        FROM public.dim_competence_generale 
+        WHERE competence_name = %s;
+    """, (competence_name,))
+    
+    result = cur.fetchone()
+    
+    cur.close()
+    conn.close()
+    
+    if result:
+        return result[0]  # Return competence_fk if found
+    else:
+        return None  # No competence_fk found
 
-    updated_row = cursor.fetchone()
-    print(f"Inserted/Updated: {updated_row}")
+# Function to get language_fk from PostgreSQL based on language label and level
+def get_language_fk_from_postgres(language_label, language_level):
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    
+    cur.execute("""
+        SELECT langue_pk 
+        FROM public.dim_languages 
+        WHERE label = %s AND level = %s;
+    """, (language_label, language_level))
+    
+    result = cur.fetchone()
+    
+    cur.close()
+    conn.close()
+    
+    if result:
+        return result[0]  # Return language_fk if found
+    else:
+        return None  # No language_fk found
 
-    cursor.close()
+# Function to get interest_pk from PostgreSQL based on interest name
+def get_interest_pk_from_postgres(interest_name):
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    
+    interest_name = interest_name.strip().lower()  # Normalize the interest name
+    
+    cur.execute("""
+        SELECT interests_pk 
+        FROM public.dim_interests 
+        WHERE interests = %s;
+    """, (interest_name,))
+    
+    result = cur.fetchone()
+    
+    cur.close()
+    conn.close()
+    
+    if result:
+        return result[0]  # Return interest_pk if found
+    else:
+        return None  # No interest_pk found
+
+# Function to get preferedjoblocations_pk from PostgreSQL based on location
+def get_preferedjoblocations_pk_from_postgres(pays, ville, region):
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT preferedjoblocations_pk 
+        FROM public.dim_preferedjoblocations 
+        WHERE pays = %s AND ville = %s AND region = %s;
+    """, (pays, ville, region))
+
+    result = cur.fetchone()
+    cur.close()
     conn.close()
 
-def extract_experiences_and_insert_or_update():
+    if result:
+        return result[0]  # Return preferedjoblocations_pk if found
+    else:
+        return None  # No preferedjoblocations_pk found
+
+# Function to insert a new prefered job location into PostgreSQL
+def insert_new_preferred_job_location(pays, ville, region):
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        INSERT INTO public.dim_preferedjoblocations (pays, ville, region)
+        VALUES (%s, %s, %s)
+        RETURNING preferedjoblocations_pk;
+    """, (pays, ville, region))
+
+    new_pk = cur.fetchone()[0]
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return new_pk
+
+# Function to process the data and generate the factcode, client_fk, language_fk, competence_fk, interest_pk, and preferedjoblocations_pk
+def match_and_display_factcode_client_competence_interest():
     client, mongo_db, collection, secteur_collection = get_mongodb_connection()
-    
-    documents = collection.find({})  
-    code_index = 1 
-    for doc in documents:
-        document_id = doc.get('_id', 'Non spécifié')
-        print(f"Document ID: {document_id}")
-        
-        experiences = doc.get('profile', {}).get('experiences', [])
-        
-        if not experiences:
-            print("Pas d'expérience trouvée.")
+
+    # Retrieve all documents from MongoDB
+    mongo_data = collection.find({}, {"_id": 0, "matricule": 1, "profile.competenceGenerales": 1, "profile.languages": 1, "profile.interests": 1, "profile.preferedJobLocations": 1, "simpleProfile.languages": 1, "simpleProfile.preferedJobLocations": 1})
+
+    global_factcode_counter = 1  # Initialize a global counter for factcode
+    line_count = 0  # Line counter
+
+    # Loop through each document in MongoDB
+    for user in mongo_data:
+        matricule = user.get("matricule", None)
+        competenceGenerales = user.get("profile", {}).get("competenceGenerales", [])
+        languages = user.get("profile", {}).get("languages", [])
+        interests = user.get("profile", {}).get("interests", [])
+        preferedJobLocations = user.get("profile", {}).get("preferedJobLocations", [])
+        simpleProfile_languages = user.get("simpleProfile", {}).get("languages", [])
+        simpleProfile_preferedJobLocations = user.get("simpleProfile", {}).get("preferedJobLocations", [])
+
+        # Get client_fk from PostgreSQL
+        client_fk = get_client_fk_from_postgres(matricule)
+
+        # Proceed if client_fk is found
+        if client_fk:
+            client_has_experience_or_language_or_interest_or_location = False  # Flag for checking if there is any experience, language, interest, or location
+
+            # Display client_fk
+            print(f"Matricule: {matricule}, client_fk: {client_fk}")
+
+            # Process competencies
+            if competenceGenerales:
+                for competence in competenceGenerales:
+                    competence_fk = get_competence_fk_from_postgres(competence)
+                    if competence_fk:
+                        factcode = generate_factcode(global_factcode_counter)
+                        print(f"client_fk: {client_fk}, factcode: {factcode}, competence_fk: {competence_fk}")
+                        global_factcode_counter += 1
+                        line_count += 1
+                        client_has_experience_or_language_or_interest_or_location = True
+
+            # Process languages from both profiles
+            if languages:
+                for language in languages:
+                    language_label = language.get("label", "").strip() if isinstance(language, dict) else language.strip()
+                    language_level = language.get("level", "").strip() if isinstance(language, dict) else ""
+                    
+                    language_fk = get_language_fk_from_postgres(language_label, language_level)
+                    factcode = generate_factcode(global_factcode_counter)
+                    print(f"client_fk: {client_fk}, factcode: {factcode}, language_fk: {language_fk}")
+                    global_factcode_counter += 1
+                    line_count += 1
+                    client_has_experience_or_language_or_interest_or_location = True
+
+            # Process languages from simpleProfile
+            if simpleProfile_languages:
+                for language in simpleProfile_languages:
+                    language_label = language.get("label", "").strip() if isinstance(language, dict) else language.strip()
+                    language_level = language.get("level", "").strip() if isinstance(language, dict) else ""
+                    
+                    language_fk = get_language_fk_from_postgres(language_label, language_level)
+                    factcode = generate_factcode(global_factcode_counter)
+                    print(f"client_fk: {client_fk}, factcode: {factcode}, language_fk: {language_fk}")
+                    global_factcode_counter += 1
+                    line_count += 1
+                    client_has_experience_or_language_or_interest_or_location = True
+
+            # Process interests
+            if interests:
+                for interest in interests:
+                    interest_pk = get_interest_pk_from_postgres(interest)
+                    factcode = generate_factcode(global_factcode_counter)
+                    print(f"client_fk: {client_fk}, factcode: {factcode}, interest_pk: {interest_pk}")
+                    global_factcode_counter += 1
+                    line_count += 1
+                    client_has_experience_or_language_or_interest_or_location = True
+
+            # Process prefered job locations from both profiles
+            if preferedJobLocations:
+                for location in preferedJobLocations:
+                    pays = location.get("pays", "").strip()
+                    ville = location.get("ville", "").strip()
+                    region = location.get("region", "").strip()
+
+                    preferedjoblocations_pk = get_preferedjoblocations_pk_from_postgres(pays, ville, region)
+                    if not preferedjoblocations_pk:
+                        preferedjoblocations_pk = insert_new_preferred_job_location(pays, ville, region)
+
+                    factcode = generate_factcode(global_factcode_counter)
+                    print(f"client_fk: {client_fk}, factcode: {factcode}, preferedjoblocations_pk: {preferedjoblocations_pk}")
+                    global_factcode_counter += 1
+                    line_count += 1
+                    client_has_experience_or_language_or_interest_or_location = True
+
+            # If no data found, insert a line with nulls
+            if not client_has_experience_or_language_or_interest_or_location:
+                factcode = generate_factcode(global_factcode_counter)
+                print(f"client_fk: {client_fk}, factcode: {factcode}, competence_fk: null, language_fk: null, interest_pk: null, preferedjoblocations_pk: null")
+                global_factcode_counter += 1
+                line_count += 1
+
         else:
-            for experience in experiences:
-                if isinstance(experience, dict):
-                    role = experience.get('role', 'Non spécifié')
-                    entreprise = experience.get('entreprise', 'Non spécifié')
-                    du_year = experience.get('du', {}).get('year', '')
-                    du_month = experience.get('du', {}).get('month', '')
-                    au_year = experience.get('au', {}).get('year', '')
-                    au_month = experience.get('au', {}).get('month', '')
-                    pays = experience.get('pays', {}).get('value', 'Non spécifié')
+            print(f"Matricule {matricule} does not have a client_fk in PostgreSQL.")
+            line_count += 1
 
-                    ville = experience.get('ville', {}).get('value', 'Non spécifiée') if experience.get('ville') else 'Non spécifiée'
-                    type_contrat = experience.get('typeContrat', {}).get('value', 'Non spécifié') if experience.get('typeContrat') else 'Non spécifié'
+    print(f"\nTotal lines: {line_count}")
 
-                    experience_str = f"{role}, {entreprise}, {du_year}, {du_month}, {au_year}, {au_month}, {pays}, {ville}, {type_contrat}"
-                    
-                    secteur_id = experience.get('secteur')
-                    secteur_fk = None 
-                    
-                    if secteur_id:
-                        secteur_data = secteur_collection.find_one({"_id": secteur_id})
-                        if secteur_data:
-                            for job in secteur_data.get('jobs', []):
-                                rome_code = job.get('romeCode')
-                                print(f"{experience_str}")
-                                
-    
-                                secteur_fk = get_secteur_pk_from_postgres(rome_code)
-                                
-                                if secteur_fk:
-                                    print(f"Secteur_pk trouvé: {secteur_fk}")
-
-                                    codeexperience = f"code{str(code_index).zfill(4)}"
-                                    code_index += 1
-                                    
-                                 
-                                    insert_or_update_experience(
-                                        codeexperience,
-                                        role,
-                                        entreprise,
-                                        du_year,
-                                        du_month,
-                                        au_year,
-                                        au_month,
-                                        pays,
-                                        secteur_fk,
-                                        ville,
-                                        type_contrat
-                                    )
-                                else:
-                                    print(f"Secteur_pk non trouvé pour le romeCode: {rome_code}")
-                        else:
-                            print(f"{experience_str}, Secteur non trouvé dans la collection secteurdactivities.")
-                    else:
-                        print(f"{experience_str}, Aucun secteur spécifié.")
-                else:
-                    print(f"Expérience mal formatée: {experience}")
-                print('-------------------------')
-
-
-extract_experiences_and_insert_or_update()
+# Execute the function to display the factcode, client_fk, language_fk, competence_fk, interest_pk, and preferedjoblocations_pk
+match_and_display_factcode_client_competence_interest()

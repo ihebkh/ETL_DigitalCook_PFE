@@ -95,7 +95,7 @@ def load_into_postgres(data):
     WHERE langue_code = %s;
     """
     for record in data:
-        if record["langue_code"] is None:
+        if record["langue_code"] is None: 
             record["langue_code"] = generate_langue_code(existing_codes)
             existing_codes.add(record["langue_code"])
 
@@ -105,21 +105,22 @@ def load_into_postgres(data):
             record["level"],
         )
 
-        cur.execute("""
+        cur.execute(""" 
         SELECT 1 FROM dim_languages
         WHERE label = %s AND level = %s
         """, (record["label"], record["level"]))
 
         if cur.fetchone():
-            print(f" Mise à jour de l'intérêt : {values}")
+            print(f" Mise à jour de la langue : {values}")
             cur.execute(update_query, (record["level"], record["langue_code"]))
         else:
-            print(f" Insertion de l'intérêt : {values}")
+            print(f" Insertion de la langue : {values}")
             cur.execute(insert_query, values)
 
     conn.commit()
     cur.close()
     conn.close()
+
 def main():
     print("--- Extraction et chargement des langues ---")
     

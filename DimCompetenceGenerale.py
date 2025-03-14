@@ -51,26 +51,34 @@ def extract_from_mongodb():
 def load_into_postgres(data):
     conn = get_postgres_connection()
     cur = conn.cursor()
-
     cur.execute("SELECT competenceCode FROM Dim_competence_generale")
     existing_codes = {row[0] for row in cur.fetchall()}
 
     insert_query = """
     INSERT INTO Dim_competence_generale (competenceCode, competence_name)
     VALUES (%s, %s)
-    ON CONFLICT (competenceCode) DO NOTHING;
+    ON CONFLICT (competence_name) DO NOTHING;
+    """
+
+    update_query = """
+    UPDATE Dim_competence_generale
+    SET competence_name = %s
+    WHERE competenceCode = %s;
     """
 
     for record in data:
         if record["competenceCode"] is None: 
             record["competenceCode"] = generate_competence_code(existing_codes)
             existing_codes.add(record["competenceCode"]) 
-        values = (
-            record["competenceCode"],
-            record["competence_name"],
-        )
-        print(f" Insertion / Mise à jour : {values}")
-        cur.execute(insert_query, values)
+        cur.execute("SELECT competence_name FROM Dim_competence_generale WHERE competenceCode = %s", (record["competenceCode"],))
+        existing_competence = cur.fetchone()
+
+        if existing_competence:
+            print(f" Mise à jour de l'intérêt : {record['competence_name']}")
+            cur.execute(update_query, (record["competence_name"], record["competenceCode"]))
+        else:
+            print(f" Insertion de l'intérêt : {record['competence_name']}")
+            cur.execute(insert_query, (record["competenceCode"], record["competence_name"]))
 
     conn.commit()
     cur.close()

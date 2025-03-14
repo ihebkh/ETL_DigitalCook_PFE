@@ -12,7 +12,6 @@ def get_mongodb_connection():
     return client, mongo_db, collection
 
 def get_postgres_connection():
-    # Establish a connection to PostgreSQL
     return psycopg2.connect(dbname="DW_DigitalCook", user='postgres', password='admin', host='localhost', port='5432')
 
 def generate_certification_code(existing_codes):
@@ -24,31 +23,46 @@ def generate_certification_code(existing_codes):
         return f"CERT{str(new_number).zfill(3)}"
 
 def validate_year_month(year, month):
-    if not (year.isdigit() and len(year) == 4):
-        year = None 
-    if not (month.isdigit() and 1 <= int(month) <= 12):
-        month = None
+    # If year or month is invalid, set them to default values
+    if not year:
+        year = "Unknown"  # Use a placeholder value if year is empty
+    if not month:
+        month = "Unknown"  # Use a placeholder value if month is empty
 
     return year, month
 
 def extract_from_mongodb():
     client, _, collection = get_mongodb_connection()
-    mongo_data = collection.find({}, {"_id": 1, "profile.certifications": 1})
+    mongo_data = collection.find({}, {"_id": 1, "profile.certifications": 1, "simpleProfile.certifications": 1})
 
     certifications = set() 
+    existing_labels = set()
 
     for user in mongo_data:
         if isinstance(user, dict) and "profile" in user and isinstance(user["profile"], dict):
             user_certifications = user["profile"].get("certifications", [])
-
             if isinstance(user_certifications, list):
                 for certif in user_certifications:
                     if isinstance(certif, dict):
                         nom = certif.get("nomCertification", "").strip()
                         year = certif.get("year", "").strip()
                         month = certif.get("month", "").strip()
+                        print(f"Extracted Certification Data - Nom: {nom}, Year: {year}, Month: {month}")
 
-                        # Debugging: print the extracted certification data
+                        # Validate and process year and month
+                        year, month = validate_year_month(year, month)
+
+                        if nom:
+                            certifications.add((nom, year, month))
+        
+        if isinstance(user, dict) and "simpleProfile" in user and isinstance(user["simpleProfile"], dict):
+            user_certifications = user["simpleProfile"].get("certifications", [])
+            if isinstance(user_certifications, list):
+                for certif in user_certifications:
+                    if isinstance(certif, dict):
+                        nom = certif.get("nomCertification", "").strip()
+                        year = certif.get("year", "").strip()
+                        month = certif.get("month", "").strip()
                         print(f"Extracted Certification Data - Nom: {nom}, Year: {year}, Month: {month}")
 
                         # Validate and process year and month
@@ -61,7 +75,7 @@ def extract_from_mongodb():
     
     print("Certifications extraites :")
     for certification in certifications:
-        print(f"Nom: {certification[0]}, Year: {certification[1]}, Month: {certification[2]}")  # Display each certification
+        print(f"Nom: {certification[0]}, Year: {certification[1]}, Month: {certification[2]}")
     
     return [{"certificationCode": None, "nom": c[0], "year": c[1], "month": c[2]} for c in certifications]
 
@@ -82,11 +96,15 @@ def load_into_postgres(data):
     VALUES (%s, %s, %s, %s)
     ON CONFLICT (certificationCode) DO NOTHING;
     """
+    
+    # Debugging: print the data to be inserted
+    print(f"Data to be inserted or updated: {data}")
 
     for record in data:
         if record["certificationCode"] is None:
             record["certificationCode"] = generate_certification_code(existing_certifications.values())
             existing_certifications[(record["nom"], record["year"], record["month"])] = record["certificationCode"]
+        
         existing_code = existing_certifications.get((record["nom"], record["year"], record["month"]))
 
         if existing_code:
@@ -122,9 +140,9 @@ def main():
     
     if raw_data:
         load_into_postgres(raw_data)
-        print(" Données insérées/mises à jour avec succès dans PostgreSQL.")
+        print("Données insérées/mises à jour avec succès dans PostgreSQL.")
     else:
-        print(" Aucune donnée à insérer.")
+        print("Aucune donnée à insérer.")
 
 if __name__ == "__main__":
     main()
