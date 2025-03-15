@@ -239,14 +239,55 @@ def get_certification_pk_from_postgres(certification_name, year, month):
         return result[0]  # Return certification_pk if found
     else:
         return None  # No certification_pk found
+    
+# Function to retrieve experience_fk from PostgreSQL based on matching fields
+def get_experience_fk_from_postgres(role, entreprise, type_contrat):
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    
+    # Check for an experience in the database matching the provided criteria
+    cur.execute("""
+        SELECT experience_pk 
+        FROM public.dim_experience 
+        WHERE role = %s 
+          AND entreprise = %s 
+          AND typecontrat = %s ;
+    """, (role, entreprise, type_contrat))
+    
+    result = cur.fetchone()
+    
+    cur.close()
+    conn.close()
+    
+    if result:
+        return result[0]  # Return experience_fk if found
+    else:
+        return None  # No experience_fk found
 
 def match_and_display_factcode_client_competence_interest():
     collection = get_mongodb_connection()
 
-    mongo_data = collection.find({}, {"_id": 0, "matricule": 1, "profile.certifications": 1, "simpleProfile.certifications": 1 , "profile.competenceGenerales": 1, "profile.languages": 1, "profile.interests": 1, "profile.preferedJobLocations": 1, "profile.niveauDetudes": 1, "profile.visa": 1, "profile.projets": 1, "profile.professionalContacts": 1, "simpleProfile.languages": 1, "simpleProfile.preferedJobLocations": 1})
+    mongo_data = collection.find({}, {
+        "_id": 0,
+        "matricule": 1,
+        "profile.certifications": 1,
+        "simpleProfile.certifications": 1,
+        "profile.competenceGenerales": 1,
+        "profile.languages": 1,
+        "profile.interests": 1,
+        "profile.preferedJobLocations": 1,
+        "profile.niveauDetudes": 1,
+        "profile.visa": 1,
+        "profile.projets": 1,
+        "profile.professionalContacts": 1,
+        "simpleProfile.languages": 1,
+        "simpleProfile.preferedJobLocations": 1,
+        "profile.experiences": 1,
+        "simpleProfile.experiences": 1  # Include experiences field in the query
+    })
 
-    global_factcode_counter = 1  
-    line_count = 0  
+    global_factcode_counter = 1
+    line_count = 0
 
     for user in mongo_data:
         matricule = user.get("matricule", None)
@@ -260,13 +301,50 @@ def match_and_display_factcode_client_competence_interest():
         professionalContacts = user.get("profile", {}).get("professionalContacts", [])
         simpleProfile_languages = user.get("simpleProfile", {}).get("languages", [])
         simpleProfile_preferedJobLocations = user.get("simpleProfile", {}).get("preferedJobLocations", [])
+        experiences = user.get("profile", {}).get("experiences", [])
+        simpleProfile_experiences = user.get("simpleProfile", {}).get("experiences", [])
 
         client_fk = get_client_fk_from_postgres(matricule)
 
         if client_fk:
-            client_has_experience_or_language_or_interest_or_location = False  
+            client_has_experience_or_language_or_interest_or_location = False
 
             print(f"Matricule: {matricule}-----------------------------------------------------------------------")
+
+            # Process experiences from both profiles
+            if experiences:
+                for experience in experiences:
+                    # Check if the experience is a dictionary before calling get
+                    if isinstance(experience, dict):
+                        role = experience.get("role", "").strip()
+                        entreprise = experience.get("entreprise", "").strip()
+                        type_contrat = experience.get("typeContrat", {}).get("value", "").strip()
+
+                        experience_fk = get_experience_fk_from_postgres(role, entreprise, type_contrat)
+                        if experience_fk:
+                            factcode = generate_factcode(global_factcode_counter)
+                            print(f"Experience - client_fk: {client_fk}, factcode: {factcode}, experience_fk: {experience_fk}")
+                            global_factcode_counter += 1
+                            line_count += 1
+                            client_has_experience_or_language_or_interest_or_location = True
+
+            # Process experiences from simpleProfile
+            if simpleProfile_experiences:
+                for experience in simpleProfile_experiences:
+                    # Check if the experience is a dictionary before calling get
+                    if isinstance(experience, dict):
+                        role = experience.get("role", "").strip()
+                        entreprise = experience.get("entreprise", "").strip()
+                        type_contrat = experience.get("typeContrat", {}).get("value", "").strip()
+                        
+
+                        experience_fk = get_experience_fk_from_postgres(role, entreprise, type_contrat)
+                        if experience_fk:
+                            factcode = generate_factcode(global_factcode_counter)
+                            print(f"SimpleProfile Experience - client_fk: {client_fk}, factcode: {factcode}, experience_fk: {experience_fk}")
+                            global_factcode_counter += 1
+                            line_count += 1
+                            client_has_experience_or_language_or_interest_or_location = True
 
             # Process competencies from both profiles
             if competenceGenerales:
@@ -284,23 +362,10 @@ def match_and_display_factcode_client_competence_interest():
                 for language in languages:
                     language_label = language.get("label", "").strip() if isinstance(language, dict) else language.strip()
                     language_level = language.get("level", "").strip() if isinstance(language, dict) else ""
-                    
+
                     language_fk = get_language_fk_from_postgres(language_label, language_level)
                     factcode = generate_factcode(global_factcode_counter)
                     print(f"Language - client_fk: {client_fk}, factcode: {factcode}, language_fk: {language_fk}")
-                    global_factcode_counter += 1
-                    line_count += 1
-                    client_has_experience_or_language_or_interest_or_location = True
-
-            # Process languages from simpleProfile
-            if simpleProfile_languages:
-                for language in simpleProfile_languages:
-                    language_label = language.get("label", "").strip() if isinstance(language, dict) else language.strip()
-                    language_level = language.get("level", "").strip() if isinstance(language, dict) else ""
-                    
-                    language_fk = get_language_fk_from_postgres(language_label, language_level)
-                    factcode = generate_factcode(global_factcode_counter)
-                    print(f"SimpleProfile Language - client_fk: {client_fk}, factcode: {factcode}, language_fk: {language_fk}")
                     global_factcode_counter += 1
                     line_count += 1
                     client_has_experience_or_language_or_interest_or_location = True
@@ -374,7 +439,6 @@ def match_and_display_factcode_client_competence_interest():
             # Process professional contacts
             if professionalContacts:
                 for contact in professionalContacts:
-                    # Initialize variables to prevent UnboundLocalError
                     firstname = contact.get("firstName", "").strip() if isinstance(contact, dict) else ""
                     lastname = contact.get("lastName", "").strip() if isinstance(contact, dict) else ""
                     email = contact.get("email", "").strip() if isinstance(contact, dict) else ""
@@ -388,6 +452,7 @@ def match_and_display_factcode_client_competence_interest():
 
             # If no data found, insert a line with nulls
             if not client_has_experience_or_language_or_interest_or_location:
+                factcode = generate_factcode(global_factcode_counter)  # Initialize factcode here
                 print(f"client_fk: {client_fk}, factcode: {factcode}, competence_fk: null, language_fk: null, interest_pk: null, preferedjoblocations_pk: null, etude_fk: null, visa_pk: null, projet_pk: null, contact_pk: null")
                 global_factcode_counter += 1
                 line_count += 1
