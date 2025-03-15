@@ -1,3 +1,5 @@
+import os
+import json
 import psycopg2
 from pymongo import MongoClient
 
@@ -9,138 +11,115 @@ def get_mongodb_connection():
     client = MongoClient(MONGO_URI)
     mongo_db = client[MONGO_DB]
     collection = mongo_db[MONGO_COLLECTION]
+    print("Connected to MongoDB.")
     return client, mongo_db, collection
 
 def get_postgres_connection():
-    return psycopg2.connect(dbname="DW_DigitalCook", user='postgres', password='admin', host='localhost', port='5432')
+    conn = psycopg2.connect(dbname="DW_DigitalCook", user='postgres', password='admin', host='localhost', port='5432')
+    print("Connected to PostgreSQL.")
+    return conn
 
-def generate_certification_code(existing_codes):
-    if not existing_codes:
-        return "CERT001"  
-    else:
-        last_number = max(int(code.replace("CERT", "")) for code in existing_codes)
-        new_number = last_number + 1
-        return f"CERT{str(new_number).zfill(3)}"
-
-def validate_year_month(year, month):
-    # If year or month is invalid, set them to default values
-    if not year:
-        year = "Unknown"  # Use a placeholder value if year is empty
-    if not month:
-        month = "Unknown"  # Use a placeholder value if month is empty
-
-    return year, month
+def get_next_certification_code(current_count):
+    return f"certif{str(current_count).zfill(4)}"  # Incremental code with leading zeros (e.g., "certif0001")
 
 def extract_from_mongodb():
     client, _, collection = get_mongodb_connection()
-    mongo_data = collection.find({}, {"_id": 1, "profile.certifications": 1, "simpleProfile.certifications": 1})
-
-    certifications = set() 
-    existing_labels = set()
-
-    for user in mongo_data:
-        if isinstance(user, dict) and "profile" in user and isinstance(user["profile"], dict):
-            user_certifications = user["profile"].get("certifications", [])
-            if isinstance(user_certifications, list):
-                for certif in user_certifications:
-                    if isinstance(certif, dict):
-                        nom = certif.get("nomCertification", "").strip()
-                        year = certif.get("year", "").strip()
-                        month = certif.get("month", "").strip()
-                        print(f"Extracted Certification Data - Nom: {nom}, Year: {year}, Month: {month}")
-
-                        # Validate and process year and month
-                        year, month = validate_year_month(year, month)
-
-                        if nom:
-                            certifications.add((nom, year, month))
-        
-        if isinstance(user, dict) and "simpleProfile" in user and isinstance(user["simpleProfile"], dict):
-            user_certifications = user["simpleProfile"].get("certifications", [])
-            if isinstance(user_certifications, list):
-                for certif in user_certifications:
-                    if isinstance(certif, dict):
-                        nom = certif.get("nomCertification", "").strip()
-                        year = certif.get("year", "").strip()
-                        month = certif.get("month", "").strip()
-                        print(f"Extracted Certification Data - Nom: {nom}, Year: {year}, Month: {month}")
-
-                        # Validate and process year and month
-                        year, month = validate_year_month(year, month)
-
-                        if nom:
-                            certifications.add((nom, year, month))
-
+    mongo_data = list(collection.find({}, {"_id": 0}))  # Fetching all data from MongoDB
+    print(f"Extracted {len(mongo_data)} records from MongoDB.")
+    
+    # Display some details of the extracted data (showing the first few records for example)
+    print("First few records from MongoDB:")
+    for record in mongo_data[:3]:  # Show first 3 records
+        print(record)
+    
     client.close()
+    return mongo_data
+
+def transform_data(mongo_data):
+    seen_certifications = set()
+    transformed_data = []
+    current_certification_code = 1  # Initialize the starting code as certif0001
     
-    print("Certifications extraites :")
-    for certification in certifications:
-        print(f"Nom: {certification[0]}, Year: {certification[1]}, Month: {certification[2]}")
+    for idx, record in enumerate(mongo_data):
+        certifications_list = []
+        
+        # Extract from profile
+        if "profile" in record and "certifications" in record["profile"]:
+            certifications_list.extend(record["profile"]["certifications"])
+
+        # Extract from simpleProfile
+        if "simpleProfile" in record and "certifications" in record["simpleProfile"]:
+            certifications_list.extend(record["simpleProfile"]["certifications"])
+
+        for cert in certifications_list:
+            # Check if the certification is a string or a dictionary
+            if isinstance(cert, str):
+                nomCertification = cert.strip()
+                year = "Unknown"  # Default value if year and month are not provided
+                month = "Unknown"
+            elif isinstance(cert, dict):
+                nomCertification = cert.get("nomCertification", "").strip()
+                year = cert.get("year", "").strip()
+                month = cert.get("month", "").strip()
+            else:
+                # Skip invalid data types
+                continue
+
+            if nomCertification and (nomCertification, year, month) not in seen_certifications:
+                seen_certifications.add((nomCertification, year, month))
+                
+                # Generate the certification code
+                certification_code = get_next_certification_code(current_certification_code)
+                current_certification_code += 1  # Increment the certification code for next record
+                
+                transformed_data.append({
+                    "certification_code": certification_code,
+                    "nomCertification": nomCertification,
+                    "year": year,
+                    "month": month
+                })
+        
+        # Display transformation details
+        print(f"Processed record {idx + 1} from MongoDB: {record}")
     
-    return [{"certificationCode": None, "nom": c[0], "year": c[1], "month": c[2]} for c in certifications]
+    print(f"Transformed {len(transformed_data)} records.")
+    return transformed_data
 
 def load_into_postgres(data):
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT certificationCode, nom, year, month FROM Dim_certification")
-    existing_certifications = {(row[1], row[2], row[3]): row[0] for row in cur.fetchall()}
-
-    update_query = """
-    UPDATE Dim_certification
-    SET certificationCode = %s, nom = %s, year = %s, month = %s
-    WHERE nom = %s AND year = %s AND month = %s;
-    """
-
+    
     insert_query = """
-    INSERT INTO Dim_certification (certificationCode, nom, year, month)
+    INSERT INTO dim_certification (certificationcode, nom, year, month)
     VALUES (%s, %s, %s, %s)
-    ON CONFLICT (certificationCode) DO NOTHING;
+    ON CONFLICT (certificationcode) DO UPDATE SET 
+        certificationcode = EXCLUDED.certificationcode
     """
     
-    # Debugging: print the data to be inserted
-    print(f"Data to be inserted or updated: {data}")
+    for idx, record in enumerate(data):
+        values = (
+            record["certification_code"],
+            record["nomCertification"],
+            record["year"],
+            record["month"]
+        )
+        cur.execute(insert_query, values)
 
-    for record in data:
-        if record["certificationCode"] is None:
-            record["certificationCode"] = generate_certification_code(existing_certifications.values())
-            existing_certifications[(record["nom"], record["year"], record["month"])] = record["certificationCode"]
-        
-        existing_code = existing_certifications.get((record["nom"], record["year"], record["month"]))
-
-        if existing_code:
-            values = (
-                record["certificationCode"],
-                record["nom"],
-                record["year"],
-                record["month"],
-                record["nom"],
-                record["year"],
-                record["month"],
-            )
-            print(f" Mise à jour : {values}")
-            cur.execute(update_query, values)
-        else:
-            values = (
-                record["certificationCode"],
-                record["nom"],
-                record["year"],
-                record["month"],
-            )
-            print(f" Insertion : {values}")
-            cur.execute(insert_query, values)
-
+        # Display each record being inserted into PostgreSQL
+        print(f"Inserting record {idx + 1} into PostgreSQL: {record}")
+    
     conn.commit()
+    print(f"Inserted {len(data)} records into PostgreSQL.")
     cur.close()
     conn.close()
 
 def main():
     print("--- Extraction et chargement des certifications ---")
-    
     raw_data = extract_from_mongodb()
-    
-    if raw_data:
-        load_into_postgres(raw_data)
-        print("Données insérées/mises à jour avec succès dans PostgreSQL.")
+    transformed_data = transform_data(raw_data)
+    if transformed_data:
+        load_into_postgres(transformed_data)
+        print("Données insérées avec succès dans PostgreSQL.")
     else:
         print("Aucune donnée à insérer.")
 
