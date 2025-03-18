@@ -1,7 +1,6 @@
 import psycopg2
 from pymongo import MongoClient
 
-# Function to get the PostgreSQL connection
 def get_postgres_connection():
     return psycopg2.connect(
         dbname="DW_DigitalCook",
@@ -11,7 +10,6 @@ def get_postgres_connection():
         port='5432'
     )
 
-# Function to get the MongoDB connection
 def get_mongodb_connection():
     MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
     MONGO_DB = "PowerBi"
@@ -22,11 +20,9 @@ def get_mongodb_connection():
     collection = mongo_db[MONGO_COLLECTION]
     return collection
 
-# Function to generate a unique factcode
 def generate_factcode(counter):
     return f"fact{counter:04d}"
 
-# Function to retrieve client_fk from PostgreSQL using matricule
 def get_client_fk_from_postgres(matricule):
     conn = get_postgres_connection()
     cur = conn.cursor()
@@ -45,12 +41,11 @@ def get_client_fk_from_postgres(matricule):
     else:
         return None  
 
-# Function to retrieve etude_pk from PostgreSQL based on study name (niveau d'étude)
 def get_etude_pk_from_postgres(niveau_etude):
     conn = get_postgres_connection()
     cur = conn.cursor()
     
-    niveau_etude = niveau_etude.strip().lower()  # Normalize the level of study name
+    niveau_etude = niveau_etude.strip().lower()
     
     cur.execute("""
         SELECT niveau_pk 
@@ -64,11 +59,10 @@ def get_etude_pk_from_postgres(niveau_etude):
     conn.close()
     
     if result:
-        return result[0]  # Return etude_pk if found
+        return result[0]  
     else:
-        return None  # No etude_pk found
+        return None  
 
-# Function to retrieve projet_pk from PostgreSQL based on project name
 def get_projet_pk_from_postgres(nom_projet, entreprise, year_start, year_end, month_start, month_end):
     conn = get_postgres_connection()
     cur = conn.cursor()
@@ -85,11 +79,10 @@ def get_projet_pk_from_postgres(nom_projet, entreprise, year_start, year_end, mo
     conn.close()
     
     if result:
-        return result[0]  # Return projet_pk if found
+        return result[0]  
     else:
-        return None  # No projet_pk found
+        return None  
 
-# Function to retrieve contact_pk from PostgreSQL based on professional contact details
 def get_contact_pk_from_postgres(firstname, lastname, email, company):
     conn = get_postgres_connection()
     cur = conn.cursor()
@@ -106,16 +99,15 @@ def get_contact_pk_from_postgres(firstname, lastname, email, company):
     conn.close()
     
     if result:
-        return result[0]  # Return contact_pk if found
+        return result[0]  
     else:
-        return None  # No contact_pk found
+        return None  
 
-# Function to retrieve competence_fk from PostgreSQL based on competence name
 def get_competence_fk_from_postgres(competence_name):
     conn = get_postgres_connection()
     cur = conn.cursor()
     
-    competence_name = competence_name.strip().lower()  # Normalize the competence name
+    competence_name = competence_name.strip().lower()
     
     cur.execute("""
         SELECT competence_pk 
@@ -129,11 +121,10 @@ def get_competence_fk_from_postgres(competence_name):
     conn.close()
     
     if result:
-        return result[0]  # Return competence_fk if found
+        return result[0]  
     else:
-        return None  # No competence_fk found
+        return None  
 
-# Function to retrieve language_fk from PostgreSQL based on language label and level
 def get_language_fk_from_postgres(language_label, language_level):
     conn = get_postgres_connection()
     cur = conn.cursor()
@@ -150,16 +141,15 @@ def get_language_fk_from_postgres(language_label, language_level):
     conn.close()
     
     if result:
-        return result[0]  # Return language_fk if found
+        return result[0]  
     else:
-        return None  # No language_fk found
+        return None  
 
-# Function to retrieve interest_pk from PostgreSQL based on interest name
 def get_interest_pk_from_postgres(interest_name):
     conn = get_postgres_connection()
     cur = conn.cursor()
     
-    interest_name = interest_name.strip().lower()  # Normalize the interest name
+    interest_name = interest_name.strip().lower()
     
     cur.execute("""
         SELECT interests_pk 
@@ -173,11 +163,10 @@ def get_interest_pk_from_postgres(interest_name):
     conn.close()
     
     if result:
-        return result[0]  # Return interest_pk if found
+        return result[0]  
     else:
-        return None  # No interest_pk found
+        return None  
 
-# Function to retrieve preferedjoblocations_pk from PostgreSQL based on location
 def get_preferedjoblocations_pk_from_postgres(pays, ville, region):
     conn = get_postgres_connection()
     cur = conn.cursor()
@@ -193,16 +182,15 @@ def get_preferedjoblocations_pk_from_postgres(pays, ville, region):
     conn.close()
 
     if result:
-        return result[0]  # Return preferedjoblocations_pk if found
+        return result[0]  
     else:
-        return None  # No preferedjoblocations_pk found
-    
-# Function to retrieve visa_pk from PostgreSQL based on visa type
+        return None  
+
 def get_visa_pk_from_postgres(visa_type):
     conn = get_postgres_connection()
     cur = conn.cursor()
     
-    visa_type = visa_type.strip().lower()  # Normalize the visa type
+    visa_type = visa_type.strip().lower()
     
     cur.execute("""
         SELECT visa_pk 
@@ -216,9 +204,9 @@ def get_visa_pk_from_postgres(visa_type):
     conn.close()
     
     if result:
-        return result[0]  # Return visa_pk if found
+        return result[0]  
     else:
-        return None  # No visa_pk found
+        return None  
 
 def get_certification_pk_from_postgres(certification_name, year, month):
     conn = get_postgres_connection()
@@ -236,16 +224,14 @@ def get_certification_pk_from_postgres(certification_name, year, month):
     conn.close()
     
     if result:
-        return result[0]  # Return certification_pk if found
+        return result[0]  
     else:
-        return None  # No certification_pk found
-    
-# Function to retrieve experience_fk from PostgreSQL based on matching fields
+        return None  
+
 def get_experience_fk_from_postgres(role, entreprise, type_contrat):
     conn = get_postgres_connection()
     cur = conn.cursor()
     
-    # Check for an experience in the database matching the provided criteria
     cur.execute("""
         SELECT experience_pk 
         FROM public.dim_experience 
@@ -260,9 +246,9 @@ def get_experience_fk_from_postgres(role, entreprise, type_contrat):
     conn.close()
     
     if result:
-        return result[0]  # Return experience_fk if found
+        return result[0]  
     else:
-        return None  # No experience_fk found
+        return None  
 
 def match_and_display_factcode_client_competence_interest():
     collection = get_mongodb_connection()
@@ -283,7 +269,7 @@ def match_and_display_factcode_client_competence_interest():
         "simpleProfile.languages": 1,
         "simpleProfile.preferedJobLocations": 1,
         "profile.experiences": 1,
-        "simpleProfile.experiences": 1  # Include experiences field in the query
+        "simpleProfile.experiences": 1  
     })
 
     global_factcode_counter = 1
@@ -293,28 +279,31 @@ def match_and_display_factcode_client_competence_interest():
         matricule = user.get("matricule", None)
         competenceGenerales = user.get("profile", {}).get("competenceGenerales", [])
         languages = user.get("profile", {}).get("languages", [])
+        simpleProfile_languages = user.get("simpleProfile", {}).get("languages", [])
         interests = user.get("profile", {}).get("interests", [])
         preferedJobLocations = user.get("profile", {}).get("preferedJobLocations", [])
+        simpleProfile_preferedJobLocations = user.get("simpleProfile", {}).get("preferedJobLocations", [])
         niveau_etudes = user.get("profile", {}).get("niveauDetudes", [])
         visa = user.get("profile", {}).get("visa", [])
         projets = user.get("profile", {}).get("projets", [])
         professionalContacts = user.get("profile", {}).get("professionalContacts", [])
-        simpleProfile_languages = user.get("simpleProfile", {}).get("languages", [])
-        simpleProfile_preferedJobLocations = user.get("simpleProfile", {}).get("preferedJobLocations", [])
-        experiences = user.get("profile", {}).get("experiences", [])
         simpleProfile_experiences = user.get("simpleProfile", {}).get("experiences", [])
+        experiences = user.get("profile", {}).get("experiences", [])
 
         client_fk = get_client_fk_from_postgres(matricule)
 
         if client_fk:
-            client_has_experience_or_language_or_interest_or_location = False
+            competence_fk_list = []
+            language_fk_list = []
+            interest_pk_list = []
+            job_location_pk_list = []
+            study_level_fk_list = []
+            visa_pk_list = []
+            project_pk_list = []
+            contact_pk_list = []
 
-            print(f"Matricule: {matricule}-----------------------------------------------------------------------")
-
-            # Process experiences from both profiles
             if experiences:
                 for experience in experiences:
-                    # Check if the experience is a dictionary before calling get
                     if isinstance(experience, dict):
                         role = experience.get("role", "").strip()
                         entreprise = experience.get("entreprise", "").strip()
@@ -322,65 +311,49 @@ def match_and_display_factcode_client_competence_interest():
 
                         experience_fk = get_experience_fk_from_postgres(role, entreprise, type_contrat)
                         if experience_fk:
-                            factcode = generate_factcode(global_factcode_counter)
-                            print(f"Experience - client_fk: {client_fk}, factcode: {factcode}, experience_fk: {experience_fk}")
-                            global_factcode_counter += 1
-                            line_count += 1
-                            client_has_experience_or_language_or_interest_or_location = True
+                            competence_fk_list.append(str(experience_fk))
 
-            # Process experiences from simpleProfile
             if simpleProfile_experiences:
                 for experience in simpleProfile_experiences:
-                    # Check if the experience is a dictionary before calling get
                     if isinstance(experience, dict):
                         role = experience.get("role", "").strip()
                         entreprise = experience.get("entreprise", "").strip()
                         type_contrat = experience.get("typeContrat", {}).get("value", "").strip()
-                        
 
                         experience_fk = get_experience_fk_from_postgres(role, entreprise, type_contrat)
                         if experience_fk:
-                            factcode = generate_factcode(global_factcode_counter)
-                            print(f"SimpleProfile Experience - client_fk: {client_fk}, factcode: {factcode}, experience_fk: {experience_fk}")
-                            global_factcode_counter += 1
-                            line_count += 1
-                            client_has_experience_or_language_or_interest_or_location = True
+                            competence_fk_list.append(str(experience_fk))
 
-            # Process competencies from both profiles
             if competenceGenerales:
                 for competence in competenceGenerales:
                     competence_fk = get_competence_fk_from_postgres(competence)
                     if competence_fk:
-                        factcode = generate_factcode(global_factcode_counter)
-                        print(f"Competence - client_fk: {client_fk}, factcode: {factcode}, competence_fk: {competence_fk}")
-                        global_factcode_counter += 1
-                        line_count += 1
-                        client_has_experience_or_language_or_interest_or_location = True
+                        competence_fk_list.append(str(competence_fk))
 
-            # Process languages from both profiles
             if languages:
                 for language in languages:
                     language_label = language.get("label", "").strip() if isinstance(language, dict) else language.strip()
                     language_level = language.get("level", "").strip() if isinstance(language, dict) else ""
 
                     language_fk = get_language_fk_from_postgres(language_label, language_level)
-                    factcode = generate_factcode(global_factcode_counter)
-                    print(f"Language - client_fk: {client_fk}, factcode: {factcode}, language_fk: {language_fk}")
-                    global_factcode_counter += 1
-                    line_count += 1
-                    client_has_experience_or_language_or_interest_or_location = True
+                    if language_fk:
+                        language_fk_list.append(str(language_fk))
 
-            # Process interests
+            if simpleProfile_languages:
+                for language in simpleProfile_languages:
+                    language_label = language.get("label", "").strip() if isinstance(language, dict) else language.strip()
+                    language_level = language.get("level", "").strip() if isinstance(language, dict) else ""
+
+                    language_fk = get_language_fk_from_postgres(language_label, language_level)
+                    if language_fk:
+                        language_fk_list.append(str(language_fk))
+
             if interests:
                 for interest in interests:
                     interest_pk = get_interest_pk_from_postgres(interest)
-                    factcode = generate_factcode(global_factcode_counter)
-                    print(f"Interest - client_fk: {client_fk}, factcode: {factcode}, interest_pk: {interest_pk}")
-                    global_factcode_counter += 1
-                    line_count += 1
-                    client_has_experience_or_language_or_interest_or_location = True
+                    if interest_pk:
+                        interest_pk_list.append(str(interest_pk))
 
-            # Process prefered job locations from both profiles
             if preferedJobLocations:
                 for location in preferedJobLocations:
                     pays = location.get("pays", "").strip()
@@ -388,25 +361,26 @@ def match_and_display_factcode_client_competence_interest():
                     region = location.get("region", "").strip()
 
                     preferedjoblocations_pk = get_preferedjoblocations_pk_from_postgres(pays, ville, region)
+                    if preferedjoblocations_pk:
+                        job_location_pk_list.append(str(preferedjoblocations_pk))
 
-                    factcode = generate_factcode(global_factcode_counter)
-                    print(f"Job Location - client_fk: {client_fk}, factcode: {factcode}, preferedjoblocations_pk: {preferedjoblocations_pk}")
-                    global_factcode_counter += 1
-                    line_count += 1
-                    client_has_experience_or_language_or_interest_or_location = True
+            if simpleProfile_preferedJobLocations:
+                for location in simpleProfile_preferedJobLocations:
+                    pays = location.get("pays", "").strip()
+                    ville = location.get("ville", "").strip()
+                    region = location.get("region", "").strip()
 
-            # Process niveau d'études
+                    preferedjoblocations_pk = get_preferedjoblocations_pk_from_postgres(pays, ville, region)
+                    if preferedjoblocations_pk:
+                        job_location_pk_list.append(str(preferedjoblocations_pk))
+
             if niveau_etudes:
                 for niveau in niveau_etudes:
                     niveau_etude_label = niveau.get("label", "").strip() if isinstance(niveau, dict) else niveau.strip()
                     etude_fk = get_etude_pk_from_postgres(niveau_etude_label)
-                    factcode = generate_factcode(global_factcode_counter)
-                    print(f"Education Level - client_fk: {client_fk}, factcode: {factcode}, etude_fk: {etude_fk}")
-                    global_factcode_counter += 1
-                    line_count += 1
-                    client_has_experience_or_language_or_interest_or_location = True
+                    if etude_fk:
+                        study_level_fk_list.append(str(etude_fk))
 
-            # Process projects
             if projets:
                 for projet in projets:
                     if isinstance(projet, dict):
@@ -418,25 +392,16 @@ def match_and_display_factcode_client_competence_interest():
                         month_end = projet.get("dateFin", {}).get("month", 0)
 
                         projet_pk = get_projet_pk_from_postgres(nom_projet, entreprise, year_start, year_end, month_start, month_end)
+                        if projet_pk:
+                            project_pk_list.append(str(projet_pk))
 
-                        factcode = generate_factcode(global_factcode_counter)
-                        print(f"Project - client_fk: {client_fk}, factcode: {factcode}, projet_pk: {projet_pk}")
-                        global_factcode_counter += 1
-                        line_count += 1
-                        client_has_experience_or_language_or_interest_or_location = True
-
-            # Process visas
             if visa:
                 for visa_item in visa:
                     visa_type = visa_item.get("type", "").strip() if isinstance(visa_item, dict) else visa_item.strip()
                     visa_pk = get_visa_pk_from_postgres(visa_type)
-                    factcode = generate_factcode(global_factcode_counter)
-                    print(f"Visa - client_fk: {client_fk}, factcode: {factcode}, visa_pk: {visa_pk}")
-                    global_factcode_counter += 1
-                    line_count += 1
-                    client_has_experience_or_language_or_interest_or_location = True
+                    if visa_pk:
+                        visa_pk_list.append(str(visa_pk))
 
-            # Process professional contacts
             if professionalContacts:
                 for contact in professionalContacts:
                     firstname = contact.get("firstName", "").strip() if isinstance(contact, dict) else ""
@@ -446,22 +411,26 @@ def match_and_display_factcode_client_competence_interest():
 
                     contact_pk = get_contact_pk_from_postgres(firstname, lastname, email, company)
                     if contact_pk:
-                        print(f"Professional Contact - client_fk: {client_fk}, contact_pk: {contact_pk}, firstName: {firstname}, lastName: {lastname}, email: {email}, company: {company}")
-                    else:
-                        print(f"Professional Contact not found in PostgreSQL - client_fk: {client_fk}, firstName: {firstname}, lastName: {lastname}, email: {email}, company: {company}")
+                        contact_pk_list.append(str(contact_pk))
 
-            # If no data found, insert a line with nulls
-            if not client_has_experience_or_language_or_interest_or_location:
-                factcode = generate_factcode(global_factcode_counter)  # Initialize factcode here
-                print(f"client_fk: {client_fk}, factcode: {factcode}, competence_fk: null, language_fk: null, interest_pk: null, preferedjoblocations_pk: null, etude_fk: null, visa_pk: null, projet_pk: null, contact_pk: null")
-                global_factcode_counter += 1
+            max_length = max(len(competence_fk_list), len(language_fk_list), len(interest_pk_list), len(job_location_pk_list), len(study_level_fk_list), len(visa_pk_list), len(project_pk_list), len(contact_pk_list))
+
+            for i in range(max_length):
+                competence_fk = competence_fk_list[i] if i < len(competence_fk_list) else None
+                language_fk = language_fk_list[i] if i < len(language_fk_list) else None
+                interest_pk = interest_pk_list[i] if i < len(interest_pk_list) else None
+                job_location_pk = job_location_pk_list[i] if i < len(job_location_pk_list) else None
+                study_level_fk = study_level_fk_list[i] if i < len(study_level_fk_list) else None
+                visa_pk = visa_pk_list[i] if i < len(visa_pk_list) else None
+                project_pk = project_pk_list[i] if i < len(project_pk_list) else None
+                contact_pk = contact_pk_list[i] if i < len(contact_pk_list) else None
+
+                print(f"Matricule: {matricule} - client_fk: {client_fk}, competence_fk: {competence_fk}, language_fk: {language_fk}, interest_pk: {interest_pk}, preferedjoblocations_pk: {job_location_pk}, etude_fk: {study_level_fk}, visa_pk: {visa_pk}, projet_pk: {project_pk}, contact_pk: {contact_pk}")
                 line_count += 1
 
         else:
-            print(f"Matricule {matricule} does not have a client_fk in PostgreSQL.")
             line_count += 1
 
     print(f"\nTotal lines: {line_count}")
 
-# Execute the function to display the factcode, client_fk, language_fk, competence_fk, interest_pk, preferedjoblocations_pk, etude_fk, visa_pk, projet_pk
 match_and_display_factcode_client_competence_interest()

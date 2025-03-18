@@ -1,0 +1,33 @@
+FROM apache/airflow:2.5.1
+
+# Installation des dépendances nécessaires
+USER root
+
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    libpq-dev \
+    gcc \
+    libsasl2-dev \
+    python-dev \
+    libldap2-dev \
+    libssl-dev \
+    && pip install --upgrade pip
+
+COPY requirements.txt /requirements.txt
+
+RUN pip install -r /requirements.txt
+
+ENV AIRFLOW_HOME=/opt/airflow
+
+USER airflow
+
+# Copier vos fichiers DAGs, plugins et autres ressources dans les répertoires appropriés
+COPY ./dags /opt/airflow/dags
+COPY ./plugins /opt/airflow/plugins
+
+# Définir le point d'entrée
+ENTRYPOINT ["/entrypoint"]
+CMD ["webserver"]
+
+# Exposer les ports nécessaires
+EXPOSE 8080
