@@ -23,7 +23,7 @@ def get_next_permis_code():
     count = cur.fetchone()[0] + 1
     cur.close()
     conn.close()
-    return f"code{str(count).zfill(3)}"  # Updated to return the format "code001", "code002", ...
+    return f"code{str(count).zfill(3)}"
 
 def extract_from_mongodb():
     client, _, collection = get_mongodb_connection()
@@ -38,11 +38,9 @@ def transform_data(mongo_data):
     for record in mongo_data:
         permis_list = []
         
-        # Extract from profile
         if "profile" in record and "permisConduire" in record["profile"]:
             permis_list.extend(record["profile"]["permisConduire"])
 
-        # Extract from simpleProfile
         if "simpleProfile" in record and "permisConduire" in record["simpleProfile"]:
             permis_list.extend(record["simpleProfile"]["permisConduire"])
 
