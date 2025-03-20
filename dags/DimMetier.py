@@ -44,13 +44,15 @@ def load_jobs_into_postgres(data):
     conn = get_postgres_connection()
     cur = conn.cursor()
 
-    insert_query = """
-    INSERT INTO Dim_Metier (romeCode, label_jobs, mainname_jobs, subdomain_jobs)
-    VALUES (%s, %s, %s, %s);
-    """
-
     for job in data:
-        cur.execute(insert_query, (job["romeCode"], job["label"], job["mainName"], job["subDomain"]))
+        cur.execute("""
+            INSERT INTO Dim_Metier (romeCode, label_jobs, mainname_jobs, subdomain_jobs)
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (romeCode) DO UPDATE SET
+                label_jobs = EXCLUDED.label_jobs,
+                mainname_jobs = EXCLUDED.mainname_jobs,
+                subdomain_jobs = EXCLUDED.subdomain_jobs;
+        """, (job["romeCode"], job["label"], job["mainName"], job["subDomain"]))
 
     conn.commit()
     cur.close()
@@ -63,7 +65,7 @@ def main():
     
     if jobs_data:
         load_jobs_into_postgres(jobs_data)
-        print("Données des jobs insérées avec succès dans PostgreSQL.")
+        print("Données des jobs insérées ou mises à jour avec succès dans PostgreSQL.")
     else:
         print("Aucune donnée de jobs à insérer.")
 
