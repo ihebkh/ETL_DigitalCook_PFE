@@ -1,7 +1,15 @@
-import os
+import tempfile
 import json
-import psycopg2
+import logging
+from datetime import datetime
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from bson import ObjectId
 from pymongo import MongoClient
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def get_mongodb_connection():
     MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
@@ -11,48 +19,53 @@ def get_mongodb_connection():
     client = MongoClient(MONGO_URI)
     mongo_db = client[MONGO_DB]
     collection = mongo_db[MONGO_COLLECTION]
+    logger.info("Connexion à MongoDB réussie.")
     return client, mongo_db, collection
 
 def get_postgres_connection():
-    return psycopg2.connect(dbname="DW_DigitalCook", user='postgres', password='admin', host='localhost', port='5432')
+    hook = PostgresHook(postgres_conn_id='postgres')
+    conn = hook.get_conn()
+    logger.info("Connexion à PostgreSQL réussie.")
+    return conn
 
-def reset_client_pk():
-    conn = get_postgres_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT setval('dim_client_client_pk_seq', 1, false)")
-    conn.commit()
-    cur.close()
-    conn.close()
-
-def list_mongodb_content():
-    client, _, _ = get_mongodb_connection()
-    databases = client.list_database_names()
-    print("Bases de données MongoDB:")
-    for db in databases:
-        print(f"- {db}")
-        mongo_db = client[db]
-        collections = mongo_db.list_collection_names()
-        print("  Collections:")
-        for collection in collections:
-            print(f"    - {collection}")
-    client.close()
-
-def extract_from_mongodb():
+def extract_from_mongodb_to_temp_file(**kwargs):
+    logger.info("Extraction des données de MongoDB...")
     client, _, collection = get_mongodb_connection()
-    mongo_data = list(collection.find({}, {"_id": 0}))  
-    client.close()
-    return mongo_data
+    mongo_data = list(collection.find({}, {"_id": 0}))
 
-def transform_data(mongo_data):
+    def datetime_converter(obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        elif isinstance(obj, ObjectId):
+            return str(obj)
+        raise TypeError("Type non sérialisable : {}".format(type(obj)))
+
+    with tempfile.NamedTemporaryFile(delete=False, mode='w', encoding='utf-8') as temp_file:
+        json.dump(mongo_data, temp_file, ensure_ascii=False, indent=4, default=datetime_converter)
+        temp_file_path = temp_file.name
+    client.close()
+    
+    logger.info(f"Données extraites et sauvegardées dans le fichier temporaire: {temp_file_path}")
+    
+    kwargs['ti'].xcom_push(key='temp_file_path', value=temp_file_path)
+
+def transform_data_from_temp_file(**kwargs):
+    temp_file_path = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb_to_temp_file', key='temp_file_path')
+    logger.info(f"Transformation des données depuis le fichier temporaire: {temp_file_path}")
+    
+    with open(temp_file_path, 'r', encoding='utf-8') as file:
+        mongo_data = json.load(file)
+
     seen_matricules = set()
     transformed_data = []
+
     for record in mongo_data:
         matricule = record.get("matricule")
         if matricule in seen_matricules:
-            continue  
+            continue 
         seen_matricules.add(matricule)
+
         transformed_data.append({
-            "_id": id,
             "matricule": matricule,
             "nom": record.get("nom"),
             "prenom": record.get("prenom"),
@@ -68,13 +81,20 @@ def transform_data(mongo_data):
             "niveau_etude_actuelle": record.get("profile", {}).get("niveau_etude_actuelle", None),
             "disponibilite": record.get("profile", {}).get("disponibilite", None)
         })
-        print(f"Transformed {(transformed_data)} ")
+    
+    logger.info(f"Transformation terminée, {len(transformed_data)} clients traités.")
     return transformed_data
 
-def load_into_postgres(data):
+def load_into_postgres(**kwargs):
+    data = kwargs['ti'].xcom_pull(task_ids='transform_data_from_temp_file', key='return_value')
+    
+    if not data:
+        logger.error("No data to insert into PostgreSQL.")
+        return
+    
+    logger.info("Chargement des données dans PostgreSQL...")
     conn = get_postgres_connection()
     cur = conn.cursor()
-    reset_client_pk()
     
     insert_query = """
     INSERT INTO dim_client (matricule, nom, prenom, birthdate, nationality, adresseDomicile, pays, situation, etatcivile, photo, metier, intituleposte, niveau_etude_actuelle, disponibilite)
@@ -117,18 +137,34 @@ def load_into_postgres(data):
     conn.commit()
     cur.close()
     conn.close()
+    logger.info(f"{len(data)} lignes insérées dans PostgreSQL.")
 
-def main():
-    print("--- Listing MongoDB Content ---")
-    list_mongodb_content()
-    
-    raw_data = extract_from_mongodb()
-    transformed_data = transform_data(raw_data)
-    if transformed_data:
-        load_into_postgres(transformed_data)
-        print("Données insérées avec succès dans PostgreSQL.")
-    else:
-        print("Aucune donnée à insérer.")
+dag = DAG(
+    'Dag_DimClients',
+    schedule_interval='*/2 * * * *',
+    start_date=datetime(2025, 1, 1),
+    catchup=False,
+)
 
-if __name__ == "__main__":
-    main()
+extract_task = PythonOperator(
+    task_id='extract_from_mongodb_to_temp_file',
+    python_callable=extract_from_mongodb_to_temp_file,
+    provide_context=True,
+    dag=dag,
+)
+
+transform_task = PythonOperator(
+    task_id='transform_data_from_temp_file',
+    python_callable=transform_data_from_temp_file,
+    provide_context=True,
+    dag=dag,
+)
+
+load_task = PythonOperator(
+    task_id='load_into_postgres',
+    python_callable=load_into_postgres,
+    provide_context=True,
+    dag=dag,
+)
+
+extract_task >> transform_task >> load_task
