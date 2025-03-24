@@ -9,7 +9,6 @@ def get_mongodb_connection():
     client = MongoClient(MONGO_URI)
     mongo_db = client[MONGO_DB]
     collection = mongo_db[MONGO_COLLECTION]
-    print("Connected to MongoDB.")
     return client, mongo_db, collection
 
 def get_postgres_connection():
@@ -22,15 +21,32 @@ def get_postgres_connection():
     )
     return conn
 
-def insert_or_update_data(rome_code, outer_label, pk):
+def generate_secteur_code(existing_codes):
+    if not existing_codes:
+        return "sect0001"
+    else:
+        last_number = max(int(code.replace("sect", "")) for code in existing_codes)
+        new_number = last_number + 1
+        return f"sect{str(new_number).zfill(4)}"
+
+def insert_or_update_data(outer_label):
     conn = get_postgres_connection()
     cursor = conn.cursor()
+
+    cursor.execute("SELECT secteur_code FROM dim_secteur")
+    existing_codes = [row[0] for row in cursor.fetchall()]
+
+    new_secteur_code = generate_secteur_code(existing_codes)
+
+    transformed_label = outer_label.strip().lower()
+
     cursor.execute("""
-        INSERT INTO dim_secteur (secteur_code, label, metier_fk)
-        VALUES (%s, %s, %s)
-        ON CONFLICT (secteur_code) 
-        DO UPDATE SET label = EXCLUDED.label, metier_fk = EXCLUDED.metier_fk
-    """, (rome_code, outer_label, pk))
+        INSERT INTO dim_secteur (secteur_code, label)
+        VALUES (%s, %s)
+        ON CONFLICT (label) 
+        DO UPDATE SET secteur_code = EXCLUDED.secteur_code
+    """, (new_secteur_code, transformed_label))
+    
     conn.commit()
     cursor.close()
     conn.close()
@@ -45,21 +61,7 @@ def extract_labels_and_insert():
 
     for doc in documents:
         outer_label = doc.get('label')
-
-        if 'jobs' in doc:
-            for job in doc['jobs']:
-                rome_code = job.get('romeCode')
-                if rome_code:
-                    print(f"ROMECODE: {rome_code}, Label: {outer_label}")
-                    cursor.execute("SELECT metier_pk FROM public.dim_metier WHERE romecode = %s", (rome_code,))
-                    result = cursor.fetchone()
-
-                    if result:
-                        pk = result[0]
-                        print(f"  Associated PK: {pk}")
-                        insert_or_update_data(rome_code, outer_label, pk)
-                    else:
-                        print(f"  No PK found for ROME code {rome_code}")
+        insert_or_update_data(outer_label)
 
     cursor.close()
     conn.close()

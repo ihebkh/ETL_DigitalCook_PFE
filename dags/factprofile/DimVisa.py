@@ -1,27 +1,63 @@
-import psycopg2
 from pymongo import MongoClient
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from datetime import datetime
+import logging
+from bson import ObjectId
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def get_mongodb_connection():
-    MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
-    MONGO_DB = "PowerBi"
-    MONGO_COLLECTION = "frontusers"
-    client = MongoClient(MONGO_URI)
-    mongo_db = client[MONGO_DB]
-    collection = mongo_db[MONGO_COLLECTION]
-    return client, mongo_db, collection
+    try:
+        MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
+        MONGO_DB = "PowerBi"
+        MONGO_COLLECTION = "frontusers"
+        
+        client = MongoClient(MONGO_URI)
+        mongo_db = client[MONGO_DB]
+        collection = mongo_db[MONGO_COLLECTION]
+        logger.info("MongoDB connection successful.")
+        return client, mongo_db, collection
+    except Exception as e:
+        logger.error(f"Failed to connect to MongoDB: {e}")
+        raise
 
 def get_postgres_connection():
-    return psycopg2.connect(dbname="DW_DigitalCook", user='postgres', password='admin', host='localhost', port='5432')
+    hook = PostgresHook(postgres_conn_id='postgres')
+    conn = hook.get_conn()
+    logger.info("PostgreSQL connection successful.")
+    return conn
 
-def extract_from_mongodb():
-    client, _, collection = get_mongodb_connection()
-    mongo_data = list(collection.find({}, {"_id": 0, "profile": 1, "simpleProfile": 1})) 
-    client.close()
-    return mongo_data
+def convert_datetime_and_objectid_to_string(value):
+    if isinstance(value, datetime):
+        return value.isoformat() 
+    elif isinstance(value, ObjectId):
+        return str(value)
+    elif isinstance(value, dict):
+        return {key: convert_datetime_and_objectid_to_string(val) for key, val in value.items()}
+    elif isinstance(value, list):
+        return [convert_datetime_and_objectid_to_string(item) for item in value]
+    return value
 
-def transform_data(mongo_data):
+def extract_from_mongodb(**kwargs):
+    try:
+        client, _, collection = get_mongodb_connection()
+        mongo_data = list(collection.find({}, {"_id": 0}))
+        mongo_data = [convert_datetime_and_objectid_to_string(record) for record in mongo_data]
+        
+        client.close()
+        kwargs['ti'].xcom_push(key='mongo_data', value=mongo_data)
+        logger.info("Data extracted from MongoDB successfully.")
+        return mongo_data
+    except Exception as e:
+        logger.error(f"Error extracting data from MongoDB: {e}")
+        raise
+
+def transform_data(**kwargs):
+    mongo_data = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='mongo_data')
     transformed_data = []
-    visa_counter = 1
 
     for record in mongo_data:
         profiles = [record.get("profile", {})]
@@ -31,13 +67,12 @@ def transform_data(mongo_data):
 
         for profile_item in profiles:
             visas = profile_item.get("visa", [])
-
             for visa in visas:
                 if not visa:
                     continue 
                 
                 transformed_data.append({
-                    "visa_code": f"VISA{str(visa_counter).zfill(2)}",
+                    "visa_code": f"VISA{str(len(transformed_data) + 1).zfill(2)}",
                     "visa_type": visa.get("type", "").strip() or None,
                     "date_entree": visa.get("dateEntree"),
                     "date_sortie": visa.get("dateSortie"),
@@ -46,14 +81,20 @@ def transform_data(mongo_data):
                     "duree_type": visa.get("dureeValidite", {}).get("type", "").strip() or None,
                     "nb_entree": visa.get("nbEntree", "").strip() or None
                 })
-                visa_counter += 1
 
+    kwargs['ti'].xcom_push(key='transformed_data', value=transformed_data)
+    logger.info("Data transformed successfully.")
     return transformed_data
 
-def load_into_postgres(data):
+def load_into_postgres(**kwargs):
+    transformed_data = kwargs['ti'].xcom_pull(task_ids='transform_data', key='transformed_data')
+
+    if not transformed_data:
+        logger.info("No data to insert into PostgreSQL.")
+        return
+
     conn = get_postgres_connection()
     cur = conn.cursor()
-
     insert_query = """
     INSERT INTO dim_visa (visacode, visa_type, date_entree, date_sortie, destination, duree, duree_type, nb_entree)
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
@@ -65,10 +106,9 @@ def load_into_postgres(data):
         duree = EXCLUDED.duree,
         duree_type = EXCLUDED.duree_type,
         nb_entree = EXCLUDED.nb_entree
-    RETURNING visacode, visa_type, date_entree, date_sortie, destination, duree, duree_type, nb_entree, xmin;
     """
 
-    for record in data:
+    for record in transformed_data:
         values = (
             record["visa_code"],
             record["visa_type"],
@@ -80,34 +120,38 @@ def load_into_postgres(data):
             record["nb_entree"]
         )
         cur.execute(insert_query, values)
-        result = cur.fetchone()
-        if result:
-            if result[-1] == 0:
-                print(f"Inserted new record: {result}")
-            else:
-                print(f"Updated existing record: {result}")
 
     conn.commit()
     cur.close()
     conn.close()
+    logger.info(f"{len(transformed_data)} visa records inserted/updated in PostgreSQL.")
 
-def main():
-    print("--- Extraction et chargement des visas ---")
-    raw_data = extract_from_mongodb()
-    if not raw_data:
-        print(" Aucune donnée trouvée dans MongoDB.")
-        return
+dag = DAG(
+    'visa_migration_dag',
+    schedule_interval='*/1 * * * *',
+    start_date=datetime(2025, 1, 1),
+    catchup=False,
+)
 
-    transformed_data = transform_data(raw_data)
-    if transformed_data:
-        print(" Données transformées :")
-        for record in transformed_data:
-            print(f"visa_code: {record['visa_code']}, visa_type: {record['visa_type']}, date_entree: {record['date_entree']}, date_sortie: {record['date_sortie']}, destination: {record['destination']}, duree: {record['duree']}, duree_type: {record['duree_type']}, nb_entree: {record['nb_entree']}")
-        
-        load_into_postgres(transformed_data)
-        print(" Données insérées/mises à jour avec succès dans PostgreSQL.")
-    else:
-        print(" Aucune donnée de visa à insérer.")
+extract_task = PythonOperator(
+    task_id='extract_from_mongodb',
+    python_callable=extract_from_mongodb,
+    provide_context=True,
+    dag=dag,
+)
 
-if __name__ == "__main__":
-    main()
+transform_task = PythonOperator(
+    task_id='transform_data',
+    python_callable=transform_data,
+    provide_context=True,
+    dag=dag,
+)
+
+load_task = PythonOperator(
+    task_id='load_into_postgres',
+    python_callable=load_into_postgres,
+    provide_context=True,
+    dag=dag,
+)
+
+extract_task >> transform_task >> load_task

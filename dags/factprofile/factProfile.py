@@ -329,23 +329,11 @@ def match_and_display_factcode_client_competence_interest():
 
     line_count = 0
 
-    experience_year_dict = {}
-    experience_month_dict = {}
 
     for user in mongo_data_list:
         matricule = user.get("matricule", None)
 
         # Calculate experience in years and months
-        dureeExperience = user.get("profile", {}).get("dureeExperience", {})
-        dureeExperience_year = dureeExperience.get("year", 0) if isinstance(dureeExperience, dict) else 0
-        dureeExperience_month = dureeExperience.get("month", 0) if isinstance(dureeExperience, dict) else 0
-
-        simpleProfile_dureeExperience = user.get("simpleProfile", {}).get("dureeExperience", {})
-        simpleProfile_dureeExperience_year = simpleProfile_dureeExperience.get("year", 0) if isinstance(simpleProfile_dureeExperience, dict) else 0
-        simpleProfile_dureeExperience_month = simpleProfile_dureeExperience.get("month", 0) if isinstance(simpleProfile_dureeExperience, dict) else 0
-
-        experience_year_dict[matricule] = dureeExperience_year + simpleProfile_dureeExperience_year
-        experience_month_dict[matricule] = dureeExperience_month + simpleProfile_dureeExperience_month
 
         client_fk = get_client_fk_from_postgres(matricule)
 
@@ -475,14 +463,11 @@ def match_and_display_factcode_client_competence_interest():
             certification_pk = certification_pk_list[i] if i < len(certification_pk_list) else None
             experience_fk = experience_fk_list[i] if i < len(experience_fk_list) else None
             
-            # Retrieve experience years and months
-            experience_year = experience_year_dict.get(matricule, 0)
-            experience_month = experience_month_dict.get(matricule, 0)
 
             # Call the insert function
             insert_data_to_postgres(client_fk, competence_fk, language_fk, interest_pk, job_location_pk,
                                     study_level_fk, visa_pk, project_pk, contact_pk, permis_fk, 
-                                    certification_pk, experience_fk, experience_year, experience_month)
+                                    certification_pk, experience_fk)
             
             line_count += 1
 
