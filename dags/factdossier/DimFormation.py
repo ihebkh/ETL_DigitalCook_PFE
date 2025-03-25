@@ -1,37 +1,49 @@
-import psycopg2
+import logging
 from pymongo import MongoClient
+from bson import ObjectId
 import datetime
 
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from datetime import datetime as dt
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 def get_postgresql_connection():
-    return psycopg2.connect(
-        dbname="DW_DigitalCook",
-        user="postgres",
-        password="admin",
-        host="localhost",
-        port="5432"
-    )
+    hook = PostgresHook(postgres_conn_id="postgres")
+    return hook.get_conn()
 
 def get_mongodb_connection():
     MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
-    MONGO_DB = "PowerBi"
-    MONGO_COLLECTION = "formations"
-
     client = MongoClient(MONGO_URI)
-    mongo_db = client[MONGO_DB]
-    collection = mongo_db[MONGO_COLLECTION]
+    mongo_db = client["PowerBi"]
+    collection = mongo_db["formations"]
     return client, mongo_db, collection
 
-def extract_formation_from_mongodb():
-    client, mongo_db, collection = get_mongodb_connection()
-    formations = collection.find({}, {"_id": 0, "titreFormation": 1, "dateDebut": 1, "dateFin": 1, 
-                                       "domaine": 1, "ville": 1, "adresse": 1, "centreDeFormation": 1, 
-                                       "presence": 1, "duree": 1})
-    formation_list = []
-    for formation in formations:
-        formation_list.append(formation)
+def convert_bson(obj):
+    if isinstance(obj, dict):
+        return {k: convert_bson(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_bson(i) for i in obj]
+    elif isinstance(obj, ObjectId):
+        return str(obj)
+    elif isinstance(obj, datetime.datetime):
+        return obj.isoformat()
+    return obj
 
+def extract_formations(**kwargs):
+    client, mongo_db, collection = get_mongodb_connection()
+    formations = list(collection.find({}, {
+        "_id": 0, "titreFormation": 1, "dateDebut": 1, "dateFin": 1, 
+        "domaine": 1, "ville": 1, "adresse": 1, "centreDeFormation": 1, 
+        "presence": 1, "duree": 1
+    }))
     client.close()
-    return formation_list
+    formations = convert_bson(formations)
+    kwargs['ti'].xcom_push(key='formations', value=formations)
+    logger.info(f"{len(formations)} formations extraites de MongoDB.")
 
 def generate_formation_code(index):
     return f"formation{str(index).zfill(4)}"
@@ -41,25 +53,25 @@ def convert_to_datetime(date_value):
         return date_value
     elif isinstance(date_value, str):
         try:
-            return datetime.datetime.strptime(date_value, "%Y-%m-%dT%H:%M:%S")
+            return datetime.datetime.fromisoformat(date_value)
         except ValueError:
             return None
     return None
 
-def insert_or_update_formation(formation, formation_code):
+def load_formations(**kwargs):
+    formations = kwargs['ti'].xcom_pull(task_ids='extract_formations', key='formations')
+    if not formations:
+        logger.info("Aucune formation à charger.")
+        return
+
     conn = get_postgresql_connection()
     cursor = conn.cursor()
-    titreformation = formation.get("titreFormation", "")
-    date_debut = convert_to_datetime(formation.get("dateDebut", None))
-    date_fin = convert_to_datetime(formation.get("dateFin", None))
-    domaine = formation.get("domaine", "")
-    ville = formation.get("ville", "")
-    adresse = formation.get("adresse", "")
-    centreformations = formation.get("centreDeFormation", "")
-    presence = formation.get("presence", "")
-    duree = formation.get("duree", "")
+
     query = """
-    INSERT INTO dim_formation (formationcode, titreformation, date_debut, date_fin, domaine, ville, adresse, centreformations, presence, duree)
+    INSERT INTO dim_formation (
+        formationcode, titreformation, date_debut, date_fin, 
+        domaine, ville, adresse, centreformations, presence, duree
+    )
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     ON CONFLICT (formationcode) DO UPDATE
     SET titreformation = EXCLUDED.titreformation,
@@ -72,20 +84,48 @@ def insert_or_update_formation(formation, formation_code):
         presence = EXCLUDED.presence,
         duree = EXCLUDED.duree;
     """
-    
-    cursor.execute(query, (formation_code, titreformation, date_debut, date_fin, domaine, ville, adresse, centreformations, presence, duree))
+
+    for index, formation in enumerate(formations, start=1):
+        code = generate_formation_code(index)
+        titre = formation.get("titreFormation", "")
+        date_debut = convert_to_datetime(formation.get("dateDebut"))
+        date_fin = convert_to_datetime(formation.get("dateFin"))
+        domaine = formation.get("domaine", "")
+        ville = formation.get("ville", "")
+        adresse = formation.get("adresse", "")
+        centre = formation.get("centreDeFormation", "")
+        presence = formation.get("presence", "")
+        duree = formation.get("duree", "")
+
+        cursor.execute(query, (
+            code, titre, date_debut, date_fin, domaine,
+            ville, adresse, centre, presence, duree
+        ))
+
     conn.commit()
     cursor.close()
     conn.close()
+    logger.info(f"{len(formations)} formations insérées/mises à jour.")
 
-def main():
-    formations = extract_formation_from_mongodb()
-    print("Formations extraites de MongoDB avec leurs codes générés:")
-    
-    for index, formation in enumerate(formations, start=1):
-        formation_code = generate_formation_code(index)  #
-        print(f"Insertion/Modification de la formation : {formation.get('titreFormation')} - {formation_code}")
-        insert_or_update_formation(formation, formation_code)
+dag = DAG(
+    dag_id='dag_dim_formation',
+    start_date=dt(2025, 1, 1),
+    schedule_interval='*/2 * * * *',
+    catchup=False
+)
 
-if __name__ == "__main__":
-    main()
+extract_task = PythonOperator(
+    task_id='extract_formations',
+    python_callable=extract_formations,
+    provide_context=True,
+    dag=dag
+)
+
+load_task = PythonOperator(
+    task_id='load_formations',
+    python_callable=load_formations,
+    provide_context=True,
+    dag=dag
+)
+
+extract_task >> load_task

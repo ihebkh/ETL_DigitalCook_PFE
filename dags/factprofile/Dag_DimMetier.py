@@ -1,13 +1,10 @@
-import json
 import logging
-import psycopg2
 from pymongo import MongoClient
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from datetime import datetime
 
-# Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -60,7 +57,6 @@ def extract_jobs_from_mongodb(**kwargs):
         raise
 
 def load_jobs_into_postgres(**kwargs):
-    """ Load the extracted jobs data into PostgreSQL. """
     try:
         jobs_data = kwargs['ti'].xcom_pull(task_ids='extract_jobs_from_mongodb', key='jobs_data')
 

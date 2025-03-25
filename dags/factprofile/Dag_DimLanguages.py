@@ -3,7 +3,6 @@ import json
 import logging
 from datetime import datetime
 from pymongo import MongoClient
-import psycopg2
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
@@ -38,7 +37,6 @@ def generate_langue_code(existing_codes):
         return f"LANG{str(new_number).zfill(3)}"
 
 def extract_from_mongodb_to_temp_file(**kwargs):
-    """ Extract data from MongoDB and save it to a temporary file. """
     client, _, collection = get_mongodb_connection()
     mongo_data = collection.find({}, {"_id": 0, "matricule": 1, "profile.languages": 1, "simpleProfile.languages": 1})
 
@@ -83,7 +81,6 @@ def extract_from_mongodb_to_temp_file(**kwargs):
     
     logger.info(f"Langues extraites: {languages}")
 
-    # Save to a temporary file
     with tempfile.NamedTemporaryFile(delete=False, mode='w', encoding='utf-8') as temp_file:
         temp_file_path = temp_file.name
         json.dump(languages, temp_file, ensure_ascii=False, indent=4)
@@ -91,7 +88,6 @@ def extract_from_mongodb_to_temp_file(**kwargs):
     kwargs['ti'].xcom_push(key='temp_file_path', value=temp_file_path)
 
 def transform_data_from_temp_file(**kwargs):
-    """ Transform the data from the temporary file. """
     temp_file_path = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb_to_temp_file', key='temp_file_path')
     
     with open(temp_file_path, 'r', encoding='utf-8') as file:
@@ -121,7 +117,6 @@ def transform_data_from_temp_file(**kwargs):
     kwargs['ti'].xcom_push(key='transformed_data', value=transformed_data)
 
 def load_into_postgres(**kwargs):
-    """ Load the transformed data into PostgreSQL. """
     transformed_data = kwargs['ti'].xcom_pull(task_ids='transform_data_from_temp_file', key='transformed_data')
 
     if not transformed_data:

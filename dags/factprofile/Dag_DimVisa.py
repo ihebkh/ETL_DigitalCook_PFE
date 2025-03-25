@@ -128,7 +128,7 @@ def load_into_postgres(**kwargs):
 
 dag = DAG(
     'visa_migration_dag',
-    schedule_interval='*/1 * * * *',
+    schedule_interval='*/2 * * * *',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )

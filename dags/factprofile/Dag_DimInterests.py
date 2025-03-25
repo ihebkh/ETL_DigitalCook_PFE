@@ -38,7 +38,6 @@ def generate_interests_code(existing_codes):
         return f"INT{str(new_number).zfill(3)}"
 
 def extract_from_mongodb_to_temp_file(**kwargs):
-    """ Extract data from MongoDB and save it to a temporary file. """
     client, _, collection = get_mongodb_connection()
     mongo_data = collection.find({}, {"_id": 0, "matricule": 1, "profile.interests": 1, "simpleProfile.interests": 1})
 
@@ -70,7 +69,6 @@ def extract_from_mongodb_to_temp_file(**kwargs):
     kwargs['ti'].xcom_push(key='temp_file_path', value=temp_file_path)
 
 def transform_data_from_temp_file(**kwargs):
-    """ Transform the data from the temporary file. """
     temp_file_path = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb_to_temp_file', key='temp_file_path')
     
     with open(temp_file_path, 'r', encoding='utf-8') as file:
@@ -99,7 +97,6 @@ def transform_data_from_temp_file(**kwargs):
     kwargs['ti'].xcom_push(key='transformed_data', value=transformed_data)
 
 def load_into_postgres(**kwargs):
-    """ Load the transformed data into PostgreSQL. """
     transformed_data = kwargs['ti'].xcom_pull(task_ids='transform_data_from_temp_file', key='transformed_data')
 
     if not transformed_data:

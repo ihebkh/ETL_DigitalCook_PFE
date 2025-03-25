@@ -27,7 +27,6 @@ def get_postgres_connection():
     return conn
 
 def get_existing_competences():
-    """ Fetch existing competencies from the PostgreSQL database. """
     conn = get_postgres_connection()
     cur = conn.cursor()
     cur.execute("SELECT competence_name FROM dim_competence")
@@ -37,7 +36,6 @@ def get_existing_competences():
     return competences
 
 def extract_from_mongodb_to_temp_file(**kwargs):
-    """ Extract data from MongoDB and save it to a temporary file. """
     client, _, collection = get_mongodb_connection()
     mongo_data = list(collection.find({}, {"_id": 0, "profile.experiences.competances": 1, "simpleProfile.experiences.competances": 1}))
     
@@ -65,7 +63,6 @@ def extract_from_mongodb_to_temp_file(**kwargs):
     logger.info(f"Data extracted and saved to temporary file: {temp_file_path}")
 
 def transform_data_from_temp_file(**kwargs):
-    """ Transform the data from the temporary file. """
     temp_file_path = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb_to_temp_file', key='temp_file_path')
     
     with open(temp_file_path, 'r', encoding='utf-8') as file:
@@ -91,7 +88,6 @@ def transform_data_from_temp_file(**kwargs):
     logger.info(f"Data transformed: {len(transformed_data)} new competencies found.")
 
 def load_into_postgres(**kwargs):
-    """ Load the transformed data into PostgreSQL. """
     transformed_data = kwargs['ti'].xcom_pull(task_ids='transform_data_from_temp_file', key='transformed_data')
     
     if not transformed_data:

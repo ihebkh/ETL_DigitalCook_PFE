@@ -1,65 +1,94 @@
-import psycopg2
+import logging
 from pymongo import MongoClient
+from bson import ObjectId
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from datetime import datetime
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def get_postgresql_connection():
-    return psycopg2.connect(
-        dbname="DW_DigitalCook",
-        user="postgres",
-        password="admin",
-        host="localhost",
-        port="5432"
-    )
+    hook = PostgresHook(postgres_conn_id="postgres")
+    return hook.get_conn()
 
 def get_mongodb_connection():
     MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
-    MONGO_DB = "PowerBi"
-    MONGO_COLLECTION = "universities" 
-
     client = MongoClient(MONGO_URI)
-    mongo_db = client[MONGO_DB]
-    collection = mongo_db[MONGO_COLLECTION]
+    mongo_db = client["PowerBi"]
+    collection = mongo_db["universities"]
     return client, mongo_db, collection
 
-def extract_partners_from_mongodb():
-    client, mongo_db, collection = get_mongodb_connection()
+def convert_bson(obj):
+    if isinstance(obj, dict):
+        return {k: convert_bson(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_bson(i) for i in obj]
+    elif isinstance(obj, ObjectId):
+        return str(obj)
+    return obj
 
+def extract_partenaires(**kwargs):
+    client, mongo_db, collection = get_mongodb_connection()
     universities = collection.find({}, {"_id": 0, "partenairesProfessionnel": 1})
 
     partenaires = []
-
     for university in universities:
-        for partenaire in university.get("partenairesProfessionnel", []):
-            partenaires.append(partenaire)
+        partenaires.extend(university.get("partenairesProfessionnel", []))
 
+    partenaires = list(set(convert_bson(partenaires)))
     client.close()
-    return partenaires
+    kwargs['ti'].xcom_push(key='partenaires_pro', value=partenaires)
+    logger.info(f"{len(partenaires)} partenaires professionnels extraits de MongoDB.")
 
 def generate_partenaire_professional_code(index):
-    return f"partenairePro{str(index).zfill(4)}" 
+    return f"partenairePro{str(index).zfill(4)}"
 
-def insert_or_update_partenaire(partenaire, index):
+def load_partenaires(**kwargs):
+    partenaires = kwargs['ti'].xcom_pull(task_ids='extract_partenaires', key='partenaires_pro')
+    if not partenaires:
+        logger.info("Aucun partenaire professionnel à charger.")
+        return
+
     conn = get_postgresql_connection()
     cursor = conn.cursor()
 
-    codepartenaireprofessional = generate_partenaire_professional_code(index)
-    query = """
-    INSERT INTO dim_partenaire_proessionnel (codepartenaireprofessional, nom_partenaire)
-    VALUES (%s, %s)
-    ON CONFLICT (codepartenaireprofessional) DO UPDATE
-    SET nom_partenaire = EXCLUDED.nom_partenaire;
+    insert_query = """
+        INSERT INTO dim_partenaire_proessionnel (codepartenaireprofessional, nom_partenaire)
+        VALUES (%s, %s)
+        ON CONFLICT (codepartenaireprofessional) DO UPDATE
+        SET nom_partenaire = EXCLUDED.nom_partenaire;
     """
-    cursor.execute(query, (codepartenaireprofessional, partenaire))
+
+    for index, partenaire in enumerate(partenaires, start=1):
+        code = generate_partenaire_professional_code(index)
+        cursor.execute(insert_query, (code, partenaire))
+
     conn.commit()
     cursor.close()
     conn.close()
+    logger.info(f"{len(partenaires)} partenaires professionnels insérés/mis à jour.")
 
-def main():
-    partenaires = extract_partners_from_mongodb()
-    print("Partenaires professionnels extraits de MongoDB avec leurs codes générés:")
-    
-    for index, partenaire in enumerate(partenaires, start=1):
-        print(f"Insertion/Modification du partenaire : {partenaire} - {generate_partenaire_professional_code(index)}")
-        insert_or_update_partenaire(partenaire, index)
+dag = DAG(
+    dag_id='dag_dim_partenaire_professionnel',
+    start_date=datetime(2025, 1, 1),
+    schedule_interval='*/2 * * * *',
+    catchup=False
+)
 
-if __name__ == "__main__":
-    main()
+extract_task = PythonOperator(
+    task_id='extract_partenaires',
+    python_callable=extract_partenaires,
+    provide_context=True,
+    dag=dag
+)
+
+load_task = PythonOperator(
+    task_id='load_partenaires',
+    python_callable=load_partenaires,
+    provide_context=True,
+    dag=dag
+)
+
+extract_task >> load_task

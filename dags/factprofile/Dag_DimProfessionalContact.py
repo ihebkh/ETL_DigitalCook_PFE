@@ -100,7 +100,7 @@ def transform_data(**kwargs):
         
         transformed_contacts.append(record)
 
-    kwargs['ti'].xcom_push(key='transformed_data', value=transformed_contacts)  # Push transformed data for loading
+    kwargs['ti'].xcom_push(key='transformed_data', value=transformed_contacts)
     return transformed_contacts
 
 def load_into_postgres(**kwargs):

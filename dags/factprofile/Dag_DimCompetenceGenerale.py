@@ -35,7 +35,6 @@ def generate_competence_code(existing_codes):
         return f"COMP{str(new_number).zfill(3)}"
 
 def extract_from_mongodb_to_temp_file(**kwargs):
-    """ Extract data from MongoDB and save it to a temporary file. """
     client, _, collection = get_mongodb_connection()
     mongo_data = collection.find({}, {"_id": 0, "profile.competenceGenerales": 1, "simpleProfile.competenceGenerales": 1})
 
@@ -61,16 +60,13 @@ def extract_from_mongodb_to_temp_file(**kwargs):
     
     logger.info(f"Compétences extraites : {competences}")
 
-    # Save to a temporary file
     with tempfile.NamedTemporaryFile(delete=False, mode='w', encoding='utf-8') as temp_file:
         temp_file_path = temp_file.name
         json.dump([{"competenceCode": None, "competence_name": c} for c in competences], temp_file, ensure_ascii=False, indent=4)
     
-    # Push temp file path to XCom for the next task
     kwargs['ti'].xcom_push(key='temp_file_path', value=temp_file_path)
 
 def transform_data_from_temp_file(**kwargs):
-    """ Transform the data from the temporary file. """
     temp_file_path = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb_to_temp_file', key='temp_file_path')
     
     with open(temp_file_path, 'r', encoding='utf-8') as file:
@@ -97,11 +93,9 @@ def transform_data_from_temp_file(**kwargs):
             })
             existing_codes.add(new_competence_code)
     
-    # Push transformed data to XCom
     kwargs['ti'].xcom_push(key='transformed_data', value=transformed_data)
 
 def load_into_postgres(**kwargs):
-    """ Load the transformed data into PostgreSQL. """
     transformed_data = kwargs['ti'].xcom_pull(task_ids='transform_data_from_temp_file', key='transformed_data')
 
     if not transformed_data:
@@ -160,5 +154,4 @@ load_task = PythonOperator(
     dag=dag,
 )
 
-# Define task dependencies
 extract_task >> transform_task >> load_task

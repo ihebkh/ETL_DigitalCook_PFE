@@ -1,20 +1,14 @@
-import os
-import json
-import psycopg2
 from pymongo import MongoClient
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from datetime import datetime
-from bson import ObjectId  # Import ObjectId from bson
-
-# Setup logging
+from bson import ObjectId
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def get_mongodb_connection():
-    """MongoDB connection."""
     try:
         MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
         MONGO_DB = "PowerBi"
@@ -30,14 +24,12 @@ def get_mongodb_connection():
         raise
 
 def get_postgres_connection():
-    """PostgreSQL connection."""
     hook = PostgresHook(postgres_conn_id='postgres')
     conn = hook.get_conn()
     logger.info("PostgreSQL connection successful.")
     return conn
 
 def get_next_permis_code():
-    """Generate next permis code."""
     conn = get_postgres_connection()
     cur = conn.cursor()
     cur.execute("SELECT COUNT(*) FROM dim_permis_conduire")
@@ -47,29 +39,25 @@ def get_next_permis_code():
     return f"code{str(count).zfill(3)}"
 
 def convert_non_serializable(value):
-    """Convert non-serializable types to JSON serializable types."""
     if isinstance(value, datetime):
-        return value.isoformat()  # Convert datetime to ISO format string
+        return value.isoformat()
     elif isinstance(value, ObjectId):
-        return str(value)  # Convert ObjectId to string
+        return str(value)
     elif isinstance(value, dict):
-        return {key: convert_non_serializable(val) for key, val in value.items()}  # Recursively apply to dict
+        return {key: convert_non_serializable(val) for key, val in value.items()}
     elif isinstance(value, list):
-        return [convert_non_serializable(item) for item in value]  # Recursively apply to list
-    return value  # Return the value unchanged if it's already serializable
+        return [convert_non_serializable(item) for item in value]
+    return value
 
 
 def extract_from_mongodb(**kwargs):
-    """Extract permis data from MongoDB."""
     try:
         client, _, collection = get_mongodb_connection()
-        mongo_data = list(collection.find({}, {"_id": 0}))  # Extract data from MongoDB
-        
-        # Convert all non-serializable types in each record
+        mongo_data = list(collection.find({}, {"_id": 0}))
         mongo_data = [convert_non_serializable(record) for record in mongo_data]
 
         client.close()
-        kwargs['ti'].xcom_push(key='mongo_data', value=mongo_data)  # Push data to XCom for next task
+        kwargs['ti'].xcom_push(key='mongo_data', value=mongo_data)
         return mongo_data
     except Exception as e:
         logger.error(f"Error extracting data from MongoDB: {e}")
@@ -77,8 +65,7 @@ def extract_from_mongodb(**kwargs):
 
 
 def transform_data(**kwargs):
-    """Transform extracted data."""
-    mongo_data = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='mongo_data')  # Pull data from XCom
+    mongo_data = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='mongo_data')
     seen_categories = set()
     transformed_data = []
     
@@ -100,13 +87,12 @@ def transform_data(**kwargs):
                     "categorie": category
                 })
 
-    kwargs['ti'].xcom_push(key='transformed_data', value=transformed_data)  # Push transformed data for loading
+    kwargs['ti'].xcom_push(key='transformed_data', value=transformed_data)
     return transformed_data
 
 def load_into_postgres(**kwargs):
-    """Load transformed data into PostgreSQL."""
     try:
-        transformed_data = kwargs['ti'].xcom_pull(task_ids='transform_data', key='transformed_data')  # Pull transformed data from XCom
+        transformed_data = kwargs['ti'].xcom_pull(task_ids='transform_data', key='transformed_data')
 
         if not transformed_data:
             logger.info("No data to insert into PostgreSQL.")
@@ -136,7 +122,6 @@ def load_into_postgres(**kwargs):
         logger.error(f"Error loading data into PostgreSQL: {e}")
         raise
 
-# Airflow DAG definition
 dag = DAG(
     'Dag_DimPermisConduire',
     schedule_interval='*/2 * * * *',
@@ -144,7 +129,6 @@ dag = DAG(
     catchup=False,
 )
 
-# Task 1: Extract from MongoDB
 extract_task = PythonOperator(
     task_id='extract_from_mongodb',
     python_callable=extract_from_mongodb,
@@ -152,7 +136,6 @@ extract_task = PythonOperator(
     dag=dag,
 )
 
-# Task 2: Transform data
 transform_task = PythonOperator(
     task_id='transform_data',
     python_callable=transform_data,
@@ -160,7 +143,6 @@ transform_task = PythonOperator(
     dag=dag,
 )
 
-# Task 3: Load into PostgreSQL
 load_task = PythonOperator(
     task_id='load_into_postgres',
     python_callable=load_into_postgres,
@@ -168,5 +150,4 @@ load_task = PythonOperator(
     dag=dag,
 )
 
-# Task dependencies
 extract_task >> transform_task >> load_task

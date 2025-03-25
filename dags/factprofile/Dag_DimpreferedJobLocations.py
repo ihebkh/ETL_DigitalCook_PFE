@@ -36,18 +36,16 @@ def generate_location_code(existing_codes):
     if not existing_codes:
         return "LOC001"
     else:
-        last_number = max(int(code.replace("LOC", "")) for code in existing_codes)
+        last_number = max(int(code.replace("LOC", "")) for code in existing_codes if code.startswith("LOC"))
         new_number = last_number + 1
         return f"LOC{str(new_number).zfill(3)}"
 
 def handle_objectid(obj):
-    """ Helper function to handle MongoDB ObjectId serialization. """
     if isinstance(obj, ObjectId):
         return str(obj)
     raise TypeError(f"Type {obj.__class__.__name__} not serializable")
 
 def extract_from_mongodb(**kwargs):
-    """ Extract data from MongoDB and save it to a temporary file. """
     try:
         client, _, collection = get_mongodb_connection()
         mongo_data = list(collection.find({}, {"_id": 0, "profile.preferedJobLocations": 1, "simpleProfile.preferedJobLocations": 1}))
@@ -68,10 +66,9 @@ def extract_from_mongodb(**kwargs):
         raise
 
 def transform_data_from_temp_file(**kwargs):
-    """ Transform the data from the temporary file. """
     try:
         temp_file_path = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='temp_file_path')
-        
+
         with open(temp_file_path, 'r', encoding='utf-8') as file:
             mongo_data = json.load(file)
 
@@ -79,49 +76,31 @@ def transform_data_from_temp_file(**kwargs):
         existing_entries = set()
 
         for user in mongo_data:
-            if isinstance(user, dict) and "profile" in user and isinstance(user["profile"], dict):
-                profile = user["profile"]
-                if "preferedJobLocations" in profile:
-                    locations = profile["preferedJobLocations"]
+            for profile_key in ["profile", "simpleProfile"]:
+                if isinstance(user, dict) and profile_key in user and isinstance(user[profile_key], dict):
+                    profile = user[profile_key]
+                    if "preferedJobLocations" in profile:
+                        locations = profile["preferedJobLocations"]
 
-                    if isinstance(locations, list):
-                        for loc in locations:
-                            if isinstance(loc, dict):
-                                pays = loc.get("pays", "").strip()
-                                ville = loc.get("ville", "").strip()
-                                region = loc.get("region", "").strip()
+                        if isinstance(locations, list):
+                            for loc in locations:
+                                if isinstance(loc, dict):
+                                    pays = loc.get("pays", "").strip()
+                                    ville = loc.get("ville", "").strip()
+                                    region = loc.get("region", "").strip()
 
-                                location_tuple = (pays, ville, region)
-                                if location_tuple not in existing_entries:
-                                    existing_entries.add(location_tuple)
-                                    job_locations.append({
-                                        "preferedJobLocationsCode": None,
-                                        "pays": pays,
-                                        "ville": ville,
-                                        "region": region
-                                    })
-            
-            if isinstance(user, dict) and "simpleProfile" in user and isinstance(user["simpleProfile"], dict):
-                simple_profile = user["simpleProfile"]
-                if "preferedJobLocations" in simple_profile:
-                    locations = simple_profile["preferedJobLocations"]
+                                    if not (pays or ville or region):
+                                        continue
 
-                    if isinstance(locations, list):
-                        for loc in locations:
-                            if isinstance(loc, dict):
-                                pays = loc.get("pays", "").strip()
-                                ville = loc.get("ville", "").strip()
-                                region = loc.get("region", "").strip()
-
-                                location_tuple = (pays, ville, region)
-                                if location_tuple not in existing_entries:
-                                    existing_entries.add(location_tuple)
-                                    job_locations.append({
-                                        "preferedJobLocationsCode": None,
-                                        "pays": pays,
-                                        "ville": ville,
-                                        "region": region
-                                    })
+                                    location_tuple = (pays, ville, region)
+                                    if location_tuple not in existing_entries:
+                                        existing_entries.add(location_tuple)
+                                        job_locations.append({
+                                            "preferedJobLocationsCode": None,
+                                            "pays": pays,
+                                            "ville": ville,
+                                            "region": region
+                                        })
 
         logger.info(f"Transformed {len(job_locations)} job locations.")
         kwargs['ti'].xcom_push(key='job_locations', value=job_locations)
@@ -131,7 +110,6 @@ def transform_data_from_temp_file(**kwargs):
         raise
 
 def load_into_postgres(**kwargs):
-    """ Load the transformed data into PostgreSQL. """
     try:
         job_locations = kwargs['ti'].xcom_pull(task_ids='transform_data_from_temp_file', key='job_locations')
 
@@ -155,7 +133,13 @@ def load_into_postgres(**kwargs):
         cur.execute("SELECT preferedJobLocationsCode, pays, ville, region FROM Dim_preferedJobLocations")
         existing_entries = {(row[1], row[2], row[3]): row[0] for row in cur.fetchall()}
 
+        inserted_count = 0
+
         for record in job_locations:
+            if not (record["pays"].strip() or record["ville"].strip() or record["region"].strip()):
+                logger.info("Skipped empty job location entry.")
+                continue
+
             location_tuple = (record["pays"], record["ville"], record["region"])
             if location_tuple in existing_entries:
                 record["preferedJobLocationsCode"] = existing_entries[location_tuple]
@@ -168,16 +152,16 @@ def load_into_postgres(**kwargs):
                 record["preferedJobLocationsCode"],
                 record["pays"],
                 record["ville"],
-                record["region"],
+                record["region"]
             )
-            logger.info(f"Insertion / Mise à jour : {values}")
             cur.execute(insert_query, values)
+            inserted_count += 1
 
         conn.commit()
         cur.close()
         conn.close()
 
-        logger.info(f"{len(job_locations)} job locations inserted/updated in PostgreSQL.")
+        logger.info(f"{inserted_count} job locations inserted/updated in PostgreSQL.")
     except Exception as e:
         logger.error(f"Error loading job locations into PostgreSQL: {e}")
         raise

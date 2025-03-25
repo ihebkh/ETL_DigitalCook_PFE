@@ -1,5 +1,4 @@
 import logging
-import psycopg2
 from pymongo import MongoClient
 import tempfile
 import json
@@ -52,7 +51,6 @@ def generate_diplome_code(existing_codes):
     return new_code
 
 def extract_from_mongodb(**kwargs):
-    """ Extract data from MongoDB and save it to a temporary file. """
     try:
         client, _, collection = get_mongodb_connection()
         mongo_data = collection.find({}, {"_id": 0, "profile.niveauDetudes": 1, "simpleProfile.niveauDetudes": 1})
@@ -108,7 +106,6 @@ def extract_from_mongodb(**kwargs):
         raise
 
 def load_into_postgres(**kwargs):
-    """ Load the extracted study levels into PostgreSQL. """
     try:
         temp_file_path = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='temp_file_path')
 
