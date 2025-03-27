@@ -21,6 +21,7 @@ def get_mongodb_connection():
     return client, mongo_db, collection
 
 def convert_bson(obj):
+    """Convert BSON ObjectId to string"""
     if isinstance(obj, dict):
         return {k: convert_bson(v) for k, v in obj.items()}
     elif isinstance(obj, list):
@@ -30,6 +31,7 @@ def convert_bson(obj):
     return obj
 
 def extract_villes(**kwargs):
+    """Extract unique cities (villes) from MongoDB."""
     client, mongo_db, collection = get_mongodb_connection()
     universities = collection.find({}, {"_id": 0, "ville": 1})
 
@@ -37,15 +39,18 @@ def extract_villes(**kwargs):
     for university in universities:
         villes.update(university.get("ville", []))
 
-    villes = list(set(convert_bson(villes)))
+    villes = list(set(convert_bson(villes)))  # Convert to BSON format and remove duplicates
     client.close()
+
     kwargs['ti'].xcom_push(key='villes', value=villes)
     logger.info(f"{len(villes)} villes extraites de MongoDB.")
 
 def generate_city_code(index):
+    """Generate a unique code for each city."""
     return f"ville{str(index).zfill(4)}"
 
 def load_villes(**kwargs):
+    """Load cities into PostgreSQL."""
     villes = kwargs['ti'].xcom_pull(task_ids='extract_villes', key='villes')
     if not villes:
         logger.info("Aucune ville à charger.")
