@@ -46,6 +46,7 @@ def extract_niveau_etudes(**kwargs):
             universite = etude.get("school", "null")
             course = etude.get("course", None)
             label = etude.get("label", "null")
+            print(label)
             pays = etude.get("pays", "N/A")
             diplome = etude.get("nomDiplome", "N/A")
             du = etude.get("duree", {}).get("du", {})

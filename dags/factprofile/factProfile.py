@@ -71,8 +71,6 @@ def get_visa_counts_by_client():
 
     return {row[0]: row[1] for row in rows}
 
-
-
 def get_secteur_pk_from_postgres(label):
     conn = get_postgres_connection()
     cur = conn.cursor()
@@ -109,8 +107,6 @@ def get_metier_pk_from_postgres(label):
         return result[0]
     return None
 
-
-
 def get_client_fk_from_postgres(matricule):
     conn = get_postgres_connection()
     cur = conn.cursor()
@@ -138,7 +134,7 @@ def get_etude_pk_from_postgres(niveau_etude):
     cur.execute("""
         SELECT niveau_pk 
         FROM public.dim_niveau_d_etudes 
-        WHERE lower(label) = %s;
+        WHERE lower(universite) = %s;
     """, (niveau_etude,))
     
     result = cur.fetchone()
@@ -150,6 +146,29 @@ def get_etude_pk_from_postgres(niveau_etude):
         return result[0]  
     else:
         return None  
+    
+def get_etude_pk_from_postgres(niveau_etude):
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    
+    niveau_etude = niveau_etude.strip().lower()
+    
+    cur.execute("""
+        SELECT niveau_pk 
+        FROM public.dim_niveau_d_etudes 
+        WHERE lower(universite) = %s;
+    """, (niveau_etude,))
+    
+    result = cur.fetchone()
+    
+    cur.close()
+    conn.close()
+    
+    if result:
+        return result[0]  
+    else:
+        return None  
+    
 
 def get_projet_pk_from_postgres(nom_projet, entreprise, year_start, year_end, month_start, month_end):
     conn = get_postgres_connection()
@@ -170,8 +189,6 @@ def get_projet_pk_from_postgres(nom_projet, entreprise, year_start, year_end, mo
         return result[0]  
     else:
         return None
-
-
 
 def get_contact_pk_from_postgres(firstname, lastname, company):
     conn = get_postgres_connection()
@@ -275,6 +292,7 @@ def get_preferedjoblocations_pk_from_postgres(pays, ville, region):
         return result[0]  
     else:
         return None  
+
 def get_permis_fk_from_postgres(permis_code):
     conn = get_postgres_connection()
     cur = conn.cursor()
@@ -293,7 +311,6 @@ def get_permis_fk_from_postgres(permis_code):
         return result[0]
     else:
         return None
-
 
 def get_visa_pk_from_postgres(visa_type):
     conn = get_postgres_connection()
@@ -354,8 +371,6 @@ def get_project_counts_by_client():
 
     return {row[0]: row[1] for row in rows}
 
-
-
 def get_experience_fk_from_postgres(role, entreprise, type_contrat):
     conn = get_postgres_connection()
     cur = conn.cursor()
@@ -401,7 +416,6 @@ def get_nb_experiences_per_client():
     # Retourne {client_fk: nb_experiences}
     return {row[0]: row[1] for row in rows}
 
-
 def get_certification_counts():
     conn = get_postgres_connection()
     cur = conn.cursor()
@@ -436,7 +450,6 @@ def get_language_count_per_client():
 
     return {row[0]: row[1] for row in results}
 
-
 def get_secteur_label_from_mongodb(secteur_id):
     collection = get_mongodb_connection().database['secteurs']
     secteur = collection.find_one({"_id": secteur_id})
@@ -462,10 +475,14 @@ def match_and_display_factcode_client_competence_interest():
         "profile.competenceGenerales": 1,
         "profile.languages": 1,
         "profile.interests": 1,
+        "simpleProfile.interests": 1,
         "profile.preferedJobLocations": 1,
         "profile.niveauDetudes": 1,
+        "simpleProfile.niveauDetudes": 1,
         "profile.visa": 1,
+        "simpleProfile.visa": 1,
         "profile.projets": 1,
+        "simpleProfile.projets": 1,
         "profile.proffessionalContacts": 1,
         "simpleProfile.languages": 1,
         "simpleProfile.preferedJobLocations": 1, 
@@ -476,15 +493,12 @@ def match_and_display_factcode_client_competence_interest():
         "profile.dureeExperience": 1,
         "simpleProfile.dureeExperience": 1,
         "created_at": 1
-
- 
     })
 
     mongo_data_list = list(mongo_data)
 
     line_count = 0
-
-
+    counter = 1
     for user in mongo_data_list:
         matricule = user.get("matricule", None)
         client_fk = get_client_fk_from_postgres(matricule)
@@ -506,8 +520,7 @@ def match_and_display_factcode_client_competence_interest():
         project_displayed = False
 
         experience_counts = get_nb_experiences_per_client()
-
-
+        
 
         permis_fk_list, competence_fk_list, language_fk_list = [], [], []
 
@@ -526,6 +539,7 @@ def match_and_display_factcode_client_competence_interest():
         simpleProfile_languages = user.get("simpleProfile", {}).get("languages", [])
 
         interests = user.get("profile", {}).get("interests", [])
+        Simple_profile_interests = user.get("simpleProfile", {}).get("interests", [])
 
         preferedJobLocations = user.get("profile", {}).get("preferedJobLocations", [])
         simpleProfile_preferedJobLocations = user.get("simpleProfile", {}).get("preferedJobLocations", [])
@@ -533,11 +547,17 @@ def match_and_display_factcode_client_competence_interest():
         niveau_etudes = user.get("profile", {}).get("niveauDetudes", [])
         niveau_etudes_simple = user.get("simpleProfile", {}).get("niveauDetudes", [])
 
+
+
+
         visa = user.get("profile", {}).get("visa", [])
+        simple_profilevisa = user.get("simpleProfile", {}).get("visa", [])
 
         projets = user.get("profile", {}).get("projets", [])
+        simpleProfile_projets = user.get("simpleProfile", {}).get("projets", [])
 
         professionalContacts = user.get("profile", {}).get("proffessionalContacts", [])
+        simpleProfile_professionalContacts = user.get("simpleProfile", {}).get("proffessionalContacts", [])
 
         simpleProfile_experiences = user.get("simpleProfile", {}).get("experiences", [])
         experiences = user.get("profile", {}).get("experiences", [])
@@ -585,6 +605,21 @@ def match_and_display_factcode_client_competence_interest():
                                 pk = metier_label_to_pk.get(label)
                                 if pk:
                                     metier_pk_list.append(pk)
+
+        # Études depuis profile.niveauDetudes et simpleProfile.niveauDetudes
+    
+        for niveau in  niveau_etudes_simple:
+            niveau_etude_label1 = niveau.get("school", "").strip() if isinstance(niveau, dict) else niveau.strip()
+            niveau_etude_label2 = niveau.get("universite", "").strip() if isinstance(niveau, dict) else niveau.strip()
+            if niveau_etude_label1:  # Assurez-vous que le label n'est pas vide
+                etude_fk = get_etude_pk_from_postgres(niveau_etude_label1)
+            elif niveau_etude_label2:  # Assurez-vous que le label n'est pas vide
+                etude_fk = get_etude_pk_from_postgres(niveau_etude_label2)
+            if etude_fk and str(etude_fk) not in study_level_fk_list:  # Vérification des doublons
+                study_level_fk_list.append(str(etude_fk))
+
+
+
 
 
 
@@ -660,7 +695,7 @@ def match_and_display_factcode_client_competence_interest():
             if language_fk:
                 language_fk_list.append(str(language_fk))
 
-        for interest in interests:
+        for interest in interests+Simple_profile_interests:
             interest_pk = get_interest_pk_from_postgres(interest)
             if interest_pk:
                 interest_pk_list.append(str(interest_pk))
@@ -673,14 +708,8 @@ def match_and_display_factcode_client_competence_interest():
             if preferedjoblocations_pk:
                 job_location_pk_list.append(str(preferedjoblocations_pk))
 
-        for niveau in niveau_etudes + niveau_etudes_simple:
-            niveau_etude_label = niveau.get("label", "").strip() if isinstance(niveau, dict) else niveau.strip()
-            if niveau_etude_label:  # Assurez-vous que le label n'est pas vide
-                etude_fk = get_etude_pk_from_postgres(niveau_etude_label)
-            if etude_fk and str(etude_fk) not in study_level_fk_list:  # Vérification des doublons
-                study_level_fk_list.append(str(etude_fk))
 
-        for projet in projets:
+        for projet in projets+simpleProfile_projets:
             if isinstance(projet, dict):
                 nom_projet = projet.get("nomProjet", "").strip()
                 entreprise = projet.get("entreprise", "").strip()
@@ -692,19 +721,21 @@ def match_and_display_factcode_client_competence_interest():
                 if projet_pk:
                     project_pk_list.append(str(projet_pk))
 
-        for visa_item in visa:
+        for visa_item in visa+simple_profilevisa:
             visa_type = visa_item.get("type", "").strip() if isinstance(visa_item, dict) else visa_item.strip()
             visa_pk = get_visa_pk_from_postgres(visa_type)
             if visa_pk:
                 visa_pk_list.append(str(visa_pk))
 
-        for contact in professionalContacts:
+        for contact in professionalContacts+simpleProfile_professionalContacts:
             firstname = contact.get("firstName", "").strip() if isinstance(contact, dict) else ""
             lastname = contact.get("lastName", "").strip() if isinstance(contact, dict) else ""
             company = contact.get("company", "").strip() if isinstance(contact, dict) else ""
             contact_pk = get_contact_pk_from_postgres(firstname, lastname, company)
             if contact_pk:
                 contact_pk_list.append(str(contact_pk))
+
+        
 
         max_length = max(len(permis_fk_list), len(competence_fk_list), len(language_fk_list), 
                          len(interest_pk_list), len(job_location_pk_list), len(study_level_fk_list), 
@@ -727,6 +758,9 @@ def match_and_display_factcode_client_competence_interest():
             experience_fk = experience_fk_list[i] if i < len(experience_fk_list) else None
             secteur_id = secteur_pk_list[i] if i < len(secteur_pk_list) else None
             metier_id = metier_pk_list[i] if i < len(metier_pk_list) else None
+
+            insert_client_secteur_metier(client_fk, secteur_id, metier_id,counter)
+
 
 
             if not experience_year_displayed:
@@ -776,19 +810,53 @@ def match_and_display_factcode_client_competence_interest():
             else:
                 nb_exp = 0
 
+          
 
 
-
-            print(client_fk, competence_fk, language_fk, interest_pk, job_location_pk,
-                  study_level_fk, visa_pk, project_pk, contact_pk, permis_fk, 
-                  certification_pk, experience_fk, secteur_id,metier_id,year,
-                  month,created,nb_certif,nb_langues,visa_count_display,project_count_display,nb_exp,study_level_fk)
+         #   print(client_fk, competence_fk, language_fk, interest_pk, job_location_pk,
+          #        visa_pk, project_pk, contact_pk, permis_fk, 
+           #      certification_pk, experience_fk, secteur_id,metier_id,year,
+            #      month,created,nb_certif,nb_langues,visa_count_display,project_count_display,nb_exp,study_level_fk)
+            
 
             line_count += 1
-
+            counter += 1
+    
+    
 
 
 
     print(f"\nTotal lines: {line_count}")
+
+    
+
+def insert_client_secteur_metier(client_fk, secteur_fk, metier_fk,counter):
+    try:
+        factcode = generate_factcode(counter)  # Générer le factcode pour chaque ligne
+
+        conn = get_postgres_connection()
+        if conn is None:
+            return
+        cur = conn.cursor()
+
+        cur.execute("""
+            INSERT INTO fact_client_profile (
+                client_fk, secteur_fk, metier_fk, factcode
+            )
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (factcode) DO NOTHING;
+        """, (client_fk, secteur_fk, metier_fk, factcode))
+
+        conn.commit()
+        print(f"Client {client_fk}, Secteur {secteur_fk}, Métier {metier_fk}, Factcode {factcode} insérés avec succès.")
+        cur.close()
+        conn.close()
+
+    except Exception as e:
+        print(f"Erreur lors de l'insertion pour client {client_fk}, secteur {secteur_fk}, métier {metier_fk}, factcode {factcode} : {e}")
+
+
+
+
 
 match_and_display_factcode_client_competence_interest()

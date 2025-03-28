@@ -1,207 +1,273 @@
 from pymongo import MongoClient
-import psycopg2
+from datetime import datetime
+import logging
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.sensors.external_task_sensor import ExternalTaskSensor
+from bson import ObjectId
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def get_postgresql_connection():
-    """Établit la connexion à PostgreSQL et retourne le connecteur."""
-    try:
-        conn = psycopg2.connect(
-            dbname="DW_DigitalCook",
-            user="postgres",
-            password="admin",
-            host="localhost",
-            port="5432"
-        )
-        return conn
-    except Exception as e:
-        print(f"Failed to connect to PostgreSQL: {e}")
-        raise
+    hook = PostgresHook(postgres_conn_id="postgres")
+    return hook.get_conn()
 
 def get_mongodb_connection():
-    """Établit la connexion à MongoDB et retourne le client et la collection nécessaire."""
-    try:
-        MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
-        MONGO_DB = "PowerBi"
-        UNIVERSITIES_COLLECTION = "universities"
+    MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
+    client = MongoClient(MONGO_URI)
+    mongo_db = client["PowerBi"]
+    collection = mongo_db["universities"]
+    return client, collection
 
-        client = MongoClient(MONGO_URI)
-        mongo_db = client[MONGO_DB]
-        universities_collection = mongo_db[UNIVERSITIES_COLLECTION]
+# 🔹 Nettoyage des données Mongo pour XCom
+def sanitize_for_json(doc):
+    if isinstance(doc, dict):
+        return {k: sanitize_for_json(v) for k, v in doc.items()}
+    elif isinstance(doc, list):
+        return [sanitize_for_json(item) for item in doc]
+    elif isinstance(doc, ObjectId):
+        return str(doc)
+    elif isinstance(doc, datetime):
+        return doc.isoformat()
+    else:
+        return doc
 
-        return client, universities_collection
+def load_villes():
+    conn = get_postgresql_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT ville_pk, nom_ville FROM public.dim_ville;")
+    villes = {nom.strip().lower(): pk for pk, nom in cur.fetchall() if nom}
+    cur.close()
+    conn.close()
+    return villes
 
-    except Exception as e:
-        print(f"Failed to connect to MongoDB: {e}")
-        raise
+def load_filieres():
+    conn = get_postgresql_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT filiere_pk, nomfiliere, domaine, diplome, prerequis, codepostal FROM public.dim_filiere;")
+    filieres = [dict(zip(
+        ["filiere_pk", "nomfiliere", "domaine", "diplome", "prerequis", "codepostal"],
+        [r[0], *(v.strip().lower() if v else None for v in r[1:])])) for r in cur.fetchall()]
+    cur.close()
+    conn.close()
+    return filieres
 
-def get_partenaire_pk(nom_partenaire, type_partenaire):
-    """Récupère le partenaire_pk de PostgreSQL à partir du nom et du type du partenaire."""
-    try:
-        conn = get_postgresql_connection()
-        cursor = conn.cursor()
+def load_contacts():
+    conn = get_postgresql_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT contact_pk, firstname, lastname, poste, adresse, company, typecontact FROM public.dim_contact;")
+    contacts = [dict(zip(
+        ["contact_pk", "firstname", "lastname", "poste", "adresse", "company", "typecontact"],
+        [r[0], *(v.strip().lower() if v else None for v in r[1:])])) for r in cur.fetchall()]
+    cur.close()
+    conn.close()
+    return contacts
 
-        query = """
-            SELECT partenaire_pk
-            FROM public.dim_partenaire
-            WHERE nom_partenaire = %s AND typepartenaire = %s
-        """
-        cursor.execute(query, (nom_partenaire, type_partenaire))
-        result = cursor.fetchone()
+def load_partenaires():
+    conn = get_postgresql_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT partenaire_pk, nom_partenaire, typepartenaire FROM public.dim_partenaire;")
+    partenaires = [dict(zip(
+        ["partenaire_pk", "nom_partenaire", "typepartenaire"],
+        [r[0], *(v.strip().lower() if v else None for v in r[1:])])) for r in cur.fetchall()]
+    cur.close()
+    conn.close()
+    return partenaires
 
-        if result:
-            return result[0]
-        return None
+def generate_factcode(counter):
+    return f"fact{counter:04d}"
 
-    except Exception as e:
-        print(f"Error retrieving partenaire_pk from PostgreSQL: {e}")
-        raise
+def upsert_fact_universite(codeuniversite, nom_uni, pays, date_creation, ville_pk, filiere_pk, contact_pk, part_acad_pk, part_pro_pk):
+    conn = get_postgresql_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        INSERT INTO dim_universite (codeuniversite, nom, pays, date_creation, ville_fk, filiere_fk, contact_fk, partenaire_academique_fk, partenaire_pro_fk)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (codeuniversite) DO UPDATE SET
+            nom = EXCLUDED.nom,
+            pays = EXCLUDED.pays,
+            date_creation = EXCLUDED.date_creation,
+            ville_fk = EXCLUDED.ville_fk,
+            filiere_fk = EXCLUDED.filiere_fk,
+            contact_fk = EXCLUDED.contact_fk,
+            partenaire_academique_fk = EXCLUDED.partenaire_academique_fk,
+            partenaire_pro_fk = EXCLUDED.partenaire_pro_fk;
+    """, (codeuniversite, nom_uni, pays, date_creation, ville_pk, filiere_pk, contact_pk, part_acad_pk, part_pro_pk))
+    conn.commit()
+    cur.close()
+    conn.close()
 
-    finally:
-        cursor.close()
+def extract_universites(**kwargs):
+    client, collection = get_mongodb_connection()
+    raw_data = list(collection.find({}, {
+        "nom": 1, "pays": 1, "created_at": 1, "ville": 1,
+        "filiere": 1, "contact": 1, "partenairesAcademique": 1,
+        "partenairesProfessionnel": 1
+    }))
+    client.close()
+    cleaned_data = [sanitize_for_json(doc) for doc in raw_data]
+    kwargs['ti'].xcom_push(key='universites', value=cleaned_data)
 
-def get_ville_pk(ville_name):
-    """Récupère le ville_pk de PostgreSQL à partir du nom de la ville."""
-    try:
-        conn = get_postgresql_connection()
-        cursor = conn.cursor()
+def insert_universites(**kwargs):
+    universites = kwargs['ti'].xcom_pull(task_ids='extract_universites_task', key='universites')
+    if not universites:
+        logger.info("Aucune donnée à insérer.")
+        return
 
-        query = """
-            SELECT ville_pk
-            FROM dim_ville
-            WHERE nom_ville = %s
-        """
-        cursor.execute(query, (ville_name,))
-        result = cursor.fetchone()
+    villes_dict = load_villes()
+    filieres_pg = load_filieres()
+    contacts_pg = load_contacts()
+    partenaires_pg = load_partenaires()
 
-        if result:
-            return result[0]
-        return None
+    counter = 1
+    total = 0
 
-    except Exception as e:
-        print(f"Error retrieving ville_pk from PostgreSQL: {e}")
-        raise
+    for doc in universites:
+        nom_uni = doc.get("nom", "Université inconnue")
+        pays = doc.get("pays")
+        date_creation = doc.get("created_at")
+        if date_creation:
+            try:
+                date_creation = datetime.fromisoformat(date_creation)
+            except:
+                date_creation = None
 
-    finally:
-        cursor.close()
+        villes = [v.strip().lower() for v in doc.get("ville", []) if isinstance(v, str)] if isinstance(doc.get("ville"), list) else []
+        ville_pk_list = [villes_dict.get(v) for v in villes]
 
-def get_filiere_pk(nomfiliere, domaine, diplome):
-    """Récupère le filiere_pk de PostgreSQL à partir des informations de filière (nomfiliere, domaine, diplome)."""
-    try:
-        conn = get_postgresql_connection()
-        cursor = conn.cursor()
+        filiere_pk_list, contact_pk_list, part_acad_list, part_pro_list = [], [], [], []
 
-        query = """
-            SELECT filiere_pk
-            FROM dim_filiere
-            WHERE nomfiliere = %s AND domaine = %s AND diplome = %s
-        """
-        cursor.execute(query, (nomfiliere, domaine, diplome))
-        result = cursor.fetchone()
+        for f in doc.get("filiere", []):
+            if isinstance(f, dict):
+                for f_pg in filieres_pg:
+                    match = True
+                    for mongo_key, pg_key in [
+                        ("nomfiliere", "nomfiliere"),
+                        ("domaine", "domaine"),
+                        ("diplome", "diplome"),
+                        ("prerequis", "prerequis"),
+                        ("codePostal", "codepostal")
+                    ]:
+                        val_mongo = f.get(mongo_key)
+                        if val_mongo and f_pg.get(pg_key) != val_mongo.strip().lower():
+                            match = False
+                            break
+                    if match:
+                        filiere_pk_list.append(f_pg["filiere_pk"])
+                        break
 
-        if result:
-            return result[0]
-        return None
+        for c in doc.get("contact", []):
+            if isinstance(c, dict):
+                nom = (c.get("nom") or "").strip().lower()
+                poste = (c.get("poste") or "").strip().lower()
+                adresse = (c.get("adresse") or "").strip().lower()
+                for c_pg in contacts_pg:
+                    if (
+                        (c_pg["firstname"] and nom in c_pg["firstname"]) or
+                        (c_pg["lastname"] and nom in c_pg["lastname"]) or
+                        (c_pg["poste"] and poste in c_pg["poste"]) or
+                        (c_pg["adresse"] and adresse in c_pg["adresse"]) or
+                        (c_pg["company"] and nom in c_pg["company"]) or
+                        (c_pg["typecontact"] == "université")
+                    ):
+                        contact_pk_list.append(c_pg["contact_pk"])
+                        break
 
-    except Exception as e:
-        print(f"Error retrieving filiere_pk from PostgreSQL: {e}")
-        raise
+        for p in doc.get("partenairesAcademique", []):
+            nom = p.strip().lower()
+            for p_pg in partenaires_pg:
+                if p_pg["nom_partenaire"] == nom and p_pg["typepartenaire"] == "académique":
+                    part_acad_list.append(p_pg["partenaire_pk"])
+                    break
 
-    finally:
-        cursor.close()
+        for p in doc.get("partenairesProfessionnel", []):
+            nom = p.strip().lower()
+            for p_pg in partenaires_pg:
+                if p_pg["nom_partenaire"] == nom and p_pg["typepartenaire"] == "professionnel":
+                    part_pro_list.append(p_pg["partenaire_pk"])
+                    break
 
-def get_contact_pk_from_postgres(firstname, lastname):
-    """Récupère le contact_pk de PostgreSQL à partir du prénom et du nom de famille."""
-    try:
-        conn = get_postgresql_connection()
-        cursor = conn.cursor()
+        max_len = max(len(ville_pk_list), len(filiere_pk_list), len(contact_pk_list), len(part_acad_list), len(part_pro_list), 1)
 
-        query = """
-            SELECT contact_pk
-            FROM public.dim_contact
-            WHERE firstname = %s AND lastname = %s
-        """
-        cursor.execute(query, (firstname, lastname))
-        result = cursor.fetchone()
-
-        if result:
-            return result[0]
-        return None
-
-    except Exception as e:
-        print(f"Error retrieving contact_pk from PostgreSQL: {e}")
-        raise
-
-    finally:
-        cursor.close()
-
-def match_and_display_university_data():
-    # Retrieve MongoDB connection and data
-    client, universities_collection = get_mongodb_connection()
-
-    # Extract universities data from MongoDB
-    mongo_data = universities_collection.find({}, {
-        "_id": 0,
-        "nom": 1,                # University Name
-        "pays": 1,               # Country
-        "ville": 1,              # City
-        "filiere": 1,            # Field of Study (filiere)
-        "contact": 1,            # Contact details (for matching)
-        "created_at": 1,         # Created Date
-        "partenairesProfessionnel": 1,  # Professional Partners
-    })
-
-    mongo_data_list = list(mongo_data)
-    line_count = 0
-
-    # Iterate over each university
-    for university in mongo_data_list:
-        # Extract fields for each university
-        nom = university.get("nom", "Inconnu")
-        pays = university.get("pays", "Inconnu")
-        villes = university.get("ville", ["Inconnue"])  # Default to "Inconnue"
-        filieres = university.get("filiere", [])  # List of filieres (fields of study)
-        partenaires = university.get("partenairesProfessionnel", [])  # List of professional partners
-
-        # Initialize lists for the current university
-        city_pk_list = []
-        contact_pk_list = []
-        partenaire_pk_list = []
-
-        # Fetch city pk for each city in the "ville" field
-        for ville in villes:
-            city_pk = get_ville_pk(ville.strip().lower())
-            city_pk_list.append(city_pk)
-
-        # Fetch filiere pk for each field of study (filiere)
-        filiere_pk_list = []
-        for filiere in filieres:
-            nomfiliere = filiere.get("nomfiliere", "").strip().lower()
-            domaine = filiere.get("domaine", "").strip().lower()
-            diplome = filiere.get("diplome", "").strip().lower()
-
-            filiere_pk = get_filiere_pk(nomfiliere, domaine, diplome)
-            filiere_pk_list.append(filiere_pk)
-
-        for partenaire in partenaires:
-            nom_partenaire = partenaire.strip().lower()  # Clean the name
-            type_partenaire = "professionnel"  # Assuming the partner type is always professional in this case
-
-            partenaire_pk = get_partenaire_pk(nom_partenaire, type_partenaire)
-            partenaire_pk_list.append(partenaire_pk)
-
-        # For each university, match and display or insert the corresponding information
-        for i in range(max(len(city_pk_list), len(contact_pk_list), len(filiere_pk_list), len(partenaire_pk_list), 1)):
-            # Get data or None if the list is shorter
-            city_pk = city_pk_list[i] if i < len(city_pk_list) else None
-            contact_pk = contact_pk_list[i] if i < len(contact_pk_list) else None
+        for i in range(max_len):
+            factcode = generate_factcode(counter)
+            ville_pk = ville_pk_list[i] if i < len(ville_pk_list) else None
             filiere_pk = filiere_pk_list[i] if i < len(filiere_pk_list) else None
-            partenaire_pk = partenaire_pk_list[i] if i < len(partenaire_pk_list) else None
+            contact_pk = contact_pk_list[i] if i < len(contact_pk_list) else None
+            acad_pk = part_acad_list[i] if i < len(part_acad_list) else None
+            pro_pk = part_pro_list[i] if i < len(part_pro_list) else None
 
-            # Print only the filiere_pk (and other information like city_pk or contact_pk)
-            print(f"University: {nom}, Country: {pays}, City PK: {city_pk}, Filiere PK: {filiere_pk}, Contact PK: {contact_pk} , Partner PK: {partenaire_pk}")
+            print(f"{factcode} → {nom_uni} ({pays}) | ville_fk={ville_pk}, filiere_fk={filiere_pk}, contact_fk={contact_pk}, acad_fk={acad_pk}, pro_fk={pro_pk}")
+            upsert_fact_universite(factcode, nom_uni, pays, date_creation, ville_pk, filiere_pk, contact_pk, acad_pk, pro_pk)
+            counter += 1
+            total += 1
 
-        line_count += 1
+    logger.info(f"Total universités insérées ou mises à jour : {total}")
 
-    print(f"\nTotal lines processed: {line_count}")
+# 🔹 DAG
+dag = DAG(
+    dag_id='dag_dimuniversites',
+    start_date=datetime(2025, 1, 1),
+    schedule_interval='*/2 * * * *',
+    catchup=False
+)
 
-# Call the function to extract and display the data
-match_and_display_university_data()
+extract_task = PythonOperator(
+    task_id='extract_universites_task',
+    python_callable=extract_universites,
+    provide_context=True,
+    dag=dag
+)
+
+insert_task = PythonOperator(
+    task_id='insert_universites_task',
+    python_callable=insert_universites,
+    provide_context=True,
+    dag=dag
+)
+
+wait_dim_ville = ExternalTaskSensor(
+    task_id='wait_for_dim_VILLE',
+    external_dag_id='dag_dim_ville',
+    external_task_id='load_villes',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_dim_partenaire = ExternalTaskSensor(
+    task_id='wait_for_dim_partenaire',
+    external_dag_id='dag_dim_partenaire',
+    external_task_id='load_partenaires_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_dim_filiere = ExternalTaskSensor(
+    task_id='wait_for_dim_filiere',
+    external_dag_id='dag_dim_filiere',
+    external_task_id='load_filieres',  #
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_dim_contact = ExternalTaskSensor(
+    task_id='wait_for_dim_contact',
+    external_dag_id='dag_dim_contact',
+    external_task_id='load_contacts_postgres', 
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+
+
+wait_dim_contact>>wait_dim_filiere>>wait_dim_partenaire>>wait_dim_ville>>extract_task >> insert_task
