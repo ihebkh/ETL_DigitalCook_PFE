@@ -1,6 +1,6 @@
+import logging
 from pymongo import MongoClient
 from datetime import datetime
-import logging
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
@@ -21,7 +21,6 @@ def get_mongodb_connection():
     collection = mongo_db["universities"]
     return client, collection
 
-# 🔹 Nettoyage des données Mongo pour XCom
 def sanitize_for_json(doc):
     if isinstance(doc, dict):
         return {k: sanitize_for_json(v) for k, v in doc.items()}
@@ -37,7 +36,7 @@ def sanitize_for_json(doc):
 def load_villes():
     conn = get_postgresql_connection()
     cur = conn.cursor()
-    cur.execute("SELECT ville_pk, nom_ville FROM public.dim_ville;")
+    cur.execute("SELECT ville_pk, name FROM public.dim_ville;")
     villes = {nom.strip().lower(): pk for pk, nom in cur.fetchall() if nom}
     cur.close()
     conn.close()
@@ -82,7 +81,7 @@ def generate_factcode(counter):
 def upsert_fact_universite(codeuniversite, nom_uni, pays, date_creation, ville_pk, filiere_pk, contact_pk, part_acad_pk, part_pro_pk):
     conn = get_postgresql_connection()
     cur = conn.cursor()
-    cur.execute("""
+    cur.execute(""" 
         INSERT INTO dim_universite (codeuniversite, nom, pays, date_creation, ville_fk, filiere_fk, contact_fk, partenaire_academique_fk, partenaire_pro_fk)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (codeuniversite) DO UPDATE SET
@@ -228,15 +227,16 @@ insert_task = PythonOperator(
     dag=dag
 )
 
-wait_dim_ville = ExternalTaskSensor(
-    task_id='wait_for_dim_VILLE',
-    external_dag_id='dag_dim_ville',
-    external_task_id='load_villes',
+wait_dim_ville_destination = ExternalTaskSensor(
+    task_id='wait_for_dim_ville_destination',
+    external_dag_id='dag_dim_villes_destinations',
+    external_task_id='load_villes_and_destinations_postgres',
     mode='poke',
     timeout=600,
     poke_interval=30,
     dag=dag
 )
+
 
 wait_dim_partenaire = ExternalTaskSensor(
     task_id='wait_for_dim_partenaire',
@@ -251,7 +251,7 @@ wait_dim_partenaire = ExternalTaskSensor(
 wait_dim_filiere = ExternalTaskSensor(
     task_id='wait_for_dim_filiere',
     external_dag_id='dag_dim_filiere',
-    external_task_id='load_filieres',  #
+    external_task_id='load_filieres',
     mode='poke',
     timeout=600,
     poke_interval=30,
@@ -261,13 +261,11 @@ wait_dim_filiere = ExternalTaskSensor(
 wait_dim_contact = ExternalTaskSensor(
     task_id='wait_for_dim_contact',
     external_dag_id='dag_dim_contact',
-    external_task_id='load_contacts_postgres', 
+    external_task_id='load_contacts_postgres',
     mode='poke',
     timeout=600,
     poke_interval=30,
     dag=dag
 )
 
-
-
-wait_dim_contact>>wait_dim_filiere>>wait_dim_partenaire>>wait_dim_ville>>extract_task >> insert_task
+wait_dim_contact >> wait_dim_filiere >> wait_dim_partenaire >>wait_dim_ville_destination  >> extract_task >> insert_task

@@ -2,6 +2,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 import psycopg2
 from bson.errors import InvalidId
+from datetime import datetime
 
 def get_postgres_connection():
     return psycopg2.connect(
@@ -218,7 +219,7 @@ def get_competence_fk_from_postgres(competence_name):
     
     cur.execute("""
         SELECT competence_pk 
-        FROM public.dim_competence_generale 
+        FROM public.dim_competence 
         WHERE competence_name = %s;
     """, (competence_name,))
     
@@ -299,7 +300,7 @@ def get_permis_fk_from_postgres(permis_code):
     cur.execute("""
         SELECT permis_pk
         FROM public.dim_permis_conduire
-        WHERE permis_code = %s;
+        WHERE categorie = %s;
     """, (permis_code,))
     
     result = cur.fetchone()
@@ -374,24 +375,35 @@ def get_project_counts_by_client():
 def get_experience_fk_from_postgres(role, entreprise, type_contrat):
     conn = get_postgres_connection()
     cur = conn.cursor()
-    
-    cur.execute("""
-        SELECT experience_pk 
-        FROM public.dim_experience 
-        WHERE role = %s 
-          AND entreprise = %s 
-          AND typecontrat = %s ;
-    """, (role, entreprise, type_contrat))
-    
+
+    query = "SELECT experience_pk FROM public.dim_experience WHERE "
+    conditions = []
+    values = []
+
+    if role:
+        conditions.append("role = %s")
+        values.append(role.strip())
+    if entreprise:
+        conditions.append("entreprise = %s")
+        values.append(entreprise.strip())
+    if type_contrat:
+        conditions.append("typecontrat = %s")
+        values.append(type_contrat.strip())
+
+    if not conditions:
+        return None
+
+    query += " AND ".join(conditions)
+
+    cur.execute(query, tuple(values))
     result = cur.fetchone()
-    
+
     cur.close()
     conn.close()
-    
-    if result:
-        return result[0]  
-    else:
-        return None  
+
+    return result[0] if result else None
+
+
     
 def get_nb_experiences_per_client():
     conn = get_postgres_connection()
@@ -413,7 +425,6 @@ def get_nb_experiences_per_client():
     cur.close()
     conn.close()
 
-    # Retourne {client_fk: nb_experiences}
     return {row[0]: row[1] for row in rows}
 
 def get_certification_counts():
@@ -457,42 +468,88 @@ def get_secteur_label_from_mongodb(secteur_id):
         return secteur['label']
     return None
 
+def get_date_pk_from_postgres(date_obj):
+    if not date_obj:
+        return None
 
-def match_and_display_factcode_client_competence_interest():
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT date_pk
+        FROM dim_Dates
+        WHERE datecode = %s;
+    """, (date_obj,))
+    
+    result = cur.fetchone()
+    cur.close()
+    conn.close()
+
+    return result[0] if result else None
+
+# calcule d'age 
+
+def calculate_age(birth_date):
+    if not birth_date:
+        return None
+
+    if isinstance(birth_date, str):
+        try:
+            birth_date = datetime.fromisoformat(birth_date)
+        except ValueError:
+            return None
+
+    today = datetime.today()
+    age = today.year - birth_date.year - (
+        (today.month, today.day) < (birth_date.month, birth_date.day)
+    )
+    return age
+
+
+#extraction de date
+
+def extract_date_only(dt):
+    if not dt:
+        return None
+    if isinstance(dt, str):
+        try:
+            dt = datetime.fromisoformat(dt)
+        except ValueError:
+            return None
+    return dt.date()
+
+
+#matching 
+
+def get_combined_profile_field(user, field_name):
+    return user.get("profile", {}).get(field_name, []) + user.get("simpleProfile", {}).get(field_name, [])
+
+
+def match_and_display_factcode_client():
     collection, secteur_collection = get_mongodb_connection()
     secteur_label_to_pk = load_dim_secteur()
     metier_label_to_pk = load_dim_metier()
     
     mongo_data = collection.find({}, {
-        "_id": 0,
-        "matricule": 1,
-        "profile.dureeExperience": 1,
-        "simpleProfile.dureeExperience": 1,
-        "profile.permisConduire": 1,
-        "simpleProfile.permisConduire": 1,
-        "profile.certifications": 1,
-        "simpleProfile.certifications": 1,
-        "profile.competenceGenerales": 1,
-        "profile.languages": 1,
-        "profile.interests": 1,
-        "simpleProfile.interests": 1,
-        "profile.preferedJobLocations": 1,
+        "_id": 0, "matricule": 1,
+        "profile.dureeExperience": 1,"simpleProfile.dureeExperience": 1,
+        "profile.permisConduire": 1,"simpleProfile.permisConduire": 1,
+        "profile.certifications": 1,"simpleProfile.certifications": 1,
+        "profile.competenceGenerales": 1,"simpleProfile.competenceGenerales": 1,
+        "profile.languages": 1,"simpleProfile.languages": 1,
+        "profile.interests": 1,"simpleProfile.interests": 1,
+        "profile.preferedJobLocations": 1,"simpleProfile.preferedJobLocations": 1, 
         "profile.niveauDetudes": 1,
         "simpleProfile.niveauDetudes": 1,
-        "profile.visa": 1,
-        "simpleProfile.visa": 1,
-        "profile.projets": 1,
-        "simpleProfile.projets": 1,
-        "profile.proffessionalContacts": 1,
-        "simpleProfile.languages": 1,
-        "simpleProfile.preferedJobLocations": 1, 
-        "profile.secteur": 1, 
-        "simpleProfile.secteur": 1,
-        "profile.metier": 1,
-        "simpleProfile.metier": 1,
-        "profile.dureeExperience": 1,
-        "simpleProfile.dureeExperience": 1,
-        "created_at": 1
+        "profile.visa": 1,"simpleProfile.visa": 1,
+        "profile.projets": 1,"simpleProfile.projets": 1,
+        "profile.proffessionalContacts": 1,"simpleProfile.proffessionalContacts": 1,
+        "profile.secteur": 1, "simpleProfile.secteur": 1,
+        "profile.metier": 1,"simpleProfile.metier": 1,
+        "created_at": 1,
+        "profile.disponibilite": 1,"simpleProfile.disponibilite": 1,
+        "profile.birthDate": 1,"simpleProfile.birthDate": 1,
+        "profile.experiences": 1,"simpleProfile.experiences": 1,
+        
     })
 
     mongo_data_list = list(mongo_data)
@@ -500,7 +557,9 @@ def match_and_display_factcode_client_competence_interest():
     line_count = 0
     counter = 1
     for user in mongo_data_list:
+
         matricule = user.get("matricule", None)
+
         client_fk = get_client_fk_from_postgres(matricule)
 
         certification_counts = get_certification_counts()
@@ -522,51 +581,24 @@ def match_and_display_factcode_client_competence_interest():
         experience_counts = get_nb_experiences_per_client()
         
 
-        permis_fk_list, competence_fk_list, language_fk_list = [], [], []
+        permis_fk_list, competence_fk_list, language_fk_list,interest_pk_list = [],[],[],[]
+        interest_pk_list, job_location_pk_list, study_level_fk_list,visa_pk_list = [],[],[],[]
+        project_pk_list, contact_pk_list,certification_pk_list,experience_fk_list = [],[],[],[]
+        secteur_id_list,metier_id_list  = [],[]
 
-        interest_pk_list, job_location_pk_list, study_level_fk_list = [], [], []
-
-        visa_pk_list, project_pk_list, contact_pk_list = [], [], []
-
-        certification_pk_list, experience_fk_list = [], []
-
-        permisConduire = user.get("profile", {}).get("permisConduire", [])
-        simpleProfile_permisConduire = user.get("simpleProfile", {}).get("permisConduire", [])
-
-        competenceGenerales = user.get("profile", {}).get("competenceGenerales", [])
-
-        languages = user.get("profile", {}).get("languages", [])
-        simpleProfile_languages = user.get("simpleProfile", {}).get("languages", [])
-
-        interests = user.get("profile", {}).get("interests", [])
-        Simple_profile_interests = user.get("simpleProfile", {}).get("interests", [])
-
-        preferedJobLocations = user.get("profile", {}).get("preferedJobLocations", [])
-        simpleProfile_preferedJobLocations = user.get("simpleProfile", {}).get("preferedJobLocations", [])
-
-        niveau_etudes = user.get("profile", {}).get("niveauDetudes", [])
-        niveau_etudes_simple = user.get("simpleProfile", {}).get("niveauDetudes", [])
+        competenceGenerales = get_combined_profile_field(user, "competenceGenerales")
+        languages = get_combined_profile_field(user, "languages")
+        interests = get_combined_profile_field(user, "interests")
+        preferedJobLocations = get_combined_profile_field(user, "preferedJobLocations")
+        niveau_etudes = get_combined_profile_field(user, "niveauDetudes")
+        visa = get_combined_profile_field(user, "visa")
+        projets = get_combined_profile_field(user, "projets")
+        professionalContacts = get_combined_profile_field(user, "proffessionalContacts")
+        experiences = get_combined_profile_field(user, "experiences")
+        certifications = get_combined_profile_field(user, "certifications")
+        permis = get_combined_profile_field(user, "permisConduire")
 
 
-
-
-        visa = user.get("profile", {}).get("visa", [])
-        simple_profilevisa = user.get("simpleProfile", {}).get("visa", [])
-
-        projets = user.get("profile", {}).get("projets", [])
-        simpleProfile_projets = user.get("simpleProfile", {}).get("projets", [])
-
-        professionalContacts = user.get("profile", {}).get("proffessionalContacts", [])
-        simpleProfile_professionalContacts = user.get("simpleProfile", {}).get("proffessionalContacts", [])
-
-        simpleProfile_experiences = user.get("simpleProfile", {}).get("experiences", [])
-        experiences = user.get("profile", {}).get("experiences", [])
-
-        certifications = user.get("profile", {}).get("certifications", [])
-        simpleProfile_certifications = user.get("simpleProfile", {}).get("certifications", [])
-
-        secteur_profile = user.get("profile", {}).get("secteur")
-        secteur_simple = user.get("simpleProfile", {}).get("secteur")
 
         experience_year = 0
         experience_month = 0
@@ -577,10 +609,29 @@ def match_and_display_factcode_client_competence_interest():
         duree_exp_profile = user.get("profile", {}).get("dureeExperience")
         duree_exp_simple = user.get("simpleProfile", {}).get("dureeExperience")
 
+        metier_profile = user.get("profile", {}).get("metier")
+        metier_simple = user.get("simpleProfile", {}).get("metier")
+
         created_at = user.get("created_at")
-        created_at_str = str(created_at) if created_at else None
         created_at_displayed = False
-        secteur_pk_list = []
+
+
+        disponibilite = user.get("profile", {}).get("disponibilite") or user.get("simpleProfile", {}).get("disponibilite")
+        disponibilite_displayed = False
+
+        birth_date = user.get("profile", {}).get("birthDate") or user.get("simpleProfile", {}).get("birthDate")
+        birth_date_displayed = False
+
+
+        secteur_profile = user.get("profile", {}).get("secteur")
+        secteur_simple = user.get("simpleProfile", {}).get("secteur")
+
+        experience_year_displayed = False
+        created_at_displayed = False
+
+
+#secteur
+
         secteur_pk_list = []
         for secteur_id in [secteur_profile]:
             if secteur_id:
@@ -591,6 +642,8 @@ def match_and_display_factcode_client_competence_interest():
                     pk = secteur_label_to_pk.get(label)
                     if pk:
                         secteur_pk_list.append(pk)
+
+#metier
 
         metier_pk_list = []
         for metier_id in [metier_profile]:
@@ -606,23 +659,19 @@ def match_and_display_factcode_client_competence_interest():
                                 if pk:
                                     metier_pk_list.append(pk)
 
-        # Études depuis profile.niveauDetudes et simpleProfile.niveauDetudes
+#niveau d etude
     
-        for niveau in  niveau_etudes_simple:
+        for niveau in niveau_etudes:
             niveau_etude_label1 = niveau.get("school", "").strip() if isinstance(niveau, dict) else niveau.strip()
             niveau_etude_label2 = niveau.get("universite", "").strip() if isinstance(niveau, dict) else niveau.strip()
-            if niveau_etude_label1:  # Assurez-vous que le label n'est pas vide
+            if niveau_etude_label1:
                 etude_fk = get_etude_pk_from_postgres(niveau_etude_label1)
-            elif niveau_etude_label2:  # Assurez-vous que le label n'est pas vide
+            elif niveau_etude_label2:
                 etude_fk = get_etude_pk_from_postgres(niveau_etude_label2)
-            if etude_fk and str(etude_fk) not in study_level_fk_list:  # Vérification des doublons
+            if etude_fk and str(etude_fk) not in study_level_fk_list:
                 study_level_fk_list.append(str(etude_fk))
 
-
-
-
-
-
+#duree_experience
 
         if duree_exp_profile and isinstance(duree_exp_profile, dict) and (duree_exp_profile.get("year") or duree_exp_profile.get("month")):
             experience_year = duree_exp_profile.get("year", 0)
@@ -635,10 +684,7 @@ def match_and_display_factcode_client_competence_interest():
             experience_month = 0
 
 
-        secteur_id_list = []
-
-        secteur_profile = user.get("profile", {}).get("secteur")
-        secteur_simple = user.get("simpleProfile", {}).get("secteur")
+ 
 
         if secteur_profile:
             secteur_id_list.append(str(secteur_profile))
@@ -647,22 +693,22 @@ def match_and_display_factcode_client_competence_interest():
             secteur_id_list.append(str(secteur_simple))
 
 
-        metier_id_list = []
-        metier_profile = user.get("profile", {}).get("metier")
-        metier_simple = user.get("simpleProfile", {}).get("metier")
+
         if metier_profile:
             metier_id_list.append(str(metier_profile))
 
         if metier_simple:
             metier_id_list.append(str(metier_simple))
+#permis de conduire
 
-
-        for permis in permisConduire + simpleProfile_permisConduire:
+        for permis in  permis:
             permis_fk = get_permis_fk_from_postgres(permis)
             if permis_fk:
                 permis_fk_list.append(str(permis_fk))
 
-        for experience in experiences + simpleProfile_experiences:
+#experience
+
+        for experience in experiences :
             if isinstance(experience, dict):
                 role = experience.get("role", "").strip()
                 entreprise = experience.get("entreprise", "").strip()
@@ -671,7 +717,9 @@ def match_and_display_factcode_client_competence_interest():
                 if experience_fk:
                     experience_fk_list.append(str(experience_fk))
 
-        for certification in certifications + simpleProfile_certifications:
+#certifications 
+
+        for certification in certifications :
             if isinstance(certification, dict):
                 certification_name = certification.get("nomCertification", "").strip()
                 certification_pk = get_certification_pk_from_postgres(certification_name)
@@ -683,33 +731,37 @@ def match_and_display_factcode_client_competence_interest():
                 if certification_pk:
                     certification_pk_list.append(str(certification_pk))
 
+#competences gernales 
         for competence in competenceGenerales:
             competence_fk = get_competence_fk_from_postgres(competence)
             if competence_fk:
                 competence_fk_list.append(str(competence_fk))
+# langue 
 
-        for language in languages + simpleProfile_languages:
+        for language in languages :
             language_label = language.get("label", "").strip() if isinstance(language, dict) else language.strip()
             language_level = language.get("level", "").strip() if isinstance(language, dict) else ""
             language_fk = get_language_fk_from_postgres(language_label, language_level)
             if language_fk:
                 language_fk_list.append(str(language_fk))
+#interests 
 
-        for interest in interests+Simple_profile_interests:
+        for interest in interests:
             interest_pk = get_interest_pk_from_postgres(interest)
             if interest_pk:
                 interest_pk_list.append(str(interest_pk))
+#locations
 
-        for location in preferedJobLocations + simpleProfile_preferedJobLocations:
+        for location in preferedJobLocations:
             pays = location.get("pays", "").strip()
             ville = location.get("ville", "").strip()
             region = location.get("region", "").strip()
             preferedjoblocations_pk = get_preferedjoblocations_pk_from_postgres(pays, ville, region)
             if preferedjoblocations_pk:
                 job_location_pk_list.append(str(preferedjoblocations_pk))
+#projets 
 
-
-        for projet in projets+simpleProfile_projets:
+        for projet in projets:
             if isinstance(projet, dict):
                 nom_projet = projet.get("nomProjet", "").strip()
                 entreprise = projet.get("entreprise", "").strip()
@@ -721,13 +773,16 @@ def match_and_display_factcode_client_competence_interest():
                 if projet_pk:
                     project_pk_list.append(str(projet_pk))
 
-        for visa_item in visa+simple_profilevisa:
+#visa 
+
+        for visa_item in visa:
             visa_type = visa_item.get("type", "").strip() if isinstance(visa_item, dict) else visa_item.strip()
             visa_pk = get_visa_pk_from_postgres(visa_type)
             if visa_pk:
                 visa_pk_list.append(str(visa_pk))
+#contact pro 
 
-        for contact in professionalContacts+simpleProfile_professionalContacts:
+        for contact in professionalContacts:
             firstname = contact.get("firstName", "").strip() if isinstance(contact, dict) else ""
             lastname = contact.get("lastName", "").strip() if isinstance(contact, dict) else ""
             company = contact.get("company", "").strip() if isinstance(contact, dict) else ""
@@ -741,8 +796,7 @@ def match_and_display_factcode_client_competence_interest():
                          len(interest_pk_list), len(job_location_pk_list), len(study_level_fk_list), 
                          len(visa_pk_list), len(project_pk_list), len(contact_pk_list), 
                          len(certification_pk_list), len(experience_fk_list), len(secteur_id_list), len(metier_id_list), 1)
-        experience_year_displayed = False
-        created_at_displayed = False
+        
 
         for i in range(max_length):
             permis_fk = permis_fk_list[i] if i < len(permis_fk_list) else None
@@ -759,7 +813,7 @@ def match_and_display_factcode_client_competence_interest():
             secteur_id = secteur_pk_list[i] if i < len(secteur_pk_list) else None
             metier_id = metier_pk_list[i] if i < len(metier_pk_list) else None
 
-            insert_client_secteur_metier(client_fk, secteur_id, metier_id,counter)
+            
 
 
 
@@ -773,10 +827,12 @@ def match_and_display_factcode_client_competence_interest():
 
 
             if not created_at_displayed:
-                created = created_at_str
+                created_date = extract_date_only(created_at)
+                dim_date_pk = get_date_pk_from_postgres(created_date)
                 created_at_displayed = True
             else:
-                created = None
+                dim_date_pk = None
+
 
 
             if not nb_certifications_displayed:
@@ -810,13 +866,23 @@ def match_and_display_factcode_client_competence_interest():
             else:
                 nb_exp = 0
 
-          
+            if not disponibilite_displayed:
+                dispo = disponibilite
+                disponibilite_displayed = True
+            else:
+                dispo = None
 
 
-         #   print(client_fk, competence_fk, language_fk, interest_pk, job_location_pk,
-          #        visa_pk, project_pk, contact_pk, permis_fk, 
-           #      certification_pk, experience_fk, secteur_id,metier_id,year,
-            #      month,created,nb_certif,nb_langues,visa_count_display,project_count_display,nb_exp,study_level_fk)
+            if not birth_date_displayed:
+                age = calculate_age(birth_date)
+                birth_date_displayed = True
+            else:
+                age = None
+
+            load_fact_date(client_fk, secteur_id, metier_id,counter,competence_fk,language_fk,
+                          interest_pk,certification_pk,contact_pk,visa_pk,job_location_pk,
+                           project_pk,permis_fk,experience_fk,year,month,nb_certif,nb_langues,visa_count_display
+                           ,project_count_display,nb_exp,study_level_fk,dispo,age,dim_date_pk)
             
 
             line_count += 1
@@ -830,33 +896,82 @@ def match_and_display_factcode_client_competence_interest():
 
     
 
-def insert_client_secteur_metier(client_fk, secteur_fk, metier_fk,counter):
+def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, language_fk,
+                    interest_fk, certification_pk, contact_pk, visa_pk, job_location_pk,
+                    project_pk, permis_fk, experience_fk, year, month,
+                    nb_certif, nb_langues, visa_count_display, project_count_display, nb_exp,study_level_fk,dispo,age,dim_date_pk):
     try:
-        factcode = generate_factcode(counter)  # Générer le factcode pour chaque ligne
+        factcode = generate_factcode(counter)
 
         conn = get_postgres_connection()
-        if conn is None:
-            return
         cur = conn.cursor()
 
         cur.execute("""
             INSERT INTO fact_client_profile (
-                client_fk, secteur_fk, metier_fk, factcode
+                client_fk, secteur_fk, metier_fk, factcode,
+                competencegenerales_fk, language_fk, interests_fk,
+                certification_fk, contact_fk, visa_fk,
+                preferedjoblocations_fk, projet_fk, permis_fk,
+                experience_fk, experience_year, experience_month,
+                nbr_certif, nbr_langue, nbr_visa_valide,
+                nbr_projet, nb_experience,etude_fk,disponibilite,age,
+                    date_fk
+                
+                    
             )
-            VALUES (%s, %s, %s, %s)
-            ON CONFLICT (factcode) DO NOTHING;
-        """, (client_fk, secteur_fk, metier_fk, factcode))
+            VALUES (%s, %s, %s, %s, 
+                    %s, %s, %s, 
+                    %s, %s, %s, 
+                    %s, %s, %s, 
+                    %s, %s, %s,
+                    %s, %s, %s,
+                    %s, %s, %s,
+                    %s, %s, %s)
+            ON CONFLICT (factcode) DO UPDATE SET
+                client_fk = EXCLUDED.client_fk,
+                secteur_fk = EXCLUDED.secteur_fk,
+                metier_fk = EXCLUDED.metier_fk,
+                competencegenerales_fk = EXCLUDED.competencegenerales_fk,
+                language_fk = EXCLUDED.language_fk,
+                interests_fk = EXCLUDED.interests_fk,
+                certification_fk = EXCLUDED.certification_fk,
+                contact_fk = EXCLUDED.contact_fk,
+                visa_fk = EXCLUDED.visa_fk,
+                preferedjoblocations_fk = EXCLUDED.preferedjoblocations_fk,
+                projet_fk = EXCLUDED.projet_fk,
+                permis_fk = EXCLUDED.permis_fk,
+                experience_fk = EXCLUDED.experience_fk,
+                experience_year = EXCLUDED.experience_year,
+                experience_month = EXCLUDED.experience_month,
+                nbr_certif = EXCLUDED.nbr_certif,
+                nbr_langue = EXCLUDED.nbr_langue,
+                nbr_visa_valide = EXCLUDED.nbr_visa_valide,
+                nbr_projet = EXCLUDED.nbr_projet,
+                nb_experience = EXCLUDED.nb_experience,
+                etude_fk = EXCLUDED.etude_fk,
+                disponibilite = EXCLUDED.disponibilite,
+                age = EXCLUDED.age,
+                date_fk = EXCLUDED.date_fk;
+        """, (
+            client_fk, secteur_fk, metier_fk, factcode,
+            competence_fk, language_fk, interest_fk,
+            certification_pk, contact_pk, visa_pk,
+            job_location_pk, project_pk, permis_fk,
+            experience_fk, year, month,
+            nb_certif, nb_langues, visa_count_display,
+            project_count_display, nb_exp,
+            study_level_fk,dispo,age,dim_date_pk
+        ))
 
         conn.commit()
-        print(f"Client {client_fk}, Secteur {secteur_fk}, Métier {metier_fk}, Factcode {factcode} insérés avec succès.")
         cur.close()
         conn.close()
+        print(factcode)
 
     except Exception as e:
-        print(f"Erreur lors de l'insertion pour client {client_fk}, secteur {secteur_fk}, métier {metier_fk}, factcode {factcode} : {e}")
+        print(f"❌ Erreur pour client {client_fk}, factcode {factcode} : {e}")
 
 
 
 
-
-match_and_display_factcode_client_competence_interest()
+match_and_display_factcode_client()

@@ -37,20 +37,25 @@ def get_existing_competences():
 
 def extract_from_mongodb_to_temp_file(**kwargs):
     client, _, collection = get_mongodb_connection()
-    mongo_data = list(collection.find({}, {"_id": 0, "profile.experiences.competances": 1, "simpleProfile.experiences.competances": 1}))
+    mongo_data = list(collection.find({}, {"_id": 0, "profile.competenceGenerales": 1, "simpleProfile.competenceGenerales": 1, "profile.competences": 1, "simpleProfile.competences": 1}))
     
-    competencies = []
-    
-    for user in mongo_data:
-        if "profile" in user and "experiences" in user["profile"]:
-            for experience in user["profile"]["experiences"]:
-                competencies.extend(experience.get("competances", []))
-        if "simpleProfile" in user and "experiences" in user["simpleProfile"]:
-            for experience in user["simpleProfile"]["experiences"]:
-                competencies.extend(experience.get("competances", []))
+    competencies = set()
 
-    unique_competencies = list(set(competencies))
-    
+    for user in mongo_data:
+        if "profile" in user:
+            if "competenceGenerales" in user["profile"]:
+                competencies.update(user["profile"]["competenceGenerales"])
+            if "competences" in user["profile"]:
+                competencies.update(user["profile"]["competences"])
+
+        if "simpleProfile" in user:
+            if "competenceGenerales" in user["simpleProfile"]:
+                competencies.update(user["simpleProfile"]["competenceGenerales"])
+            if "competences" in user["simpleProfile"]:
+                competencies.update(user["simpleProfile"]["competences"])
+
+    unique_competencies = list(competencies)
+
     data_to_save = [{"competance": comp} for comp in unique_competencies]
     
     with tempfile.NamedTemporaryFile(delete=False, mode='w', encoding='utf-8') as temp_file:
@@ -77,7 +82,7 @@ def transform_data_from_temp_file(**kwargs):
         competence = competence.strip() if competence else None
         if competence and competence not in existing_competences:
             competence_code_counter += 1
-            new_competence_code = f"COMP{str(competence_code_counter).zfill(2)}"
+            new_competence_code = f"COMP{str(competence_code_counter).zfill(3)}"
             transformed_data.append({
                 "competence_code": new_competence_code,
                 "competence_name": competence
@@ -120,7 +125,7 @@ def load_into_postgres(**kwargs):
 
 dag = DAG(
     'Dag_DimCompetences',
-    schedule_interval='*/2 * * * *',
+    schedule_interval='*/1 * * * *',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )

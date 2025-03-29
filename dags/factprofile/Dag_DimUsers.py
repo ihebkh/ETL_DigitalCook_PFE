@@ -76,10 +76,8 @@ def transform_data_from_temp_file(**kwargs):
             "situation": record.get("profile", {}).get("situation"),
             "etatcivile": record.get("profile", {}).get("etatCivil"),
             "photo": record.get("google_Photo", record.get("profile", {}).get("google_Photo", None)),
-            "metier": record.get("profile", {}).get("metier", None),
             "intituleposte": record.get("profile", {}).get("intituleposte", None),
-            "niveau_etude_actuelle": record.get("profile", {}).get("niveau_etude_actuelle", None),
-            "disponibilite": record.get("profile", {}).get("disponibilite", None)
+            "niveau_etude_actuelle": record.get("profile", {}).get("niveau_etude_actuelle", None)
         })
     
     logger.info(f"Transformation terminée, {len(transformed_data)} clients traités.")
@@ -97,8 +95,8 @@ def load_into_postgres(**kwargs):
     cur = conn.cursor()
     
     insert_query = """
-    INSERT INTO dim_client (matricule, nom, prenom, birthdate, nationality, adresseDomicile, pays, situation, etatcivile, photo, metier, intituleposte, niveau_etude_actuelle, disponibilite)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    INSERT INTO dim_client (matricule, nom, prenom, birthdate, nationality, adresseDomicile, pays, situation, etatcivile, photo, intituleposte, niveau_etude_actuelle)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     ON CONFLICT (matricule) DO UPDATE SET 
         nom = EXCLUDED.nom,
         prenom = EXCLUDED.prenom,
@@ -109,35 +107,39 @@ def load_into_postgres(**kwargs):
         situation = EXCLUDED.situation,
         etatcivile = EXCLUDED.etatcivile,
         photo = EXCLUDED.photo,
-        metier = EXCLUDED.metier,
         intituleposte = EXCLUDED.intituleposte,
-        niveau_etude_actuelle = EXCLUDED.niveau_etude_actuelle,
-        disponibilite = EXCLUDED.disponibilite
+        niveau_etude_actuelle = EXCLUDED.niveau_etude_actuelle
     """
     
     for record in data:
         values = (
-            record["matricule"],
-            record["nom"].strip() if record["nom"] else None,
-            record["prenom"].strip() if record["prenom"] else None,
-            record["birthdate"] if record["birthdate"] else None,
-            record["nationality"].strip() if record["nationality"] else None,
-            record["adresseDomicile"].strip() if record["adresseDomicile"] else None,
-            record["pays"].strip() if record["pays"] else None,
-            record["situation"].strip() if record["situation"] else None,
-            record["etatcivile"].strip() if record["etatcivile"] else None,
-            record["photo"].strip() if record["photo"] else None,
-            record["metier"].strip() if record["metier"] else None,
-            record["intituleposte"].strip() if record["intituleposte"] else None,
-            record["niveau_etude_actuelle"].strip() if record["niveau_etude_actuelle"] else None,
-            record["disponibilite"].strip() if record["disponibilite"] else None
+            record.get("matricule"),
+            record.get("nom", "").strip() if record.get("nom") else None,
+            record.get("prenom", "").strip() if record.get("prenom") else None,
+            record.get("birthdate") if record.get("birthdate") else None,
+            record.get("nationality", "").strip() if record.get("nationality") else None,
+            record.get("adresseDomicile", "").strip() if record.get("adresseDomicile") else None,
+            record.get("pays", "").strip() if record.get("pays") else None,
+            record.get("situation", "").strip() if record.get("situation") else None,
+            record.get("etatcivile", "").strip() if record.get("etatcivile") else None,
+            record.get("photo", "").strip() if record.get("photo") else None,
+            record.get("intituleposte", "").strip() if record.get("intituleposte") else None,
+            record.get("niveau_etude_actuelle", "").strip() if record.get("niveau_etude_actuelle") else None
         )
-        cur.execute(insert_query, values)
+        
+        # Log the values to debug
+        logger.debug(f"Inserting record: {values}")
+        
+        try:
+            cur.execute(insert_query, values)
+        except Exception as e:
+            logger.error(f"Error inserting record: {values} - Error: {e}")
     
     conn.commit()
     cur.close()
     conn.close()
     logger.info(f"{len(data)} lignes insérées dans PostgreSQL.")
+
 
 dag = DAG(
     'Dag_DimClients',
