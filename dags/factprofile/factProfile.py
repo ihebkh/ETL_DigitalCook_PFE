@@ -32,8 +32,8 @@ def safe_object_id(id_str):
     except InvalidId:
         return None
 
-def generate_factcode(counter):
-    return f"fact{counter:04d}"
+def generate_fact_pk(counter):
+    return f"{counter:04d}"
 
 def load_dim_secteur():
     conn = get_postgres_connection()
@@ -403,7 +403,6 @@ def get_experience_fk_from_postgres(role, entreprise, type_contrat):
 
     return result[0] if result else None
 
-
     
 def get_nb_experiences_per_client():
     conn = get_postgres_connection()
@@ -524,7 +523,7 @@ def get_combined_profile_field(user, field_name):
     return user.get("profile", {}).get(field_name, []) + user.get("simpleProfile", {}).get(field_name, [])
 
 
-def match_and_display_factcode_client():
+def matchclient():
     collection, secteur_collection = get_mongodb_connection()
     secteur_label_to_pk = load_dim_secteur()
     metier_label_to_pk = load_dim_metier()
@@ -597,8 +596,6 @@ def match_and_display_factcode_client():
         experiences = get_combined_profile_field(user, "experiences")
         certifications = get_combined_profile_field(user, "certifications")
         permis = get_combined_profile_field(user, "permisConduire")
-
-
 
         experience_year = 0
         experience_month = 0
@@ -813,9 +810,7 @@ def match_and_display_factcode_client():
             secteur_id = secteur_pk_list[i] if i < len(secteur_pk_list) else None
             metier_id = metier_pk_list[i] if i < len(metier_pk_list) else None
 
-            
-
-
+# experience : year 
 
             if not experience_year_displayed:
                 year = experience_year
@@ -824,7 +819,7 @@ def match_and_display_factcode_client():
             else:
                 year = None
                 month = None
-
+# creation : 
 
             if not created_at_displayed:
                 created_date = extract_date_only(created_at)
@@ -833,46 +828,46 @@ def match_and_display_factcode_client():
             else:
                 dim_date_pk = None
 
-
+# certifications :  
 
             if not nb_certifications_displayed:
                 nb_certif = nb_certifications_total
                 nb_certifications_displayed = True
             else:
                 nb_certif = 0
-
+# langue : 
             if not nb_languages_displayed:
                 nb_langues = nb_languages_total
                 nb_languages_displayed = True
             else:
                 nb_langues = 0
 
-
+# visa :
             if not visa_displayed:
                 visa_count_display = nb_visa_valide
                 visa_displayed = True
             else:
                 visa_count_display = 0
-
+# projet :
 
             if not project_displayed:
                 project_count_display = nb_projets_total
                 project_displayed = True
             else:
                 project_count_display = 0
-
+# experience :
             if not experience_year_displayed:
                 nb_exp = experience_counts.get(client_fk, 0)
             else:
                 nb_exp = 0
-
+# disponibilite :
             if not disponibilite_displayed:
                 dispo = disponibilite
                 disponibilite_displayed = True
             else:
                 dispo = None
 
-
+# age :
             if not birth_date_displayed:
                 age = calculate_age(birth_date)
                 birth_date_displayed = True
@@ -901,21 +896,21 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                     project_pk, permis_fk, experience_fk, year, month,
                     nb_certif, nb_langues, visa_count_display, project_count_display, nb_exp,study_level_fk,dispo,age,dim_date_pk):
     try:
-        factcode = generate_factcode(counter)
+        fact_pk = generate_fact_pk(counter)
 
         conn = get_postgres_connection()
         cur = conn.cursor()
 
         cur.execute("""
             INSERT INTO fact_client_profile (
-                client_fk, secteur_fk, metier_fk, factcode,
+                client_fk, secteur_fk, metier_fk, fact_pk,
                 competencegenerales_fk, language_fk, interests_fk,
                 certification_fk, contact_fk, visa_fk,
                 preferedjoblocations_fk, projet_fk, permis_fk,
                 experience_fk, experience_year, experience_month,
                 nbr_certif, nbr_langue, nbr_visa_valide,
                 nbr_projet, nb_experience,etude_fk,disponibilite,age,
-                    date_fk
+                date_fk
                 
                     
             )
@@ -927,7 +922,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                     %s, %s, %s,
                     %s, %s, %s,
                     %s, %s, %s)
-            ON CONFLICT (factcode) DO UPDATE SET
+            ON CONFLICT (fact_pk) DO UPDATE SET
                 client_fk = EXCLUDED.client_fk,
                 secteur_fk = EXCLUDED.secteur_fk,
                 metier_fk = EXCLUDED.metier_fk,
@@ -953,7 +948,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                 age = EXCLUDED.age,
                 date_fk = EXCLUDED.date_fk;
         """, (
-            client_fk, secteur_fk, metier_fk, factcode,
+            client_fk, secteur_fk, metier_fk, fact_pk,
             competence_fk, language_fk, interest_fk,
             certification_pk, contact_pk, visa_pk,
             job_location_pk, project_pk, permis_fk,
@@ -966,12 +961,12 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
         conn.commit()
         cur.close()
         conn.close()
-        print(factcode)
+        print(fact_pk)
 
     except Exception as e:
-        print(f"❌ Erreur pour client {client_fk}, factcode {factcode} : {e}")
+        print(f"❌ Erreur pour client {client_fk}, fact_pk iteration {fact_pk} : {e}")
 
 
 
 
-match_and_display_factcode_client()
+matchclient()

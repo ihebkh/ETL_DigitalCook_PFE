@@ -75,16 +75,16 @@ def load_partenaires():
     conn.close()
     return partenaires
 
-def generate_factcode(counter):
-    return f"fact{counter:04d}"
+def generate_codeuniv(counter):
+    return f"univ{counter:04d}"
 
-def upsert_fact_universite(codeuniversite, nom_uni, pays, date_creation, ville_pk, filiere_pk, contact_pk, part_acad_pk, part_pro_pk):
+def upsert_fact_universite(universite_pk, codeuniversite, nom_uni, pays, date_creation, ville_pk, filiere_pk, contact_pk, part_acad_pk, part_pro_pk):
     conn = get_postgresql_connection()
     cur = conn.cursor()
     cur.execute(""" 
-        INSERT INTO dim_universite (codeuniversite, nom, pays, date_creation, ville_fk, filiere_fk, contact_fk, partenaire_academique_fk, partenaire_pro_fk)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-        ON CONFLICT (codeuniversite) DO UPDATE SET
+        INSERT INTO dim_universite (universite_pk, codeuniversite, nom, pays, date_creation, ville_fk, filiere_fk, contact_fk, partenaire_academique_fk, partenaire_pro_fk)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (universite_pk) DO UPDATE SET
             nom = EXCLUDED.nom,
             pays = EXCLUDED.pays,
             date_creation = EXCLUDED.date_creation,
@@ -93,7 +93,7 @@ def upsert_fact_universite(codeuniversite, nom_uni, pays, date_creation, ville_p
             contact_fk = EXCLUDED.contact_fk,
             partenaire_academique_fk = EXCLUDED.partenaire_academique_fk,
             partenaire_pro_fk = EXCLUDED.partenaire_pro_fk;
-    """, (codeuniversite, nom_uni, pays, date_creation, ville_pk, filiere_pk, contact_pk, part_acad_pk, part_pro_pk))
+    """, (universite_pk, codeuniversite, nom_uni, pays, date_creation, ville_pk, filiere_pk, contact_pk, part_acad_pk, part_pro_pk))
     conn.commit()
     cur.close()
     conn.close()
@@ -120,11 +120,20 @@ def insert_universites(**kwargs):
     contacts_pg = load_contacts()
     partenaires_pg = load_partenaires()
 
-    counter = 1
+    universite_code_map = {}
+    code_counter = 1
     total = 0
+    universite_pk_counter = 1
 
     for doc in universites:
         nom_uni = doc.get("nom", "Université inconnue")
+        nom_uni_cleaned = nom_uni.strip().lower()
+
+        if nom_uni_cleaned not in universite_code_map:
+            universite_code_map[nom_uni_cleaned] = generate_codeuniv(code_counter)
+            code_counter += 1
+
+        codeuniversite = universite_code_map[nom_uni_cleaned]
         pays = doc.get("pays")
         date_creation = doc.get("created_at")
         if date_creation:
@@ -191,21 +200,22 @@ def insert_universites(**kwargs):
         max_len = max(len(ville_pk_list), len(filiere_pk_list), len(contact_pk_list), len(part_acad_list), len(part_pro_list), 1)
 
         for i in range(max_len):
-            factcode = generate_factcode(counter)
             ville_pk = ville_pk_list[i] if i < len(ville_pk_list) else None
             filiere_pk = filiere_pk_list[i] if i < len(filiere_pk_list) else None
             contact_pk = contact_pk_list[i] if i < len(contact_pk_list) else None
             acad_pk = part_acad_list[i] if i < len(part_acad_list) else None
             pro_pk = part_pro_list[i] if i < len(part_pro_list) else None
 
-            print(f"{factcode} → {nom_uni} ({pays}) | ville_fk={ville_pk}, filiere_fk={filiere_pk}, contact_fk={contact_pk}, acad_fk={acad_pk}, pro_fk={pro_pk}")
-            upsert_fact_universite(factcode, nom_uni, pays, date_creation, ville_pk, filiere_pk, contact_pk, acad_pk, pro_pk)
-            counter += 1
+            universite_pk = universite_pk_counter
+            print(f"{universite_pk} | {codeuniversite} → {nom_uni} ({pays}) | ville_fk={ville_pk}, filiere_fk={filiere_pk}, contact_fk={contact_pk}, acad_fk={acad_pk}, pro_fk={pro_pk}")
+            upsert_fact_universite(universite_pk, codeuniversite, nom_uni, pays, date_creation, ville_pk, filiere_pk, contact_pk, acad_pk, pro_pk)
+            universite_pk_counter += 1
             total += 1
 
     logger.info(f"Total universités insérées ou mises à jour : {total}")
 
-# 🔹 DAG
+# DAG
+
 dag = DAG(
     dag_id='dag_dimuniversites',
     start_date=datetime(2025, 1, 1),
@@ -237,7 +247,6 @@ wait_dim_ville_destination = ExternalTaskSensor(
     dag=dag
 )
 
-
 wait_dim_partenaire = ExternalTaskSensor(
     task_id='wait_for_dim_partenaire',
     external_dag_id='dag_dim_partenaire',
@@ -268,4 +277,4 @@ wait_dim_contact = ExternalTaskSensor(
     dag=dag
 )
 
-wait_dim_contact >> wait_dim_filiere >> wait_dim_partenaire >>wait_dim_ville_destination  >> extract_task >> insert_task
+wait_dim_contact >> wait_dim_filiere >> wait_dim_partenaire >> wait_dim_ville_destination >> extract_task >> insert_task
