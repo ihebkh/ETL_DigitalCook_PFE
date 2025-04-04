@@ -1,5 +1,4 @@
 import logging
-import json
 from datetime import datetime
 from pymongo import MongoClient
 from airflow import DAG
@@ -16,6 +15,15 @@ def get_mongodb_connection():
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
+
+def get_max_niveau_pk():
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT COALESCE(MAX(niveau_pk), 0) FROM dim_niveau_d_etudes")
+    max_pk = cur.fetchone()[0]
+    cur.close()
+    conn.close()
+    return max_pk
 
 def parse_date(date_input):
     if isinstance(date_input, str):
@@ -35,36 +43,28 @@ def parse_date(date_input):
 def extract_niveau_etudes(**kwargs):
     collection = get_mongodb_connection()
     data = []
-    compteur = 1
 
     for doc in collection.find():
         for etude in doc.get("simpleProfile", {}).get("niveauDetudes", []):
             if not isinstance(etude, dict):
                 continue
-            code = f"DIP{compteur:03d}"
-            compteur += 1
             universite = etude.get("school", "null")
             course = etude.get("course", None)
             label = etude.get("label", "null")
-            print(label)
             pays = etude.get("pays", "N/A")
             diplome = etude.get("nomDiplome", "N/A")
             du = etude.get("duree", {}).get("du", {})
             au = etude.get("duree", {}).get("au", {})
             start_m, start_y = parse_date(du)
             end_m, end_y = parse_date(au)
-            data.append({"code": code, "label": label, "universite": universite,
-                         "start_year": start_y if start_y not in ["", "null"] else None,
-                         "start_month": start_m if start_m not in ["", "null"] else None,
-                         "end_year": end_y if end_y not in ["", "null"] else None,
-                         "end_month": end_m if end_m not in ["", "null"] else None,
+            data.append({"label": label, "universite": universite,
+                         "start_year": start_y, "start_month": start_m,
+                         "end_year": end_y, "end_month": end_m,
                          "diplome": diplome, "pays": pays, "course": course})
 
         for etude in doc.get("profile", {}).get("niveauDetudes", []):
             if not isinstance(etude, dict):
                 continue
-            code = f"DIP{compteur:03d}"
-            compteur += 1
             universite = etude.get("universite", "null")
             course = None
             label = etude.get("label", "null")
@@ -72,28 +72,61 @@ def extract_niveau_etudes(**kwargs):
             diplome = etude.get("nomDiplome", "N/A")
             start_m, start_y = parse_date(etude.get("du", {}))
             end_m, end_y = parse_date(etude.get("au", {}))
-            data.append({"code": code, "label": label, "universite": universite,
-                         "start_year": start_y if start_y not in ["", "null"] else None,
-                         "start_month": start_m if start_m not in ["", "null"] else None,
-                         "end_year": end_y if end_y not in ["", "null"] else None,
-                         "end_month": end_m if end_m not in ["", "null"] else None,
+            data.append({"label": label, "universite": universite,
+                         "start_year": start_y, "start_month": start_m,
+                         "end_year": end_y, "end_month": end_m,
                          "diplome": diplome, "pays": pays, "course": course})
 
-    kwargs['ti'].xcom_push(key='dim_niveaux', value=data)
+    kwargs['ti'].xcom_push(key='niveau_raw_data', value=data)
     logger.info(f"{len(data)} niveaux d’études extraits.")
 
+def transform_niveau_etudes(**kwargs):
+    raw_data = kwargs['ti'].xcom_pull(task_ids='extract_dim_niveau_etudes', key='niveau_raw_data')
+    if not raw_data:
+        logger.info("Aucune donnée à transformer.")
+        return
+
+    max_pk = get_max_niveau_pk()
+    transformed = []
+    compteur = 0
+
+    for row in raw_data:
+        compteur += 1
+        max_pk += 1
+        code = f"DIP{compteur:03d}"
+        transformed.append({
+            "niveau_pk": max_pk,
+            "code": code,
+            "label": row["label"],
+            "universite": row["universite"],
+            "start_year": row["start_year"],
+            "start_month": row["start_month"],
+            "end_year": row["end_year"],
+            "end_month": row["end_month"],
+            "diplome": row["diplome"],
+            "pays": row["pays"],
+            "course": row["course"]
+        })
+
+    kwargs['ti'].xcom_push(key='niveau_transformed', value=transformed)
+    logger.info(f"{len(transformed)} lignes transformées avec succès.")
+
 def load_niveau_etudes_postgres(**kwargs):
-    data = kwargs['ti'].xcom_pull(task_ids='extract_dim_niveau_etudes', key='dim_niveaux')
+    data = kwargs['ti'].xcom_pull(task_ids='transform_niveau_etudes', key='niveau_transformed')
+    if not data:
+        logger.info("Aucune donnée à insérer.")
+        return
+
     conn = get_postgres_connection()
     cur = conn.cursor()
 
     insert_query = """
     INSERT INTO dim_niveau_d_etudes (
-        diplome_code, label, universite,
+        niveau_pk, diplome_code, label, universite,
         start_year, start_month, end_year, end_month,
         nom_diplome, pays, course
-    ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-    ON CONFLICT (diplome_code)
+    ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+    ON CONFLICT (niveau_pk)
     DO UPDATE SET
         start_year = EXCLUDED.start_year,
         start_month = EXCLUDED.start_month,
@@ -105,18 +138,25 @@ def load_niveau_etudes_postgres(**kwargs):
 
     for row in data:
         cur.execute(insert_query, (
-            row['code'], row['label'], row['universite'],
-            row['start_year'], row['start_month'],
-            row['end_year'], row['end_month'],
-            row['diplome'], row['pays'], row['course']
-        ))
+            row['niveau_pk'],
+            row['code'],
+            row['label'],
+            row['universite'],
+            int(row['start_year']) if str(row['start_year']).isdigit() else None,
+            int(row['start_month']) if str(row['start_month']).isdigit() else None,
+            int(row['end_year']) if str(row['end_year']).isdigit() else None,
+            int(row['end_month']) if str(row['end_month']).isdigit() else None,
+            row['diplome'],
+            row['pays'],
+            row['course']
+))
+
 
     conn.commit()
     cur.close()
     conn.close()
     logger.info(f"{len(data)} niveaux d’études insérés ou mis à jour.")
 
-# DAG
 with DAG(
     dag_id='dag_dim_niveau_etudes',
     schedule_interval='*/2 * * * *',
@@ -130,10 +170,16 @@ with DAG(
         provide_context=True,
     )
 
+    transform_task = PythonOperator(
+        task_id='transform_niveau_etudes',
+        python_callable=transform_niveau_etudes,
+        provide_context=True,
+    )
+
     load_task = PythonOperator(
         task_id='load_dim_niveau_etudes',
         python_callable=load_niveau_etudes_postgres,
         provide_context=True,
     )
 
-    extract_task >> load_task
+    extract_task >> transform_task >> load_task

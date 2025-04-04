@@ -1,5 +1,3 @@
-import tempfile
-import json
 import logging
 from datetime import datetime
 from pymongo import MongoClient
@@ -35,118 +33,102 @@ def get_existing_competences():
     conn.close()
     return competences
 
-def extract_from_mongodb_to_temp_file(**kwargs):
+def get_next_competence_pk():
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT COALESCE(MAX(competence_pk), 0) FROM dim_competence")
+    max_pk = cur.fetchone()[0]
+    cur.close()
+    conn.close()
+    return max_pk + 1
+
+def extract_from_mongodb(**kwargs):
     client, _, collection = get_mongodb_connection()
-    mongo_data = list(collection.find({}, {"_id": 0, "profile.competenceGenerales": 1, "simpleProfile.competenceGenerales": 1, "profile.competences": 1, "simpleProfile.competences": 1}))
+    mongo_data = list(collection.find({}, {
+        "_id": 0, 
+        "profile.competenceGenerales": 1, 
+        "simpleProfile.competenceGenerales": 1, 
+    }))
     
     competencies = set()
-
     for user in mongo_data:
         if "profile" in user:
-            if "competenceGenerales" in user["profile"]:
-                competencies.update(user["profile"]["competenceGenerales"])
-            if "competences" in user["profile"]:
-                competencies.update(user["profile"]["competences"])
-
+            competencies.update(user["profile"].get("competenceGenerales", []))
         if "simpleProfile" in user:
-            if "competenceGenerales" in user["simpleProfile"]:
-                competencies.update(user["simpleProfile"]["competenceGenerales"])
-            if "competences" in user["simpleProfile"]:
-                competencies.update(user["simpleProfile"]["competences"])
+            competencies.update(user["simpleProfile"].get("competenceGenerales", []))
 
     unique_competencies = list(competencies)
-
-    data_to_save = [{"competance": comp} for comp in unique_competencies]
-    
-    with tempfile.NamedTemporaryFile(delete=False, mode='w', encoding='utf-8') as temp_file:
-        json.dump(data_to_save, temp_file, ensure_ascii=False, indent=4)
-        temp_file_path = temp_file.name
-    
+    kwargs['ti'].xcom_push(key='extracted_competencies', value=unique_competencies)
     client.close()
-    
-    kwargs['ti'].xcom_push(key='temp_file_path', value=temp_file_path)
-    logger.info(f"Data extracted and saved to temporary file: {temp_file_path}")
+    logger.info(f"{len(unique_competencies)} compétences extraites de MongoDB")
 
-def transform_data_from_temp_file(**kwargs):
-    temp_file_path = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb_to_temp_file', key='temp_file_path')
-    
-    with open(temp_file_path, 'r', encoding='utf-8') as file:
-        mongo_data = json.load(file)
-
+def transform_competences(**kwargs):
+    extracted_competencies = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='extracted_competencies')
     existing_competences = get_existing_competences()
+    next_pk = get_next_competence_pk()
     transformed_data = []
-    competence_code_counter = len(existing_competences)
 
-    for record in mongo_data:
-        competence = record.get("competance")
-        competence = competence.strip() if competence else None
-        if competence and competence not in existing_competences:
-            competence_code_counter += 1
-            new_competence_code = f"COMP{str(competence_code_counter).zfill(3)}"
+    for comp in extracted_competencies:
+        comp = comp.strip() if comp else None
+        if comp and comp not in existing_competences:
             transformed_data.append({
-                "competence_code": new_competence_code,
-                "competence_name": competence
+                "competence_pk": next_pk,
+                "competence_code": f"COMP{str(next_pk).zfill(3)}",
+                "competence_name": comp
             })
-            existing_competences.add(competence)
-    
-    kwargs['ti'].xcom_push(key='transformed_data', value=transformed_data)
-    logger.info(f"Data transformed: {len(transformed_data)} new competencies found.")
+            next_pk += 1
+            existing_competences.add(comp)
 
-def load_into_postgres(**kwargs):
-    transformed_data = kwargs['ti'].xcom_pull(task_ids='transform_data_from_temp_file', key='transformed_data')
-    
+    kwargs['ti'].xcom_push(key='transformed_competences', value=transformed_data)
+    logger.info(f"{len(transformed_data)} nouvelles compétences à insérer")
+
+def load_competences(**kwargs):
+    transformed_data = kwargs['ti'].xcom_pull(task_ids='transform_competences', key='transformed_competences')
     if not transformed_data:
-        logger.info("No data to insert into PostgreSQL.")
+        logger.info("Aucune nouvelle compétence à insérer.")
         return
-    
+
     conn = get_postgres_connection()
     cur = conn.cursor()
     
     insert_query = """
-    INSERT INTO dim_competence (competence_code, competence_name)
-    VALUES (%s, %s)
-    ON CONFLICT (competence_code) DO NOTHING;  -- Ensure competence_code is unique
+    INSERT INTO dim_competence (competence_pk, competence_code, competence_name)
+    VALUES (%s, %s, %s)
+    ON CONFLICT (competence_pk) DO NOTHING
     """
-    update_query = """
-    UPDATE dim_competence
-    SET competence_name = %s
-    WHERE competence_code = %s;  -- Update by competence_code
-    """
-    
+
     for record in transformed_data:
-        cur.execute(insert_query, (record["competence_code"], record["competence_name"]))
-        if cur.rowcount == 0:
-            cur.execute(update_query, (record["competence_name"], record["competence_code"]))
+        cur.execute(insert_query, (record["competence_pk"], record["competence_code"], record["competence_name"]))
     
     conn.commit()
     cur.close()
     conn.close()
-    logger.info(f"{len(transformed_data)} rows inserted into PostgreSQL.")
+    logger.info(f"{len(transformed_data)} lignes insérées dans PostgreSQL")
 
 dag = DAG(
     'Dag_DimCompetences',
-    schedule_interval='*/1 * * * *',
+    schedule_interval='*/2 * * * *',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )
 
 extract_task = PythonOperator(
-    task_id='extract_from_mongodb_to_temp_file',
-    python_callable=extract_from_mongodb_to_temp_file,
+    task_id='extract_from_mongodb',
+    python_callable=extract_from_mongodb,
     provide_context=True,
     dag=dag,
 )
 
 transform_task = PythonOperator(
-    task_id='transform_data_from_temp_file',
-    python_callable=transform_data_from_temp_file,
+    task_id='transform_competences',
+    python_callable=transform_competences,
     provide_context=True,
     dag=dag,
 )
 
 load_task = PythonOperator(
-    task_id='load_into_postgres',
-    python_callable=load_into_postgres,
+    task_id='load_competences',
+    python_callable=load_competences,
     provide_context=True,
     dag=dag,
 )

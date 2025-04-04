@@ -5,20 +5,17 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 from datetime import datetime
 from bson import ObjectId
 import logging
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def get_mongodb_connection():
     try:
-        MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
-        MONGO_DB = "PowerBi"
-        MONGO_COLLECTION = "frontusers"
-        
-        client = MongoClient(MONGO_URI)
-        mongo_db = client[MONGO_DB]
-        collection = mongo_db[MONGO_COLLECTION]
+        client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
+        db = client["PowerBi"]
+        collection = db["frontusers"]
         logger.info("MongoDB connection successful.")
-        return client, mongo_db, collection
+        return client, collection
     except Exception as e:
         logger.error(f"Failed to connect to MongoDB: {e}")
         raise
@@ -29,14 +26,18 @@ def get_postgres_connection():
     logger.info("PostgreSQL connection successful.")
     return conn
 
-def get_next_permis_code():
+def get_max_permis_pk_and_codes():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT COUNT(*) FROM dim_permis_conduire")
-    count = cur.fetchone()[0] + 1
+    cur.execute("SELECT COALESCE(MAX(permis_pk), 0) FROM dim_permis_conduire")
+    max_pk = cur.fetchone()[0]
+
+    cur.execute("SELECT categorie FROM dim_permis_conduire")
+    existing_categories = {row[0] for row in cur.fetchall()}
+
     cur.close()
     conn.close()
-    return f"code{str(count).zfill(3)}"
+    return max_pk, existing_categories
 
 def convert_non_serializable(value):
     if isinstance(value, datetime):
@@ -49,10 +50,9 @@ def convert_non_serializable(value):
         return [convert_non_serializable(item) for item in value]
     return value
 
-
 def extract_from_mongodb(**kwargs):
     try:
-        client, _, collection = get_mongodb_connection()
+        client, collection = get_mongodb_connection()
         mongo_data = list(collection.find({}, {"_id": 0}))
         mongo_data = [convert_non_serializable(record) for record in mongo_data]
 
@@ -63,15 +63,17 @@ def extract_from_mongodb(**kwargs):
         logger.error(f"Error extracting data from MongoDB: {e}")
         raise
 
-
 def transform_data(**kwargs):
     mongo_data = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='mongo_data')
     seen_categories = set()
     transformed_data = []
-    
+
+    max_pk, existing_categories = get_max_permis_pk_and_codes()
+    compteur = max_pk
+
     for record in mongo_data:
         permis_list = []
-        
+
         if "profile" in record and "permisConduire" in record["profile"]:
             permis_list.extend(record["profile"]["permisConduire"])
 
@@ -80,14 +82,18 @@ def transform_data(**kwargs):
 
         for permis in permis_list:
             category = permis.strip()
-            if category and category not in seen_categories:
-                seen_categories.add(category)
+            if category and category not in seen_categories and category not in existing_categories:
+                compteur += 1
+                code = f"code{str(compteur).zfill(3)}"
                 transformed_data.append({
-                    "permis_code": get_next_permis_code(),
+                    "permis_pk": compteur,
+                    "permis_code": code,
                     "categorie": category
                 })
+                seen_categories.add(category)
 
     kwargs['ti'].xcom_push(key='transformed_data', value=transformed_data)
+    logger.info(f"{len(transformed_data)} nouveaux permis transformés.")
     return transformed_data
 
 def load_into_postgres(**kwargs):
@@ -100,19 +106,20 @@ def load_into_postgres(**kwargs):
 
         conn = get_postgres_connection()
         cur = conn.cursor()
-        
+
         insert_query = """
-        INSERT INTO dim_permis_conduire (permis_code, categorie)
-        VALUES (%s, %s)
-        ON CONFLICT (categorie) DO UPDATE SET permis_code = EXCLUDED.permis_code
+        INSERT INTO dim_permis_conduire (permis_pk, permis_code, categorie)
+        VALUES (%s, %s, %s)
+        ON CONFLICT (categorie) DO UPDATE SET
+            permis_code = EXCLUDED.permis_code
         """
 
         for record in transformed_data:
-            values = (
+            cur.execute(insert_query, (
+                record["permis_pk"],
                 record["permis_code"],
                 record["categorie"]
-            )
-            cur.execute(insert_query, values)
+            ))
 
         conn.commit()
         cur.close()

@@ -10,15 +10,11 @@ logger = logging.getLogger(__name__)
 
 def get_mongodb_connection():
     try:
-        MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
-        MONGO_DB = "PowerBi"
-        MONGO_COLLECTION = "secteurdactivities"
-
-        client = MongoClient(MONGO_URI)
-        mongo_db = client[MONGO_DB]
-        collection = mongo_db[MONGO_COLLECTION]
+        client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
+        db = client["PowerBi"]
+        collection = db["secteurdactivities"]
         logger.info("MongoDB connection successful.")
-        return client, mongo_db, collection
+        return client, collection
     except Exception as e:
         logger.error(f"Failed to connect to MongoDB: {e}")
         raise
@@ -29,39 +25,83 @@ def get_postgres_connection():
     logger.info("PostgreSQL connection successful.")
     return conn
 
+def get_max_metier_pk():
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT COALESCE(MAX(metier_pk), 0) FROM Dim_Metier")
+    max_pk = cur.fetchone()[0]
+    cur.close()
+    conn.close()
+    return max_pk
+
+def get_existing_rome_codes():
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT romeCode FROM Dim_Metier")
+    rome_codes = {row[0] for row in cur.fetchall()}
+    cur.close()
+    conn.close()
+    return rome_codes
+
 def extract_jobs_from_mongodb(**kwargs):
-    """ Extract job data from MongoDB and save to XCom. """
     try:
-        client, _, collection = get_mongodb_connection()
-        mongo_data = collection.find({}, {"_id": 0, "jobs": 1})
+        client, collection = get_mongodb_connection()
+        cursor = collection.find({}, {"_id": 0, "jobs": 1})
 
         jobs = []
-
-        for document in mongo_data:
+        for document in cursor:
             if "jobs" in document:
                 for job in document["jobs"]:
-                    job_info = {
-                        "label": job.get("label"),
-                        "romeCode": job.get("romeCode"),
-                        "mainName": job.get("mainName"),
-                        "subDomain": job.get("subDomain")
-                    }
-                    logger.info(f"Extracted job: {job_info}")
-                    jobs.append(job_info)
+                    if job.get("romeCode"):
+                        job_info = {
+                            "label": job.get("label"),
+                            "romeCode": job.get("romeCode"),
+                            "mainName": job.get("mainName"),
+                            "subDomain": job.get("subDomain")
+                        }
+                        jobs.append(job_info)
 
         client.close()
-        kwargs['ti'].xcom_push(key='jobs_data', value=jobs)
-        return jobs
+        kwargs['ti'].xcom_push(key='extracted_jobs', value=jobs)
+        logger.info(f"{len(jobs)} jobs extracted from MongoDB.")
     except Exception as e:
         logger.error(f"Error extracting data from MongoDB: {e}")
         raise
 
+def transform_jobs_data(**kwargs):
+    try:
+        jobs = kwargs['ti'].xcom_pull(task_ids='extract_jobs_from_mongodb', key='extracted_jobs')
+        if not jobs:
+            logger.info("No jobs to transform.")
+            return
+
+        current_pk = get_max_metier_pk()
+        existing_rome_codes = get_existing_rome_codes()
+
+        transformed = []
+        for job in jobs:
+            if job["romeCode"] not in existing_rome_codes:
+                current_pk += 1
+                transformed.append({
+                    "metier_pk": current_pk,
+                    "romeCode": job["romeCode"],
+                    "label": job["label"],
+                    "mainName": job["mainName"],
+                    "subDomain": job["subDomain"]
+                })
+                existing_rome_codes.add(job["romeCode"])
+
+        kwargs['ti'].xcom_push(key='transformed_jobs', value=transformed)
+        logger.info(f"{len(transformed)} new jobs prepared for PostgreSQL.")
+    except Exception as e:
+        logger.error(f"Error transforming jobs: {e}")
+        raise
+
 def load_jobs_into_postgres(**kwargs):
     try:
-        jobs_data = kwargs['ti'].xcom_pull(task_ids='extract_jobs_from_mongodb', key='jobs_data')
-
+        jobs_data = kwargs['ti'].xcom_pull(task_ids='transform_jobs_data', key='transformed_jobs')
         if not jobs_data:
-            logger.info("No data to insert into PostgreSQL.")
+            logger.info("No jobs to insert into PostgreSQL.")
             return
 
         conn = get_postgres_connection()
@@ -70,13 +110,13 @@ def load_jobs_into_postgres(**kwargs):
         for job in jobs_data:
             try:
                 cur.execute("""
-                    INSERT INTO Dim_Metier (romeCode, label_jobs, mainname_jobs, subdomain_jobs)
-                    VALUES (%s, %s, %s, %s)
-                    ON CONFLICT (romeCode) DO UPDATE SET
+                    INSERT INTO Dim_Metier (metier_pk, romeCode, label_jobs, mainname_jobs, subdomain_jobs)
+                    VALUES (%s, %s, %s, %s, %s)
+                    ON CONFLICT (metier_pk) DO UPDATE SET
                         label_jobs = EXCLUDED.label_jobs,
                         mainname_jobs = EXCLUDED.mainname_jobs,
                         subdomain_jobs = EXCLUDED.subdomain_jobs;
-                """, (job["romeCode"], job["label"], job["mainName"], job["subDomain"]))
+                """, (job["metier_pk"], job["romeCode"], job["label"], job["mainName"], job["subDomain"]))
             except Exception as e:
                 logger.error(f"Error inserting job {job['romeCode']}: {e}")
 
@@ -102,6 +142,13 @@ extract_task = PythonOperator(
     dag=dag,
 )
 
+transform_task = PythonOperator(
+    task_id='transform_jobs_data',
+    python_callable=transform_jobs_data,
+    provide_context=True,
+    dag=dag,
+)
+
 load_task = PythonOperator(
     task_id='load_jobs_into_postgres',
     python_callable=load_jobs_into_postgres,
@@ -109,4 +156,4 @@ load_task = PythonOperator(
     dag=dag,
 )
 
-extract_task >> load_task
+extract_task >> transform_task >> load_task

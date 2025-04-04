@@ -1,12 +1,10 @@
-import tempfile
-import json
 import logging
 from datetime import datetime
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-from bson import ObjectId
 from pymongo import MongoClient
+from bson import ObjectId
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -14,77 +12,76 @@ logger = logging.getLogger(__name__)
 def get_mongodb_connection():
     MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
     client = MongoClient(MONGO_URI)
-    mongo_db = client["PowerBi"]
-    collection = mongo_db["frontusers"]
-    return client, mongo_db, collection
+    db = client["PowerBi"]
+    return client, db["frontusers"]
 
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
 
-def extract_from_mongodb_to_temp_file():
-    client, _, collection = get_mongodb_connection()
-    mongo_data = list(collection.find({}, {"_id": 0}))
-
-    def datetime_converter(obj):
-        if isinstance(obj, datetime):
-            return obj.isoformat()
-        elif isinstance(obj, ObjectId):
-            return str(obj)
-        raise TypeError("Type non sérialisable : {}".format(type(obj)))
-
-    with tempfile.NamedTemporaryFile(delete=False, mode='w', encoding='utf-8') as temp_file:
-        json.dump(mongo_data, temp_file, ensure_ascii=False, indent=4, default=datetime_converter)
-        temp_file_path = temp_file.name
-
+def extract_from_mongodb(ti):
+    client, collection = get_mongodb_connection()
+    data = list(collection.find({}, {"_id": 0}))
     client.close()
-    return temp_file_path
 
-def transform_data_from_temp_file(temp_file_path):
-    with open(temp_file_path, 'r', encoding='utf-8') as file:
-        mongo_data = json.load(file)
+    cleaned = []
+    for doc in data:
+        def clean(value):
+            if isinstance(value, ObjectId):
+                return str(value)
+            elif isinstance(value, datetime):
+                return value.isoformat()
+            elif isinstance(value, dict):
+                return {k: clean(v) for k, v in value.items()}
+            elif isinstance(value, list):
+                return [clean(v) for v in value]
+            else:
+                return value
+        cleaned.append(clean(doc))
 
-    seen_certifications = set()
-    transformed_data = []
-    current_certification_code = 1
+    ti.xcom_push(key="certifications_raw", value=cleaned)
 
-    for record in mongo_data:
-        certifications_list = []
+def transform_certifications(ti):
+    raw_data = ti.xcom_pull(task_ids='extract_from_mongodb', key='certifications_raw')
+    seen = set()
+    result = []
+    counter = 1
+
+    for record in raw_data:
+        certifs = []
 
         if "profile" in record and "certifications" in record["profile"]:
-            certifications_list.extend(record["profile"]["certifications"])
+            certifs.extend(record["profile"]["certifications"])
 
         if "simpleProfile" in record and "certifications" in record["simpleProfile"]:
-            certifications_list.extend(record["simpleProfile"]["certifications"])
+            certifs.extend(record["simpleProfile"]["certifications"])
 
-        for cert in certifications_list:
+        for cert in certifs:
             if isinstance(cert, str):
-                nomCertification = cert.strip()
-                date = None
+                name = cert.strip()
             elif isinstance(cert, dict):
-                nomCertification = cert.get("nomCertification", "").strip()
-                date = cert.get("year")
+                name = cert.get("nomCertification", "").strip()
             else:
                 continue
 
-            if nomCertification and (nomCertification, date) not in seen_certifications:
-                seen_certifications.add((nomCertification, date))
-                certification_code = f"certif{str(current_certification_code).zfill(4)}"
-                current_certification_code += 1
-                transformed_data.append((certification_code, nomCertification, date))
+            if name and name.lower() not in seen:
+                code = f"certif{str(counter).zfill(4)}"
+                result.append((counter, code, name))
+                seen.add(name.lower())
+                counter += 1
 
-    return transformed_data
+    ti.xcom_push(key='certifications_transformed', value=result)
 
-def load_into_postgres(data):
+def load_into_postgres(ti):
+    data = ti.xcom_pull(task_ids='transform_certifications', key='certifications_transformed')
     conn = get_postgres_connection()
     cur = conn.cursor()
 
     insert_query = """
-    INSERT INTO dim_certification (certificationcode, nom, date)
+    INSERT INTO dim_certification (certification_pk, certificationcode, nom)
     VALUES (%s, %s, %s)
-    ON CONFLICT (certificationcode) DO UPDATE SET 
-        nom = EXCLUDED.nom,
-        date = EXCLUDED.date;
+    ON CONFLICT (certification_pk) DO UPDATE SET 
+        nom = EXCLUDED.nom;
     """
 
     for record in data:
@@ -93,31 +90,33 @@ def load_into_postgres(data):
     conn.commit()
     cur.close()
     conn.close()
+    logger.info(f"{len(data)} certifications insérées ou mises à jour.")
 
 dag = DAG(
-    'Dag_Dimcertiifcations',
+    dag_id='Dag_Dimcertiifcations',
     schedule_interval='*/2 * * * *',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )
 
 extract_task = PythonOperator(
-    task_id='extract_from_mongodb_to_temp_file',
-    python_callable=extract_from_mongodb_to_temp_file,
+    task_id='extract_from_mongodb',
+    python_callable=extract_from_mongodb,
+    provide_context=True,
     dag=dag,
 )
 
 transform_task = PythonOperator(
-    task_id='transform_data_from_temp_file',
-    python_callable=transform_data_from_temp_file,
-    op_args=[extract_task.output],
+    task_id='transform_certifications',
+    python_callable=transform_certifications,
+    provide_context=True,
     dag=dag,
 )
 
 load_task = PythonOperator(
     task_id='load_into_postgres',
     python_callable=load_into_postgres,
-    op_args=[transform_task.output],
+    provide_context=True,
     dag=dag,
 )
 

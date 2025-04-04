@@ -14,7 +14,6 @@ def get_mongodb_connection():
         MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
         MONGO_DB = "PowerBi"
         MONGO_COLLECTION = "frontusers"
-        
         client = MongoClient(MONGO_URI)
         mongo_db = client[MONGO_DB]
         collection = mongo_db[MONGO_COLLECTION]
@@ -29,6 +28,15 @@ def get_postgres_connection():
     conn = hook.get_conn()
     logger.info("PostgreSQL connection successful.")
     return conn
+
+def get_max_visa_pk():
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT COALESCE(MAX(visa_pk), 0) FROM dim_visa")
+    max_pk = cur.fetchone()[0]
+    cur.close()
+    conn.close()
+    return max_pk
 
 def convert_datetime_and_objectid_to_string(value):
     if isinstance(value, datetime):
@@ -46,7 +54,6 @@ def extract_from_mongodb(**kwargs):
         client, _, collection = get_mongodb_connection()
         mongo_data = list(collection.find({}, {"_id": 0}))
         mongo_data = [convert_datetime_and_objectid_to_string(record) for record in mongo_data]
-        
         client.close()
         kwargs['ti'].xcom_push(key='mongo_data', value=mongo_data)
         logger.info("Data extracted from MongoDB successfully.")
@@ -58,6 +65,8 @@ def extract_from_mongodb(**kwargs):
 def transform_data(**kwargs):
     mongo_data = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='mongo_data')
     transformed_data = []
+    max_pk = get_max_visa_pk()
+    compteur = max_pk
 
     for record in mongo_data:
         profiles = [record.get("profile", {})]
@@ -69,10 +78,11 @@ def transform_data(**kwargs):
             visas = profile_item.get("visa", [])
             for visa in visas:
                 if not visa:
-                    continue 
-                
+                    continue
+                compteur += 1
                 transformed_data.append({
-                    "visa_code": f"VISA{str(len(transformed_data) + 1).zfill(2)}",
+                    "visa_pk": compteur,
+                    "visa_code": f"VISA{str(compteur).zfill(4)}",
                     "visa_type": visa.get("type", "").strip() or None,
                     "date_entree": visa.get("dateEntree"),
                     "date_sortie": visa.get("dateSortie"),
@@ -83,7 +93,7 @@ def transform_data(**kwargs):
                 })
 
     kwargs['ti'].xcom_push(key='transformed_data', value=transformed_data)
-    logger.info("Data transformed successfully.")
+    logger.info(f"{len(transformed_data)} visas transformed.")
     return transformed_data
 
 def load_into_postgres(**kwargs):
@@ -95,9 +105,12 @@ def load_into_postgres(**kwargs):
 
     conn = get_postgres_connection()
     cur = conn.cursor()
+
     insert_query = """
-    INSERT INTO dim_visa (visacode, visa_type, date_entree, date_sortie, destination, duree, duree_type, nb_entree)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    INSERT INTO dim_visa (
+        visa_pk, visacode, visa_type, date_entree, date_sortie,
+        destination, duree, duree_type, nb_entree
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     ON CONFLICT (visacode) DO UPDATE SET 
         visa_type = EXCLUDED.visa_type,
         date_entree = EXCLUDED.date_entree,
@@ -110,6 +123,7 @@ def load_into_postgres(**kwargs):
 
     for record in transformed_data:
         values = (
+            record["visa_pk"],
             record["visa_code"],
             record["visa_type"],
             record["date_entree"],
@@ -127,7 +141,7 @@ def load_into_postgres(**kwargs):
     logger.info(f"{len(transformed_data)} visa records inserted/updated in PostgreSQL.")
 
 dag = DAG(
-    'visa_migration_dag',
+    'visa_dag',
     schedule_interval='*/2 * * * *',
     start_date=datetime(2025, 1, 1),
     catchup=False,

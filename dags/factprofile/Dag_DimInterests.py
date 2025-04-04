@@ -1,6 +1,4 @@
-import tempfile
 import re
-import json
 import logging
 from datetime import datetime
 from pymongo import MongoClient
@@ -12,14 +10,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def get_mongodb_connection():
-    MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
-    MONGO_DB = "PowerBi"
-    MONGO_COLLECTION = "frontusers"
-    
-    client = MongoClient(MONGO_URI)
-    mongo_db = client[MONGO_DB]
-    collection = mongo_db[MONGO_COLLECTION]
-    return client, mongo_db, collection
+    client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
+    db = client["PowerBi"]
+    collection = db["frontusers"]
+    return client, collection
 
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
@@ -27,130 +21,120 @@ def get_postgres_connection():
     logger.info("Connexion à PostgreSQL réussie.")
     return conn
 
-def generate_interests_code(existing_codes):
-    valid_codes = [code for code in existing_codes if re.match(r"^INT\d{3}$", code)]
-    
-    if not valid_codes:
-        return "INT001"
-    else:
-        last_number = max(int(code.replace("INT", "")) for code in valid_codes)
-        new_number = last_number + 1
-        return f"INT{str(new_number).zfill(3)}"
-
-def extract_from_mongodb_to_temp_file(**kwargs):
-    client, _, collection = get_mongodb_connection()
-    mongo_data = collection.find({}, {"_id": 0, "matricule": 1, "profile.interests": 1, "simpleProfile.interests": 1})
-
-    interests = set()
-
-    for user in mongo_data:
-        if isinstance(user, dict):
-            if "profile" in user and isinstance(user["profile"], dict):
-                user_interests = user["profile"].get("interests", [])
-                if isinstance(user_interests, list):
-                    for interest in user_interests:
-                        if isinstance(interest, str) and interest.strip():
-                            interests.add(interest.strip())
-            if "simpleProfile" in user and isinstance(user["simpleProfile"], dict):
-                user_interests = user["simpleProfile"].get("interests", [])
-                if isinstance(user_interests, list):
-                    for interest in user_interests:
-                        if isinstance(interest, str) and interest.strip():
-                            interests.add(interest.strip())
-
-    client.close()
-    
-    logger.info(f"Intérêts extraits : {interests}")
-
-    with tempfile.NamedTemporaryFile(delete=False, mode='w', encoding='utf-8') as temp_file:
-        temp_file_path = temp_file.name
-        json.dump([{"interestsCode": None, "interests": i} for i in interests], temp_file, ensure_ascii=False, indent=4)
-    
-    kwargs['ti'].xcom_push(key='temp_file_path', value=temp_file_path)
-
-def transform_data_from_temp_file(**kwargs):
-    temp_file_path = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb_to_temp_file', key='temp_file_path')
-    
-    with open(temp_file_path, 'r', encoding='utf-8') as file:
-        mongo_data = json.load(file)
-
+def get_existing_interests_data():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT interests FROM Dim_interests")
-    existing_interests = {row[0] for row in cur.fetchall()}
-    cur.execute("SELECT interestsCode FROM Dim_interests")
-    existing_codes = {row[0] for row in cur.fetchall()}
+
+    cur.execute("SELECT interests, interestsCode FROM Dim_interests")
+    existing_data = cur.fetchall()
+    existing_interests = {row[0] for row in existing_data}
+    existing_codes = {row[1] for row in existing_data}
+
+    cur.execute("SELECT COALESCE(MAX(interests_pk), 0) FROM Dim_interests")
+    current_pk = cur.fetchone()[0]
+
     cur.close()
     conn.close()
 
-    transformed_data = []
-    for record in mongo_data:
-        interest_name = record["interests"]
-        if interest_name and interest_name not in existing_interests:
-            interest_code = generate_interests_code(existing_codes)
-            transformed_data.append({
-                "interestsCode": interest_code,
-                "interests": interest_name
+    return existing_interests, existing_codes, current_pk
+
+def extract_interests(**kwargs):
+    client, collection = get_mongodb_connection()
+    cursor = collection.find({}, {
+        "_id": 0,
+        "profile.interests": 1,
+        "simpleProfile.interests": 1
+    })
+
+    interests = set()
+
+    for user in cursor:
+        for profile_type in ['profile', 'simpleProfile']:
+            if profile_type in user and isinstance(user[profile_type], dict):
+                entries = user[profile_type].get('interests', [])
+                for interest in entries:
+                    if isinstance(interest, str) and interest.strip():
+                        interests.add(interest.strip())
+
+    client.close()
+    kwargs['ti'].xcom_push(key='extracted_interests', value=list(interests))
+    logger.info(f"{len(interests)} intérêts extraits.")
+
+def generate_interest_code(existing_codes):
+    valid_codes = [code for code in existing_codes if re.match(r"^INT\d{3}$", code)]
+    if not valid_codes:
+        return "INT001"
+    max_num = max(int(code[3:]) for code in valid_codes)
+    return f"INT{str(max_num + 1).zfill(3)}"
+
+def transform_interests(**kwargs):
+    extracted = kwargs['ti'].xcom_pull(task_ids='extract_interests', key='extracted_interests')
+    existing_interests, existing_codes, current_pk = get_existing_interests_data()
+
+    transformed = []
+    for interest in extracted:
+        if interest not in existing_interests:
+            current_pk += 1
+            code = generate_interest_code(existing_codes)
+            transformed.append({
+                "interests_pk": current_pk,
+                "interestsCode": code,
+                "interests": interest
             })
-            existing_codes.add(interest_code)
+            existing_codes.add(code)
+            existing_interests.add(interest)
 
-    kwargs['ti'].xcom_push(key='transformed_data', value=transformed_data)
+    kwargs['ti'].xcom_push(key='transformed_interests', value=transformed)
+    logger.info(f"{len(transformed)} nouveaux intérêts préparés.")
 
-def load_into_postgres(**kwargs):
-    transformed_data = kwargs['ti'].xcom_pull(task_ids='transform_data_from_temp_file', key='transformed_data')
-
-    if not transformed_data:
-        logger.info("No data to insert into PostgreSQL.")
+def load_interests(**kwargs):
+    records = kwargs['ti'].xcom_pull(task_ids='transform_interests', key='transformed_interests')
+    if not records:
+        logger.info("Aucun intérêt à insérer.")
         return
 
     conn = get_postgres_connection()
     cur = conn.cursor()
 
     insert_query = """
-    INSERT INTO Dim_interests (interestsCode, interests)
-    VALUES (%s, %s)
-    ON CONFLICT (interestsCode) DO NOTHING;
+    INSERT INTO Dim_interests (interests_pk, interestsCode, interests)
+    VALUES (%s, %s, %s)
+    ON CONFLICT (interests) DO UPDATE SET
+        interestsCode = EXCLUDED.interestsCode
     """
-    update_query = """
-    UPDATE Dim_interests
-    SET interests = %s
-    WHERE interestsCode = %s;
-    """
-    
-    for record in transformed_data:
-        cur.execute(insert_query, (record["interestsCode"], record["interests"]))
-        if cur.rowcount == 0:
-            cur.execute(update_query, (record["interests"], record["interestsCode"]))
-    
+
+    for r in records:
+        cur.execute(insert_query, (r["interests_pk"], r["interestsCode"], r["interests"]))
+
     conn.commit()
     cur.close()
     conn.close()
-    logger.info(f"{len(transformed_data)} rows inserted into PostgreSQL.")
+    logger.info(f"{len(records)} lignes insérées ou mises à jour.")
 
 dag = DAG(
-    'Dag_DimInterests',
-    schedule_interval='*/2 * * * *',
+    dag_id='Dag_DimInterests',
     start_date=datetime(2025, 1, 1),
-    catchup=False,
+    schedule_interval='*/2 * * * *',
+    catchup=False
 )
 
 extract_task = PythonOperator(
-    task_id='extract_from_mongodb_to_temp_file',
-    python_callable=extract_from_mongodb_to_temp_file,
+    task_id='extract_interests',
+    python_callable=extract_interests,
     provide_context=True,
     dag=dag,
 )
 
 transform_task = PythonOperator(
-    task_id='transform_data_from_temp_file',
-    python_callable=transform_data_from_temp_file,
+    task_id='transform_interests',
+    python_callable=transform_interests,
     provide_context=True,
     dag=dag,
 )
 
 load_task = PythonOperator(
-    task_id='load_into_postgres',
-    python_callable=load_into_postgres,
+    task_id='load_interests',
+    python_callable=load_interests,
     provide_context=True,
     dag=dag,
 )

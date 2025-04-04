@@ -22,6 +22,15 @@ def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
 
+def get_max_experience_pk():
+    conn = get_postgres_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT COALESCE(MAX(experience_pk), 0) FROM dim_experience")
+    max_pk = cursor.fetchone()[0]
+    cursor.close()
+    conn.close()
+    return max_pk
+
 def load_dim_secteur():
     conn = get_postgres_connection()
     cursor = conn.cursor()
@@ -65,7 +74,9 @@ def extract_experiences(**kwargs):
     label_to_pk_metier = load_dim_metier()
     documents = collection.find()
     filtered_experiences = []
-    code_index = 1
+
+    current_pk = get_max_experience_pk()
+    code_index = current_pk + 1
 
     for doc in documents:
         for profile_field in ['profile', 'simpleProfile']:
@@ -111,7 +122,9 @@ def extract_experiences(**kwargs):
                                         metier_pk = label_to_pk_metier.get(label)
                                         if metier_pk:
                                             metier_pk_list.append(str(metier_pk))
+
                         filtered_experience["metier"] = metier_pk_list[0] if metier_pk_list else None
+                        filtered_experience["experience_pk"] = code_index
                         filtered_experience["code_experience"] = generate_code_experience(code_index)
                         filtered_experiences.append(convert_bson(filtered_experience))
                         code_index += 1
@@ -125,14 +138,15 @@ def insert_experiences_into_postgres(**kwargs):
     experiences = kwargs['ti'].xcom_pull(task_ids='extract_dim_experience', key='dim_experiences')
     conn = get_postgres_connection()
     cursor = conn.cursor()
+
     upsert_query = """
         INSERT INTO public.dim_experience (
-            codeexperience, role, entreprise,
+            experience_pk, codeexperience, role, entreprise,
             start_year, start_month, end_year, end_month,
             pays, ville, typecontrat,
             fk_secteur, fk_metier
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (codeexperience) DO UPDATE SET
             role = EXCLUDED.role,
             entreprise = EXCLUDED.entreprise,
@@ -149,6 +163,7 @@ def insert_experiences_into_postgres(**kwargs):
 
     for exp in experiences:
         cursor.execute(upsert_query, (
+            exp["experience_pk"],
             exp["code_experience"],
             exp["role"],
             exp["entreprise"],
@@ -168,6 +183,7 @@ def insert_experiences_into_postgres(**kwargs):
     conn.close()
     logger.info(f"{len(experiences)} expériences insérées ou mises à jour.")
 
+# DAG Definition
 dag = DAG(
     dag_id='dag_dim_experience',
     schedule_interval='*/2 * * * *',

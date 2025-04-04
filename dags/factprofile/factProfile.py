@@ -1,17 +1,20 @@
 from pymongo import MongoClient
 from bson import ObjectId
-import psycopg2
 from bson.errors import InvalidId
 from datetime import datetime
+from collections import defaultdict
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+import logging
+from airflow.sensors.external_task_sensor import ExternalTaskSensor
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def get_postgres_connection():
-    return psycopg2.connect(
-        dbname="DW_DigitalCook",
-        user='postgres',
-        password='admin',
-        host='localhost',
-        port='5432'
-    )
+    hook = PostgresHook(postgres_conn_id='postgres')
+    return hook.get_conn()
 
 def get_mongodb_connection():
     MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
@@ -23,8 +26,9 @@ def get_mongodb_connection():
     
     collection = mongo_db[MONGO_COLLECTION]
     secteur_collection = mongo_db["secteurdactivities"]
+    parrainage_collection = mongo_db["parrainages"]
     
-    return collection, secteur_collection
+    return collection, secteur_collection,parrainage_collection
 
 def safe_object_id(id_str):
     try:
@@ -170,7 +174,6 @@ def get_etude_pk_from_postgres(niveau_etude):
     else:
         return None  
     
-
 def get_projet_pk_from_postgres(nom_projet, entreprise, year_start, year_end, month_start, month_end):
     conn = get_postgres_connection()
     cur = conn.cursor()
@@ -402,7 +405,6 @@ def get_experience_fk_from_postgres(role, entreprise, type_contrat):
     conn.close()
 
     return result[0] if result else None
-
     
 def get_nb_experiences_per_client():
     conn = get_postgres_connection()
@@ -503,7 +505,6 @@ def calculate_age(birth_date):
     )
     return age
 
-
 #extraction de date
 
 def extract_date_only(dt):
@@ -516,17 +517,76 @@ def extract_date_only(dt):
             return None
     return dt.date()
 
+def get_client_pk_by_user_id(user_id):
+    collection, _, _ = get_mongodb_connection()
+
+    matched_user = collection.find_one({"_id": user_id})
+    if not matched_user:
+        matched_user = collection.find_one({"userId": user_id})
+
+    if matched_user:
+        full_name = matched_user.get("fullName", "").strip()
+        matricule = str(matched_user.get("matricule", "")).strip()
+        nom_prenom = full_name.split()
+
+        client_pk = None
+        if len(nom_prenom) >= 2:
+            first_name = nom_prenom[1]
+            last_name = nom_prenom[0]
+            client_pk = get_client_pk_from_postgres(last_name, first_name)
+            if not client_pk:
+                client_pk = get_client_pk_from_postgres(first_name, last_name)
+
+        if not client_pk and matricule:
+            client_pk = get_client_fk_from_postgres(matricule)
+
+        return client_pk
+    return None
+
+def get_client_pk_from_postgres(nom, prenom):
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT client_pk FROM public.dim_client
+        WHERE LOWER(nom) = LOWER(%s) AND LOWER(prenom) = LOWER(%s)
+        LIMIT 1
+    """, (nom, prenom))
+    result = cur.fetchone()
+    cur.close()
+    conn.close()
+    return result[0] if result else None
+
+def get_parrainage_data():
+    _, _, parrainages_col = get_mongodb_connection()
+
+    parrainage_counts = defaultdict(int)
+    filleuls_par_client = defaultdict(list)
+
+    for doc in parrainages_col.find():
+        parrain_pk = doc.get("client_pk")
+        user_id = doc.get("userId")
+
+        if parrain_pk and user_id:
+            filleul_pk = get_client_pk_by_user_id(user_id)
+            if filleul_pk and filleul_pk != parrain_pk:
+                parrainage_counts[parrain_pk] += 1
+                filleuls_par_client[parrain_pk].append(filleul_pk)
+            else:
+                filleuls_par_client[parrain_pk].append(None)
+
+    return parrainage_counts, filleuls_par_client
 
 #matching 
 
 def get_combined_profile_field(user, field_name):
     return user.get("profile", {}).get(field_name, []) + user.get("simpleProfile", {}).get(field_name, [])
 
-
 def matchclient():
-    collection, secteur_collection = get_mongodb_connection()
+    collection, secteur_collection, _ = get_mongodb_connection()
     secteur_label_to_pk = load_dim_secteur()
     metier_label_to_pk = load_dim_metier()
+    parrainage_counts, filleuls_by_client = get_parrainage_data()
+    nb_parrainages_displayed = False
     
     mongo_data = collection.find({}, {
         "_id": 0, "matricule": 1,
@@ -834,32 +894,32 @@ def matchclient():
                 nb_certif = nb_certifications_total
                 nb_certifications_displayed = True
             else:
-                nb_certif = 0
+                nb_certif = None
 # langue : 
             if not nb_languages_displayed:
                 nb_langues = nb_languages_total
                 nb_languages_displayed = True
             else:
-                nb_langues = 0
+                nb_langues = None
 
 # visa :
             if not visa_displayed:
                 visa_count_display = nb_visa_valide
                 visa_displayed = True
             else:
-                visa_count_display = 0
+                visa_count_display = None
 # projet :
 
             if not project_displayed:
                 project_count_display = nb_projets_total
                 project_displayed = True
             else:
-                project_count_display = 0
+                project_count_display = None
 # experience :
             if not experience_year_displayed:
                 nb_exp = experience_counts.get(client_fk, 0)
             else:
-                nb_exp = 0
+                nb_exp = None
 # disponibilite :
             if not disponibilite_displayed:
                 dispo = disponibilite
@@ -874,30 +934,31 @@ def matchclient():
             else:
                 age = None
 
+
+            if not nb_parrainages_displayed:
+                nb_parrainages = parrainage_counts.get(client_fk, 0)
+                nb_parrainages_displayed = True
+            else:
+                nb_parrainages = None
+
             load_fact_date(client_fk, secteur_id, metier_id,counter,competence_fk,language_fk,
                           interest_pk,certification_pk,contact_pk,visa_pk,job_location_pk,
                            project_pk,permis_fk,experience_fk,year,month,nb_certif,nb_langues,visa_count_display
-                           ,project_count_display,nb_exp,study_level_fk,dispo,age,dim_date_pk)
+                           ,project_count_display,nb_exp,study_level_fk,dispo,age,dim_date_pk,nb_parrainages)
             
 
             line_count += 1
             counter += 1
     
-    
-
-
-
     print(f"\nTotal lines: {line_count}")
-
-    
 
 def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, language_fk,
                     interest_fk, certification_pk, contact_pk, visa_pk, job_location_pk,
                     project_pk, permis_fk, experience_fk, year, month,
-                    nb_certif, nb_langues, visa_count_display, project_count_display, nb_exp,study_level_fk,dispo,age,dim_date_pk):
+                    nb_certif, nb_langues, visa_count_display, project_count_display, nb_exp,
+                    study_level_fk, dispo, age, dim_date_pk, nb_parrainages):
     try:
         fact_pk = generate_fact_pk(counter)
-
         conn = get_postgres_connection()
         cur = conn.cursor()
 
@@ -909,19 +970,17 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                 preferedjoblocations_fk, projet_fk, permis_fk,
                 experience_fk, experience_year, experience_month,
                 nbr_certif, nbr_langue, nbr_visa_valide,
-                nbr_projet, nb_experience,etude_fk,disponibilite,age,
-                date_fk
-                
-                    
+                nbr_projet, nb_experience, etude_fk, disponibilite, age,
+                date_fk, nb_parrainages
             )
-            VALUES (%s, %s, %s, %s, 
-                    %s, %s, %s, 
-                    %s, %s, %s, 
-                    %s, %s, %s, 
+            VALUES (%s, %s, %s, %s,
                     %s, %s, %s,
                     %s, %s, %s,
                     %s, %s, %s,
-                    %s, %s, %s)
+                    %s, %s, %s,
+                    %s, %s, %s,
+                    %s, %s, %s, %s, %s,
+                    %s, %s)
             ON CONFLICT (fact_pk) DO UPDATE SET
                 client_fk = EXCLUDED.client_fk,
                 secteur_fk = EXCLUDED.secteur_fk,
@@ -946,7 +1005,8 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                 etude_fk = EXCLUDED.etude_fk,
                 disponibilite = EXCLUDED.disponibilite,
                 age = EXCLUDED.age,
-                date_fk = EXCLUDED.date_fk;
+                date_fk = EXCLUDED.date_fk,
+                nb_parrainages = EXCLUDED.nb_parrainages;
         """, (
             client_fk, secteur_fk, metier_fk, fact_pk,
             competence_fk, language_fk, interest_fk,
@@ -955,7 +1015,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
             experience_fk, year, month,
             nb_certif, nb_langues, visa_count_display,
             project_count_display, nb_exp,
-            study_level_fk,dispo,age,dim_date_pk
+            study_level_fk, dispo, age, dim_date_pk, nb_parrainages
         ))
 
         conn.commit()
@@ -964,9 +1024,159 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
         print(fact_pk)
 
     except Exception as e:
-        print(f"❌ Erreur pour client {client_fk}, fact_pk iteration {fact_pk} : {e}")
+        print(f" Erreur pour client {client_fk}, fact_pk iteration {fact_pk} : {e}")
 
 
 
+dag = DAG(
+    dag_id='etl_fact_client_profile_dag',
+    schedule_interval='*/15 * * * *',
+    start_date=datetime(2025, 1, 1),
+    catchup=False
+)
 
-matchclient()
+task_run_etl = PythonOperator(
+    task_id='run_etl_fact_client_profile',
+    python_callable=matchclient,
+    provide_context=True,
+    dag=dag,
+)
+wait_dim_client = ExternalTaskSensor(
+    task_id='wait_for_dim_client',
+    external_dag_id='Dag_DimClients',
+    external_task_id='load_into_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+) 
+
+
+wait_dim_secteur = ExternalTaskSensor(
+    task_id='wait_for_dim_secteur',
+    external_dag_id='dag_dim_secteur',
+    external_task_id='load_into_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_dim_metier = ExternalTaskSensor(
+    task_id='wait_for_dim_metier',
+    external_dag_id='Dag_Metier',
+    external_task_id='load_jobs_into_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+wait_dim_certification = ExternalTaskSensor(
+    task_id='wait_for_dim_certifications',
+    external_dag_id='Dag_Dimcertiifcations',
+    external_task_id='load_into_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+wait_dim_competence = ExternalTaskSensor(
+    task_id='wait_for_dim_competence',
+    external_dag_id='Dag_DimCompetences',
+    external_task_id='load_competences',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+wait_dim_dates = ExternalTaskSensor(
+    task_id='wait_for_dim_dates',
+    external_dag_id='dim_dates_dag',
+    external_task_id='load_dim_dates',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_dim_experience = ExternalTaskSensor(
+    task_id='wait_for_dim_experience',
+    external_dag_id='dag_dim_experience',
+    external_task_id='load_dim_experience',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+wait_dim_interests = ExternalTaskSensor(
+    task_id='wait_for_dim_interests',
+    external_dag_id='Dag_DimInterests',
+    external_task_id='load_interests',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_dim_languages = ExternalTaskSensor(
+    task_id='wait_for_dim_languages',
+    external_dag_id='Dag_DimLanguages',
+    external_task_id='load_into_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_dim_niveau_etudes = ExternalTaskSensor(
+    task_id='wait_for_dim_niveau_etudes',
+    external_dag_id='dag_dim_niveau_etudes',
+    external_task_id='load_dim_niveau_etudes',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_dim_permis = ExternalTaskSensor(
+    task_id='wait_for_dim_permis',
+    external_dag_id='Dag_DimPermisConduire',
+    external_task_id='load_into_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_dim_preferedjoblocations = ExternalTaskSensor(
+    task_id='wait_for_dim_preferedjoblocations',
+    external_dag_id='Dag_DimpreferedJobLocations',
+    external_task_id='load_into_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_dim_projet = ExternalTaskSensor(
+    task_id='wait_for_dim_projet',
+    external_dag_id='Dag_DimProjet',
+    external_task_id='load_into_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_dim_visa = ExternalTaskSensor(
+    task_id='wait_for_dim_visa',
+    external_dag_id='visa_migration_dag',
+    external_task_id='load_into_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+
+wait_dim_metier >> task_run_etl
