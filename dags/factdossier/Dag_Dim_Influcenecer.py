@@ -1,25 +1,26 @@
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from datetime import datetime
 from pymongo import MongoClient
-import psycopg2
+import logging
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Connexion MongoDB
 def get_mongodb_collections():
     MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
     client = MongoClient(MONGO_URI)
     db = client["PowerBi"]
     return db["users"], db["privileges"]
 
-def get_postgres_connection():
-    return psycopg2.connect(
-        dbname="DW_DigitalCook",
-        user="postgres",
-        password="admin",
-        host="localhost",
-        port="5432"
-    )
-
+# Générer un code
 def generate_codeinfluencer(index):
     return f"influ{index:04d}"
 
-def extract_users():
+# Tâche d'extraction
+def extract_users(**kwargs):
     users_collection, privileges_collection = get_mongodb_collections()
 
     privilege_map = {
@@ -46,10 +47,15 @@ def extract_users():
         users.append((codeinflu, nom, prenom, is_admin, privilege_label))
         index += 1
 
-    return users
+    kwargs['ti'].xcom_push(key='users_data', value=users)
+    logger.info(f"{len(users)} utilisateurs extraits.")
 
-def insert_users_to_dim_influencer(users):
-    conn = get_postgres_connection()
+# Tâche de chargement
+def insert_users_to_dim_influencer(**kwargs):
+    users = kwargs['ti'].xcom_pull(task_ids='extract_users', key='users_data')
+
+    hook = PostgresHook(postgres_conn_id='postgres')
+    conn = hook.get_conn()
     cur = conn.cursor()
 
     for user in users:
@@ -66,7 +72,26 @@ def insert_users_to_dim_influencer(users):
     conn.commit()
     cur.close()
     conn.close()
+    logger.info(f"{len(users)} influenceurs insérés/mis à jour dans PostgreSQL.")
 
-if __name__ == "__main__":
-    users = extract_users()
-    insert_users_to_dim_influencer(users)
+# Définition du DAG
+with DAG(
+    dag_id='Dag_DimInfluencer',
+    schedule_interval='*/2 * * * *',
+    start_date=datetime(2025, 1, 1),
+    catchup=False,
+) as dag:
+
+    extract_task = PythonOperator(
+        task_id='extract_users',
+        python_callable=extract_users,
+        provide_context=True
+    )
+
+    load_task = PythonOperator(
+        task_id='load_users_to_postgres',
+        python_callable=insert_users_to_dim_influencer,
+        provide_context=True
+    )
+
+    extract_task >> load_task

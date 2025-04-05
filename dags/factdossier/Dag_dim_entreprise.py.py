@@ -87,7 +87,6 @@ def insert_entreprises(**kwargs):
     conn.close()
     print(f"\n✅ {total} entreprises insérées ou mises à jour dans dim_entreprise.")
 
-# Définir le DAG
 dag = DAG(
     dag_id='dag_dim_entreprise',
     schedule_interval='*/2 * * * *',

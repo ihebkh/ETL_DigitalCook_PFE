@@ -6,7 +6,9 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.sensors.external_task_sensor import ExternalTaskSensor
+from airflow.operators.dummy_operator import DummyOperator
 from datetime import datetime
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -183,10 +185,9 @@ def insert_experiences_into_postgres(**kwargs):
     conn.close()
     logger.info(f"{len(experiences)} expériences insérées ou mises à jour.")
 
-# DAG Definition
 dag = DAG(
     dag_id='dag_dim_experience',
-    schedule_interval='*/2 * * * *',
+    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False
 )
@@ -225,4 +226,11 @@ load_task = PythonOperator(
     dag=dag
 )
 
-wait_dim_secteur >> wait_dim_metier >> extract_task >> load_task
+end_task = DummyOperator(
+    task_id='end_task',
+    dag=dag
+)
+# en parallele
+[wait_dim_secteur, wait_dim_metier] >> extract_task
+
+extract_task >> load_task >> end_task

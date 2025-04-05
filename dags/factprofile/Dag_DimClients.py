@@ -135,10 +135,9 @@ def load_data(**kwargs):
     conn.close()
     logger.info(f"{len(data)} clients insérés/mis à jour dans PostgreSQL.")
 
-# DAG definition
 dag = DAG(
     dag_id='Dag_DimClients',
-    schedule_interval='*/2 * * * *',
+    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False
 )

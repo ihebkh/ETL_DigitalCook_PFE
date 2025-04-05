@@ -114,7 +114,7 @@ def load_interests(**kwargs):
 dag = DAG(
     dag_id='Dag_DimInterests',
     start_date=datetime(2025, 1, 1),
-    schedule_interval='*/2 * * * *',
+    schedule_interval='@daily',
     catchup=False
 )
 

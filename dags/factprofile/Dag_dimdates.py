@@ -89,7 +89,7 @@ default_args = {
 dag = DAG(
     dag_id='dim_dates_dag',
     default_args=default_args,
-    schedule_interval='0 0 * * *',
+    schedule_interval='@daily',
     catchup=False
 )
 

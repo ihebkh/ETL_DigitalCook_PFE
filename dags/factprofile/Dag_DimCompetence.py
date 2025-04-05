@@ -107,7 +107,7 @@ def load_competences(**kwargs):
 
 dag = DAG(
     'Dag_DimCompetences',
-    schedule_interval='*/2 * * * *',
+    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )

@@ -143,15 +143,13 @@ def load_into_postgres(**kwargs):
     conn.close()
     logger.info(f"{len(projects)} projets insérés ou mis à jour.")
 
-# Define DAG
 dag = DAG(
     'Dag_DimProjet',
-    schedule_interval='*/2 * * * *',
+    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )
 
-# Define tasks
 extract_task = PythonOperator(
     task_id='extract_from_mongodb',
     python_callable=extract_from_mongodb,
@@ -173,5 +171,4 @@ load_task = PythonOperator(
     dag=dag
 )
 
-# Task dependencies
 extract_task >> transform_task >> load_task

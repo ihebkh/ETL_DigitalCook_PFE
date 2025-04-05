@@ -142,7 +142,7 @@ def load_into_postgres(**kwargs):
 
 dag = DAG(
     'visa_dag',
-    schedule_interval='*/2 * * * *',
+    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )
@@ -153,6 +153,8 @@ extract_task = PythonOperator(
     provide_context=True,
     dag=dag,
 )
+
+
 
 transform_task = PythonOperator(
     task_id='transform_data',

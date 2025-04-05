@@ -93,8 +93,8 @@ def load_into_postgres(ti):
     logger.info(f"{len(data)} certifications insérées ou mises à jour.")
 
 dag = DAG(
-    dag_id='Dag_Dimcertiifcations',
-    schedule_interval='*/2 * * * *',
+     'Dag_Dimcertifications', 
+    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )

@@ -130,7 +130,7 @@ def load_jobs_into_postgres(**kwargs):
 
 dag = DAG(
     'Dag_Metier',
-    schedule_interval='*/2 * * * *',
+    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )

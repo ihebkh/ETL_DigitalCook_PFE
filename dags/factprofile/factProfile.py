@@ -8,6 +8,9 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 import logging
 from airflow.sensors.external_task_sensor import ExternalTaskSensor
+from airflow.operators.email_operator import EmailOperator
+from airflow.operators.empty import EmptyOperator 
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -1029,28 +1032,11 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
 
 
 dag = DAG(
-    dag_id='etl_fact_client_profile_dag',
-    schedule_interval='*/15 * * * *',
+    'dag_fact',
+    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False
 )
-
-task_run_etl = PythonOperator(
-    task_id='run_etl_fact_client_profile',
-    python_callable=matchclient,
-    provide_context=True,
-    dag=dag,
-)
-wait_dim_client = ExternalTaskSensor(
-    task_id='wait_for_dim_client',
-    external_dag_id='Dag_DimClients',
-    external_task_id='load_into_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-) 
-
 
 wait_dim_secteur = ExternalTaskSensor(
     task_id='wait_for_dim_secteur',
@@ -1062,6 +1048,18 @@ wait_dim_secteur = ExternalTaskSensor(
     dag=dag
 )
 
+wait_dim_clients = ExternalTaskSensor(
+    task_id='wait_for_dim_clients',
+    external_dag_id='Dag_DimClients',             
+    external_task_id='load_data',                 
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+
+
 wait_dim_metier = ExternalTaskSensor(
     task_id='wait_for_dim_metier',
     external_dag_id='Dag_Metier',
@@ -1071,28 +1069,20 @@ wait_dim_metier = ExternalTaskSensor(
     poke_interval=30,
     dag=dag
 )
-wait_dim_certification = ExternalTaskSensor(
+wait_dim_certifications = ExternalTaskSensor(
     task_id='wait_for_dim_certifications',
-    external_dag_id='Dag_Dimcertiifcations',
+    external_dag_id='Dag_Dimcertifications',
     external_task_id='load_into_postgres',
     mode='poke',
     timeout=600,
     poke_interval=30,
     dag=dag
 )
-wait_dim_competence = ExternalTaskSensor(
-    task_id='wait_for_dim_competence',
-    external_dag_id='Dag_DimCompetences',
-    external_task_id='load_competences',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
-wait_dim_dates = ExternalTaskSensor(
-    task_id='wait_for_dim_dates',
-    external_dag_id='dim_dates_dag',
-    external_task_id='load_dim_dates',
+
+wait_dim_competences = ExternalTaskSensor(
+    task_id='wait_for_dim_competences',
+    external_dag_id='Dag_DimCompetences',  
+    external_task_id='load_competences',  
     mode='poke',
     timeout=600,
     poke_interval=30,
@@ -1101,13 +1091,14 @@ wait_dim_dates = ExternalTaskSensor(
 
 wait_dim_experience = ExternalTaskSensor(
     task_id='wait_for_dim_experience',
-    external_dag_id='dag_dim_experience',
-    external_task_id='load_dim_experience',
+    external_dag_id='dag_dim_experience',     
+    external_task_id='end_task',            
     mode='poke',
     timeout=600,
     poke_interval=30,
     dag=dag
 )
+
 wait_dim_interests = ExternalTaskSensor(
     task_id='wait_for_dim_interests',
     external_dag_id='Dag_DimInterests',
@@ -1121,13 +1112,12 @@ wait_dim_interests = ExternalTaskSensor(
 wait_dim_languages = ExternalTaskSensor(
     task_id='wait_for_dim_languages',
     external_dag_id='Dag_DimLanguages',
-    external_task_id='load_into_postgres',
+    external_task_id='load_languages',
     mode='poke',
     timeout=600,
     poke_interval=30,
     dag=dag
 )
-
 wait_dim_niveau_etudes = ExternalTaskSensor(
     task_id='wait_for_dim_niveau_etudes',
     external_dag_id='dag_dim_niveau_etudes',
@@ -1147,8 +1137,7 @@ wait_dim_permis = ExternalTaskSensor(
     poke_interval=30,
     dag=dag
 )
-
-wait_dim_preferedjoblocations = ExternalTaskSensor(
+wait_dim_locations = ExternalTaskSensor(
     task_id='wait_for_dim_preferedjoblocations',
     external_dag_id='Dag_DimpreferedJobLocations',
     external_task_id='load_into_postgres',
@@ -1157,26 +1146,37 @@ wait_dim_preferedjoblocations = ExternalTaskSensor(
     poke_interval=30,
     dag=dag
 )
-
-wait_dim_projet = ExternalTaskSensor(
-    task_id='wait_for_dim_projet',
-    external_dag_id='Dag_DimProjet',
-    external_task_id='load_into_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
+wait_projects = ExternalTaskSensor(
+        task_id='wait_dim_projet',
+        external_dag_id='Dag_DimProjet',
+        external_task_id='load_into_postgres',
+        mode='poke',
+        timeout=600,
+        poke_interval=30
 )
 
-wait_dim_visa = ExternalTaskSensor(
-    task_id='wait_for_dim_visa',
-    external_dag_id='visa_migration_dag',
-    external_task_id='load_into_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
+wait_visa = ExternalTaskSensor(
+        task_id='wait_dim_visa',
+        external_dag_id='visa_dag',
+        external_task_id='load_into_postgres',
+        mode='poke',
+        timeout=600,
+        poke_interval=30
 )
 
 
-wait_dim_metier >> task_run_etl
+task_run_etl = PythonOperator(
+    task_id='run_etl_fact_client_profile',
+    python_callable=matchclient,
+    provide_context=True,
+    dag=dag
+)
+end_task = EmptyOperator(
+    task_id='end_task',
+    dag=dag
+)
+
+[wait_dim_metier,wait_dim_secteur,wait_dim_certifications,
+wait_dim_clients,wait_dim_competences,wait_dim_experience,
+wait_dim_interests,wait_dim_languages,wait_dim_niveau_etudes,
+wait_dim_permis,wait_dim_locations,wait_projects,wait_visa]>> task_run_etl>>end_task

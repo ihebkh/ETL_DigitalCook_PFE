@@ -277,4 +277,5 @@ wait_dim_contact = ExternalTaskSensor(
     dag=dag
 )
 
-wait_dim_contact >> wait_dim_filiere >> wait_dim_partenaire >> wait_dim_ville_destination >> extract_task >> insert_task
+[wait_dim_contact , wait_dim_filiere , wait_dim_partenaire ,
+wait_dim_ville_destination ]>> extract_task >> insert_task
