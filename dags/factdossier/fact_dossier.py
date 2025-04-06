@@ -5,7 +5,7 @@ from bson import ObjectId
 def get_mongodb_collections():
     mongo_client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
     mongo_db = mongo_client["PowerBi"]
-    return mongo_db["dossiers"], mongo_db["frontusers"], mongo_db["formations"], mongo_db["users"], mongo_db["offredemplois"]
+    return mongo_db["dossiers"], mongo_db["frontusers"], mongo_db["formations"], mongo_db["users"], mongo_db["offredemplois"], mongo_db["influencerinfos"]
 
 def get_postgres_cursor():
     pg_conn = psycopg2.connect(
@@ -43,11 +43,15 @@ def get_influencer_pk(cursor, nom, prenom):
     cursor.execute("SELECT influencer_pk FROM public.dim_influencer WHERE LOWER(nom) = LOWER(%s) AND LOWER(prenom) = LOWER(%s)", (nom, prenom))
     return cursor.fetchone()
 
+def get_fee_rate_by_agence(influencerinfos, agence_id):
+    doc = influencerinfos.find_one({"agence": agence_id}, {"feeRate": 1})
+    return doc.get("feeRate") if doc else None
+
 def generate_fact_code(counter):
     return f"FACT{counter:04d}"
 
 def generate_sequence_with_all_fields():
-    dossiers, frontusers, formations, users, offres = get_mongodb_collections()
+    dossiers, frontusers, formations, users, offres, influencerinfos = get_mongodb_collections()
     pg_conn, pg_cursor = get_postgres_cursor()
 
     index = 1
@@ -79,6 +83,8 @@ def generate_sequence_with_all_fields():
 
         charge_daffaire_id = dossier.get("chargeDaffaire")
         influencer_pk = None
+        fee_rate = None
+
         if isinstance(charge_daffaire_id, ObjectId):
             user_doc = users.find_one({"_id": charge_daffaire_id}, {"name": 1, "last_name": 1})
             if user_doc:
@@ -87,6 +93,7 @@ def generate_sequence_with_all_fields():
                 result = get_influencer_pk(pg_cursor, nom, prenom)
                 if result:
                     influencer_pk = result[0]
+                fee_rate = get_fee_rate_by_agence(influencerinfos, charge_daffaire_id)
 
         date_pk = None
         if date_depart:
@@ -116,6 +123,7 @@ def generate_sequence_with_all_fields():
                         fourth_detude_display = fourth_offer_detude_id if i == 0 else None
                         fourth_demploi_display = fourth_offer_demploi_id if i == 0 else None
                         influencer_display = influencer_pk if i == 0 else None
+                        fee_rate_display = fee_rate if i == 0 else None
 
                         ville_pk = None
                         if destination:
@@ -146,19 +154,31 @@ def generate_sequence_with_all_fields():
                                         formation_pk = pg_result[0]
 
                         offre_pk_selected = None
+                        min_salaire = None
+                        max_salaire = None
+                        type_contrat_selected = None
                         if selected_offer_demploi_id:
                             offre_doc = offres.find_one({"_id": ObjectId(selected_offer_demploi_id)})
                             if offre_doc:
                                 titre = offre_doc.get("titre")
+                                min_salaire = offre_doc.get("minSalaire")
+                                max_salaire = offre_doc.get("maxSalaire")
+                                type_contrat_selected = offre_doc.get("typeContrat")
                                 pg_result = get_offre_pk_by_titre(pg_cursor, titre)
                                 if pg_result:
                                     offre_pk_selected = pg_result[0]
 
                         offre_pk_fourth = None
+                        min_salaire_fourth = None
+                        max_salaire_fourth = None
+                        type_contrat_fourth = None
                         if fourth_offer_demploi_id:
                             offre_doc = offres.find_one({"_id": ObjectId(fourth_offer_demploi_id)})
                             if offre_doc:
                                 titre = offre_doc.get("titre")
+                                min_salaire_fourth = offre_doc.get("minSalaire")
+                                max_salaire_fourth = offre_doc.get("maxSalaire")
+                                type_contrat_fourth = offre_doc.get("typeContrat")
                                 pg_result = get_offre_pk_by_titre(pg_cursor, titre)
                                 if pg_result:
                                     offre_pk_fourth = pg_result[0]
@@ -170,8 +190,9 @@ def generate_sequence_with_all_fields():
                             f"| hoursPerWeek : {hours_per_week} | extraFeeLabel : {extra_fee_label} "
                             f"| discount : {discount} | prixFormation : {prix} "
                             f"| selectedOfferDetude_id : {selected_offer_detude_id} | fourthStep_selectedOfferDetude_id : {fourth_detude_display} "
-                            f"| selectedOfferDemploi_pk : {offre_pk_selected} | fourthStep_selectedOfferDemploi_pk : {offre_pk_fourth} "
-                            f"| influencer_fk : {influencer_display}"
+                            f"| selectedOfferDemploi_pk : {offre_pk_selected} | minSalaire : {min_salaire} | maxSalaire : {max_salaire} | typeContrat : {type_contrat_selected} "
+                            f"| fourthStep_selectedOfferDemploi_pk : {offre_pk_fourth} | minSalaireFourth : {min_salaire_fourth} | maxSalaireFourth : {max_salaire_fourth} | typeContratFourth : {type_contrat_fourth} "
+                            f"| influencer_fk : {influencer_display} | feeRate : {fee_rate_display}"
                         )
                         index += 1
 
@@ -180,3 +201,4 @@ def generate_sequence_with_all_fields():
 
 if __name__ == "__main__":
     generate_sequence_with_all_fields()
+
