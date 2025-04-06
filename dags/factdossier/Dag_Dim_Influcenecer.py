@@ -8,18 +8,18 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Connexion MongoDB
 def get_mongodb_collections():
-    MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
-    client = MongoClient(MONGO_URI)
+    client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
     db = client["PowerBi"]
     return db["users"], db["privileges"]
 
-# Générer un code
+def get_postgres_connection():
+    hook = PostgresHook(postgres_conn_id='postgres')
+    return hook.get_conn()
+
 def generate_codeinfluencer(index):
     return f"influ{index:04d}"
 
-# Tâche d'extraction
 def extract_users(**kwargs):
     users_collection, privileges_collection = get_mongodb_collections()
 
@@ -50,12 +50,9 @@ def extract_users(**kwargs):
     kwargs['ti'].xcom_push(key='users_data', value=users)
     logger.info(f"{len(users)} utilisateurs extraits.")
 
-# Tâche de chargement
 def insert_users_to_dim_influencer(**kwargs):
     users = kwargs['ti'].xcom_pull(task_ids='extract_users', key='users_data')
-
-    hook = PostgresHook(postgres_conn_id='postgres')
-    conn = hook.get_conn()
+    conn = get_postgres_connection()
     cur = conn.cursor()
 
     for user in users:
@@ -74,7 +71,6 @@ def insert_users_to_dim_influencer(**kwargs):
     conn.close()
     logger.info(f"{len(users)} influenceurs insérés/mis à jour dans PostgreSQL.")
 
-# Définition du DAG
 with DAG(
     dag_id='Dag_DimInfluencer',
     schedule_interval='*/2 * * * *',

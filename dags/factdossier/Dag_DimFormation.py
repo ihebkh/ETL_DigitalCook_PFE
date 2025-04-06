@@ -2,7 +2,6 @@ import logging
 from pymongo import MongoClient
 from bson import ObjectId
 import datetime
-
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook

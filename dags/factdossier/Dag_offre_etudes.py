@@ -102,7 +102,6 @@ def extract_offres_etudes(**kwargs):
     insert_or_update_offres_batch(offres_to_insert)
 
 dag = DAG(
-    'dag_dim_offre_etudes',
     dag_id='dag_dim_offre_etudes',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
