@@ -1,0 +1,83 @@
+import logging
+from pymongo import MongoClient
+from datetime import datetime
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def extract_nom_services(**kwargs):
+    MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
+    client = MongoClient(MONGO_URI)
+    db = client["PowerBi"]
+    factures = db["factures"]
+
+    all_services = []
+    for facture in factures.find():
+        services = facture.get("services", [])
+        for service in services:
+            nom = service.get("nomService")
+            if nom and nom.strip():
+                all_services.append(nom.strip())
+
+    unique_services = sorted(list(set(all_services)))
+    client.close()
+
+    kwargs['ti'].xcom_push(key='services', value=unique_services)
+    logger.info(f"{len(unique_services)} services extraits.")
+
+def generate_service_code(index):
+    return f"SERV{index:04d}"
+
+def upsert_services_postgres(**kwargs):
+    services = kwargs['ti'].xcom_pull(task_ids='extract_nom_services', key='services')
+    hook = PostgresHook(postgres_conn_id='postgres')
+    conn = hook.get_conn()
+    cursor = conn.cursor()
+
+    query = """
+    INSERT INTO public.dim_service (service_code, nom_service)
+    VALUES (%s, %s)
+    ON CONFLICT (service_code)
+    DO UPDATE SET nom_service = EXCLUDED.nom_service;
+    """
+
+    for i, nom in enumerate(services, 1):
+        service_code = generate_service_code(i)
+        try:
+            cursor.execute(query, (service_code, nom))
+            logger.info(f"[✓] Upserted: {service_code} | {nom}")
+        except Exception as e:
+            logger.error(f"[Erreur] {service_code} | {nom} : {e}")
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+default_args = {
+    'start_date': datetime(2025, 1, 1),
+}
+
+with DAG(
+    dag_id='dag_dim_service',
+    schedule_interval='@daily',
+    catchup=False,
+    default_args=default_args,
+    description='DAG pour remplir ou mettre à jour la dimension des services depuis MongoDB',
+) as dag:
+
+    extract_task = PythonOperator(
+        task_id='extract_nom_services',
+        python_callable=extract_nom_services,
+        provide_context=True
+    )
+
+    upsert_task = PythonOperator(
+        task_id='upsert_services_postgres',
+        python_callable=upsert_services_postgres,
+        provide_context=True
+    )
+
+    extract_task >> upsert_task

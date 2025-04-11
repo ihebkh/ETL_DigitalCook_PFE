@@ -9,8 +9,11 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+def get_postgres_connection():
+    hook = PostgresHook(postgres_conn_id='postgres')
+    return hook.get_conn()
+
 def get_mongodb_connection():
-    """Connect to MongoDB and return the collection."""
     MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
     client = MongoClient(MONGO_URI)
     mongo_db = client["PowerBi"]
@@ -19,7 +22,6 @@ def get_mongodb_connection():
     return client, mongo_db, collection, dossiers_collection
 
 def convert_bson(obj):
-    """Convert BSON ObjectId to string."""
     if isinstance(obj, dict):
         return {k: convert_bson(v) for k, v in obj.items()}
     elif isinstance(obj, list):
@@ -28,8 +30,19 @@ def convert_bson(obj):
         return str(obj)
     return obj
 
+def generate_code(index):
+    return f"code{str(index).zfill(4)}"
+
+def get_next_ville_pk():
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT MAX(ville_pk) FROM public.dim_ville;")
+    max_pk = cur.fetchone()[0]
+    cur.close()
+    conn.close()
+    return (max_pk or 0) + 1
+
 def extract_villes_and_destinations(**kwargs):
-    """Extract cities (villes) and destinations from MongoDB."""
     client, mongo_db, collection, dossiers_collection = get_mongodb_connection()
 
     universities = collection.find({}, {"_id": 0, "ville": 1})
@@ -46,47 +59,41 @@ def extract_villes_and_destinations(**kwargs):
             destinations.update(record["firstStep"]["destination"])
 
     destinations = list(set(convert_bson(destinations)))
-
     client.close()
 
     kwargs['ti'].xcom_push(key='villes', value=villes)
     kwargs['ti'].xcom_push(key='destinations', value=destinations)
 
-    logger.info(f"{len(villes)} villes extraites de MongoDB.")
-    logger.info(f"{len(destinations)} destinations extraites de MongoDB.")
-
-def generate_code(index):
-    """Generate a unique code for each city or destination."""
-    return f"code{str(index).zfill(4)}"
+    logger.info(f"{len(villes)} villes extraites.")
+    logger.info(f"{len(destinations)} destinations extraites.")
 
 def load_villes_and_destinations_postgres(**kwargs):
-    """Load villes and destinations into PostgreSQL."""
     villes = kwargs['ti'].xcom_pull(task_ids='extract_villes_and_destinations', key='villes')
     destinations = kwargs['ti'].xcom_pull(task_ids='extract_villes_and_destinations', key='destinations')
 
-    hook = PostgresHook(postgres_conn_id='postgres')
-    conn = hook.get_conn()
+    conn = get_postgres_connection()
     cursor = conn.cursor()
 
     insert_query = """
-    INSERT INTO public.dim_ville (code, name, type)
-    VALUES (%s, %s, %s)
-    ON CONFLICT (code)
+    INSERT INTO public.dim_ville (ville_pk, code, name, type)
+    VALUES (%s, %s, %s, %s)
+    ON CONFLICT (ville_pk)
     DO UPDATE SET
+        code = EXCLUDED.code,
         name = EXCLUDED.name,
         type = EXCLUDED.type;
     """
 
-    index = 1
+    pk_counter = get_next_ville_pk()
     for ville in villes:
-        code = generate_code(index)
-        cursor.execute(insert_query, (code, ville, 'Ville'))
-        index += 1
+        code = generate_code(pk_counter)
+        cursor.execute(insert_query, (pk_counter, code, ville, 'Ville'))
+        pk_counter += 1
     
     for destination in destinations:
-        code = generate_code(index)
-        cursor.execute(insert_query, (code, destination, 'Destination'))
-        index += 1
+        code = generate_code(pk_counter)
+        cursor.execute(insert_query, (pk_counter, code, destination, 'Destination'))
+        pk_counter += 1
 
     conn.commit()
     cursor.close()
@@ -95,9 +102,9 @@ def load_villes_and_destinations_postgres(**kwargs):
     logger.info(f"{len(villes)} villes et {len(destinations)} destinations insérées ou mises à jour.")
 
 with DAG(
-    dag_id='dag_dim_villes_destinations',
+    dag_id='dag_dim_villes',
     start_date=datetime(2025, 1, 1),
-    schedule_interval='*/2 * * * *', 
+    schedule_interval='@daily',
     catchup=False
 ) as dag:
 

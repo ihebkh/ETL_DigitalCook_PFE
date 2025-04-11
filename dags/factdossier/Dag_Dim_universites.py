@@ -214,12 +214,11 @@ def insert_universites(**kwargs):
 
     logger.info(f"Total universités insérées ou mises à jour : {total}")
 
-# DAG
 
 dag = DAG(
     dag_id='dag_dimuniversites',
     start_date=datetime(2025, 1, 1),
-    schedule_interval='*/2 * * * *',
+    schedule_interval='@daily',
     catchup=False
 )
 

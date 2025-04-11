@@ -1,5 +1,4 @@
 import logging
-import json
 from datetime import datetime
 from pymongo import MongoClient
 from airflow import DAG
@@ -17,6 +16,15 @@ def get_mongodb_connection():
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
+
+def get_next_contact_pk():
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT MAX(contact_pk) FROM public.dim_contact;")
+    max_pk = cur.fetchone()[0]
+    cur.close()
+    conn.close()
+    return (max_pk or 0) + 1
 
 def generate_contact_code(index):
     return f"contact{str(index).zfill(4)}"
@@ -83,21 +91,24 @@ def load_contacts_postgres(**kwargs):
     cursor = conn.cursor()
 
     insert_query = """
-    INSERT INTO public.dim_contact (contact_code, firstname, lastname, company, typecontact, poste, adresse)
-    VALUES (%s, %s, %s, %s, %s, %s, %s)
-    ON CONFLICT (contact_code)
+    INSERT INTO public.dim_contact (contact_pk, contactcode, firstname, lastname, company, typecontact, poste, adresse)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    ON CONFLICT (contact_pk)
     DO UPDATE SET
         firstname = EXCLUDED.firstname,
         lastname = EXCLUDED.lastname,
         company = EXCLUDED.company,
         typecontact = EXCLUDED.typecontact,
         poste = EXCLUDED.poste,
-        adresse = EXCLUDED.adresse;
+        adresse = EXCLUDED.adresse,
+        contactcode = EXCLUDED.contactcode;
     """
 
-    for index, contact in enumerate(contacts, 1):
-        code = generate_contact_code(index)
+    counter_pk = get_next_contact_pk()
+    for i, contact in enumerate(contacts, 0):
+        code = generate_contact_code(counter_pk)
         cursor.execute(insert_query, (
+            counter_pk,
             code,
             contact.get("firstname"),
             contact.get("lastname"),
@@ -106,6 +117,7 @@ def load_contacts_postgres(**kwargs):
             contact.get("poste"),
             contact.get("adresse")
         ))
+        counter_pk += 1
 
     conn.commit()
     cursor.close()
@@ -115,9 +127,8 @@ def load_contacts_postgres(**kwargs):
 with DAG(
     dag_id='dag_dim_contact',
     start_date=datetime(2025, 1, 1),
-    schedule_interval='*/2 * * * *',
+    schedule_interval='@daily',
     catchup=False
-
 ) as dag:
 
     extract_task = PythonOperator(

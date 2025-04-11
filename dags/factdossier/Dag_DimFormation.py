@@ -32,6 +32,28 @@ def convert_bson(obj):
         return obj.isoformat()
     return obj
 
+def generate_formation_code(index):
+    return f"formation{str(index).zfill(4)}"
+
+def get_next_formation_pk():
+    conn = get_postgresql_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT MAX(formation_pk) FROM public.dim_formation;")
+    max_pk = cur.fetchone()[0]
+    cur.close()
+    conn.close()
+    return (max_pk or 0) + 1
+
+def convert_to_datetime(date_value):
+    if isinstance(date_value, datetime.datetime):
+        return date_value
+    elif isinstance(date_value, str):
+        try:
+            return datetime.datetime.fromisoformat(date_value)
+        except ValueError:
+            return None
+    return None
+
 def extract_formations(**kwargs):
     client, mongo_db, collection = get_mongodb_connection()
     formations = list(collection.find({}, {
@@ -44,19 +66,6 @@ def extract_formations(**kwargs):
     kwargs['ti'].xcom_push(key='formations', value=formations)
     logger.info(f"{len(formations)} formations extraites de MongoDB.")
 
-def generate_formation_code(index):
-    return f"formation{str(index).zfill(4)}"
-
-def convert_to_datetime(date_value):
-    if isinstance(date_value, datetime.datetime):
-        return date_value
-    elif isinstance(date_value, str):
-        try:
-            return datetime.datetime.fromisoformat(date_value)
-        except ValueError:
-            return None
-    return None
-
 def load_formations(**kwargs):
     formations = kwargs['ti'].xcom_pull(task_ids='extract_formations', key='formations')
     if not formations:
@@ -68,12 +77,13 @@ def load_formations(**kwargs):
 
     query = """
     INSERT INTO dim_formation (
-        formationcode, titreformation, date_debut, date_fin, 
+        formation_pk, formationcode, titreformation, date_debut, date_fin, 
         domaine, ville, adresse, centreformations, presence, duree
     )
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-    ON CONFLICT (formationcode) DO UPDATE
-    SET titreformation = EXCLUDED.titreformation,
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    ON CONFLICT (formation_pk) DO UPDATE
+    SET formationcode = EXCLUDED.formationcode,
+        titreformation = EXCLUDED.titreformation,
         date_debut = EXCLUDED.date_debut,
         date_fin = EXCLUDED.date_fin,
         domaine = EXCLUDED.domaine,
@@ -84,8 +94,11 @@ def load_formations(**kwargs):
         duree = EXCLUDED.duree;
     """
 
-    for index, formation in enumerate(formations, start=1):
-        code = generate_formation_code(index)
+    pk_counter = get_next_formation_pk()
+
+    for formation in formations:
+        formation_pk = pk_counter
+        code = generate_formation_code(pk_counter)
         titre = formation.get("titreFormation", "")
         date_debut = convert_to_datetime(formation.get("dateDebut"))
         date_fin = convert_to_datetime(formation.get("dateFin"))
@@ -97,9 +110,10 @@ def load_formations(**kwargs):
         duree = formation.get("duree", "")
 
         cursor.execute(query, (
-            code, titre, date_debut, date_fin, domaine,
-            ville, adresse, centre, presence, duree
+            formation_pk, code, titre, date_debut, date_fin,
+            domaine, ville, adresse, centre, presence, duree
         ))
+        pk_counter += 1
 
     conn.commit()
     cursor.close()
@@ -109,7 +123,7 @@ def load_formations(**kwargs):
 dag = DAG(
     dag_id='dag_dim_formation',
     start_date=dt(2025, 1, 1),
-    schedule_interval='*/2 * * * *',
+    schedule_interval='@daily',
     catchup=False
 )
 

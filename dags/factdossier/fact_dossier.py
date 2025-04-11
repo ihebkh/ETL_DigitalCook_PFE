@@ -5,14 +5,23 @@ from bson import ObjectId
 def get_mongodb_collections():
     mongo_client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
     mongo_db = mongo_client["PowerBi"]
-    return mongo_db["dossiers"], mongo_db["frontusers"], mongo_db["formations"], mongo_db["users"], mongo_db["offredemplois"], mongo_db["influencerinfos"]
+    return (
+    mongo_db["dossiers"],
+    mongo_db["frontusers"],
+    mongo_db["formations"],
+    mongo_db["users"],
+    mongo_db["offredemplois"],
+    mongo_db["influencerinfos"],
+    mongo_db["offredetudes"],
+    mongo_db["factures"]
+)
 
 def get_postgres_cursor():
     pg_conn = psycopg2.connect(
         dbname="DW_DigitalCook",
-        user="postgres",
-        password="admin",
-        host="localhost",
+        user="iheb",
+        password="201JmT1896@",
+        host="monserveur-postgres.postgres.database.azure.com",
         port="5432"
     )
     return pg_conn, pg_conn.cursor()
@@ -36,7 +45,7 @@ def get_formation_pk_by_title(cursor, title):
     return cursor.fetchone()
 
 def get_offre_pk_by_titre(cursor, titre):
-    cursor.execute("SELECT offre_pk FROM public.offreemploi WHERE LOWER(titre) = LOWER(%s)", (titre,))
+    cursor.execute("SELECT offre_pk FROM public.dim_offreemploi WHERE LOWER(titre) = LOWER(%s)", (titre,))
     return cursor.fetchone()
 
 def get_influencer_pk(cursor, nom, prenom):
@@ -50,8 +59,17 @@ def get_fee_rate_by_agence(influencerinfos, agence_id):
 def generate_fact_code(counter):
     return f"FACT{counter:04d}"
 
+def get_service_pk_by_nom(cursor, nom_service):
+    cursor.execute(
+        "SELECT service_pk FROM public.dim_service WHERE TRIM(LOWER(nom_service)) = LOWER(%s)",
+        (nom_service,)
+    )
+    return cursor.fetchone()
+
+
 def generate_sequence_with_all_fields():
-    dossiers, frontusers, formations, users, offres, influencerinfos = get_mongodb_collections()
+    dossiers, frontusers, formations, users, offres, influencerinfos, offredetudes, factures = get_mongodb_collections()
+
     pg_conn, pg_cursor = get_postgres_cursor()
 
     index = 1
@@ -64,6 +82,35 @@ def generate_sequence_with_all_fields():
         type_de_demande = dossier.get("firstStep", {}).get("typeDeDemande", None)
         date_depart = dossier.get("firstStep", {}).get("dateDepart", None)
         formations_list = dossier.get("thirdStep", {}).get("formations", [])
+        dossier_id = dossier.get("_id")
+
+        service_details = []
+        facture_docs = factures.find({"dossierId": dossier_id}) if dossier_id else []
+        if facture_docs:
+            for facture in facture_docs:
+                for service in facture.get("services", []):
+                    nom_service = service.get("nomService", "").strip()
+                    prix = service.get("prix", None)
+                    discount = service.get("discount", None)
+                    extra_fee_label = service.get("extraFee", {}).get("label", "")
+                    if nom_service:
+                        try:
+                            result = get_service_pk_by_nom(pg_cursor, nom_service)
+                            if result:
+                                service_details.append((
+                                    result[0], nom_service, prix, discount, extra_fee_label
+                                ))
+                        except Exception as e:
+                            print(f"[Erreur] Service '{nom_service}' : {e}")
+        if not service_details:
+            service_details.append((None, None, None, None, None))
+
+
+
+
+
+
+        
 
         selected_offers_detude = dossier.get("secondStep", {}).get("selectedOffersDetude", [])
         if isinstance(selected_offers_detude, ObjectId):
@@ -74,6 +121,8 @@ def generate_sequence_with_all_fields():
         if isinstance(selected_offers_demploi, ObjectId):
             selected_offers_demploi = [selected_offers_demploi]
         selected_employ_ids = [str(oid) for oid in selected_offers_demploi if isinstance(oid, ObjectId)]
+
+
 
         fourth_offer_detude = dossier.get("fourthStep", {}).get("selectedOfferDetude")
         fourth_offer_detude_id = str(fourth_offer_detude) if isinstance(fourth_offer_detude, ObjectId) else None
@@ -110,12 +159,41 @@ def generate_sequence_with_all_fields():
                     fact_code = generate_fact_code(fact_counter)
                     fact_counter += 1
 
-                    max_length = max(len(destination_list), len(formations_list), len(selected_offer_ids), len(selected_employ_ids), 1)
+                    max_length = max(
+                    len(destination_list),
+                    len(formations_list),
+                    len(selected_offer_ids),
+                    len(selected_employ_ids),
+                    len(service_details),
+                    )
+
+
+
+                    # Initialize flags for each field to display them only once per fact_code
+                    max_salaire_displayed = False
+                    fee_rate_displayed = False
+                    type_contrat_fourth_displayed = False
+                    min_salaire_fourth_displayed = False
+                    discount_displayed = False
+                    extra_fee_label_displayed = False
+                    hours_per_week_displayed = False
+                    type_de_demande_displayed = False
 
                     for i in range(max_length):
+
+
+
+
                         destination = destination_list[i] if i < len(destination_list) else None
                         selected_offer_detude_id = selected_offer_ids[i] if i < len(selected_offer_ids) else None
                         selected_offer_demploi_id = selected_employ_ids[i] if i < len(selected_employ_ids) else None
+                        service_pk_display = service_details[i][0] if i < len(service_details) else None
+                        prix_service_display = service_details[i][2] if i < len(service_details) else None
+                        discount_display_service = service_details[i][3] if i < len(service_details) else None
+                        extra_fee_label_display_service = service_details[i][4] if i < len(service_details) else None
+
+
+
 
                         step_display = current_step if i == 0 else None
                         type_demande_display = type_de_demande if i == 0 else None
@@ -166,7 +244,7 @@ def generate_sequence_with_all_fields():
                                 type_contrat_selected = offre_doc.get("typeContrat")
                                 pg_result = get_offre_pk_by_titre(pg_cursor, titre)
                                 if pg_result:
-                                    offre_pk_selected = pg_result[0]
+                                    offre_pk_selected = pg_result[0]  # Replace _id with offre_pk
 
                         offre_pk_fourth = None
                         min_salaire_fourth = None
@@ -181,18 +259,54 @@ def generate_sequence_with_all_fields():
                                 type_contrat_fourth = offre_doc.get("typeContrat")
                                 pg_result = get_offre_pk_by_titre(pg_cursor, titre)
                                 if pg_result:
-                                    offre_pk_fourth = pg_result[0]
+                                    offre_pk_fourth = pg_result[0]  # Replace _id with offre_pk
+
+                        # Display the fields only once
+                        salairemax = max_salaire_fourth if not max_salaire_displayed else None
+                        if not max_salaire_displayed:
+                            max_salaire_displayed = True
+
+                        fee_rate_display = fee_rate if not fee_rate_displayed else None
+                        if not fee_rate_displayed:
+                            fee_rate_displayed = True
+
+                        type_contrat_fourth_display = type_contrat_fourth if not type_contrat_fourth_displayed else None
+                        if not type_contrat_fourth_displayed:
+                            type_contrat_fourth_displayed = True
+
+                        min_salaire_fourth_display = min_salaire_fourth if not min_salaire_fourth_displayed else None
+                        if not min_salaire_fourth_displayed:
+                            min_salaire_fourth_displayed = True
+
+                        discount_display = discount if not discount_displayed else None
+                        if not discount_displayed:
+                            discount_displayed = True
+
+                        extra_fee_label_display = extra_fee_label if not extra_fee_label_displayed else None
+                        if not extra_fee_label_displayed:
+                            extra_fee_label_displayed = True
+
+                        hours_per_week_display = hours_per_week if not hours_per_week_displayed else None
+                        if not hours_per_week_displayed:
+                            hours_per_week_displayed = True
+
+                        type_demande_display = type_de_demande if not type_de_demande_displayed else None
+                        if not type_de_demande_displayed:
+                            type_de_demande_displayed = True
 
                         print(
                             f"Séquence {index} → {fact_code} | client_pk : {client_pk} | currentStep : {step_display} "
                             f"| typeDeDemande : {type_demande_display} | date_pk : {date_pk_display} "
                             f"| destination_pk : {ville_pk} | formation_pk : {formation_pk} "
-                            f"| hoursPerWeek : {hours_per_week} | extraFeeLabel : {extra_fee_label} "
-                            f"| discount : {discount} | prixFormation : {prix} "
-                            f"| selectedOfferDetude_id : {selected_offer_detude_id} | fourthStep_selectedOfferDetude_id : {fourth_detude_display} "
+                            f"| hoursPerWeek : {hours_per_week_display} | extraFeeLabel : {extra_fee_label_display} "
+                            f"| discount : {discount_display} | prixFormation : {prix} "
                             f"| selectedOfferDemploi_pk : {offre_pk_selected} | minSalaire : {min_salaire} | maxSalaire : {max_salaire} | typeContrat : {type_contrat_selected} "
-                            f"| fourthStep_selectedOfferDemploi_pk : {offre_pk_fourth} | minSalaireFourth : {min_salaire_fourth} | maxSalaireFourth : {max_salaire_fourth} | typeContratFourth : {type_contrat_fourth} "
-                            f"| influencer_fk : {influencer_display} | feeRate : {fee_rate_display}"
+                            f"| fourthStep_selectedOfferDemploi_pk : {offre_pk_fourth} | minSalaireFourth : {min_salaire_fourth_display} | maxSalaireFourth : {salairemax} | typeContratFourth : {type_contrat_fourth_display} "
+                            f"| influencer_fk : {influencer_display} | feeRate : {fee_rate_display} "
+                            f"| service_pk : {service_pk_display} | prix : {prix_service_display} | "
+                            f"|discount : {discount_display_service} | extraFeeLabel : {extra_fee_label_display_service} "
+
+
                         )
                         index += 1
 
@@ -201,4 +315,3 @@ def generate_sequence_with_all_fields():
 
 if __name__ == "__main__":
     generate_sequence_with_all_fields()
-

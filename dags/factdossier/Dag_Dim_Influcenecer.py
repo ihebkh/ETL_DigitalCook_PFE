@@ -17,6 +17,15 @@ def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
 
+def get_next_influencer_pk():
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT MAX(influencer_pk) FROM public.dim_influencer;")
+    max_pk = cur.fetchone()[0]
+    cur.close()
+    conn.close()
+    return (max_pk or 0) + 1
+
 def generate_codeinfluencer(index):
     return f"influ{index:04d}"
 
@@ -29,6 +38,8 @@ def extract_users(**kwargs):
     }
 
     users = []
+    index = get_next_influencer_pk()
+
     cursor = users_collection.find({}, {
         "name": 1,
         "last_name": 1,
@@ -36,7 +47,6 @@ def extract_users(**kwargs):
         "privilege": 1
     })
 
-    index = 1
     for user in cursor:
         codeinflu = generate_codeinfluencer(index)
         nom = user.get("name", "")
@@ -44,7 +54,7 @@ def extract_users(**kwargs):
         is_admin = user.get("is_admin", False)
         privilege_id = str(user.get("privilege", ""))
         privilege_label = privilege_map.get(privilege_id, "Non défini")
-        users.append((codeinflu, nom, prenom, is_admin, privilege_label))
+        users.append((index, codeinflu, nom, prenom, is_admin, privilege_label))
         index += 1
 
     kwargs['ti'].xcom_push(key='users_data', value=users)
@@ -57,9 +67,10 @@ def insert_users_to_dim_influencer(**kwargs):
 
     for user in users:
         cur.execute("""
-            INSERT INTO dim_influencer (codeinfluencer, nom, prenom, is_admin, privilege)
-            VALUES (%s, %s, %s, %s, %s)
-            ON CONFLICT (codeinfluencer) DO UPDATE SET
+            INSERT INTO dim_influencer (influencer_pk, codeinfluencer, nom, prenom, is_admin, privilege)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            ON CONFLICT (influencer_pk) DO UPDATE SET
+                codeinfluencer = EXCLUDED.codeinfluencer,
                 nom = EXCLUDED.nom,
                 prenom = EXCLUDED.prenom,
                 is_admin = EXCLUDED.is_admin,
@@ -73,7 +84,7 @@ def insert_users_to_dim_influencer(**kwargs):
 
 with DAG(
     dag_id='Dag_DimInfluencer',
-    schedule_interval='*/2 * * * *',
+    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 ) as dag:

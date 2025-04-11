@@ -15,6 +15,19 @@ def get_mongodb_connection():
     mongo_db = client["PowerBi"]
     return client, mongo_db
 
+def get_postgres_connection():
+    hook = PostgresHook(postgres_conn_id='postgres')
+    return hook.get_conn()
+
+def get_next_partenaire_pk():
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT MAX(partenaire_pk) FROM public.dim_partenaire;")
+    max_pk = cur.fetchone()[0]
+    cur.close()
+    conn.close()
+    return (max_pk or 0) + 1
+
 def convert_bson(obj):
     if isinstance(obj, dict):
         return {k: convert_bson(v) for k, v in obj.items()}
@@ -26,10 +39,6 @@ def convert_bson(obj):
 
 def generate_partenaire_code(index):
     return f"part{str(index).zfill(4)}"
-
-def get_postgres_connection():
-    hook = PostgresHook(postgres_conn_id='postgres')
-    return hook.get_conn()
 
 def extract_partenaires(**kwargs):
     client, mongo_db = get_mongodb_connection()
@@ -61,19 +70,27 @@ def load_partenaires_postgres(**kwargs):
     cursor = conn.cursor()
 
     insert_query = """
-    INSERT INTO public.dim_partenaire (codepartenaire, nom_partenaire, typepartenaire)
-    VALUES (%s, %s, %s)
-    ON CONFLICT (codepartenaire)
+    INSERT INTO public.dim_partenaire (partenaire_pk, codepartenaire, nom_partenaire, typepartenaire)
+    VALUES (%s, %s, %s, %s)
+    ON CONFLICT (partenaire_pk)
     DO UPDATE SET
+        codepartenaire = EXCLUDED.codepartenaire,
         nom_partenaire = EXCLUDED.nom_partenaire,
         typepartenaire = EXCLUDED.typepartenaire;
     """
 
-    for index, partenaire in enumerate(partenaires, 1):
-        code = generate_partenaire_code(index)
+    pk_counter = get_next_partenaire_pk()
+    for partenaire in partenaires:
+        code = generate_partenaire_code(pk_counter)
         partenaire_type = "professionnel" if "professionnel" in partenaire else "académique"
         partenaire_nom = partenaire.replace("professionnel ", "").replace("académique ", "")
-        cursor.execute(insert_query, (code, partenaire_nom, partenaire_type))
+        cursor.execute(insert_query, (
+            pk_counter,
+            code,
+            partenaire_nom,
+            partenaire_type
+        ))
+        pk_counter += 1
 
     conn.commit()
     cursor.close()
@@ -83,7 +100,7 @@ def load_partenaires_postgres(**kwargs):
 with DAG(
     dag_id='dag_dim_partenaire',
     start_date=datetime(2025, 1, 1),
-    schedule_interval='*/2 * * * *',
+    schedule_interval='@daily',
     catchup=False,
 ) as dag:
 

@@ -1,8 +1,12 @@
-from pymongo import MongoClient
+import logging
+from datetime import datetime
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-from datetime import datetime
+from pymongo import MongoClient
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def get_mongo_collections():
     client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
@@ -14,21 +18,22 @@ def get_postgres_connection():
     return hook.get_conn()
 
 def generate_entreprise_code(counter):
-    return f"entre{counter:04d}"
+    return f"entre{str(counter).zfill(4)}"
 
-def load_existing_entreprises():
+def get_next_entreprise_pk_and_code_counter():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT LOWER(nom), lieu_societe, codeentreprise FROM public.dim_entreprise;")
-    rows = cur.fetchall()
+    cur.execute("SELECT MAX(entreprise_pk) FROM public.dim_entreprise;")
+    max_pk = cur.fetchone()[0]
     cur.close()
     conn.close()
-    return {(nom.lower(), lieu): code for nom, lieu, code in rows if nom}
+    next_pk = (max_pk or 0) + 1
+    return next_pk, next_pk
 
-def extract_all_entreprises(**kwargs):
+def extract_all_entreprises(ti):
     client, offres_col, frontusers_col, entreprises_col = get_mongo_collections()
     entreprises = set()
-    
+
     for doc in offres_col.find({"isDeleted": False}, {"societe": 1, "lieuSociete": 1}):
         nom = doc.get("societe", "").strip() or "null"
         lieu = doc.get("lieuSociete", "").strip() or "null"
@@ -51,38 +56,49 @@ def extract_all_entreprises(**kwargs):
             entreprises.add((nom, ville))
 
     client.close()
-    kwargs['ti'].xcom_push(key='entreprises', value=list(entreprises))
+    ti.xcom_push(key='entreprises', value=list(entreprises))
 
-def insert_entreprises(**kwargs):
-    entreprises = kwargs['ti'].xcom_pull(task_ids='extract_all_entreprises', key='entreprises')
-    existing = load_existing_entreprises()
+def insert_entreprises(ti):
+    entreprises = ti.xcom_pull(task_ids='extract_all_entreprises', key='entreprises')
     conn = get_postgres_connection()
     cur = conn.cursor()
-    counter = len(existing) + 1
+
+    counter_pk, counter_code = get_next_entreprise_pk_and_code_counter()
     total = 0
+
     for nom, lieu in entreprises:
-        key = (nom.lower(), lieu)
-        if key in existing:
-            code = existing[key]
-        else:
-            code = generate_entreprise_code(counter)
-            counter += 1
+        nom_clean = None if nom == "null" else nom
+        lieu_clean = None if lieu == "null" else lieu
+
+        entreprise_pk = counter_pk
+        codeentreprise = generate_entreprise_code(counter_code)
+
         cur.execute("""
-            INSERT INTO public.dim_entreprise (codeentreprise, nom, lieu_societe)
-            VALUES (%s, %s, %s)
-            ON CONFLICT (codeentreprise) DO UPDATE
+            INSERT INTO public.dim_entreprise (entreprise_pk, codeentreprise, nom, lieu_societe)
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (entreprise_pk) DO UPDATE
             SET nom = EXCLUDED.nom,
-                lieu_societe = EXCLUDED.lieu_societe;
-        """, (code, None if nom == "null" else nom, None if lieu == "null" else lieu))
+                lieu_societe = EXCLUDED.lieu_societe,
+                codeentreprise = EXCLUDED.codeentreprise;
+        """, (
+            entreprise_pk,
+            codeentreprise,
+            nom_clean,
+            lieu_clean
+        ))
+
+        counter_pk += 1
+        counter_code += 1
         total += 1
+
     conn.commit()
     cur.close()
     conn.close()
-    print(f"{total} entreprises insérées ou mises à jour dans dim_entreprise.")
+    logger.info(f"{total} entreprises insérées ou mises à jour dans dim_entreprise.")
 
 dag = DAG(
-    dag_id='dag_dim_entreprise_all_sources',
-    schedule_interval='*/2 * * * *',
+    dag_id='dag_dim_entreprise',
+    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False
 )
@@ -91,14 +107,14 @@ extract_task = PythonOperator(
     task_id='extract_all_entreprises',
     python_callable=extract_all_entreprises,
     provide_context=True,
-    dag=dag
+    dag=dag,
 )
 
 insert_task = PythonOperator(
     task_id='insert_entreprises',
     python_callable=insert_entreprises,
     provide_context=True,
-    dag=dag
+    dag=dag,
 )
 
 extract_task >> insert_task
