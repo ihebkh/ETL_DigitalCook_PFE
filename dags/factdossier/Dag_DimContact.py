@@ -38,69 +38,85 @@ def extract_contacts(**kwargs):
     contacts = []
     existing_entries = set()
 
+    # Extracting contacts from universities
     universities = universities_collection.find({}, {"_id": 0, "contact.nom": 1, "contact.poste": 1, "contact.adresse": 1, "contact.company": 1, "contact.lastname": 1})
     for university in universities:
-        for contact in university.get("contact", []):
-            contact_info = {
-                "firstname": contact.get("nom"),
-                "lastname": contact.get("lastname"),
-                "poste": contact.get("poste"),
-                "adresse": contact.get("adresse"),
-                "company": contact.get("company"),
-                "typecontact": "Université"
-            }
-            contacts.append(contact_info)
+        if isinstance(university.get("contact"), list):  # Ensure "contact" is a list
+            for contact in university["contact"]:
+                if isinstance(contact, dict):  # Ensure contact is a dictionary
+                    contact_info = {
+                        "firstname": contact.get("nom"),
+                        "lastname": contact.get("lastname"),
+                        "poste": contact.get("poste"),
+                        "company": contact.get("company"),
+                    }
+                    contacts.append(contact_info)
 
+    # Extracting contacts from frontusers
     frontusers_data = frontusers_collection.find({}, {"_id": 0, "profile.proffessionalContacts": 1})
     for user in frontusers_data:
         if "profile" in user and "proffessionalContacts" in user["profile"]:
-            for contact in user["profile"]["proffessionalContacts"]:
-                key = (contact.get("firstName"), contact.get("lastName"), contact.get("company"))
+            proffessional_contact = user["profile"]["proffessionalContacts"]
+            if isinstance(proffessional_contact, dict):  # Ensure it's a dictionary
+                key = (proffessional_contact.get("firstName"), proffessional_contact.get("lastName"), proffessional_contact.get("company"))
                 if key not in existing_entries:
                     contact_info = {
-                        "firstname": contact.get("firstName"),
-                        "lastname": contact.get("lastName"),
-                        "company": contact.get("company"),
-                        "poste": contact.get("poste"),
-                        "adresse": contact.get("adresse"),
-                        "typecontact": "Professionnel"
+                        "firstname": proffessional_contact.get("firstName"),
+                        "lastname": proffessional_contact.get("lastName"),
+                        "company": proffessional_contact.get("company"),
+                        "poste": proffessional_contact.get("poste"),
                     }
                     contacts.append(contact_info)
                     existing_entries.add(key)
 
+    # Extracting contacts from centrefinancements
     centrefinancements_data = centrefinancements_collection.find({}, {"_id": 0, "contactPersonel.nom": 1, "contactPersonel.poste": 1})
     for record in centrefinancements_data:
-        for contact in record.get("contactPersonel", []):
-            contact_info = {
-                "firstname": contact.get("nom"),
-                "lastname": None,
-                "poste": contact.get("poste"),
-                "adresse": None,
-                "company": None,
-                "typecontact": "Personnel"
-            }
-            contacts.append(contact_info)
+        if isinstance(record.get("contactPersonel"), list):  # Ensure "contactPersonel" is a list
+            for contact in record["contactPersonel"]:
+                if isinstance(contact, dict):  # Ensure contact is a dictionary
+                    contact_info = {
+                        "firstname": contact.get("nom"),
+                        "lastname": None,
+                        "poste": contact.get("poste"),
+                        "company": None,
+                    }
+                    contacts.append(contact_info)
 
     client.close()
     kwargs['ti'].xcom_push(key='contact_data', value=contacts)
     logger.info(f"{len(contacts)} contacts extraits.")
 
-def load_contacts_postgres(**kwargs):
+def transform_contacts(**kwargs):
     contacts = kwargs['ti'].xcom_pull(task_ids='extract_contacts', key='contact_data')
+    
+    transformed_contacts = []
+    for contact in contacts:
+        contact['firstname'] = contact.get('firstname', "Unknown") if contact.get('firstname') else "Unknown"
+        contact['lastname'] = contact.get('lastname', "Unknown") if contact.get('lastname') else "Unknown"
+        contact['poste'] = (contact.get('poste') or '').strip()
+        contact['company'] = (contact.get('company') or '').strip()
+
+        transformed_contacts.append(contact)
+    
+    kwargs['ti'].xcom_push(key='transformed_contact_data', value=transformed_contacts)
+    logger.info(f"{len(transformed_contacts)} contacts transformés.")
+
+
+def load_contacts_postgres(**kwargs):
+    contacts = kwargs['ti'].xcom_pull(task_ids='transform_contacts', key='transformed_contact_data')
     conn = get_postgres_connection()
     cursor = conn.cursor()
 
     insert_query = """
-    INSERT INTO public.dim_contact (contact_pk, contactcode, firstname, lastname, company, typecontact, poste, adresse)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-    ON CONFLICT (contact_pk)
+    INSERT INTO public.dim_contact (contact_pk, contactcode, firstname, lastname, company, poste)
+    VALUES (%s, %s, %s, %s, %s, %s)
+    ON CONFLICT (firstname, lastname)
     DO UPDATE SET
         firstname = EXCLUDED.firstname,
         lastname = EXCLUDED.lastname,
         company = EXCLUDED.company,
-        typecontact = EXCLUDED.typecontact,
         poste = EXCLUDED.poste,
-        adresse = EXCLUDED.adresse,
         contactcode = EXCLUDED.contactcode;
     """
 
@@ -113,9 +129,7 @@ def load_contacts_postgres(**kwargs):
             contact.get("firstname"),
             contact.get("lastname"),
             contact.get("company"),
-            contact.get("typecontact"),
             contact.get("poste"),
-            contact.get("adresse")
         ))
         counter_pk += 1
 
@@ -137,10 +151,16 @@ with DAG(
         provide_context=True,
     )
 
+    transform_task = PythonOperator(
+        task_id='transform_contacts',
+        python_callable=transform_contacts,
+        provide_context=True,
+    )
+
     load_task = PythonOperator(
         task_id='load_contacts_postgres',
         python_callable=load_contacts_postgres,
         provide_context=True,
     )
 
-    extract_task >> load_task
+    extract_task >> transform_task >> load_task

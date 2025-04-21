@@ -141,7 +141,7 @@ def load_into_postgres(**kwargs):
     logger.info(f"{len(transformed_data)} visa records inserted/updated in PostgreSQL.")
 
 dag = DAG(
-    'visa_dag',
+    'dag_dim_visa',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,

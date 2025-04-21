@@ -61,6 +61,18 @@ def extract_offres_from_mongo(**kwargs):
         logger.error(f" Erreur durant l'extraction MongoDB : {e}")
         raise
 
+def get_secteur_map(cur):
+    cur.execute("SELECT secteur_pk, LOWER(label) FROM public.dim_secteur;")
+    return {label: pk for pk, label in cur.fetchall()}
+
+def get_metier_map(cur):
+    cur.execute("SELECT metier_pk, LOWER(label_jobs) FROM public.dim_metier;")
+    return {label: pk for pk, label in cur.fetchall()}
+
+def get_entreprise_map(cur):
+    cur.execute("SELECT entreprise_pk, LOWER(nom) FROM public.dim_entreprise;")
+    return {label: pk for pk, label in cur.fetchall()}
+
 def transform_offres(**kwargs):
     try:
         raw_offres = kwargs['ti'].xcom_pull(task_ids='extract_offres_from_mongo', key='raw_offres')
@@ -68,14 +80,9 @@ def transform_offres(**kwargs):
         cur = conn.cursor()
         client, _, _, secteurs_col = get_mongo_collections()
 
-        cur.execute("SELECT secteur_pk, LOWER(label) FROM public.dim_secteur;")
-        secteur_map = {label: pk for pk, label in cur.fetchall()}
-
-        cur.execute("SELECT metier_pk, LOWER(label_jobs) FROM public.dim_metier;")
-        metier_map = {label: pk for pk, label in cur.fetchall()}
-
-        cur.execute("SELECT entreprise_pk, LOWER(nom) FROM public.dim_entreprise;")
-        entreprise_map = {label: pk for pk, label in cur.fetchall()}
+        secteur_map = get_secteur_map(cur)
+        metier_map = get_metier_map(cur)
+        entreprise_map = get_entreprise_map(cur)
 
         seen_titles = set()
         counter = 1
@@ -116,8 +123,6 @@ def transform_offres(**kwargs):
                 entreprise_fk,
                 doc["typeContrat"],
                 doc["tempsDeTravail"],
-                doc["societe"],
-                doc["lieuSociete"],
                 doc["deviseSalaire"],
                 doc["salaireBrutPar"],
                 doc["niveauDexperience"],
@@ -138,7 +143,6 @@ def transform_offres(**kwargs):
         logger.error(f" Erreur durant la transformation : {e}")
         raise
 
-
 def load_offres_to_postgres(**kwargs):
     try:
         offres = kwargs['ti'].xcom_pull(task_ids='transform_offres', key='offres_transformed')
@@ -146,14 +150,21 @@ def load_offres_to_postgres(**kwargs):
         cur = conn.cursor()
 
         for record in offres:
+            logger.info(f"Record : {record}")
+            record = tuple(
+                (r if r is not None and r != '' else None) for r in record
+            )
+
+            logger.info(f"Record modifié : {record}")
+
             cur.execute("""
                 INSERT INTO public.dim_offreemploi (
                     offre_pk, offre_code, titre, secteur_fk, metier_fk, entreprise_fk,
-                    type_contrat, temps_de_travail, societe, lieu_societe,
+                    type_contrat, temps_de_travail,
                     devise_salaire, salaire_brut_par, niveau_experience, disponibilite,
                     pays, on_site_or_remote
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (offre_pk) DO UPDATE SET
                     titre = EXCLUDED.titre,
                     secteur_fk = EXCLUDED.secteur_fk,
@@ -161,8 +172,6 @@ def load_offres_to_postgres(**kwargs):
                     entreprise_fk = EXCLUDED.entreprise_fk,
                     type_contrat = EXCLUDED.type_contrat,
                     temps_de_travail = EXCLUDED.temps_de_travail,
-                    societe = EXCLUDED.societe,
-                    lieu_societe = EXCLUDED.lieu_societe,
                     devise_salaire = EXCLUDED.devise_salaire,
                     salaire_brut_par = EXCLUDED.salaire_brut_par,
                     niveau_experience = EXCLUDED.niveau_experience,

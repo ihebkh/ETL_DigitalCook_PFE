@@ -2,10 +2,11 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.sensors.external_task import ExternalTaskSensor
 from pymongo import MongoClient
-import psycopg2
+
 from bson import ObjectId
 from datetime import datetime
 import logging
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -17,13 +18,8 @@ def get_mongodb_collections():
     return db["offredetudes"], db["universities"]
 
 def get_postgres_connection():
-    return psycopg2.connect(
-        dbname="DW_DigitalCook",
-        user="postgres",
-        password="admin",
-        host="localhost",
-        port="5432"
-    )
+    hook = PostgresHook(postgres_conn_id='postgres')
+    return hook.get_conn()
 
 def load_universite_id_to_name(universities_collection):
     cursor = universities_collection.find({}, {"_id": 1, "nom": 1})

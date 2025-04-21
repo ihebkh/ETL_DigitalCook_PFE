@@ -32,7 +32,7 @@ def create_date_df(start_date, end_date):
 
 def load_dim_dates_to_postgres(**kwargs):
     try:
-        start_date = '2022-01-01'
+        start_date = '1980-01-01'
         end_date = datetime.today().strftime('%Y-%m-%d')
         df = create_date_df(start_date, end_date)
 
@@ -67,6 +67,7 @@ def load_dim_dates_to_postgres(**kwargs):
         data_tuples = [tuple(row) for row in df.to_numpy()]
         cursor.executemany(insert_query, data_tuples)
         conn.commit()
+        logger.info(f"Successfully inserted/updated {len(data_tuples)} rows into dim_Dates.")
         cursor.close()
         conn.close()
         logger.info(f" {len(data_tuples)} lignes insérées/à jour dans dim_Dates.")

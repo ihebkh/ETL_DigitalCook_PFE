@@ -55,7 +55,7 @@ def extract_filieres(**kwargs):
     filieres_coll = mongo_db["filieres"]
 
     filieres_univ = universities_coll.find({}, {"_id": 0, "filiere": 1})
-    filieres_data = filieres_coll.find({}, {"_id": 0, "nomfiliere": 1, "domaine": 1, "diplome": 1, "prix": 1, "prerequis": 1, "adresse": 1, "codepostal": 1})
+    filieres_data = filieres_coll.find({}, {"_id": 0, "nomfiliere": 1, "domaine": 1, "diplome": 1, "prix": 1, "prerequis": 1})
 
     filieres = []
 
@@ -82,17 +82,15 @@ def load_into_postgres(**kwargs):
     cursor = conn.cursor()
 
     insert_query = """
-    INSERT INTO dim_filiere (filiere_pk, filierecode, nomfiliere, domaine, diplome, prix, prerequis, adresse, codepostal)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+    INSERT INTO dim_filiere (filiere_pk, filierecode, nomfiliere, domaine, diplome, prix, prerequis)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
     ON CONFLICT (filiere_pk) DO UPDATE
     SET filierecode = EXCLUDED.filierecode,
         nomfiliere = EXCLUDED.nomfiliere,
         domaine = EXCLUDED.domaine,
         diplome = EXCLUDED.diplome,
         prix = EXCLUDED.prix,
-        prerequis = EXCLUDED.prerequis,
-        adresse = EXCLUDED.adresse,
-        codepostal = EXCLUDED.codepostal;
+        prerequis = EXCLUDED.prerequis;
     """
 
     counter = get_next_filiere_pk()
@@ -105,8 +103,6 @@ def load_into_postgres(**kwargs):
         diplome = filiere.get("diplome", "")
         prix = clean_price(filiere.get("prix", ""))
         prerequis = filiere.get("prerequis", "")
-        adresse = filiere.get("adresse", "")
-        codepostal = filiere.get("codepostal", "")
 
         cursor.execute(insert_query, (
             filiere_pk,
@@ -115,9 +111,7 @@ def load_into_postgres(**kwargs):
             domaine,
             diplome,
             prix,
-            prerequis,
-            adresse,
-            codepostal
+            prerequis
         ))
         counter += 1
 

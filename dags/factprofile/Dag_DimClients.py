@@ -65,24 +65,25 @@ def transform_data(**kwargs):
         seen_matricules.add(matricule)
         max_pk += 1
 
+        profile_data = record.get("profile") or record.get("simpleProfile") or {}
+
         transformed.append({
             "client_pk": max_pk,
             "matricule": matricule,
             "nom": record.get("nom"),
             "prenom": record.get("prenom"),
-            "birthdate": record.get("profile", {}).get("birthDate"),
-            "nationality": record.get("profile", {}).get("nationality"),
-            "adresseDomicile": record.get("profile", {}).get("adresseDomicile"),
-            "pays": record.get("profile", {}).get("pays"),
-            "situation": record.get("profile", {}).get("situation"),
-            "etatcivile": record.get("profile", {}).get("etatCivil"),
-            "photo": record.get("google_Photo", record.get("profile", {}).get("google_Photo")),
-            "intituleposte": record.get("profile", {}).get("intituleposte"),
-            "niveau_etude_actuelle": record.get("profile", {}).get("niveau_etude_actuelle")
+            "birthdate": profile_data.get("birthDate"),
+            "nationality": profile_data.get("nationality"),
+            "pays": profile_data.get("pays"),
+            "situation": profile_data.get("situation"),
+            "etatcivile": profile_data.get("etatCivil"),
+            "photo": record.get("google_Photo", profile_data.get("google_Photo")),
+            "niveau_etude_actuelle": profile_data.get("niveauDetudeActuel")
         })
 
     kwargs['ti'].xcom_push(key='transformed_clients', value=transformed)
     logger.info(f"{len(transformed)} clients transformés.")
+
 
 def load_data(**kwargs):
     data = kwargs['ti'].xcom_pull(task_ids='transform_data', key='transformed_clients')
@@ -96,20 +97,18 @@ def load_data(**kwargs):
 
     insert_query = """
     INSERT INTO dim_client (
-        client_pk, matricule, nom, prenom, birthdate, nationality, adresseDomicile,
-        pays, situation, etatcivile, photo, intituleposte, niveau_etude_actuelle
-    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        client_pk, matricule, nom, prenom, birthdate, nationality,
+        pays, situation, etatcivile, photo, niveau_etude_actuelle
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s)
     ON CONFLICT (matricule) DO UPDATE SET
         nom = EXCLUDED.nom,
         prenom = EXCLUDED.prenom,
         birthdate = EXCLUDED.birthdate,
         nationality = EXCLUDED.nationality,
-        adresseDomicile = EXCLUDED.adresseDomicile,
         pays = EXCLUDED.pays,
         situation = EXCLUDED.situation,
         etatcivile = EXCLUDED.etatcivile,
         photo = EXCLUDED.photo,
-        intituleposte = EXCLUDED.intituleposte,
         niveau_etude_actuelle = EXCLUDED.niveau_etude_actuelle
     """
 
@@ -121,12 +120,10 @@ def load_data(**kwargs):
             row.get("prenom"),
             row.get("birthdate"),
             row.get("nationality"),
-            row.get("adresseDomicile"),
             row.get("pays"),
             row.get("situation"),
             row.get("etatcivile"),
             row.get("photo"),
-            row.get("intituleposte"),
             row.get("niveau_etude_actuelle")
         ))
 

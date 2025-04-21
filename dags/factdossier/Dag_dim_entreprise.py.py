@@ -8,6 +8,7 @@ from pymongo import MongoClient
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def get_mongo_collections():
     client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
     db = client["PowerBi"]
@@ -16,6 +17,7 @@ def get_mongo_collections():
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
+
 
 def generate_entreprise_code(counter):
     return f"entre{str(counter).zfill(4)}"
@@ -30,36 +32,44 @@ def get_next_entreprise_pk_and_code_counter():
     next_pk = (max_pk or 0) + 1
     return next_pk, next_pk
 
+
 def extract_all_entreprises(ti):
     client, offres_col, frontusers_col, entreprises_col = get_mongo_collections()
     entreprises = set()
 
     for doc in offres_col.find({"isDeleted": False}, {"societe": 1, "lieuSociete": 1}):
-        nom = doc.get("societe", "").strip() or "null"
-        lieu = doc.get("lieuSociete", "").strip() or "null"
-        if nom != "null" or lieu != "null":
-            entreprises.add((nom, lieu))
+        nom = doc.get("societe", "").strip()
+        lieu = doc.get("lieuSociete", "").strip()
+        if nom:
+            entreprises.add((nom, lieu or None))
 
     for doc in frontusers_col.find({}, {"profile.experiences.entreprise": 1, "simpleProfile.experiences.entreprise": 1}):
         for profile_key in ["profile", "simpleProfile"]:
             profile = doc.get(profile_key, {})
             for exp in profile.get("experiences", []):
                 if isinstance(exp, dict):
-                    nom = exp.get("entreprise", "").strip() or "null"
-                    if nom != "null":
-                        entreprises.add((nom, "null"))
+                    nom = exp.get("entreprise", "").strip()
+                    if nom:
+                        entreprises.add((nom, None))
 
     for doc in entreprises_col.find({}, {"nom": 1, "ville": 1}):
-        nom = doc.get("nom", "").strip() or "null"
-        ville = doc.get("ville", "").strip() or "null"
-        if nom != "null" or ville != "null":
-            entreprises.add((nom, ville))
+        nom = doc.get("nom", "").strip()
+        ville = doc.get("ville", "").strip()
+        if nom:
+            entreprises.add((nom, ville or None))
 
     client.close()
-    ti.xcom_push(key='entreprises', value=list(entreprises))
+    entreprises_list = list(entreprises)
+    ti.xcom_push(key='entreprises', value=entreprises_list)
+    logger.info(f"{len(entreprises_list)} entreprises extraites de MongoDB.")
+
 
 def insert_entreprises(ti):
     entreprises = ti.xcom_pull(task_ids='extract_all_entreprises', key='entreprises')
+    if not entreprises:
+        logger.info("Aucune entreprise à insérer.")
+        return
+
     conn = get_postgres_connection()
     cur = conn.cursor()
 
@@ -67,21 +77,22 @@ def insert_entreprises(ti):
     total = 0
 
     for nom, lieu in entreprises:
-        nom_clean = None if nom == "null" else nom
-        lieu_clean = None if lieu == "null" else lieu
+        nom_clean = nom.strip() if nom else None
+        lieu_clean = lieu.strip() if lieu else None
 
-        entreprise_pk = counter_pk
+        if not nom_clean:
+            continue
+
         codeentreprise = generate_entreprise_code(counter_code)
 
         cur.execute("""
             INSERT INTO public.dim_entreprise (entreprise_pk, codeentreprise, nom, lieu_societe)
             VALUES (%s, %s, %s, %s)
             ON CONFLICT (entreprise_pk) DO UPDATE
-            SET nom = EXCLUDED.nom,
-                lieu_societe = EXCLUDED.lieu_societe,
+            SET lieu_societe = EXCLUDED.lieu_societe,
                 codeentreprise = EXCLUDED.codeentreprise;
         """, (
-            entreprise_pk,
+            counter_pk,
             codeentreprise,
             nom_clean,
             lieu_clean
@@ -95,6 +106,7 @@ def insert_entreprises(ti):
     cur.close()
     conn.close()
     logger.info(f"{total} entreprises insérées ou mises à jour dans dim_entreprise.")
+
 
 dag = DAG(
     dag_id='dag_dim_entreprise',

@@ -2,6 +2,7 @@ import logging
 from pymongo import MongoClient
 from bson import ObjectId
 from bson.errors import InvalidId
+import re
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
@@ -70,6 +71,8 @@ def convert_bson(obj):
         return str(obj)
     return obj
 
+
+
 def extract_experiences(**kwargs):
     client, _, collection, secteur_collection = get_mongodb_connection()
     label_to_pk_secteur = load_dim_secteur()
@@ -88,16 +91,28 @@ def extract_experiences(**kwargs):
                         filtered_experience = {
                             "role": experience.get("role", ""),
                             "entreprise": experience.get("entreprise", ""),
-                            "du_month": experience.get("du", {}).get("month", ""),
-                            "du_year": experience.get("du", {}).get("year", ""),
-                            "au_month": experience.get("au", {}).get("month", ""),
-                            "au_year": experience.get("au", {}).get("year", ""),
                             "ville": experience.get("ville", {}).get("value", "") if isinstance(experience.get("ville", {}), dict) else experience.get("ville", ""),
                             "pays": experience.get("pays", {}).get("value", "") if isinstance(experience.get("pays", {}), dict) else experience.get("pays", ""),
                             "typeContrat": experience.get("typeContrat", {}).get("value", "") if isinstance(experience.get("typeContrat", {}), dict) else experience.get("typeContrat", ""),
                             "secteur": experience.get("secteur", ""),
-                            "metier": experience.get("metier", "")
+                            "metier": experience.get("metier", ""),
                         }
+
+                        def parse_date(date_str):
+                            if isinstance(date_str, str):
+                                if re.match(r"^\d{4}-\d{2}$", date_str):
+                                    year, month = date_str.split("-")
+                                    return int(year), int(month)
+                                elif re.match(r"^\d{4}$", date_str):
+                                    return int(date_str), None
+                            return None, None
+
+                        start_year, start_month = parse_date(experience.get("du", ""))
+                        end_year, end_month = parse_date(experience.get("au", ""))
+                        filtered_experience["du_year"] = start_year if start_year else ""
+                        filtered_experience["du_month"] = start_month if start_month else ""
+                        filtered_experience["au_year"] = end_year if end_year else ""
+                        filtered_experience["au_month"] = end_month if end_month else ""
 
                         values = [filtered_experience[k] for k in filtered_experience]
                         if not any(str(v).strip() for v in values):
@@ -111,12 +126,13 @@ def extract_experiences(**kwargs):
                                 secteur_label = secteur_doc.get("label", "").lower()
                                 filtered_experience["secteur"] = label_to_pk_secteur.get(secteur_label, None)
 
+
                         metier_ids = filtered_experience["metier"]
                         metier_pk_list = []
                         if metier_ids:
                             if isinstance(metier_ids, str):
                                 metier_ids = [metier_ids]
-                            metier_ids = [ObjectId(m) for m in metier_ids if is_valid_objectid(m)]
+                            metier_ids = [ObjectId(m) for m in metier_ids] if isinstance(metier_ids, list) else [ObjectId(metier_ids)] if is_valid_objectid(metier_ids) else []
                             if secteur_doc and "jobs" in secteur_doc:
                                 for job in secteur_doc["jobs"]:
                                     if job["_id"] in metier_ids:
@@ -149,7 +165,7 @@ def insert_experiences_into_postgres(**kwargs):
             fk_secteur, fk_metier
         )
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        ON CONFLICT (codeexperience) DO UPDATE SET
+        ON CONFLICT (experience_pk) DO UPDATE SET
             role = EXCLUDED.role,
             entreprise = EXCLUDED.entreprise,
             start_year = EXCLUDED.start_year,
@@ -212,6 +228,7 @@ wait_dim_metier = ExternalTaskSensor(
     dag=dag
 )
 
+
 extract_task = PythonOperator(
     task_id='extract_dim_experience',
     python_callable=extract_experiences,
@@ -230,7 +247,7 @@ end_task = DummyOperator(
     task_id='end_task',
     dag=dag
 )
-# en parallele
-[wait_dim_secteur, wait_dim_metier] >> extract_task
 
-extract_task >> load_task >> end_task
+[wait_dim_secteur, wait_dim_metier] >> extract_task >> load_task >> end_task
+
+

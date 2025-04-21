@@ -2,10 +2,10 @@ import logging
 from pymongo import MongoClient
 from bson import ObjectId
 import datetime
+from datetime import datetime as dt
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-from datetime import datetime as dt
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -58,7 +58,7 @@ def extract_formations(**kwargs):
     client, mongo_db, collection = get_mongodb_connection()
     formations = list(collection.find({}, {
         "_id": 0, "titreFormation": 1, "dateDebut": 1, "dateFin": 1, 
-        "domaine": 1, "ville": 1, "adresse": 1, "centreDeFormation": 1, 
+        "domaine": 1, "ville": 1, "centreDeFormation": 1, 
         "presence": 1, "duree": 1
     }))
     client.close()
@@ -78,9 +78,9 @@ def load_formations(**kwargs):
     query = """
     INSERT INTO dim_formation (
         formation_pk, formationcode, titreformation, date_debut, date_fin, 
-        domaine, ville, adresse, centreformations, presence, duree
+        domaine, ville, centreformations, presence, duree
     )
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     ON CONFLICT (formation_pk) DO UPDATE
     SET formationcode = EXCLUDED.formationcode,
         titreformation = EXCLUDED.titreformation,
@@ -88,7 +88,6 @@ def load_formations(**kwargs):
         date_fin = EXCLUDED.date_fin,
         domaine = EXCLUDED.domaine,
         ville = EXCLUDED.ville,
-        adresse = EXCLUDED.adresse,
         centreformations = EXCLUDED.centreformations,
         presence = EXCLUDED.presence,
         duree = EXCLUDED.duree;
@@ -104,14 +103,13 @@ def load_formations(**kwargs):
         date_fin = convert_to_datetime(formation.get("dateFin"))
         domaine = formation.get("domaine", "")
         ville = formation.get("ville", "")
-        adresse = formation.get("adresse", "")
         centre = formation.get("centreDeFormation", "")
         presence = formation.get("presence", "")
         duree = formation.get("duree", "")
 
         cursor.execute(query, (
             formation_pk, code, titre, date_debut, date_fin,
-            domaine, ville, adresse, centre, presence, duree
+            domaine, ville, centre, presence, duree
         ))
         pk_counter += 1
 

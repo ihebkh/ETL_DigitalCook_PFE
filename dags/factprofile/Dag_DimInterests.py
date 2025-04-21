@@ -99,7 +99,7 @@ def load_interests(**kwargs):
     insert_query = """
     INSERT INTO Dim_interests (interests_pk, interestsCode, interests)
     VALUES (%s, %s, %s)
-    ON CONFLICT (interests) DO UPDATE SET
+    ON CONFLICT (interests_pk) DO UPDATE SET
         interestsCode = EXCLUDED.interestsCode
     """
 
