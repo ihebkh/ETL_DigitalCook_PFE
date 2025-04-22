@@ -85,7 +85,7 @@ def extract_experiences(**kwargs):
 
     for doc in documents:
         for profile_field in ['profile', 'simpleProfile']:
-            if profile_field in doc and 'experiences' in doc[profile_field]:
+            if profile_field in doc and doc[profile_field] and 'experiences' in doc[profile_field] and doc[profile_field]['experiences']:
                 for experience in doc[profile_field]['experiences']:
                     if isinstance(experience, dict):
                         filtered_experience = {
@@ -97,6 +97,9 @@ def extract_experiences(**kwargs):
                             "secteur": experience.get("secteur", ""),
                             "metier": experience.get("metier", ""),
                         }
+
+                        if not filtered_experience["role"] or not filtered_experience["ville"] or not filtered_experience["typeContrat"]:
+                            continue 
 
                         def parse_date(date_str):
                             if isinstance(date_str, str):
@@ -126,7 +129,6 @@ def extract_experiences(**kwargs):
                                 secteur_label = secteur_doc.get("label", "").lower()
                                 filtered_experience["secteur"] = label_to_pk_secteur.get(secteur_label, None)
 
-
                         metier_ids = filtered_experience["metier"]
                         metier_pk_list = []
                         if metier_ids:
@@ -151,6 +153,8 @@ def extract_experiences(**kwargs):
     kwargs['ti'].xcom_push(key='dim_experiences', value=filtered_experiences)
     logger.info(f"{len(filtered_experiences)} expériences extraites.")
     return filtered_experiences
+
+
 
 def insert_experiences_into_postgres(**kwargs):
     experiences = kwargs['ti'].xcom_pull(task_ids='extract_dim_experience', key='dim_experiences')
@@ -248,6 +252,7 @@ end_task = DummyOperator(
     dag=dag
 )
 
-[wait_dim_secteur, wait_dim_metier] >> extract_task >> load_task >> end_task
+[wait_dim_secteur, wait_dim_metier] >> extract_task 
+extract_task >> load_task >> end_task
 
 

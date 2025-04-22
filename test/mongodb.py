@@ -1,30 +1,49 @@
+import unittest
 from pymongo import MongoClient
-from pymongo.collection import Collection
 
-def get_mongo_collections():
+def get_all_collections():
     client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
     db = client["PowerBi"]
-    return client, db["offredemplois"], db["frontusers"], db["entreprises"]
+    
+    collections = [
+        "parrainageinfluencers", "dossiers", "entitecomercals", "filieres", 
+        "secteurdactivities", "centrefinancements", "formations", 
+        "commercialinfos", "agenceinfos", "factures", "products", 
+        "offredetudes", "frontusers", "parrainages", "users", 
+        "entreprises", "universities", "offredemplois", "privileges", 
+        "influencerinfos", "profiles", "businessfinderinfos"
+    ]
+    
+    existing_collections = []
+    for collection in collections:
+        if collection in db.list_collection_names():
+            existing_collections.append(collection)
+    
+    client.close()
+    return existing_collections
 
-def main():
-    try:
-        client, offres, users, entreprises = get_mongo_collections()
+class TestMongoDBCollections(unittest.TestCase):
 
-        assert isinstance(offres, Collection), "offredemplois n'est pas une collection MongoDB"
-        assert isinstance(users, Collection), "frontusers n'est pas une collection MongoDB"
-        assert isinstance(entreprises, Collection), "entreprises n'est pas une collection MongoDB"
+    def test_collections_exist(self):
+        collections = get_all_collections()
+        expected_collections = [
+            "parrainageinfluencers", "dossiers", "entitecomercals", "filieres", 
+            "secteurdactivities", "centrefinancements", "formations", 
+            "commercialinfos", "agenceinfos", "factures", "products", 
+            "offredetudes", "frontusers", "parrainages", "users", 
+            "entreprises", "universities", "offredemplois", "privileges", 
+            "influencerinfos", "profiles", "businessfinderinfos"
+        ]
+        
+        for collection in expected_collections:
+            assert collection in collections, f"La collection {collection} est manquante dans la base de données"
 
-        print("✅ Connexion MongoDB réussie")
-        print("🗂️ Collections récupérées :")
-        print(f" - offres       : {offres.name}")
-        print(f" - utilisateurs : {users.name}")
-        print(f" - entreprises  : {entreprises.name}")
-
-    except AssertionError as ae:
-        print("❌ Erreur d'assertion :", ae)
-
-    except Exception as e:
-        print("❌ Erreur lors de la connexion à MongoDB :", e)
+    def test_connection(self):
+        try:
+            client, *_ = get_all_collections()
+            self.assertTrue(client, "La connexion MongoDB a échoué")
+        except Exception as e:
+            self.fail(f"Erreur de connexion MongoDB : {e}")
 
 if __name__ == "__main__":
-    main()
+    unittest.main(argv=[''], exit=False)

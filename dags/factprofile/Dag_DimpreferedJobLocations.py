@@ -123,7 +123,7 @@ def load_into_postgres(**kwargs):
         insert_query = """
         INSERT INTO Dim_preferedJobLocations (preferedJobLocationsCode, pays, ville, region)
         VALUES (%s, %s, %s, %s)
-        ON CONFLICT (preferedJobLocationsCode) 
+        ON CONFLICT (preferedjoblocations_pk) 
         DO UPDATE SET 
             pays = EXCLUDED.pays,
             ville = EXCLUDED.ville,

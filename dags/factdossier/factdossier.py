@@ -114,44 +114,30 @@ def query_dim_influencer_for_name(pg_cursor, name, last_name):
     result = pg_cursor.fetchone()
     return result[0] if result else None
 
-def get_fee_rate_for_charge_daffaire(charge_daffaire_id, agenceinfos_collection):
-    if not charge_daffaire_id:
-        return None
-    doc = agenceinfos_collection.find_one({"_id": charge_daffaire_id})
-    return doc.get("feeRate") if doc else None
-
-def get_fee_rate_for_client(profile_id, businessfinderinfos_collection):
-    if not profile_id:
-        return None
-    doc = businessfinderinfos_collection.find_one({"_id": profile_id})
-    return doc.get("feeRate") if doc else None
 
 def generate_fact_code(index):
     return f"fact{index:04d}"
 
 def upsert_fact_dossier(
     pg_cursor, dossier_pk, client_pk, fact_code, current_step, type_de_contrat,
-    influencer_pk, charge_fee_rate, client_fee_rate, destination_pk, date_depart_pk,
+    influencer_pk, destination_pk, date_depart_pk,
     formation_pk, prix, hours, offre_emploi_step2, offre_etude_step2,
     offre_emploi_step4, offre_etude_step4, service_nom, service_prix, service_discount, service_extra
 ):
     pg_cursor.execute("""
         INSERT INTO public.fact_dossier (
-            dossier_pk, client_fk, fact_code, current_step, type_de_contrat, influencer_fk,
-            charge_fee_rate, client_fee_rate, destination_fk, date_depart_fk,
+            dossier_pk, client_fk, fact_code, current_step, type_de_contrat, influencer_fk, destination_fk, date_depart_fk,
             formation_fk, prix_formation, hours_number,
             offre_emploi_step2_fk, offre_etude_step2_fk, offre_emploi_step4_fk, offre_etude_step4_fk,
             service_nom, service_prix, service_discount, service_extra
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (dossier_pk) DO UPDATE SET
             client_fk = EXCLUDED.client_fk,
             fact_code = EXCLUDED.fact_code,
             current_step = EXCLUDED.current_step,
             type_de_contrat = EXCLUDED.type_de_contrat,
             influencer_fk = EXCLUDED.influencer_fk,
-            charge_fee_rate = EXCLUDED.charge_fee_rate,
-            client_fee_rate = EXCLUDED.client_fee_rate,
             destination_fk = EXCLUDED.destination_fk,
             date_depart_fk = EXCLUDED.date_depart_fk,
             formation_fk = EXCLUDED.formation_fk,
@@ -167,7 +153,7 @@ def upsert_fact_dossier(
             service_extra = EXCLUDED.service_extra;
     """, (
         dossier_pk, client_pk, fact_code, current_step, type_de_contrat, influencer_pk,
-        charge_fee_rate, client_fee_rate, destination_pk, date_depart_pk, formation_pk, prix, hours,
+          destination_pk, date_depart_pk, formation_pk, prix, hours,
         offre_emploi_step2, offre_etude_step2, offre_emploi_step4, offre_etude_step4,
         service_nom, service_prix, service_discount, service_extra
     ))
@@ -218,9 +204,7 @@ def extract_fields():
 
         name, last_name = get_name_lastname_from_users(charge_daffaire_id, users_collection)
         influencer_pk = query_dim_influencer_for_name(pg_cursor, name, last_name)
-        charge_fee_rate = get_fee_rate_for_charge_daffaire(charge_daffaire_id, agenceinfos_collection)
-        client_fee_rate = get_fee_rate_for_client(profile_id, businessfinderinfos_collection)
-
+      
         raw_date_depart = doc.get("firstStep", {}).get("dateDepart")
         date_depart_str = format_date_only(raw_date_depart)
         date_depart_pk = datecode_to_pk.get(date_depart_str, None)
@@ -279,8 +263,6 @@ def extract_fields():
                 current_step_print,
                 type_de_contrat,
                 influencer_pk,
-                charge_fee_rate,
-                client_fee_rate,
                 ville_name_to_pk.get(destination_list[i], None) if i < len(destination_list) else None,
                 date_depart_print,
                 *formations[i] if i < len(formations) else (None, None, None),

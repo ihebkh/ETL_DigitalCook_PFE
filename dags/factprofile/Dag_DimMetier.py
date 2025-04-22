@@ -55,9 +55,7 @@ def extract_jobs_from_mongodb(**kwargs):
                     if job.get("romeCode"):
                         job_info = {
                             "label": job.get("label"),
-                            "romeCode": job.get("romeCode"),
-                            "mainName": job.get("mainName"),
-                            "subDomain": job.get("subDomain")
+                            "romeCode": job.get("romeCode")
                         }
                         jobs.append(job_info)
 
@@ -85,9 +83,7 @@ def transform_jobs_data(**kwargs):
                 transformed.append({
                     "metier_pk": current_pk,
                     "romeCode": job["romeCode"],
-                    "label": job["label"],
-                    "mainName": job["mainName"],
-                    "subDomain": job["subDomain"]
+                    "label": job["label"]
                 })
                 existing_rome_codes.add(job["romeCode"])
 
@@ -110,13 +106,11 @@ def load_jobs_into_postgres(**kwargs):
         for job in jobs_data:
             try:
                 cur.execute("""
-                    INSERT INTO Dim_Metier (metier_pk, romeCode, label_jobs, mainname_jobs, subdomain_jobs)
-                    VALUES (%s, %s, %s, %s, %s)
+                    INSERT INTO Dim_Metier (metier_pk, romeCode, label_jobs)
+                    VALUES (%s, %s, %s)
                     ON CONFLICT (metier_pk) DO UPDATE SET
-                        label_jobs = EXCLUDED.label_jobs,
-                        mainname_jobs = EXCLUDED.mainname_jobs,
-                        subdomain_jobs = EXCLUDED.subdomain_jobs;
-                """, (job["metier_pk"], job["romeCode"], job["label"], job["mainName"], job["subDomain"]))
+                        label_jobs = EXCLUDED.label_jobs;
+                """, (job["metier_pk"], job["romeCode"], job["label"]))
             except Exception as e:
                 logger.error(f"Error inserting job {job['romeCode']}: {e}")
 

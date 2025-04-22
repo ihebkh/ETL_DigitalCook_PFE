@@ -8,7 +8,6 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 import logging
 from airflow.sensors.external_task_sensor import ExternalTaskSensor
-from airflow.operators.email_operator import EmailOperator
 from airflow.operators.empty import EmptyOperator 
 
 
@@ -196,30 +195,6 @@ def get_projet_pk_from_postgres(nom_projet, entreprise, year_start, year_end, mo
         return result[0]  
     else:
         return None
-
-def get_contact_pk_from_postgres(firstname, lastname):
-    conn = get_postgres_connection()
-    cur = conn.cursor()
-
-    firstname = firstname.strip().lower() if firstname else ''
-    lastname = lastname.strip().lower() if lastname else ''
-
-    cur.execute("""
-        SELECT contact_pk 
-        FROM public.dim_contact 
-        WHERE LOWER(firstname) = %s AND LOWER(lastname) = %s;
-    """, (firstname, lastname))
-    
-    result = cur.fetchone()
-    cur.close()
-    conn.close()
-    
-    if result:
-        return result[0]  
-    else:
-        logger.warning(f"Contact introuvable : {firstname} {lastname}")
-        return None  
-
 
 def get_competence_fk_from_postgres(competence_name):
     conn = get_postgres_connection()
@@ -616,7 +591,6 @@ def matchclient():
         "simpleProfile.niveauDetudes": 1,
         "profile.visa": 1,"simpleProfile.visa": 1,
         "profile.projets": 1,"simpleProfile.projets": 1,
-        "profile.proffessionalContacts": 1,"simpleProfile.proffessionalContacts": 1,
         "profile.secteur": 1, "simpleProfile.secteur": 1,
         "profile.metier": 1,"simpleProfile.metier": 1,
         "created_at": 1,
@@ -658,7 +632,7 @@ def matchclient():
 
         permis_fk_list, competence_fk_list, language_fk_list,interest_pk_list = [],[],[],[]
         interest_pk_list, job_location_pk_list, study_level_fk_list,visa_pk_list = [],[],[],[]
-        project_pk_list, contact_pk_list,certification_pk_list,experience_fk_list = [],[],[],[]
+        project_pk_list,certification_pk_list,experience_fk_list = [],[],[]
         secteur_id_list,metier_id_list  = [],[]
 
         competenceGenerales = get_combined_profile_field(user, "competenceGenerales")
@@ -668,7 +642,6 @@ def matchclient():
         niveau_etudes = get_combined_profile_field(user, "niveauDetudes")
         visa = get_combined_profile_field(user, "visa")
         projets = get_combined_profile_field(user, "projets")
-        professionalContacts = get_combined_profile_field(user, "proffessionalContacts")
         experiences = get_combined_profile_field(user, "experiences")
         certifications = get_combined_profile_field(user, "certifications")
         permis = get_combined_profile_field(user, "permisConduire")
@@ -863,23 +836,13 @@ def matchclient():
             visa_pk = get_visa_pk_from_postgres(visa_type)
             if visa_pk:
                 visa_pk_list.append(str(visa_pk))
-#contact pro 
-
-        for contact in professionalContacts:
-            firstname = contact.get("firstName", "").strip().lower()
-            lastname = contact.get("lastName", "").strip().lower()
-            contact_pk = get_contact_pk_from_postgres(firstname, lastname)
-            print(contact_pk)
-            if contact_pk:
-                contact_pk_list.append(str(contact_pk))
-                print(contact_pk_list)
                 
 
         
 
         max_length = max(len(permis_fk_list), len(competence_fk_list), len(language_fk_list), 
                          len(interest_pk_list), len(job_location_pk_list), len(study_level_fk_list), 
-                         len(visa_pk_list), len(project_pk_list), len(contact_pk_list), 
+                         len(visa_pk_list), len(project_pk_list), 
                          len(certification_pk_list), len(experience_fk_list), len(secteur_id_list), len(metier_id_list), 1)
         
 
@@ -892,7 +855,6 @@ def matchclient():
             study_level_fk = study_level_fk_list[i] if i < len(study_level_fk_list) else None
             visa_pk = visa_pk_list[i] if i < len(visa_pk_list) else None
             project_pk = project_pk_list[i] if i < len(project_pk_list) else None
-            contact_pk = contact_pk_list[i] if i < len(contact_pk_list) else None
             certification_pk = certification_pk_list[i] if i < len(certification_pk_list) else None
             experience_fk = experience_fk_list[i] if i < len(experience_fk_list) else None
             secteur_id = secteur_pk_list[i] if i < len(secteur_pk_list) else None
@@ -976,7 +938,7 @@ def matchclient():
                 nb_parrainages = None
 
             load_fact_date(client_fk, secteur_id, metier_id,counter,competence_fk,language_fk,
-                          interest_pk,certification_pk,contact_pk,visa_pk,job_location_pk,
+                          interest_pk,certification_pk,visa_pk,job_location_pk,
                            project_pk,permis_fk,experience_fk,year,month,nb_certif,nb_langues,visa_count_display
                            ,project_count_display,nb_exp,study_level_fk,dispo,age,dim_date_pk,nb_parrainages,gender)
             
@@ -987,7 +949,7 @@ def matchclient():
     print(f"\nTotal lines: {line_count}")
 
 def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, language_fk,
-                    interest_fk, certification_pk, contact_pk, visa_pk, job_location_pk,
+                    interest_fk, certification_pk, visa_pk, job_location_pk,
                     project_pk, permis_fk, experience_fk, year, month,
                     nb_certif, nb_langues, visa_count_display, project_count_display, nb_exp,
                     study_level_fk, dispo, age, dim_date_pk, nb_parrainages,gender):
@@ -1000,7 +962,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
             INSERT INTO fact_client_profile (
                 client_fk, secteur_fk, metier_fk, fact_pk,
                 competencegenerales_fk, language_fk, interests_fk,
-                certification_fk, contact_fk, visa_fk,
+                certification_fk, visa_fk,
                 preferedjoblocations_fk, projet_fk, permis_fk,
                 experience_fk, experience_year, experience_month,
                 nbr_certif, nbr_langue, nbr_visa_valide,
@@ -1014,7 +976,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                     %s, %s, %s,
                     %s, %s, %s,
                     %s, %s, %s, %s, %s,
-                    %s, %s, %s)
+                    %s, %s)
             ON CONFLICT (fact_pk) DO UPDATE SET
                 client_fk = EXCLUDED.client_fk,
                 secteur_fk = EXCLUDED.secteur_fk,
@@ -1023,7 +985,6 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                 language_fk = EXCLUDED.language_fk,
                 interests_fk = EXCLUDED.interests_fk,
                 certification_fk = EXCLUDED.certification_fk,
-                contact_fk = EXCLUDED.contact_fk,
                 visa_fk = EXCLUDED.visa_fk,
                 preferedjoblocations_fk = EXCLUDED.preferedjoblocations_fk,
                 projet_fk = EXCLUDED.projet_fk,
@@ -1045,7 +1006,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
         """, (
             client_fk, secteur_fk, metier_fk, fact_pk,
             competence_fk, language_fk, interest_fk,
-            certification_pk, contact_pk, visa_pk,
+            certification_pk, visa_pk,
             job_location_pk, project_pk, permis_fk,
             experience_fk, year, month,
             nb_certif, nb_langues, visa_count_display,
@@ -1196,7 +1157,15 @@ wait_visa = ExternalTaskSensor(
         timeout=600,
         poke_interval=30
 )
-
+wait_dim_dates_task = ExternalTaskSensor(
+    task_id='wait_for_dim_dates',
+    external_dag_id='dim_dates_dag',
+    external_task_id='load_dim_dates', 
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag 
+)
 
 task_run_etl = PythonOperator(
     task_id='run_etl_fact_client_profile',
@@ -1212,4 +1181,4 @@ end_task = EmptyOperator(
 [wait_dim_metier,wait_dim_secteur,wait_dim_certifications,
 wait_dim_clients,wait_dim_competences,wait_dim_experience,
 wait_dim_interests,wait_dim_languages,wait_dim_niveau_etudes,
-wait_dim_permis,wait_dim_locations,wait_projects,wait_visa]>> task_run_etl>>end_task
+wait_dim_permis,wait_dim_locations,wait_projects,wait_visa,wait_dim_dates_task]>> task_run_etl>>end_task

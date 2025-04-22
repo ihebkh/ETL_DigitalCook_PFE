@@ -60,13 +60,12 @@ def extract_niveau_etudes(**kwargs):
             data.append({"label": label, "universite": universite,
                          "start_year": start_y, "start_month": start_m,
                          "end_year": end_y, "end_month": end_m,
-                         "diplome": diplome, "pays": pays, "course": course})
+                         "diplome": diplome, "pays": pays})
 
         for etude in doc.get("profile", {}).get("niveauDetudes", []):
             if not isinstance(etude, dict):
                 continue
             universite = etude.get("universite", "null")
-            course = None
             label = etude.get("label", "null")
             pays = etude.get("pays", "N/A")
             diplome = etude.get("nomDiplome", "N/A")
@@ -75,7 +74,7 @@ def extract_niveau_etudes(**kwargs):
             data.append({"label": label, "universite": universite,
                          "start_year": start_y, "start_month": start_m,
                          "end_year": end_y, "end_month": end_m,
-                         "diplome": diplome, "pays": pays, "course": course})
+                         "diplome": diplome, "pays": pays})
 
     kwargs['ti'].xcom_push(key='niveau_raw_data', value=data)
     logger.info(f"{len(data)} niveaux d’études extraits.")
@@ -94,6 +93,11 @@ def transform_niveau_etudes(**kwargs):
         compteur += 1
         max_pk += 1
         code = f"DIP{compteur:03d}"
+
+        if row["label"] in [None, "null", ""]:
+            row["label"] = row.get("course", None)
+            row["course"] = None 
+
         transformed.append({
             "niveau_pk": max_pk,
             "code": code,
@@ -103,9 +107,7 @@ def transform_niveau_etudes(**kwargs):
             "start_month": row["start_month"],
             "end_year": row["end_year"],
             "end_month": row["end_month"],
-            "diplome": row["diplome"],
-            "pays": row["pays"],
-            "course": row["course"]
+            "pays": row["pays"]
         })
 
     kwargs['ti'].xcom_push(key='niveau_transformed', value=transformed)
@@ -124,16 +126,15 @@ def load_niveau_etudes_postgres(**kwargs):
     INSERT INTO dim_niveau_d_etudes (
         niveau_pk, diplome_code, label, universite,
         start_year, start_month, end_year, end_month,
-        nom_diplome, pays, course
-    ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        pays
+    ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
     ON CONFLICT (niveau_pk)
     DO UPDATE SET
         start_year = EXCLUDED.start_year,
         start_month = EXCLUDED.start_month,
         end_year = EXCLUDED.end_year,
         end_month = EXCLUDED.end_month,
-        pays = EXCLUDED.pays,
-        course = EXCLUDED.course
+        pays = EXCLUDED.pays
     """
 
     for row in data:
@@ -146,11 +147,8 @@ def load_niveau_etudes_postgres(**kwargs):
             int(row['start_month']) if str(row['start_month']).isdigit() else None,
             int(row['end_year']) if str(row['end_year']).isdigit() else None,
             int(row['end_month']) if str(row['end_month']).isdigit() else None,
-            row['diplome'],
-            row['pays'],
-            row['course']
-))
-
+            row['pays']
+        ))
 
     conn.commit()
     cur.close()

@@ -2,6 +2,7 @@ import logging
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.sensors.external_task_sensor import ExternalTaskSensor
 from datetime import datetime
 from pymongo import MongoClient
 from bson import ObjectId
@@ -218,4 +219,25 @@ load = PythonOperator(
     dag=dag
 )
 
-extract >> transform >> load
+
+wait_dim_secteur = ExternalTaskSensor(
+    task_id='wait_for_dim_secteur',
+    external_dag_id='dag_dim_secteur',
+    external_task_id='load_into_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+wait_dim_metier = ExternalTaskSensor(
+    task_id='wait_for_dim_metier',
+    external_dag_id='Dag_Metier',
+    external_task_id='load_jobs_into_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+
+[wait_dim_secteur,wait_dim_metier] >> transform >> load
