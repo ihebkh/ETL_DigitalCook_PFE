@@ -25,7 +25,7 @@ def load_offreemploi_mapping(pg_cursor):
     return {row[0]: row[1] for row in pg_cursor.fetchall()}
 
 def load_offre_etude_mapping(pg_cursor):
-    pg_cursor.execute("SELECT titre, offre_pk FROM public.dim_offre_etude")
+    pg_cursor.execute("SELECT titre, etude_pk FROM public.dim_offre_etude")
     return {row[0]: row[1] for row in pg_cursor.fetchall()}
 
 def load_formation_mapping(pg_cursor):

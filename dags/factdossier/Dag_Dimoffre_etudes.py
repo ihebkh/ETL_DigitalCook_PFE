@@ -2,7 +2,6 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.sensors.external_task import ExternalTaskSensor
 from pymongo import MongoClient
-
 from bson import ObjectId
 from datetime import datetime
 import logging
@@ -28,7 +27,7 @@ def load_universite_id_to_name(universities_collection):
 def load_nom_to_codeuniversite():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT nom, codeuniversite FROM public.dim_universite;")
+    cur.execute("SELECT nom, universite_pk FROM public.dim_universite;")
     rows = cur.fetchall()
     cur.close()
     conn.close()
@@ -62,7 +61,7 @@ def insert_or_update_offres_batch(offres_data):
     counter_code = len(existing_codes) + 1
     counter_pk = get_next_etude_pk()
 
-    for titre, codeuniv, dispo, financement in offres_data:
+    for titre, codeuniv, dispo in offres_data:
         while True:
             code = generate_code_offre(counter_code)
             counter_code += 1
@@ -71,22 +70,20 @@ def insert_or_update_offres_batch(offres_data):
                 break
         cur.execute("""
             INSERT INTO public.dim_offre_etude (
-                etude_pk, codeoffre, titre, codeuniversite, disponibilite, financement
+                etude_pk, codeoffre, titre, university_fk, disponibilite
             )
-            VALUES (%s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s)
             ON CONFLICT (etude_pk) DO UPDATE
             SET codeoffre = EXCLUDED.codeoffre,
                 titre = EXCLUDED.titre,
-                codeuniversite = EXCLUDED.codeuniversite,
-                disponibilite = EXCLUDED.disponibilite,
-                financement = EXCLUDED.financement;
+                university_fk = EXCLUDED.university_fk,
+                disponibilite = EXCLUDED.disponibilite;
         """, (
             counter_pk,
             code,
             titre,
             codeuniv,
-            dispo,
-            financement
+            dispo
         ))
         counter_pk += 1
 
@@ -113,12 +110,8 @@ def extract_offres_etudes(**kwargs):
         university_name = id_to_name.get(university_id, "—").lower()
         university_code = name_to_code.get(university_name, "Non trouvé")
         disponibilite = doc.get("disponibilite", "—")
-        financement = "—"
-        for crit in doc.get("criterias", []):
-            if crit.get("label", "").lower() in ["financement", "finance", "funding"]:
-                financement = crit.get("value", "—")
-                break
-        offres_to_insert.append((titre, university_code, disponibilite, financement))
+        # Supprimé : Gestion de financement
+        offres_to_insert.append((titre, university_code, disponibilite))
 
     insert_or_update_offres_batch(offres_to_insert)
 
