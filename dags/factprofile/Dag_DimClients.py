@@ -78,7 +78,9 @@ def transform_data(**kwargs):
             "situation": profile_data.get("situation"),
             "etatcivile": profile_data.get("etatCivil"),
             "photo": record.get("google_Photo", profile_data.get("google_Photo")),
-            "niveau_etude_actuelle": profile_data.get("niveauDetudeActuel")
+            "niveau_etude_actuelle": profile_data.get("niveauDetudeActuel"),
+            "gender": profile_data.get("gender"),
+            "profileType": profile_data.get("profileType"),
         })
 
     kwargs['ti'].xcom_push(key='transformed_clients', value=transformed)
@@ -98,8 +100,8 @@ def load_data(**kwargs):
     insert_query = """
     INSERT INTO dim_client (
         client_pk, matricule, nom, prenom, birthdate, nationality,
-        pays, situation, etatcivile, photo, niveau_etude_actuelle
-    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s)
+        pays, situation, etatcivile, photo, niveau_etude_actuelle,gender,profileType
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s ,%s,%s)
     ON CONFLICT (matricule) DO UPDATE SET
         nom = EXCLUDED.nom,
         prenom = EXCLUDED.prenom,
@@ -109,7 +111,9 @@ def load_data(**kwargs):
         situation = EXCLUDED.situation,
         etatcivile = EXCLUDED.etatcivile,
         photo = EXCLUDED.photo,
-        niveau_etude_actuelle = EXCLUDED.niveau_etude_actuelle
+        niveau_etude_actuelle = EXCLUDED.niveau_etude_actuelle,
+        gender = EXCLUDED.gender,
+        profileType = EXCLUDED.profileType
     """
 
     for row in data:
@@ -124,7 +128,9 @@ def load_data(**kwargs):
             row.get("situation"),
             row.get("etatcivile"),
             row.get("photo"),
-            row.get("niveau_etude_actuelle")
+            row.get("niveau_etude_actuelle"),
+            row.get("gender"),
+            row.get("profileType")
         ))
 
     conn.commit()

@@ -592,9 +592,6 @@ def matchclient():
         "profile.disponibilite": 1,"simpleProfile.disponibilite": 1,
         "profile.birthDate": 1,"simpleProfile.birthDate": 1,
         "profile.experiences": 1,"simpleProfile.experiences": 1,
-        "profile.gender": 1,"simpleProfile.gender": 1,
-        "profile.situation": 1,"simpleProfile.situation": 1,
-        "profile.profileType": 1,"simpleProfile.profileType": 1,
         
     })
 
@@ -654,17 +651,10 @@ def matchclient():
         experience_year_displayed = False
         created_at_displayed = False
 
-        gender_displayed = False
-        gender = user.get("profile", {}).get("gender") or user.get("simpleProfile", {}).get("gender")
 
 
         experience_count_displayed =False
 
-        situation_displayed = False
-        situation = user.get("profile", {}).get("situation") or user.get("simpleProfile", {}).get("situation")
-
-        profile_type_displayed = False
-        profile_type = user.get("profile", {}).get("profileType") or user.get("simpleProfile", {}).get("profileType")
 
 
 
@@ -862,11 +852,6 @@ def matchclient():
             nb_projets_total = project_counts.get(client_fk, 0)
             project_displayed = False
 
-#gender 
-            if not gender_displayed:
-                gender_displayed = True 
-            else:
-                gender = None  
 
 # experience : year 
 
@@ -940,25 +925,11 @@ def matchclient():
             else:
                 nb_parrainages = None
 
-#situation 
-
-            if not situation_displayed:
-                situation_displayed = True
-            else:
-                situation = None
-
-# profile_type
-
-            if not profile_type_displayed:
-                profile_type_displayed = True
-            else:
-                profile_type = None
-
 
             load_fact_date(client_fk, secteur_id, metier_id,counter,competence_fk,language_fk,
                           interest_pk,certification_pk,visa_pk,job_location_pk,
                            project_pk,permis_fk,experience_fk,year,month,nb_certif,nb_langues,visa_count_display
-                           ,project_count_display,nb_exp,study_level_fk,dispo,age,dim_date_pk,nb_parrainages,gender,situation,profile_type)
+                           ,project_count_display,nb_exp,study_level_fk,dispo,age,dim_date_pk,nb_parrainages)
             
 
             line_count += 1
@@ -970,7 +941,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                     interest_fk, certification_pk, visa_pk, job_location_pk,
                     project_pk, permis_fk, experience_fk, year, month,
                     nb_certif, nb_langues, visa_count_display, project_count_display, nb_exp,
-                    study_level_fk, dispo, age, dim_date_pk, nb_parrainages,gender,situation,profile_type):
+                    study_level_fk, dispo, age, dim_date_pk, nb_parrainages):
     try:
         fact_pk = generate_fact_pk(counter)
         conn = get_postgres_connection()
@@ -985,15 +956,15 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                 experience_fk, experience_year, experience_month,
                 nbr_certif, nbr_langue, nbr_visa_valide,
                 nbr_projet, nb_experience, etude_fk, disponibilite, age,
-                date_fk, nb_parrainages , gender,situation,profile_type
+                date_fk, nb_parrainages
             )
-            VALUES (%s, %s, %s, %s,
+            VALUES (%s, %s, %s,
                     %s, %s, %s,
                     %s, %s, %s,
                     %s, %s, %s,
                     %s, %s, %s,
                     %s, %s, %s,
-                    %s, %s, %s, %s, %s,
+                    %s, %s, %s,
                     %s, %s, %s, %s)
             ON CONFLICT (fact_pk) DO UPDATE SET
                 client_fk = EXCLUDED.client_fk,
@@ -1019,10 +990,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                 disponibilite = EXCLUDED.disponibilite,
                 age = EXCLUDED.age,
                 date_fk = EXCLUDED.date_fk,
-                nb_parrainages = EXCLUDED.nb_parrainages,
-                gender = EXCLUDED.gender,
-                situation = EXCLUDED.situation,
-                profile_type = EXCLUDED.profile_type;
+                nb_parrainages = EXCLUDED.nb_parrainages;
         """, (
             client_fk, secteur_fk, metier_fk, fact_pk,
             competence_fk, language_fk, interest_fk,
@@ -1031,7 +999,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
             experience_fk, year, month,
             nb_certif, nb_langues, visa_count_display,
             project_count_display, nb_exp,
-            study_level_fk, dispo, age, dim_date_pk, nb_parrainages,gender,situation,profile_type
+            study_level_fk, dispo, age, dim_date_pk, nb_parrainages
         ))
 
         conn.commit()
