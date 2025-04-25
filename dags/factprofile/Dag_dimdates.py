@@ -2,7 +2,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 import pandas as pd
-from datetime import datetime
+from datetime import datetime , timedelta
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -33,7 +33,7 @@ def create_date_df(start_date, end_date):
 def load_dim_dates_to_postgres(**kwargs):
     try:
         start_date = '1980-01-01'
-        end_date = datetime.today().strftime('%Y-%m-%d')
+        end_date = '2030-01-01'
         df = create_date_df(start_date, end_date)
 
         hook = PostgresHook(postgres_conn_id='postgres')
