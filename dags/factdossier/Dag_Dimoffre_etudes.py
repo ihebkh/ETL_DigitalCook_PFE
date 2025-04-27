@@ -1,11 +1,11 @@
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-from airflow.sensors.external_task import ExternalTaskSensor
-from airflow.providers.postgres.hooks.postgres import PostgresHook
 from pymongo import MongoClient
 from bson import ObjectId
 from datetime import datetime
 import logging
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.sensors.external_task import ExternalTaskSensor
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 
 logging.basicConfig(level=logging.INFO)
@@ -111,7 +111,6 @@ def extract_offres_etudes(**kwargs):
         university_name = id_to_name.get(university_id, "—").lower()
         university_code = name_to_code.get(university_name, "Non trouvé")
         disponibilite = doc.get("disponibilite", "—")
-        # Supprimé : Gestion de financement
         offres_to_insert.append((titre, university_code, disponibilite))
 
     insert_or_update_offres_batch(offres_to_insert)

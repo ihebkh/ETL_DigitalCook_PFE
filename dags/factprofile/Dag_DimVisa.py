@@ -1,10 +1,10 @@
 from pymongo import MongoClient
-from airflow import DAG
-from airflow.operators.python import PythonOperator
-from airflow.providers.postgres.hooks.postgres import PostgresHook
 from datetime import datetime
 import logging
 from bson import ObjectId
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

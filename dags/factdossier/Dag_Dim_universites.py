@@ -1,11 +1,11 @@
-from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
-from airflow.providers.postgres.hooks.postgres import PostgresHook
-from airflow.sensors.external_task_sensor import ExternalTaskSensor
 import logging
 from pymongo import MongoClient
 from datetime import datetime
 from bson import ObjectId
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.sensors.external_task_sensor import ExternalTaskSensor
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -91,7 +91,7 @@ def insert_universites(**kwargs):
     logger.info(f"Total universités insérées ou mises à jour : {total}")
 
 dag = DAG(
-    dag_id='dag_dimuniversites',
+    dag_id='dag_dim_universites',
     start_date=datetime(2025, 1, 1),
     schedule_interval='@daily',
     catchup=False

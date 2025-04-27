@@ -1,11 +1,11 @@
-from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
-from airflow.providers.postgres.hooks.postgres import PostgresHook
-from airflow.sensors.external_task_sensor import ExternalTaskSensor
 import logging
 from datetime import datetime
 from pymongo import MongoClient
 from bson import ObjectId
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.sensors.external_task_sensor import ExternalTaskSensor
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

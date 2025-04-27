@@ -3,12 +3,12 @@ from pymongo import MongoClient
 from bson import ObjectId
 from bson.errors import InvalidId
 import re
+from datetime import datetime
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.sensors.external_task_sensor import ExternalTaskSensor
 from airflow.operators.dummy_operator import DummyOperator
-from datetime import datetime
 
 
 logging.basicConfig(level=logging.INFO)
