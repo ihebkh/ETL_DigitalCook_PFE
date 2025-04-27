@@ -32,7 +32,7 @@ def get_postgres_connection():
 def get_max_visa_pk():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT COALESCE(MAX(visa_pk), 0) FROM dim_visa")
+    cur.execute("SELECT COALESCE(MAX(visa_id), 0) FROM dim_visa")
     max_pk = cur.fetchone()[0]
     cur.close()
     conn.close()
@@ -108,17 +108,18 @@ def load_into_postgres(**kwargs):
 
     insert_query = """
     INSERT INTO dim_visa (
-        visa_pk, visacode, visa_type, date_entree, date_sortie,
-        destination, duree, duree_type, nb_entree
+        visa_id, code_visa, type_visa, date_entree_visa, date_sortie_visa,
+        destination_visa, duree_visa, type_duree_visa, nombre_entrees_visa
     ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-    ON CONFLICT (visacode) DO UPDATE SET 
-        visa_type = EXCLUDED.visa_type,
-        date_entree = EXCLUDED.date_entree,
-        date_sortie = EXCLUDED.date_sortie,
-        destination = EXCLUDED.destination,
-        duree = EXCLUDED.duree,
-        duree_type = EXCLUDED.duree_type,
-        nb_entree = EXCLUDED.nb_entree
+    ON CONFLICT (code_visa) DO UPDATE SET 
+        code_visa = EXCLUDED.code_visa,
+        type_visa = EXCLUDED.type_visa,
+        date_entree_visa = EXCLUDED.date_entree_visa,
+        date_sortie_visa = EXCLUDED.date_sortie_visa,
+        destination_visa = EXCLUDED.destination_visa,
+        duree_visa = EXCLUDED.duree_visa,
+        type_duree_visa = EXCLUDED.type_duree_visa,
+        nombre_entrees_visa = EXCLUDED.nombre_entrees_visa
     """
 
     for record in transformed_data:

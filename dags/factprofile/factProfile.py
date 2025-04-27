@@ -46,7 +46,7 @@ def generate_fact_pk(counter):
 def load_dim_secteur():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT secteur_pk, label FROM public.dim_secteur;")
+    cur.execute("SELECT secteur_id, nom_secteur FROM public.dim_secteur;")
     rows = cur.fetchall()
     cur.close()
     conn.close()
@@ -55,7 +55,7 @@ def load_dim_secteur():
 def load_dim_metier():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT metier_pk, label_jobs FROM public.dim_metier;")
+    cur.execute("SELECT metier_id, nom_metier FROM public.dim_metier;")
     rows = cur.fetchall()
     cur.close()
     conn.close()
@@ -66,12 +66,12 @@ def get_visa_counts_by_client():
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT f.client_fk, COUNT(v.visa_pk) AS nb_visas_valides
+        SELECT f.client_id, COUNT(v.visa_id) AS nb_visas_valides
         FROM fact_client_profile f
-        JOIN dim_visa v ON f.visa_fk = v.visa_pk
-        WHERE v.date_sortie > CURRENT_DATE
-          AND v.nb_entree ILIKE '%multiple%'
-        GROUP BY f.client_fk;
+        JOIN dim_visa v ON f.visa_id = v.visa_id
+        WHERE v.date_sortie_visa > CURRENT_DATE
+          AND v.nombre_entrees_visa ILIKE '%multiple%'
+        GROUP BY f.client_id;
     """)
 
     rows = cur.fetchall()
@@ -85,9 +85,9 @@ def get_secteur_pk_from_postgres(label):
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT secteur_pk 
+        SELECT secteur_id 
         FROM public.dim_secteur 
-        WHERE LOWER(label) = %s;
+        WHERE LOWER(nom_secteur) = %s;
     """, (label.strip().lower(),))
 
     result = cur.fetchone()
@@ -103,9 +103,9 @@ def get_metier_pk_from_postgres(label):
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT metier_pk 
+        SELECT metier_id 
         FROM public.dim_metier 
-        WHERE LOWER(label_jobs) = %s;
+        WHERE LOWER(nom_metier) = %s;
     """, (label.strip().lower(),))
 
     result = cur.fetchone()
@@ -120,9 +120,9 @@ def get_client_fk_from_postgres(matricule):
     conn = get_postgres_connection()
     cur = conn.cursor()
     cur.execute("""
-        SELECT client_pk 
+        SELECT client_id 
         FROM public.dim_client 
-        WHERE matricule = %s;
+        WHERE matricule_client = %s;
     """, (str(matricule),))
     
     result = cur.fetchone()
@@ -141,9 +141,9 @@ def get_etude_pk_from_postgres(niveau_etude):
     niveau_etude = niveau_etude.strip().lower()
     
     cur.execute("""
-        SELECT niveau_pk 
+        SELECT niveau_etude_id 
         FROM public.dim_niveau_d_etudes 
-        WHERE lower(universite) = %s;
+        WHERE lower(universite_etudes) = %s;
     """, (niveau_etude,))
     
     result = cur.fetchone()
@@ -155,35 +155,13 @@ def get_etude_pk_from_postgres(niveau_etude):
         return result[0]  
     else:
         return None  
-    
-def get_etude_pk_from_postgres(niveau_etude):
-    conn = get_postgres_connection()
-    cur = conn.cursor()
-    
-    niveau_etude = niveau_etude.strip().lower()
-    
-    cur.execute("""
-        SELECT niveau_pk 
-        FROM public.dim_niveau_d_etudes 
-        WHERE lower(universite) = %s;
-    """, (niveau_etude,))
-    
-    result = cur.fetchone()
-    
-    cur.close()
-    conn.close()
-    
-    if result:
-        return result[0]  
-    else:
-        return None  
-    
+
 def get_projet_pk_from_postgres(nom_projet, entreprise, year_start, year_end, month_start, month_end):
     conn = get_postgres_connection()
     cur = conn.cursor()
     
     cur.execute("""
-        SELECT projet_pk 
+        SELECT projet_id 
         FROM public.dim_projet 
         WHERE nom_projet = %s
     """, (nom_projet,)) 
@@ -205,9 +183,9 @@ def get_competence_fk_from_postgres(competence_name):
     competence_name = competence_name.strip().lower()
     
     cur.execute("""
-    SELECT competence_pk 
+    SELECT competence_id 
     FROM public.dim_competence 
-    WHERE LOWER(competence_name) = %s;
+    WHERE LOWER(nom_competence) = %s;
 """, (competence_name,))
     result = cur.fetchone()
     
@@ -224,9 +202,9 @@ def get_language_fk_from_postgres(language_label, language_level):
     cur = conn.cursor()
     
     cur.execute("""
-        SELECT langue_pk 
+        SELECT langue_id 
         FROM public.dim_languages 
-        WHERE label = %s AND level = %s;
+        WHERE nom_langue = %s AND niveau_langue = %s;
     """, (language_label, language_level))
     
     result = cur.fetchone()
@@ -244,9 +222,9 @@ def get_interest_pk_from_postgres(interest):
     cur = conn.cursor()
     interest = interest.strip().lower()
     cur.execute("""
-        SELECT interests_pk
+        SELECT interet_id
         FROM public.dim_interests
-        WHERE LOWER(interests) = %s
+        WHERE LOWER(nom_interet) = %s
     """, (interest,))
     
     result = cur.fetchone()
@@ -263,9 +241,9 @@ def get_preferedjoblocations_pk_from_postgres(pays, ville, region):
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT preferedjoblocations_pk 
+        SELECT job_location_preferee_id 
         FROM public.dim_preferedjoblocations 
-        WHERE pays = %s AND ville = %s AND region = %s;
+        WHERE pays_location_preferee = %s AND ville_location_preferee = %s AND region_location_preferee = %s;
     """, (pays, ville, region))
 
     result = cur.fetchone()
@@ -281,9 +259,9 @@ def get_permis_fk_from_postgres(permis_code):
     conn = get_postgres_connection()
     cur = conn.cursor()
     cur.execute("""
-        SELECT permis_pk
+        SELECT permis_id
         FROM public.dim_permis_conduire
-        WHERE categorie = %s;
+        WHERE categorie_permis = %s;
     """, (permis_code,))
     
     result = cur.fetchone()
@@ -303,9 +281,9 @@ def get_visa_pk_from_postgres(visa_type):
     visa_type = visa_type.strip().lower()
     
     cur.execute("""
-        SELECT visa_pk 
+        SELECT visa_id 
         FROM public.dim_visa 
-        WHERE lower(visa_type) = %s;
+        WHERE lower(type_visa) = %s;
     """, (visa_type,))
     
     result = cur.fetchone()
@@ -323,9 +301,9 @@ def get_certification_pk_from_postgres(certification_name):
     cur = conn.cursor()
     
     cur.execute("""
-        SELECT certification_pk
+        SELECT certification_id
         FROM public.dim_certification
-        WHERE nom = %s;
+        WHERE nom_certification = %s;
     """, (certification_name,))
     
     result = cur.fetchone()
@@ -343,9 +321,9 @@ def get_project_counts_by_client():
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT client_fk, COUNT(projet_fk) AS projet_count
+        SELECT client_id, COUNT(projet_id) AS projet_count
         FROM public.fact_client_profile
-        GROUP BY client_fk;
+        GROUP BY client_id;
     """)
 
     rows = cur.fetchall()
@@ -358,7 +336,7 @@ def get_experience_fk_from_postgres(role, entreprise, type_contrat):
     conn = get_postgres_connection()
     cur = conn.cursor()
 
-    query = "SELECT experience_pk FROM public.dim_experience WHERE "
+    query = "SELECT experience_id FROM public.dim_experience WHERE "
     conditions = []
     values = []
 
@@ -391,14 +369,14 @@ def get_nb_experiences_per_client():
 
     cur.execute("""
         SELECT 
-            client_fk, 
-            COUNT(experience_fk) AS nb_experiences
+            client_id, 
+            COUNT(experience_id) AS nb_experiences
         FROM 
             fact_client_profile
         WHERE 
-            experience_fk IS NOT NULL
+            experience_id IS NOT NULL
         GROUP BY 
-            client_fk
+            client_id
     """)
 
     rows = cur.fetchall()
@@ -412,10 +390,10 @@ def get_certification_counts():
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT client_fk, COUNT(certification_fk) AS nb_certifications
+        SELECT client_id, COUNT(certification_id) AS nb_certifications
         FROM fact_client_profile
-        WHERE certification_fk IS NOT NULL
-        GROUP BY client_fk
+        WHERE certification_id IS NOT NULL
+        GROUP BY client_id
     """)
 
     result = cur.fetchall()
@@ -429,10 +407,10 @@ def get_language_count_per_client():
     cur = conn.cursor()
     
     cur.execute("""
-        SELECT client_fk, COUNT(language_fk) 
+        SELECT client_id, COUNT(langue_id) 
         FROM fact_client_profile 
-        WHERE language_fk IS NOT NULL 
-        GROUP BY client_fk;
+        WHERE langue_id IS NOT NULL 
+        GROUP BY client_id;
     """)
     
     results = cur.fetchall()
@@ -455,9 +433,9 @@ def get_date_pk_from_postgres(date_obj):
     conn = get_postgres_connection()
     cur = conn.cursor()
     cur.execute("""
-        SELECT date_pk
+        SELECT date_id
         FROM dim_Dates
-        WHERE datecode = %s;
+        WHERE code_date = %s;
     """, (date_obj,))
     
     result = cur.fetchone()
@@ -522,8 +500,8 @@ def get_client_pk_from_postgres(nom, prenom):
     conn = get_postgres_connection()
     cur = conn.cursor()
     cur.execute("""
-        SELECT client_pk FROM public.dim_client
-        WHERE LOWER(nom) = LOWER(%s) AND LOWER(prenom) = LOWER(%s)
+        SELECT client_id FROM public.dim_client
+        WHERE LOWER(nom_client) = LOWER(%s) AND LOWER(prenom_client) = LOWER(%s)
         LIMIT 1
     """, (nom, prenom))
     result = cur.fetchone()
@@ -949,14 +927,14 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
 
         cur.execute("""
             INSERT INTO fact_client_profile (
-                client_fk, secteur_fk, metier_fk, fact_pk,
-                competencegenerales_fk, language_fk, interests_fk,
-                certification_fk, visa_fk,
-                preferedjoblocations_fk, projet_fk, permis_fk,
-                experience_fk, experience_year, experience_month,
-                nbr_certif, nbr_langue, nbr_visa_valide,
-                nbr_projet, nb_experience, etude_fk, disponibilite, age,
-                date_fk, nb_parrainages
+                client_id, secteur_id, metier_id, fact_id,
+                competence_generale_id, langue_id, interet_id,
+                certification_id, visa_id,
+                location_preferee_emploi_id, projet_id, permis_id,
+                experience_id, annee_experience, mois_experience,
+                nombre_certifications, nombre_langues, nombre_visas_valides,
+                nombre_projets, nombre_experiences, etude_id, disponibilite, age_client,
+                date_id, nombre_parrainages
             )
             VALUES (%s, %s, %s,
                     %s, %s, %s,
@@ -966,31 +944,31 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                     %s, %s, %s,
                     %s, %s, %s,
                     %s, %s, %s, %s)
-            ON CONFLICT (fact_pk) DO UPDATE SET
-                client_fk = EXCLUDED.client_fk,
-                secteur_fk = EXCLUDED.secteur_fk,
-                metier_fk = EXCLUDED.metier_fk,
-                competencegenerales_fk = EXCLUDED.competencegenerales_fk,
-                language_fk = EXCLUDED.language_fk,
-                interests_fk = EXCLUDED.interests_fk,
-                certification_fk = EXCLUDED.certification_fk,
-                visa_fk = EXCLUDED.visa_fk,
-                preferedjoblocations_fk = EXCLUDED.preferedjoblocations_fk,
-                projet_fk = EXCLUDED.projet_fk,
-                permis_fk = EXCLUDED.permis_fk,
-                experience_fk = EXCLUDED.experience_fk,
-                experience_year = EXCLUDED.experience_year,
-                experience_month = EXCLUDED.experience_month,
-                nbr_certif = EXCLUDED.nbr_certif,
-                nbr_langue = EXCLUDED.nbr_langue,
-                nbr_visa_valide = EXCLUDED.nbr_visa_valide,
-                nbr_projet = EXCLUDED.nbr_projet,
-                nb_experience = EXCLUDED.nb_experience,
-                etude_fk = EXCLUDED.etude_fk,
+            ON CONFLICT (fact_id) DO UPDATE SET
+                client_id = EXCLUDED.client_id,
+                secteur_id = EXCLUDED.secteur_id,
+                metier_id = EXCLUDED.metier_id,
+                competence_generale_id = EXCLUDED.competence_generale_id,
+                langue_id = EXCLUDED.langue_id,
+                interet_id = EXCLUDED.interet_id,
+                certification_id = EXCLUDED.certification_id,
+                visa_id = EXCLUDED.visa_id,
+                location_preferee_emploi_id = EXCLUDED.location_preferee_emploi_id,
+                projet_id = EXCLUDED.projet_id,
+                permis_id = EXCLUDED.permis_id,
+                experience_id = EXCLUDED.experience_id,
+                annee_experience = EXCLUDED.annee_experience,
+                mois_experience = EXCLUDED.mois_experience,
+                nombre_certifications = EXCLUDED.nombre_certifications,
+                nombre_langues = EXCLUDED.nombre_langues,
+                nombre_visas_valides = EXCLUDED.nombre_visas_valides,
+                nombre_projets = EXCLUDED.nombre_projets,
+                nombre_experiences = EXCLUDED.nombre_experiences,
+                etude_id = EXCLUDED.etude_id,
                 disponibilite = EXCLUDED.disponibilite,
-                age = EXCLUDED.age,
-                date_fk = EXCLUDED.date_fk,
-                nb_parrainages = EXCLUDED.nb_parrainages;
+                age_client = EXCLUDED.age_client,
+                date_id = EXCLUDED.date_id,
+                nombre_parrainages = EXCLUDED.nombre_parrainages;
         """, (
             client_fk, secteur_fk, metier_fk, fact_pk,
             competence_fk, language_fk, interest_fk,
@@ -1013,7 +991,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
 
 
 dag = DAG(
-    'dag_fact',
+    'fact_client_profile',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False

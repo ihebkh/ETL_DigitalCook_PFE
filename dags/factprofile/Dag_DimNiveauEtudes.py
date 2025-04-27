@@ -19,7 +19,7 @@ def get_postgres_connection():
 def get_max_niveau_pk():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT COALESCE(MAX(niveau_pk), 0) FROM dim_niveau_d_etudes")
+    cur.execute("SELECT COALESCE(MAX(niveau_etude_id), 0) FROM dim_niveau_d_etudes")
     max_pk = cur.fetchone()[0]
     cur.close()
     conn.close()
@@ -124,17 +124,20 @@ def load_niveau_etudes_postgres(**kwargs):
 
     insert_query = """
     INSERT INTO dim_niveau_d_etudes (
-        niveau_pk, diplome_code, label, universite,
-        start_year, start_month, end_year, end_month,
-        pays
+        niveau_etude_id, code_diplome, nom_diplome, universite_etudes,
+        annee_debut_etudes, mois_debut_etudes, annee_fin_etudes, mois_fin_etudes,
+        pays_etudes
     ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
-    ON CONFLICT (niveau_pk)
+    ON CONFLICT (niveau_etude_id)
     DO UPDATE SET
-        start_year = EXCLUDED.start_year,
-        start_month = EXCLUDED.start_month,
-        end_year = EXCLUDED.end_year,
-        end_month = EXCLUDED.end_month,
-        pays = EXCLUDED.pays
+        code_diplome = EXCLUDED.code_diplome,
+        nom_diplome = EXCLUDED.nom_diplome,
+        universite_etudes = EXCLUDED.universite_etudes,
+        annee_debut_etudes = EXCLUDED.annee_debut_etudes,
+        mois_debut_etudes = EXCLUDED.mois_debut_etudes,
+        annee_fin_etudes = EXCLUDED.annee_fin_etudes,
+        mois_fin_etudes = EXCLUDED.mois_fin_etudes,
+        pays_etudes = EXCLUDED.pays_etudes
     """
 
     for row in data:

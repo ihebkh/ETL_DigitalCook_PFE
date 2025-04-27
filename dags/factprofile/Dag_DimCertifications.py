@@ -78,10 +78,11 @@ def load_into_postgres(ti):
     cur = conn.cursor()
 
     insert_query = """
-    INSERT INTO dim_certification (certification_pk, certificationcode, nom)
+    INSERT INTO dim_certification (certification_id, code_certification, nom_certification)
     VALUES (%s, %s, %s)
-    ON CONFLICT (certification_pk) DO UPDATE SET 
-        nom = EXCLUDED.nom;
+    ON CONFLICT (certification_id) DO UPDATE SET 
+        code_certification = EXCLUDED.code_certification,
+        nom_certification = EXCLUDED.nom_certification;
     """
 
     for record in data:
@@ -93,7 +94,7 @@ def load_into_postgres(ti):
     logger.info(f"{len(data)} certifications insérées ou mises à jour.")
 
 dag = DAG(
-     'Dag_Dimcertifications', 
+     'dag_dim_certifications', 
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,

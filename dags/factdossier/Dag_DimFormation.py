@@ -1,11 +1,11 @@
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 import logging
 from pymongo import MongoClient
 from bson import ObjectId
 import datetime
 from datetime import datetime as dt
-from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
-from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -38,7 +38,7 @@ def generate_formation_code(index):
 def get_next_formation_pk():
     conn = get_postgresql_connection()
     cur = conn.cursor()
-    cur.execute("SELECT MAX(formation_pk) FROM public.dim_formation;")
+    cur.execute("SELECT MAX(formation_id) FROM public.dim_formation;")
     max_pk = cur.fetchone()[0]
     cur.close()
     conn.close()
@@ -66,6 +66,15 @@ def extract_formations(**kwargs):
     kwargs['ti'].xcom_push(key='formations', value=formations)
     logger.info(f"{len(formations)} formations extraites de MongoDB.")
 
+def insert_if_not_exists(cursor, query_insert, data):
+    formation_pk = data[0]
+    cursor.execute("SELECT 1 FROM dim_formation WHERE formation_id = %s LIMIT 1;", (formation_pk,))
+    if cursor.fetchone():
+        logger.info(f"Duplicate found for formation_id: {formation_pk}. Skipping insert.")
+    else:
+        cursor.execute(query_insert, data)
+        logger.info(f"Inserted new formation with formation_id: {formation_pk}.")
+
 def load_formations(**kwargs):
     formations = kwargs['ti'].xcom_pull(task_ids='extract_formations', key='formations')
     if not formations:
@@ -75,22 +84,22 @@ def load_formations(**kwargs):
     conn = get_postgresql_connection()
     cursor = conn.cursor()
 
-    query = """
+    query_insert = """
     INSERT INTO dim_formation (
-        formation_pk, formationcode, titreformation, date_debut, date_fin, 
-        domaine, ville, centreformations, presence, duree
+        formation_id , code_formation , titre_formation, date_debut_formation, date_fin_formation, 
+        domaine_formation, ville_formation, centre_formation, presence_formation, duree_formation
     )
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-    ON CONFLICT (formation_pk) DO UPDATE
-    SET formationcode = EXCLUDED.formationcode,
-        titreformation = EXCLUDED.titreformation,
-        date_debut = EXCLUDED.date_debut,
-        date_fin = EXCLUDED.date_fin,
-        domaine = EXCLUDED.domaine,
-        ville = EXCLUDED.ville,
-        centreformations = EXCLUDED.centreformations,
-        presence = EXCLUDED.presence,
-        duree = EXCLUDED.duree;
+    ON CONFLICT (formation_id) DO UPDATE
+    SET code_formation  = EXCLUDED.code_formation ,
+        titre_formation = EXCLUDED.titre_formation,
+        date_debut_formation = EXCLUDED.date_debut_formation,
+        date_fin_formation = EXCLUDED.date_fin_formation,
+        domaine_formation = EXCLUDED.domaine_formation,
+        ville_formation = EXCLUDED.ville_formation,
+        centre_formation = EXCLUDED.centre_formation,
+        presence_formation = EXCLUDED.presence_formation,
+        duree_formation = EXCLUDED.duree_formation;
     """
 
     pk_counter = get_next_formation_pk()
@@ -107,16 +116,19 @@ def load_formations(**kwargs):
         presence = formation.get("presence", "")
         duree = formation.get("duree", "")
 
-        cursor.execute(query, (
+        data = (
             formation_pk, code, titre, date_debut, date_fin,
             domaine, ville, centre, presence, duree
-        ))
+        )
+
+        insert_if_not_exists(cursor, query_insert, data)
+
         pk_counter += 1
 
     conn.commit()
     cursor.close()
     conn.close()
-    logger.info(f"{len(formations)} formations insérées/mises à jour.")
+    logger.info(f"{len(formations)} formations insérées, doublons ignorés.")
 
 dag = DAG(
     dag_id='dag_dim_formation',

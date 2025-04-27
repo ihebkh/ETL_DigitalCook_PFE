@@ -28,7 +28,7 @@ def get_postgres_connection():
 def get_max_metier_pk():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT COALESCE(MAX(metier_pk), 0) FROM Dim_Metier")
+    cur.execute("SELECT COALESCE(MAX(metier_id), 0) FROM Dim_Metier")
     max_pk = cur.fetchone()[0]
     cur.close()
     conn.close()
@@ -37,7 +37,7 @@ def get_max_metier_pk():
 def get_existing_rome_codes():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT romeCode FROM Dim_Metier")
+    cur.execute("SELECT code_metier FROM Dim_Metier")
     rome_codes = {row[0] for row in cur.fetchall()}
     cur.close()
     conn.close()
@@ -106,10 +106,11 @@ def load_jobs_into_postgres(**kwargs):
         for job in jobs_data:
             try:
                 cur.execute("""
-                    INSERT INTO Dim_Metier (metier_pk, romeCode, label_jobs)
+                    INSERT INTO Dim_Metier (metier_id, code_metier, nom_metier)
                     VALUES (%s, %s, %s)
                     ON CONFLICT (metier_pk) DO UPDATE SET
-                        label_jobs = EXCLUDED.label_jobs;
+                        code_metier = EXCLUDED.code_metier;
+                        nom_metier = EXCLUDED.nom_metier;
                 """, (job["metier_pk"], job["romeCode"], job["label"]))
             except Exception as e:
                 logger.error(f"Error inserting job {job['romeCode']}: {e}")
@@ -123,7 +124,7 @@ def load_jobs_into_postgres(**kwargs):
         raise
 
 dag = DAG(
-    'Dag_Metier',
+    'dag_dim_metier',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,

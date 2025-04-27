@@ -121,16 +121,17 @@ def load_into_postgres(**kwargs):
         cur = conn.cursor()
 
         insert_query = """
-        INSERT INTO Dim_preferedJobLocations (preferedJobLocationsCode, pays, ville, region)
+        INSERT INTO Dim_preferedJobLocations (code_job_location_preferee, pays_location_preferee, ville_location_preferee, region_location_preferee)
         VALUES (%s, %s, %s, %s)
-        ON CONFLICT (preferedjoblocations_pk) 
+        ON CONFLICT (code_job_location_preferee) 
         DO UPDATE SET 
-            pays = EXCLUDED.pays,
-            ville = EXCLUDED.ville,
-            region = EXCLUDED.region;
+            code_job_location_preferee = EXCLUDED.code_job_location_preferee,
+            pays_location_preferee = EXCLUDED.pays_location_preferee,
+            ville_location_preferee = EXCLUDED.ville_location_preferee,
+            region_location_preferee = EXCLUDED.region_location_preferee;
         """
 
-        cur.execute("SELECT preferedJobLocationsCode, pays, ville, region FROM Dim_preferedJobLocations")
+        cur.execute("SELECT code_job_location_preferee, pays_location_preferee, ville_location_preferee, region_location_preferee FROM Dim_preferedJobLocations")
         existing_entries = {(row[1], row[2], row[3]): row[0] for row in cur.fetchall()}
 
         inserted_count = 0
@@ -167,7 +168,7 @@ def load_into_postgres(**kwargs):
         raise
 
 dag = DAG(
-    'Dag_DimpreferedJobLocations',
+    'dag_dim_prefered_Job_Locations',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,

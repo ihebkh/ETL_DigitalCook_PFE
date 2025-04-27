@@ -25,9 +25,9 @@ def get_postgres_connection():
 def get_max_language_pk_and_existing_labels():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT COALESCE(MAX(langue_pk), 0) FROM dim_languages")
+    cur.execute("SELECT COALESCE(MAX(langue_id), 0) FROM dim_languages")
     max_pk = cur.fetchone()[0]
-    cur.execute("SELECT label FROM dim_languages")
+    cur.execute("SELECT nom_langue FROM dim_languages")
     existing_labels = {row[0] for row in cur.fetchall()}
     cur.close()
     conn.close()
@@ -90,11 +90,12 @@ def load_languages(**kwargs):
 
     insert_query = """
     INSERT INTO dim_languages (
-        langue_pk, langue_code, label, level
+        langue_id, code_langue, nom_langue, niveau_langue
     ) VALUES (%s, %s, %s, %s)
-    ON CONFLICT (langue_pk) DO UPDATE SET
-        label = EXCLUDED.label,
-        level = EXCLUDED.level;
+    ON CONFLICT (langue_id) DO UPDATE SET
+        code_langue = EXCLUDED.code_langue,
+        nom_langue = EXCLUDED.nom_langue,
+        niveau_langue = EXCLUDED.niveau_langue;
     """
 
     for record in data:

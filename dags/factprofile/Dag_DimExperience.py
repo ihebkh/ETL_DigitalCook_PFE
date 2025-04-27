@@ -28,7 +28,7 @@ def get_postgres_connection():
 def get_max_experience_pk():
     conn = get_postgres_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT COALESCE(MAX(experience_pk), 0) FROM dim_experience")
+    cursor.execute("SELECT COALESCE(MAX(experience_id), 0) FROM dim_experience")
     max_pk = cursor.fetchone()[0]
     cursor.close()
     conn.close()
@@ -37,7 +37,7 @@ def get_max_experience_pk():
 def load_dim_secteur():
     conn = get_postgres_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT secteur_pk, label FROM public.dim_secteur;")
+    cursor.execute("SELECT secteur_id, nom_secteur FROM public.dim_secteur;")
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -46,7 +46,7 @@ def load_dim_secteur():
 def load_dim_metier():
     conn = get_postgres_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT metier_pk, label_jobs FROM public.dim_metier;")
+    cursor.execute("SELECT metier_id, nom_metier FROM public.dim_metier;")
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -163,24 +163,25 @@ def insert_experiences_into_postgres(**kwargs):
 
     upsert_query = """
         INSERT INTO public.dim_experience (
-            experience_pk, codeexperience, role, entreprise,
-            start_year, start_month, end_year, end_month,
-            pays, ville, typecontrat,
-            fk_secteur, fk_metier
+            experience_id, code_experience, role_experience, nom_entreprise,
+            annee_debut, mois_debut, annee_fin, mois_fin,
+            pays_experience, ville_experience, type_contrat,
+            secteur_id, metier_id
         )
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        ON CONFLICT (experience_pk) DO UPDATE SET
-            role = EXCLUDED.role,
-            entreprise = EXCLUDED.entreprise,
-            start_year = EXCLUDED.start_year,
-            start_month = EXCLUDED.start_month,
-            end_year = EXCLUDED.end_year,
-            end_month = EXCLUDED.end_month,
-            pays = EXCLUDED.pays,
-            ville = EXCLUDED.ville,
-            typecontrat = EXCLUDED.typecontrat,
-            fk_secteur = EXCLUDED.fk_secteur,
-            fk_metier = EXCLUDED.fk_metier;
+        ON CONFLICT (experience_id) DO UPDATE SET
+            code_experience = EXCLUDED.code_experience,
+            role_experience = EXCLUDED.role_experience,
+            nom_entreprise = EXCLUDED.nom_entreprise,
+            annee_debut = EXCLUDED.annee_debut,
+            mois_debut = EXCLUDED.mois_debut,
+            annee_fin = EXCLUDED.annee_fin,
+            mois_fin = EXCLUDED.mois_fin,
+            pays_experience = EXCLUDED.pays_experience,
+            ville_experience = EXCLUDED.ville_experience,
+            type_contrat = EXCLUDED.type_contrat,
+            secteur_id = EXCLUDED.secteur_id,
+            metier_id = EXCLUDED.metier_id;
     """
 
     for exp in experiences:

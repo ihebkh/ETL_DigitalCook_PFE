@@ -1,11 +1,12 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.sensors.external_task import ExternalTaskSensor
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 from pymongo import MongoClient
 from bson import ObjectId
 from datetime import datetime
 import logging
-from airflow.providers.postgres.hooks.postgres import PostgresHook
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -27,7 +28,7 @@ def load_universite_id_to_name(universities_collection):
 def load_nom_to_codeuniversite():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT nom, universite_pk FROM public.dim_universite;")
+    cur.execute("SELECT nom_universite, universite_id FROM public.dim_universite;")
     rows = cur.fetchall()
     cur.close()
     conn.close()
@@ -39,7 +40,7 @@ def generate_code_offre(counter: int):
 def get_next_etude_pk():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT MAX(etude_pk) FROM public.dim_offre_etude;")
+    cur.execute("SELECT MAX(offre_etude_id) FROM public.dim_offre_etude;")
     max_pk = cur.fetchone()[0]
     cur.close()
     conn.close()
@@ -48,7 +49,7 @@ def get_next_etude_pk():
 def load_existing_codeoffres():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT codeoffre FROM public.dim_offre_etude;")
+    cur.execute("SELECT code_offre_etude FROM public.dim_offre_etude;")
     codes = [r[0] for r in cur.fetchall()]
     cur.close()
     conn.close()
@@ -70,14 +71,14 @@ def insert_or_update_offres_batch(offres_data):
                 break
         cur.execute("""
             INSERT INTO public.dim_offre_etude (
-                etude_pk, codeoffre, titre, university_fk, disponibilite
+                offre_etude_id, code_offre_etude, titre_offre_etude, universite_id, disponibilite_offre_etude
             )
             VALUES (%s, %s, %s, %s, %s)
-            ON CONFLICT (etude_pk) DO UPDATE
-            SET codeoffre = EXCLUDED.codeoffre,
-                titre = EXCLUDED.titre,
-                university_fk = EXCLUDED.university_fk,
-                disponibilite = EXCLUDED.disponibilite;
+            ON CONFLICT (offre_etude_id) DO UPDATE
+            SET code_offre_etude = EXCLUDED.code_offre_etude,
+                titre_offre_etude = EXCLUDED.titre_offre_etude,
+                universite_id = EXCLUDED.universite_id,
+                disponibilite_offre_etude = EXCLUDED.disponibilite_offre_etude;
         """, (
             counter_pk,
             code,

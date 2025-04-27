@@ -1,8 +1,8 @@
-import logging
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.sensors.external_task_sensor import ExternalTaskSensor
+import logging
 from datetime import datetime
 from pymongo import MongoClient
 from bson import ObjectId
@@ -63,15 +63,15 @@ def extract_offres_from_mongo(**kwargs):
         raise
 
 def get_secteur_map(cur):
-    cur.execute("SELECT secteur_pk, LOWER(label) FROM public.dim_secteur;")
+    cur.execute("SELECT secteur_id, LOWER(nom_secteur) FROM public.dim_secteur;")
     return {label: pk for pk, label in cur.fetchall()}
 
 def get_metier_map(cur):
-    cur.execute("SELECT metier_pk, LOWER(label_jobs) FROM public.dim_metier;")
+    cur.execute("SELECT metier_id, LOWER(nom_metier) FROM public.dim_metier;")
     return {label: pk for pk, label in cur.fetchall()}
 
 def get_entreprise_map(cur):
-    cur.execute("SELECT entreprise_pk, LOWER(nom) FROM public.dim_entreprise;")
+    cur.execute("SELECT entreprise_id, LOWER(nom_entreprise) FROM public.dim_entreprise;")
     return {label: pk for pk, label in cur.fetchall()}
 
 def transform_offres(**kwargs):
@@ -160,25 +160,26 @@ def load_offres_to_postgres(**kwargs):
 
             cur.execute("""
                 INSERT INTO public.dim_offreemploi (
-                    offre_pk, offre_code, titre, secteur_fk, metier_fk, entreprise_fk,
-                    type_contrat, temps_de_travail,
-                    devise_salaire, salaire_brut_par, niveau_experience, disponibilite,
-                    pays, on_site_or_remote
+                    offre_emploi_id, code_offre_emploi, titre_offre_emploi, secteur_id, metier_id, entreprise_id,
+                    type_contrat_emploi, temps_travail_emploi,
+                    devise_salaire_emploi, salaire_brut_par_emploi, niveau_experience_emploi, disponibilite_emploi,
+                    pays_emploi, site_ou_remote
                 )
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                ON CONFLICT (offre_pk) DO UPDATE SET
-                    titre = EXCLUDED.titre,
-                    secteur_fk = EXCLUDED.secteur_fk,
-                    metier_fk = EXCLUDED.metier_fk,
-                    entreprise_fk = EXCLUDED.entreprise_fk,
-                    type_contrat = EXCLUDED.type_contrat,
-                    temps_de_travail = EXCLUDED.temps_de_travail,
-                    devise_salaire = EXCLUDED.devise_salaire,
-                    salaire_brut_par = EXCLUDED.salaire_brut_par,
-                    niveau_experience = EXCLUDED.niveau_experience,
-                    disponibilite = EXCLUDED.disponibilite,
-                    pays = EXCLUDED.pays,
-                    on_site_or_remote = EXCLUDED.on_site_or_remote;
+                ON CONFLICT (offre_emploi_id) DO UPDATE SET
+                    code_offre_emploi = EXCLUDED.code_offre_emploi,   
+                    titre_offre_emploi = EXCLUDED.titre_offre_emploi,
+                    secteur_id = EXCLUDED.secteur_id,
+                    metier_id = EXCLUDED.metier_id,
+                    entreprise_id = EXCLUDED.entreprise_id,
+                    type_contrat_emploi = EXCLUDED.type_contrat_emploi,
+                    temps_travail_emploi = EXCLUDED.temps_travail_emploi,
+                    devise_salaire_emploi = EXCLUDED.devise_salaire_emploi,
+                    salaire_brut_par_emploi = EXCLUDED.salaire_brut_par_emploi,
+                    niveau_experience_emploi = EXCLUDED.niveau_experience_emploi,
+                    disponibilite_emploi = EXCLUDED.disponibilite_emploi,
+                    pays_emploi = EXCLUDED.pays_emploi,
+                    site_ou_remote = EXCLUDED.site_ou_remote;
             """, record)
 
         conn.commit()
@@ -192,7 +193,7 @@ def load_offres_to_postgres(**kwargs):
         raise
 
 dag = DAG(
-    dag_id='dag_dim_offreemploi',
+    dag_id='dag_dim_offre_emplois',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False

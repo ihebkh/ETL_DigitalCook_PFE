@@ -28,7 +28,7 @@ def get_postgres_connection():
 def get_max_secteur_pk():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT COALESCE(MAX(secteur_pk), 0) FROM dim_secteur")
+    cur.execute("SELECT COALESCE(MAX(secteur_id), 0) FROM dim_secteur")
     max_pk = cur.fetchone()[0]
     cur.close()
     conn.close()
@@ -37,7 +37,7 @@ def get_max_secteur_pk():
 def get_existing_secteur_labels_and_codes():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT secteur_code, label FROM dim_secteur")
+    cur.execute("SELECT code_secteur, nom_secteur FROM dim_secteur")
     rows = cur.fetchall()
     cur.close()
     conn.close()
@@ -99,9 +99,11 @@ def load_into_postgres(**kwargs):
         cur = conn.cursor()
 
         insert_query = """
-        INSERT INTO dim_secteur (secteur_pk, secteur_code, label)
+        INSERT INTO dim_secteur (secteur_id, code_secteur, nom_secteur)
         VALUES (%s, %s, %s)
-        ON CONFLICT (label) DO UPDATE SET secteur_code = EXCLUDED.secteur_code;
+        ON CONFLICT (nom_secteur) DO UPDATE SET
+        code_secteur = EXCLUDED.code_secteur,
+        nom_secteur = EXCLUDED.nom_secteur;
         """
 
         for row in transformed:

@@ -25,10 +25,10 @@ def get_existing_projects_and_max_pk():
     conn = get_postgresql_connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT projet_pk, nom_projet, entreprise, code_projet FROM dim_projet")
+    cur.execute("SELECT projet_id, nom_projet, nom_entreprise_projet, code_projet FROM dim_projet")
     existing = {(row[1], row[2]): (row[0], row[3]) for row in cur.fetchall()}
 
-    cur.execute("SELECT COALESCE(MAX(projet_pk), 0) FROM dim_projet")
+    cur.execute("SELECT COALESCE(MAX(projet_id), 0) FROM dim_projet")
     max_pk = cur.fetchone()[0]
 
     cur.close()
@@ -113,16 +113,16 @@ def load_into_postgres(**kwargs):
 
     insert_query = """
     INSERT INTO dim_projet (
-        projet_pk, code_projet, nom_projet, year_start, month_start,
-        year_end, month_end, entreprise
+        projet_id, code_projet, nom_projet, annee_debut_projet, mois_debut_projet,
+        annee_fin_projet, mois_fin_projet, nom_entreprise_projet
     ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-    ON CONFLICT (projet_pk) DO UPDATE SET
+    ON CONFLICT (projet_id) DO UPDATE SET
         nom_projet = EXCLUDED.nom_projet,
-        year_start = EXCLUDED.year_start,
-        month_start = EXCLUDED.month_start,
-        year_end = EXCLUDED.year_end,
-        month_end = EXCLUDED.month_end,
-        entreprise = EXCLUDED.entreprise,
+        annee_debut_projet = EXCLUDED.annee_debut_projet,
+        mois_debut_projet = EXCLUDED.mois_debut_projet,
+        annee_fin_projet = EXCLUDED.annee_fin_projet,
+        mois_fin_projet = EXCLUDED.mois_fin_projet,
+        nom_entreprise_projet = EXCLUDED.nom_entreprise_projet,
         code_projet = EXCLUDED.code_projet;
     """
 
@@ -144,7 +144,7 @@ def load_into_postgres(**kwargs):
     logger.info(f"{len(projects)} projets insérés ou mis à jour.")
 
 dag = DAG(
-    'Dag_DimProjet',
+    'dag_dim_projet',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,

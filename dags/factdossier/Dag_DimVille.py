@@ -1,10 +1,10 @@
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 import logging
 from pymongo import MongoClient
 from bson import ObjectId
 from datetime import datetime
-from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
-from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ def generate_code(index):
 def get_next_ville_pk():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT MAX(ville_pk) FROM public.dim_ville;")
+    cur.execute("SELECT MAX(ville_id) FROM public.dim_ville;")
     max_pk = cur.fetchone()[0]
     cur.close()
     conn.close()
@@ -75,13 +75,13 @@ def load_villes_and_destinations_postgres(**kwargs):
     cursor = conn.cursor()
 
     insert_query = """
-    INSERT INTO public.dim_ville (ville_pk, code, name, type)
+    INSERT INTO public.dim_ville (ville_id, code_ville, nom_ville, type_ville)
     VALUES (%s, %s, %s, %s)
-    ON CONFLICT (ville_pk)
+    ON CONFLICT (ville_id)
     DO UPDATE SET
-        code = EXCLUDED.code,
-        name = EXCLUDED.name,
-        type = EXCLUDED.type;
+        code_ville = EXCLUDED.code_ville,
+        nom_ville = EXCLUDED.nom_ville,
+        type_ville = EXCLUDED.type_ville;
     """
 
     pk_counter = get_next_ville_pk()

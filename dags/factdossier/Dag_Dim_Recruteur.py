@@ -1,9 +1,8 @@
-import json
-import logging
-from pymongo import MongoClient
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+import logging
+from pymongo import MongoClient
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
@@ -21,38 +20,27 @@ def get_postgres_connection():
     return conn
 
 def get_next_users_pk():
-    """
-    Get the next available primary key for users by checking the maximum `user_pk`
-    value from the PostgreSQL table.
-    """
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT COALESCE(MAX(user_pk), 0) FROM public.dim_user;")
+    cur.execute("SELECT COALESCE(MAX(recruteur_id), 0) FROM public.dim_recruteur;")
     max_pk = cur.fetchone()[0]
     cur.close()
     conn.close()
-    return max_pk + 1  # Increment the max value by 1 to get the next available PK
+    return max_pk + 1 
 
 def generate_codeusers(index):
-    """
-    Generate the user code (`codeuser`) based on the primary key `user_pk`.
-    """
     return f"influ{index:04d}"
 
 def extract_users(**kwargs):
-    """
-    Extract user data from MongoDB, generate primary keys, and prepare the data for insertion.
-    """
     users_collection, privileges_collection = get_mongodb_collections()
 
-    # Create a map for privilege labels to quickly access them by their ID
     privilege_map = {
         str(p["_id"]): p.get("label", "Non défini")
         for p in privileges_collection.find({}, {"_id": 1, "label": 1})
     }
 
     users = []
-    index = get_next_users_pk()  # Get the next available user_pk for insertion
+    index = get_next_users_pk()
 
     cursor = users_collection.find({}, {
         "name": 1,
@@ -61,37 +49,31 @@ def extract_users(**kwargs):
     })
 
     for user in cursor:
-        # Generate user code and extract information
         codeinflu = generate_codeusers(index)
         nom = user.get("name", "")
         prenom = user.get("last_name", "")
         privilege_id = str(user.get("privilege", ""))
         privilege_label = privilege_map.get(privilege_id, "Non défini")
         
-        # Prepare the user data to insert into the database
         users.append((index, codeinflu, nom, prenom, privilege_label))
-        index += 1  # Increment index for the next user
+        index += 1 
 
     kwargs['ti'].xcom_push(key='users_data', value=users)
     logger.info(f"{len(users)} utilisateurs extraits.")
 
 def insert_users_to_dim_users(**kwargs):
-    """
-    Insert or update user data in PostgreSQL.
-    """
     users = kwargs['ti'].xcom_pull(task_ids='extract_users', key='users_data')
     conn = get_postgres_connection()
     cur = conn.cursor()
 
-    # Define insert query with ON CONFLICT handling to avoid duplicates
     insert_query = """
-        INSERT INTO dim_user (user_pk, codeuser, nom, prenom, privilege)
+        INSERT INTO dim_recruteur (recruteur_id, code_recruteur, nom_recruteur, prenom_recruteur, privilege_recruteur)
         VALUES (%s, %s, %s, %s, %s)
-        ON CONFLICT (user_pk) DO UPDATE SET
-            codeuser = EXCLUDED.codeuser,
-            nom = EXCLUDED.nom,
-            prenom = EXCLUDED.prenom,
-            privilege = EXCLUDED.privilege;
+        ON CONFLICT (recruteur_id) DO UPDATE SET
+            code_recruteur = EXCLUDED.code_recruteur,
+            nom_recruteur = EXCLUDED.nom_recruteur,
+            prenom_recruteur = EXCLUDED.prenom_recruteur,
+            privilege_recruteur = EXCLUDED.privilege_recruteur;
     """
 
     inserted_count = 0
@@ -105,7 +87,7 @@ def insert_users_to_dim_users(**kwargs):
     logger.info(f"{inserted_count} utilisateurs insérés/mis à jour dans PostgreSQL.")
 
 with DAG(
-    dag_id='Dag_DimUser',
+    dag_id='Dag_dim_recruteur',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,

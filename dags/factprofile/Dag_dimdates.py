@@ -2,7 +2,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 import pandas as pd
-from datetime import datetime , timedelta
+from datetime import datetime
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -42,26 +42,27 @@ def load_dim_dates_to_postgres(**kwargs):
 
         insert_query = """
         INSERT INTO dim_Dates (
-            datecode, "Jour_Mois_Annee", "Annee", id_semestre, semestre,
-            id_trimestre, trimestre, id_mois, mois, lib_mois,
-            id_jour, jour, lib_jour, semaine, "JourDeAnnee", "Jour_mois_lettre"
+            code_date, "jour_mois_annee", "annee", id_semestre, semestre,
+            id_trimestre, trimestre, id_mois, mois, libelle_mois,
+            id_jour, jour, libelle_jour, semaine, "jour_de_annee", "jour_mois_lettre"
         ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        ON CONFLICT (datecode) DO UPDATE SET
-            "Jour_Mois_Annee" = EXCLUDED."Jour_Mois_Annee",
-            "Annee" = EXCLUDED."Annee",
+        ON CONFLICT (code_date) DO UPDATE SET
+            "code_date" = EXCLUDED."code_date",
+            "jour_mois_annee" = EXCLUDED."jour_mois_annee",
+            "annee" = EXCLUDED."annee",
             id_semestre = EXCLUDED.id_semestre,
             semestre = EXCLUDED.semestre,
             id_trimestre = EXCLUDED.id_trimestre,
             trimestre = EXCLUDED.trimestre,
             id_mois = EXCLUDED.id_mois,
             mois = EXCLUDED.mois,
-            lib_mois = EXCLUDED.lib_mois,
+            libelle_mois = EXCLUDED.libelle_mois,
             id_jour = EXCLUDED.id_jour,
             jour = EXCLUDED.jour,
-            lib_jour = EXCLUDED.lib_jour,
+            libelle_jour = EXCLUDED.libelle_jour,
             semaine = EXCLUDED.semaine,
-            "JourDeAnnee" = EXCLUDED."JourDeAnnee",
-            "Jour_mois_lettre" = EXCLUDED."Jour_mois_lettre"
+            "jour_de_annee" = EXCLUDED."jour_de_annee",
+            "jour_mois_lettre" = EXCLUDED."jour_mois_lettre"
         """
 
         data_tuples = [tuple(row) for row in df.to_numpy()]
@@ -78,18 +79,13 @@ def load_dim_dates_to_postgres(**kwargs):
 
 
 
-default_args = {
-    'owner': 'airflow',
-    'start_date': datetime(2025, 1, 1),
-    'retries': 1
-}
 
 
 
 
 dag = DAG(
-    dag_id='dim_dates_dag',
-    default_args=default_args,
+    dag_id='dag_dim_dates',
+    start_date=datetime(2025, 1, 1),
     schedule_interval='@daily',
     catchup=False
 )

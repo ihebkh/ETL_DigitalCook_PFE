@@ -25,7 +25,7 @@ def get_postgres_connection():
 def get_max_client_pk():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT COALESCE(MAX(client_pk), 0) FROM dim_client")
+    cur.execute("SELECT COALESCE(MAX(client_id), 0) FROM dim_client")
     max_pk = cur.fetchone()[0]
     cur.close()
     conn.close()
@@ -99,21 +99,22 @@ def load_data(**kwargs):
 
     insert_query = """
     INSERT INTO dim_client (
-        client_pk, matricule, nom, prenom, birthdate, nationality,
-        pays, situation, etatcivile, photo, niveau_etude_actuelle,gender,profileType
+        client_id, matricule_client, nom_client, prenom_client, date_naissance, nationalite,
+        pays_residence, situation_familiale, etat_civil, photo_client, niveau_etudes_actuel,sexe,type_de_profil
     ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s ,%s,%s)
-    ON CONFLICT (matricule) DO UPDATE SET
-        nom = EXCLUDED.nom,
-        prenom = EXCLUDED.prenom,
-        birthdate = EXCLUDED.birthdate,
-        nationality = EXCLUDED.nationality,
-        pays = EXCLUDED.pays,
-        situation = EXCLUDED.situation,
-        etatcivile = EXCLUDED.etatcivile,
-        photo = EXCLUDED.photo,
-        niveau_etude_actuelle = EXCLUDED.niveau_etude_actuelle,
-        gender = EXCLUDED.gender,
-        profileType = EXCLUDED.profileType
+    ON CONFLICT (matricule_client) DO UPDATE SET
+        matricule_client = EXCLUDED.matricule_client,
+        nom_client = EXCLUDED.nom_client,
+        prenom_client = EXCLUDED.prenom_client,
+        date_naissance = EXCLUDED.date_naissance,
+        nationalite = EXCLUDED.nationalite,
+        pays_residence = EXCLUDED.pays_residence,
+        situation_familiale = EXCLUDED.situation_familiale,
+        etat_civil = EXCLUDED.etat_civil,
+        photo_client = EXCLUDED.photo_client,
+        niveau_etudes_actuel = EXCLUDED.niveau_etudes_actuel,
+        sexe = EXCLUDED.sexe,
+        type_de_profil = EXCLUDED.type_de_profil
     """
 
     for row in data:
@@ -139,7 +140,7 @@ def load_data(**kwargs):
     logger.info(f"{len(data)} clients insérés/mis à jour dans PostgreSQL.")
 
 dag = DAG(
-    dag_id='Dag_DimClients',
+    dag_id='dag_dim_Clients',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False

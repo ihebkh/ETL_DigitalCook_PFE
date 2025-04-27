@@ -29,10 +29,10 @@ def get_postgres_connection():
 def get_max_permis_pk_and_codes():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT COALESCE(MAX(permis_pk), 0) FROM dim_permis_conduire")
+    cur.execute("SELECT COALESCE(MAX(permis_id), 0) FROM dim_permis_conduire")
     max_pk = cur.fetchone()[0]
 
-    cur.execute("SELECT categorie FROM dim_permis_conduire")
+    cur.execute("SELECT categorie_permis FROM dim_permis_conduire")
     existing_categories = {row[0] for row in cur.fetchall()}
 
     cur.close()
@@ -108,10 +108,11 @@ def load_into_postgres(**kwargs):
         cur = conn.cursor()
 
         insert_query = """
-        INSERT INTO dim_permis_conduire (permis_pk, permis_code, categorie)
+        INSERT INTO dim_permis_conduire (permis_id, code_permis, categorie_permis)
         VALUES (%s, %s, %s)
-        ON CONFLICT (categorie) DO UPDATE SET
-            permis_code = EXCLUDED.permis_code
+        ON CONFLICT (categorie_permis) DO UPDATE SET
+            code_permis = EXCLUDED.code_permis,
+            categorie_permis = EXCLUDED.categorie_permis
         """
 
         for record in transformed_data:
@@ -130,7 +131,7 @@ def load_into_postgres(**kwargs):
         raise
 
 dag = DAG(
-    'Dag_DimPermisConduire',
+    'dag_dim_permis_conduire',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,

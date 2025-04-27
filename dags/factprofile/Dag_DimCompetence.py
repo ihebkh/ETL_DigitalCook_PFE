@@ -27,7 +27,7 @@ def get_postgres_connection():
 def get_existing_competences():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT competence_name FROM dim_competence")
+    cur.execute("SELECT nom_competence FROM dim_competence")
     competences = {row[0] for row in cur.fetchall()}
     cur.close()
     conn.close()
@@ -36,7 +36,7 @@ def get_existing_competences():
 def get_next_competence_pk():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT COALESCE(MAX(competence_pk), 0) FROM dim_competence")
+    cur.execute("SELECT COALESCE(MAX(competence_id), 0) FROM dim_competence")
     max_pk = cur.fetchone()[0]
     cur.close()
     conn.close()
@@ -92,9 +92,11 @@ def load_competences(**kwargs):
     cur = conn.cursor()
     
     insert_query = """
-    INSERT INTO dim_competence (competence_pk, competence_code, competence_name)
+    INSERT INTO dim_competence (competence_id, code_competence, nom_competence)
     VALUES (%s, %s, %s)
-    ON CONFLICT (competence_pk) DO NOTHING
+    ON CONFLICT (competence_id)DO UPDATE SET
+        code_competence = EXCLUDED.code_competence,
+        nom_competence = EXCLUDED.nom_competence;
     """
 
     for record in transformed_data:
@@ -106,7 +108,7 @@ def load_competences(**kwargs):
     logger.info(f"{len(transformed_data)} lignes insérées dans PostgreSQL")
 
 dag = DAG(
-    'Dag_DimCompetences',
+    'dag_dim_Competences',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,

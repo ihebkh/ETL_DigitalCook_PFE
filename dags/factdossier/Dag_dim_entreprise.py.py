@@ -1,8 +1,8 @@
-import logging
-from datetime import datetime
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+import logging
+from datetime import datetime
 from pymongo import MongoClient
 
 logging.basicConfig(level=logging.INFO)
@@ -25,7 +25,7 @@ def generate_entreprise_code(counter):
 def get_next_entreprise_pk_and_code_counter():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT MAX(entreprise_pk) FROM public.dim_entreprise;")
+    cur.execute("SELECT MAX(entreprise_id) FROM public.dim_entreprise;")
     max_pk = cur.fetchone()[0]
     cur.close()
     conn.close()
@@ -86,11 +86,14 @@ def insert_entreprises(ti):
         codeentreprise = generate_entreprise_code(counter_code)
 
         cur.execute("""
-            INSERT INTO public.dim_entreprise (entreprise_pk, codeentreprise, nom, lieu_societe)
+            INSERT INTO public.dim_entreprise (entreprise_id, code_entreprise, nom_entreprise, lieu_societe)
             VALUES (%s, %s, %s, %s)
-            ON CONFLICT (entreprise_pk) DO UPDATE
-            SET lieu_societe = EXCLUDED.lieu_societe,
-                codeentreprise = EXCLUDED.codeentreprise;
+            ON CONFLICT (entreprise_id) DO UPDATE
+            SET 
+                code_entreprise = EXCLUDED.code_entreprise,
+                lieu_societe = EXCLUDED.lieu_societe,
+                nom_entreprise = EXCLUDED.nom_entreprise,
+                code_entreprise = EXCLUDED.code_entreprise;
         """, (
             counter_pk,
             codeentreprise,
