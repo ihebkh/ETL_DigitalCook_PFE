@@ -43,7 +43,7 @@ def load_formation_mapping(pg_cursor):
     return {row[0]: row[1] for row in pg_cursor.fetchall()}
 
 def load_date_mapping(pg_cursor):
-    pg_cursor.execute("SELECT date_id, date_id FROM public.dim_dates")
+    pg_cursor.execute("SELECT date_id, code_date FROM public.dim_dates")
     return {str(row[0]): row[1] for row in pg_cursor.fetchall()}
 
 def get_mongodb_collections():
@@ -72,12 +72,16 @@ def get_client_pk_from_profile(profile_id, frontusers_collection, pg_cursor):
 
 def get_offre_pk_from_id(oid, mongo_collection, titre_to_pk):
     if not oid:
-        return None
-    doc = mongo_collection.find_one({"_id": oid})
+        return None, None, None
+    doc = mongo_collection.find_one({"_id": ObjectId(oid)})
     if not doc:
-        return None
+        return None, None, None
     titre = doc.get("titre") or doc.get("titreFormation")
-    return titre_to_pk.get(titre, None)
+    min_salaire = doc.get("minSalaire")
+    max_salaire = doc.get("maxSalaire")
+    return titre_to_pk.get(titre, None), min_salaire, max_salaire
+
+
 
 def get_services_for_dossier(dossier_id, factures_collection, pg_cursor):
     facture = factures_collection.find_one({"dossierId": dossier_id})
@@ -95,10 +99,11 @@ def get_services_for_dossier(dossier_id, factures_collection, pg_cursor):
     return result
 
 def get_formation_title_and_price_by_id(formation_id, formations_collection):
-    formation = formations_collection.find_one({"_id": formation_id})
-    if formation:
-        titre_formation = formation.get("titre_formation")
-        prix = formation.get("prix")
+    formation_object_id = ObjectId(formation_id)
+    matched_formation = formations_collection.find_one({"_id": formation_object_id})
+    if matched_formation:
+        titre_formation = matched_formation.get("titreFormation")
+        prix = matched_formation.get("prix")
         return titre_formation, prix
     else:
         return None, None
@@ -140,25 +145,27 @@ def get_formation_pk_by_title(titre_formation, pg_cursor):
     result = pg_cursor.fetchone()
     return result[0] if result else None
 
+
 def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_step, type_de_contrat,
                          influencer_pk, destination_pk, date_depart_pk,
                          offre_emploi_step2, offre_etude_step2,
                          offre_emploi_step4, offre_etude_step4, service_pk, service_prix, service_discount, service_extra,
-                         formation_pk, formation_prix, created_at, updated_at):
+                         formation_pk, formation_prix, created_at, updated_at, minSalaire, maxSalaire):
     pg_cursor.execute("""
         INSERT INTO public.fact_dossier (
-            dossier_id, client_id, code_fact, etape_actuelle, type_contrat, recruteur_id, destination_id , date_depart_id,
+            dossier_id, client_id, code_fact, etape_actuelle, type_contrat, recruteur_id, destination_id, date_depart_id,
             offre_emploi_step2_id, offre_etude_step2_id, offre_emploi_step4_id, offre_etude_step4_id,
-            service_id, service_prix, remise_service, extra_service, formation_id, prix_formation, date_creation, date_mise_a_jour
+            service_id, service_prix, remise_service, extra_service, formation_id, prix_formation, date_creation, date_mise_a_jour,
+            minsalaire, maxsalaire
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (dossier_id) DO UPDATE SET
             client_id = EXCLUDED.client_id,
             code_fact = EXCLUDED.code_fact,
             etape_actuelle = EXCLUDED.etape_actuelle,
             type_contrat = EXCLUDED.type_contrat,
             recruteur_id = EXCLUDED.recruteur_id,
-            destination_id  = EXCLUDED.destination_id ,
+            destination_id = EXCLUDED.destination_id,
             date_depart_id = EXCLUDED.date_depart_id,
             offre_emploi_step2_id = EXCLUDED.offre_emploi_step2_id,
             offre_etude_step2_id = EXCLUDED.offre_etude_step2_id,
@@ -171,19 +178,24 @@ def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_ste
             formation_id = EXCLUDED.formation_id,
             prix_formation = EXCLUDED.prix_formation,
             date_creation = EXCLUDED.date_creation,
-            date_mise_a_jour = EXCLUDED.date_mise_a_jour;
+            date_mise_a_jour = EXCLUDED.date_mise_a_jour,
+            minsalaire = EXCLUDED.minsalaire,
+            maxsalaire = EXCLUDED.maxsalaire;
     """, (
         dossier_pk, client_pk, fact_code, current_step, type_de_contrat, influencer_pk,
         destination_pk, date_depart_pk,
-        offre_emploi_step2, offre_etude_step2,
-        offre_emploi_step4, offre_etude_step4,
+        # Assurez-vous de passer un seul élément, pas un tuple
+        offre_emploi_step2[0] if isinstance(offre_emploi_step2, tuple) else offre_emploi_step2,  # Uniquement l'ID
+        offre_etude_step2[0] if isinstance(offre_etude_step2, tuple) else offre_etude_step2,  # Uniquement l'ID
+        offre_emploi_step4[0] if isinstance(offre_emploi_step4, tuple) else offre_emploi_step4,  # Uniquement l'ID
+        offre_etude_step4[0] if isinstance(offre_etude_step4, tuple) else offre_etude_step4,  # Uniquement l'ID
         service_pk, service_prix, service_discount, service_extra,
-        formation_pk, formation_prix, created_at, updated_at
+        formation_pk, formation_prix, created_at, updated_at,
+        minSalaire, maxSalaire
     ))
 
 
 def extract_fields():
-    
     pg_conn, _ = get_postgres_cursor()
     pg_cursor = pg_conn.cursor()
     (
@@ -195,7 +207,6 @@ def extract_fields():
         formations_collection,
         factures_collection
     ) = get_mongodb_collections()
-
 
     ville_name_to_pk = load_ville_mapping(pg_cursor)
     offre_titre_to_pk = load_offreemploi_mapping(pg_cursor)
@@ -234,7 +245,7 @@ def extract_fields():
 
         name, last_name = get_name_lastname_from_users(charge_daffaire_id, users_collection)
         influencer_pk = query_dim_influencer_for_name(pg_cursor, name, last_name)
-      
+
         raw_date_depart = doc.get("firstStep", {}).get("dateDepart")
         date_depart_str = format_date_only(raw_date_depart)
         date_depart_pk = datecode_to_pk.get(date_depart_str, None)
@@ -245,7 +256,7 @@ def extract_fields():
         selected_offre_emploi_step4_id = doc.get("fourthStep", {}).get("selectedOfferDemploi")
         selected_offre_etude_step4_id = doc.get("fourthStep", {}).get("selectedOfferDetude")
         formations = doc.get("thirdStep", {}).get("formations", [])
-        
+
         formation_pks = []
         formation_prix = []
         for formation in formations:
@@ -257,8 +268,16 @@ def extract_fields():
                     formation_pks.append(formation_pk)
                     formation_prix.append(prix)
 
-        offres_emploi_step2 = [get_offre_pk_from_id(oid, offredemplois_collection, offre_titre_to_pk) for oid in offres_emploi_step2_ids] if offres_emploi_step2_ids else []
-        offres_etude_step2 = [get_offre_pk_from_id(oid, offredetudes_collection, offre_etude_titre_to_pk) for oid in offres_etude_step2_ids] if offres_etude_step2_ids else []
+        selected_offre_emploi_step4_pk, min_salaire_step4, max_salaire_step4 = get_offre_pk_from_id(selected_offre_emploi_step4_id, offredemplois_collection, offre_titre_to_pk) if selected_offre_emploi_step4_id else (None, None, None)
+
+        offres_emploi_step2 = [
+            get_offre_pk_from_id(oid, offredemplois_collection, offre_titre_to_pk) for oid in offres_emploi_step2_ids
+        ] if offres_emploi_step2_ids else []
+
+        offres_etude_step2 = [
+            get_offre_pk_from_id(oid, offredetudes_collection, offre_etude_titre_to_pk) for oid in offres_etude_step2_ids
+        ] if offres_etude_step2_ids else []
+
         selected_offre_emploi_step4 = get_offre_pk_from_id(selected_offre_emploi_step4_id, offredemplois_collection, offre_titre_to_pk) if selected_offre_emploi_step4_id else None
         selected_offre_etude_step4 = get_offre_pk_from_id(selected_offre_etude_step4_id, offredetudes_collection, offre_etude_titre_to_pk) if selected_offre_etude_step4_id else None
 
@@ -309,7 +328,9 @@ def extract_fields():
             else:
                 type_de_contrat_print = None
 
-            
+            # Get the values for the step4 salaries (min and max)
+            min_salaire_step4_current = min_salaire_step4 if i < len(offres_emploi_step4) else None
+            max_salaire_step4_current = max_salaire_step4 if i < len(offres_emploi_step4) else None
 
             formation_pk = formation_pks[i] if i < len(formation_pks) else None
             formation_prix_value = formation_prix[i] if i < len(formation_prix) else None
@@ -323,19 +344,21 @@ def extract_fields():
                 type_de_contrat_print,
                 influencer_pk,
                 ville_name_to_pk.get(destination_list[i], None) if i < len(destination_list) else None,
-                date_depart_print,
+                date_depart_pk,
                 offres_emploi_step2[i] if i < len(offres_emploi_step2) else None,
                 offres_etude_step2[i] if i < len(offres_etude_step2) else None,
                 offres_emploi_step4[i] if i < len(offres_emploi_step4) else None,
                 offres_etude_step4[i] if i < len(offres_etude_step4) else None,
-                service_pk=services_info[i][0] if i < len(services_info) else None,  
+                service_pk=services_info[i][0] if i < len(services_info) else None,
                 service_prix=services_info[i][1] if i < len(services_info) else None,
                 service_discount=services_info[i][2] if i < len(services_info) else None,
-                service_extra=services_info[i][3] if i < len(services_info) else None,      
+                service_extra=services_info[i][3] if i < len(services_info) else None,
                 created_at=created_at_str,
                 updated_at=updated_at_str,
                 formation_pk=formation_pk,
-                formation_prix=formation_prix_value
+                formation_prix=formation_prix_value,
+                minSalaire=min_salaire_step4_current,  # Passer minSalaire de la step 4
+                maxSalaire=max_salaire_step4_current,  # Passer maxSalaire de la step 4
             )
 
             dossier_pk += 1
