@@ -108,8 +108,8 @@ def load_jobs_into_postgres(**kwargs):
                 cur.execute("""
                     INSERT INTO Dim_Metier (metier_id, code_metier, nom_metier)
                     VALUES (%s, %s, %s)
-                    ON CONFLICT (metier_pk) DO UPDATE SET
-                        code_metier = EXCLUDED.code_metier;
+                    ON CONFLICT (metier_id) DO UPDATE SET
+                        code_metier = EXCLUDED.code_metier,
                         nom_metier = EXCLUDED.nom_metier;
                 """, (job["metier_pk"], job["romeCode"], job["label"]))
             except Exception as e:

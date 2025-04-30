@@ -10,13 +10,12 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def get_postgresql_connection():
-    hook = PostgresHook(postgres_conn_id="postgres")
+def get_postgres_connection():
+    hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
 
 def get_mongodb_connection():
-    MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
-    client = MongoClient(MONGO_URI)
+    client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
     mongo_db = client["PowerBi"]
     collection = mongo_db["formations"]
     return client, mongo_db, collection
@@ -32,48 +31,43 @@ def convert_bson(obj):
         return obj.isoformat()
     return obj
 
-def generate_formation_code(index):
-    return f"formation{str(index).zfill(4)}"
+def generate_code_formation(pk):
+    return f"formation{str(pk).zfill(4)}"
 
-def get_next_formation_pk():
-    conn = get_postgresql_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT MAX(formation_id) FROM public.dim_formation;")
-    max_pk = cur.fetchone()[0]
-    cur.close()
+def load_existing_formations():
+    conn = get_postgres_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT formation_id, titre_formation
+        FROM public.dim_formation
+    """)
+    rows = cursor.fetchall()
+    cursor.close()
     conn.close()
-    return (max_pk or 0) + 1
+    mapping = {}
+    for formation_id, titre in rows:
+        key = (titre or '')
+        mapping[key] = formation_id
+    return mapping
 
-def convert_to_datetime(date_value):
-    if isinstance(date_value, datetime.datetime):
-        return date_value
-    elif isinstance(date_value, str):
-        try:
-            return datetime.datetime.fromisoformat(date_value)
-        except ValueError:
-            return None
-    return None
+def get_max_formation_pk():
+    conn = get_postgres_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT COALESCE(MAX(formation_id), 0) FROM public.dim_formation;")
+    max_pk = cursor.fetchone()[0]
+    cursor.close()
+    conn.close()
+    return max_pk
 
 def extract_formations(**kwargs):
     client, mongo_db, collection = get_mongodb_connection()
     formations = list(collection.find({}, {
-        "_id": 0, "titreFormation": 1, "dateDebut": 1, "dateFin": 1, 
-        "domaine": 1, "ville": 1, "centreDeFormation": 1, 
-        "presence": 1, "duree": 1
+        "_id": 0, "titreFormation": 1, "domaine": 1
     }))
     client.close()
     formations = convert_bson(formations)
     kwargs['ti'].xcom_push(key='formations', value=formations)
     logger.info(f"{len(formations)} formations extraites de MongoDB.")
-
-def insert_if_not_exists(cursor, query_insert, data):
-    formation_pk = data[0]
-    cursor.execute("SELECT 1 FROM dim_formation WHERE formation_id = %s LIMIT 1;", (formation_pk,))
-    if cursor.fetchone():
-        logger.info(f"Duplicate found for formation_id: {formation_pk}. Skipping insert.")
-    else:
-        cursor.execute(query_insert, data)
-        logger.info(f"Inserted new formation with formation_id: {formation_pk}.")
 
 def load_formations(**kwargs):
     formations = kwargs['ti'].xcom_pull(task_ids='extract_formations', key='formations')
@@ -81,54 +75,47 @@ def load_formations(**kwargs):
         logger.info("Aucune formation à charger.")
         return
 
-    conn = get_postgresql_connection()
+    existing_formations = load_existing_formations()
+    current_pk = get_max_formation_pk()
+
+    conn = get_postgres_connection()
     cursor = conn.cursor()
 
-    query_insert = """
-    INSERT INTO dim_formation (
-        formation_id , code_formation , titre_formation, date_debut_formation, date_fin_formation, 
-        domaine_formation, ville_formation, centre_formation, presence_formation, duree_formation
+    query_upsert = """
+    INSERT INTO public.dim_formation (
+        formation_id, code_formation, titre_formation, domaine_formation
     )
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-    ON CONFLICT (formation_id) DO UPDATE
-    SET code_formation  = EXCLUDED.code_formation ,
+    VALUES (%s, %s, %s, %s)
+    ON CONFLICT (titre_formation) DO UPDATE SET
+        code_formation = EXCLUDED.code_formation,
         titre_formation = EXCLUDED.titre_formation,
-        date_debut_formation = EXCLUDED.date_debut_formation,
-        date_fin_formation = EXCLUDED.date_fin_formation,
-        domaine_formation = EXCLUDED.domaine_formation,
-        ville_formation = EXCLUDED.ville_formation,
-        centre_formation = EXCLUDED.centre_formation,
-        presence_formation = EXCLUDED.presence_formation,
-        duree_formation = EXCLUDED.duree_formation;
+        domaine_formation = EXCLUDED.domaine_formation;
     """
 
-    pk_counter = get_next_formation_pk()
-
     for formation in formations:
-        formation_pk = pk_counter
-        code = generate_formation_code(pk_counter)
         titre = formation.get("titreFormation", "")
-        date_debut = convert_to_datetime(formation.get("dateDebut"))
-        date_fin = convert_to_datetime(formation.get("dateFin"))
         domaine = formation.get("domaine", "")
-        ville = formation.get("ville", "")
-        centre = formation.get("centreDeFormation", "")
-        presence = formation.get("presence", "")
-        duree = formation.get("duree", "")
+
+        key = (titre or '')
+
+        if key in existing_formations:
+            formation_id = existing_formations[key]
+        else:
+            current_pk += 1
+            formation_id = current_pk
+
+        code = generate_code_formation(formation_id)
 
         data = (
-            formation_pk, code, titre, date_debut, date_fin,
-            domaine, ville, centre, presence, duree
+            formation_id, code, titre, domaine
         )
 
-        insert_if_not_exists(cursor, query_insert, data)
-
-        pk_counter += 1
+        cursor.execute(query_upsert, data)
 
     conn.commit()
     cursor.close()
     conn.close()
-    logger.info(f"{len(formations)} formations insérées, doublons ignorés.")
+    logger.info(f"{len(formations)} formations insérées ou mises à jour.")
 
 dag = DAG(
     dag_id='dag_dim_formation',

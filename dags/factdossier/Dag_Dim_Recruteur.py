@@ -5,8 +5,11 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
+# Logging configuration
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# ---------------------- Connexions ----------------------
 
 def get_mongodb_collections():
     client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
@@ -19,6 +22,19 @@ def get_postgres_connection():
     logger.info("PostgreSQL connection successful.")
     return conn
 
+# ---------------------- Clé existante ----------------------
+
+def get_existing_user_keys():
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT nom_recruteur, prenom_recruteur, privilege_recruteur FROM dim_recruteur;")
+    existing_keys = {(row[0], row[1], row[2]) for row in cur.fetchall()}
+    cur.close()
+    conn.close()
+    return existing_keys
+
+# ---------------------- PK et code ----------------------
+
 def get_next_users_pk():
     conn = get_postgres_connection()
     cur = conn.cursor()
@@ -26,19 +42,21 @@ def get_next_users_pk():
     max_pk = cur.fetchone()[0]
     cur.close()
     conn.close()
-    return max_pk + 1 
+    return max_pk + 1
 
 def generate_codeusers(index):
     return f"influ{index:04d}"
 
+# ---------------------- Extraction ----------------------
+
 def extract_users(**kwargs):
     users_collection, privileges_collection = get_mongodb_collections()
-
     privilege_map = {
         str(p["_id"]): p.get("label", "Non défini")
         for p in privileges_collection.find({}, {"_id": 1, "label": 1})
     }
 
+    existing_keys = get_existing_user_keys()
     users = []
     index = get_next_users_pk()
 
@@ -49,17 +67,23 @@ def extract_users(**kwargs):
     })
 
     for user in cursor:
-        codeinflu = generate_codeusers(index)
         nom = user.get("name", "")
         prenom = user.get("last_name", "")
         privilege_id = str(user.get("privilege", ""))
         privilege_label = privilege_map.get(privilege_id, "Non défini")
-        
+
+        # Éviter les doublons
+        if (nom, prenom, privilege_label) in existing_keys:
+            continue
+
+        codeinflu = generate_codeusers(index)
         users.append((index, codeinflu, nom, prenom, privilege_label))
-        index += 1 
+        index += 1
 
     kwargs['ti'].xcom_push(key='users_data', value=users)
-    logger.info(f"{len(users)} utilisateurs extraits.")
+    logger.info(f"{len(users)} nouveaux utilisateurs extraits sans doublon.")
+
+# ---------------------- Insertion ----------------------
 
 def insert_users_to_dim_users(**kwargs):
     users = kwargs['ti'].xcom_pull(task_ids='extract_users', key='users_data')
@@ -67,7 +91,9 @@ def insert_users_to_dim_users(**kwargs):
     cur = conn.cursor()
 
     insert_query = """
-        INSERT INTO dim_recruteur (recruteur_id, code_recruteur, nom_recruteur, prenom_recruteur, privilege_recruteur)
+        INSERT INTO dim_recruteur (
+            recruteur_id, code_recruteur, nom_recruteur, prenom_recruteur, privilege_recruteur
+        )
         VALUES (%s, %s, %s, %s, %s)
         ON CONFLICT (recruteur_id) DO UPDATE SET
             code_recruteur = EXCLUDED.code_recruteur,
@@ -85,6 +111,8 @@ def insert_users_to_dim_users(**kwargs):
     cur.close()
     conn.close()
     logger.info(f"{inserted_count} utilisateurs insérés/mis à jour dans PostgreSQL.")
+
+# ---------------------- DAG ----------------------
 
 with DAG(
     dag_id='Dag_dim_recruteur',

@@ -1,23 +1,58 @@
 import logging
-from datetime import datetime
+import psycopg2
 from pymongo import MongoClient
 from bson import ObjectId
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.sensors.external_task_sensor import ExternalTaskSensor
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def get_postgres_connection():
-    hook = PostgresHook(postgres_conn_id='postgres')
-    return hook.get_conn()
+def get_postgres_cursor():
+    try:
+        conn = psycopg2.connect(
+            dbname="DW_DigitalCook",
+            user="iheb",
+            password="201JmT1896@",
+            host="monserveur-postgres.postgres.database.azure.com"
+        )
+        cursor = conn.cursor()
+        logger.info("Connexion PostgreSQL réussie.")
+        return cursor, conn
+    except Exception as e:
+        logger.error(f"Erreur de connexion PostgreSQL : {e}")
+        return None, None
+
+def get_secteur_map(cursor):
+    try:
+        cursor.execute("SELECT secteur_id, LOWER(nom_secteur) FROM public.dim_secteur;")
+        return {label: pk for pk, label in cursor.fetchall()}
+    except Exception as e:
+        logger.error(f"Erreur lors de la récupération des secteurs : {e}")
+        return {}
+
+def get_metier_map(cursor):
+    try:
+        cursor.execute("SELECT metier_id, LOWER(nom_metier) FROM public.dim_metier;")
+        return {label: pk for pk, label in cursor.fetchall()}
+    except Exception as e:
+        logger.error(f"Erreur lors de la récupération des métiers : {e}")
+        return {}
+
+def get_entreprise_map(cursor):
+    try:
+        cursor.execute("SELECT entreprise_id, LOWER(nom_entreprise) FROM public.dim_entreprise;")
+        return {label: pk for pk, label in cursor.fetchall()}
+    except Exception as e:
+        logger.error(f"Erreur lors de la récupération des entreprises : {e}")
+        return {}
 
 def get_mongo_collections():
     client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
     db = client["PowerBi"]
-    return client, db["offredemplois"], db["entreprises"], db["secteurdactivities"]
+    return client, db["offredemplois"], db["secteurdactivities"]
 
 def convert_bson(obj):
     if isinstance(obj, dict):
@@ -28,9 +63,9 @@ def convert_bson(obj):
         return str(obj)
     return obj
 
-def extract_offres_from_mongo(**kwargs):
+def extract_offres_from_mongo():
     try:
-        client, offres_col, _, _ = get_mongo_collections()
+        client, offres_col, _ = get_mongo_collections()
         cursor = offres_col.find({"isDeleted": False})
         offres = []
 
@@ -42,48 +77,26 @@ def extract_offres_from_mongo(**kwargs):
                 "secteur": doc.get("secteur"),
                 "metier": doc.get("metier", []),
                 "typeContrat": doc.get("typeContrat", "—"),
-                "tempsDeTravail": doc.get("tempsDeTravail", "—"),
                 "societe": doc.get("societe", "—"),
                 "lieuSociete": doc.get("lieuSociete", "—"),
-                "deviseSalaire": doc.get("deviseSalaire", "—"),
-                "salaireBrutPar": doc.get("salaireBrutPar", "—"),
-                "niveauDexperience": doc.get("niveauDexperience", "—"),
-                "disponibilite": doc.get("disponibilite", "—"),
                 "pays": doc.get("pays", "—"),
-                "onSiteOrRemote": doc.get("onSiteOrRemote", "—")
             })
 
         client.close()
         cleaned = convert_bson(offres)
         logger.info(f" {len(cleaned)} documents extraits depuis MongoDB.")
-        kwargs['ti'].xcom_push(key='raw_offres', value=cleaned)
+        
+        return cleaned
 
     except Exception as e:
         logger.error(f" Erreur durant l'extraction MongoDB : {e}")
-        raise
+        return []
 
-def get_secteur_map(cur):
-    cur.execute("SELECT secteur_id, LOWER(nom_secteur) FROM public.dim_secteur;")
-    return {label: pk for pk, label in cur.fetchall()}
-
-def get_metier_map(cur):
-    cur.execute("SELECT metier_id, LOWER(nom_metier) FROM public.dim_metier;")
-    return {label: pk for pk, label in cur.fetchall()}
-
-def get_entreprise_map(cur):
-    cur.execute("SELECT entreprise_id, LOWER(nom_entreprise) FROM public.dim_entreprise;")
-    return {label: pk for pk, label in cur.fetchall()}
-
-def transform_offres(**kwargs):
+def transform_offres(raw_offres, cursor):
     try:
-        raw_offres = kwargs['ti'].xcom_pull(task_ids='extract_offres_from_mongo', key='raw_offres')
-        conn = get_postgres_connection()
-        cur = conn.cursor()
-        client, _, _, secteurs_col = get_mongo_collections()
-
-        secteur_map = get_secteur_map(cur)
-        metier_map = get_metier_map(cur)
-        entreprise_map = get_entreprise_map(cur)
+        secteur_map = get_secteur_map(cursor)
+        metier_map = get_metier_map(cursor)
+        entreprise_map = get_entreprise_map(cursor)
 
         seen_titles = set()
         counter = 1
@@ -105,6 +118,7 @@ def transform_offres(**kwargs):
                 metier_ids = [metier_ids]
 
             if secteur_id and ObjectId.is_valid(secteur_id):
+                client, _, secteurs_col = get_mongo_collections()
                 secteur_doc = secteurs_col.find_one({"_id": ObjectId(secteur_id)})
                 if secteur_doc:
                     label = secteur_doc.get("label", "").strip().lower()
@@ -115,78 +129,68 @@ def transform_offres(**kwargs):
                             metier_fk = metier_map.get(metier_label)
                             break
 
-            transformed.append((
-                counter,
-                offre_code,
-                titre,
-                secteur_fk,
-                metier_fk,
-                entreprise_fk,
-                doc["typeContrat"],
-                doc["tempsDeTravail"],
-                doc["deviseSalaire"],
-                doc["salaireBrutPar"],
-                doc["niveauDexperience"],
-                doc["disponibilite"],
-                doc["pays"],
-                doc["onSiteOrRemote"]
-            ))
+            transformed.append({
+                "offre_code": offre_code,
+                "titre": titre,
+                "secteur_fk": secteur_fk,
+                "metier_fk": metier_fk,
+                "entreprise_fk": entreprise_fk,
+                "typeContrat": doc["typeContrat"],
+                "pays": doc["pays"],
+            })
             counter += 1
 
-        client.close()
-        cur.close()
-        conn.close()
-
         logger.info(f" {len(transformed)} offres transformées avec succès.")
-        kwargs['ti'].xcom_push(key='offres_transformed', value=transformed)
+        
+        return transformed
 
     except Exception as e:
         logger.error(f" Erreur durant la transformation : {e}")
-        raise
+        return []
 
-def load_offres_to_postgres(**kwargs):
+def load_offres_to_postgres(transformed_offres):
     try:
-        offres = kwargs['ti'].xcom_pull(task_ids='transform_offres', key='offres_transformed')
-        conn = get_postgres_connection()
-        cur = conn.cursor()
+        cursor, conn = get_postgres_cursor()
 
-        for record in offres:
-            logger.info(f"Record : {record}")
-            record = tuple(
-                (r if r is not None and r != '' else None) for r in record
+        for offre in transformed_offres:
+            logger.info(f"Record : {offre}")
+            
+            record = (
+                offre.get('offre_code'),
+                offre.get('titre'),
+                offre.get('secteur_fk', None),
+                offre.get('metier_fk', None),
+                offre.get('entreprise_fk', None),
+                offre.get('typeContrat'),
+                offre.get('pays')
             )
+
+            if len(record) != 7:
+                logger.error(f"Erreur: Le record a un nombre incorrect d'éléments: {len(record)}")
+                continue
 
             logger.info(f"Record modifié : {record}")
 
-            cur.execute("""
-                INSERT INTO public.dim_offreemploi (
-                    offre_emploi_id, code_offre_emploi, titre_offre_emploi, secteur_id, metier_id, entreprise_id,
-                    type_contrat_emploi, temps_travail_emploi,
-                    devise_salaire_emploi, salaire_brut_par_emploi, niveau_experience_emploi, disponibilite_emploi,
-                    pays_emploi, site_ou_remote
+            cursor.execute("""
+                INSERT INTO public.dim_offre_emploi (
+                    code_offre_emploi, titre_offre_emploi, secteur_id, metier_id, entreprise_id,
+                    type_contrat_emploi, pays_emploi
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                ON CONFLICT (offre_emploi_id) DO UPDATE SET
-                    code_offre_emploi = EXCLUDED.code_offre_emploi,   
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (code_offre_emploi) DO UPDATE SET
                     titre_offre_emploi = EXCLUDED.titre_offre_emploi,
                     secteur_id = EXCLUDED.secteur_id,
                     metier_id = EXCLUDED.metier_id,
                     entreprise_id = EXCLUDED.entreprise_id,
                     type_contrat_emploi = EXCLUDED.type_contrat_emploi,
-                    temps_travail_emploi = EXCLUDED.temps_travail_emploi,
-                    devise_salaire_emploi = EXCLUDED.devise_salaire_emploi,
-                    salaire_brut_par_emploi = EXCLUDED.salaire_brut_par_emploi,
-                    niveau_experience_emploi = EXCLUDED.niveau_experience_emploi,
-                    disponibilite_emploi = EXCLUDED.disponibilite_emploi,
-                    pays_emploi = EXCLUDED.pays_emploi,
-                    site_ou_remote = EXCLUDED.site_ou_remote;
+                    pays_emploi = EXCLUDED.pays_emploi;
             """, record)
 
         conn.commit()
-        cur.close()
+        cursor.close()
         conn.close()
 
-        logger.info(f" {len(offres)} offres insérées ou mises à jour dans PostgreSQL.")
+        logger.info(f" {len(transformed_offres)} offres insérées ou mises à jour dans PostgreSQL.")
 
     except Exception as e:
         logger.error(f" Erreur lors du chargement dans PostgreSQL : {e}")
@@ -199,27 +203,39 @@ dag = DAG(
     catchup=False
 )
 
+def extract_task():
+    raw_offres = extract_offres_from_mongo()
+    return raw_offres
+
+def transform_task(**kwargs):
+    raw_offres = kwargs['ti'].xcom_pull(task_ids='extract_task')
+    cursor, conn = get_postgres_cursor()
+    transformed_offres = transform_offres(raw_offres, cursor)
+    return transformed_offres
+
+def load_task(**kwargs):
+    transformed_offres = kwargs['ti'].xcom_pull(task_ids='transform_task')
+    load_offres_to_postgres(transformed_offres)
+
 extract = PythonOperator(
-    task_id='extract_offres_from_mongo',
-    python_callable=extract_offres_from_mongo,
-    provide_context=True,
+    task_id='extract_task',
+    python_callable=extract_task,
     dag=dag
 )
 
 transform = PythonOperator(
-    task_id='transform_offres',
-    python_callable=transform_offres,
+    task_id='transform_task',
+    python_callable=transform_task,
     provide_context=True,
     dag=dag
 )
 
 load = PythonOperator(
-    task_id='load_offres_to_postgres',
-    python_callable=load_offres_to_postgres,
+    task_id='load_task',
+    python_callable=load_task,
     provide_context=True,
     dag=dag
 )
-
 
 wait_dim_secteur = ExternalTaskSensor(
     task_id='wait_for_dim_secteur',
@@ -230,6 +246,18 @@ wait_dim_secteur = ExternalTaskSensor(
     poke_interval=30,
     dag=dag
 )
+
+wait_dim_entreprise = ExternalTaskSensor(
+    task_id='wait_for_dim_entreprise',
+    external_dag_id='dag_dim_entreprise',
+    external_task_id='load_into_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag 
+)
+
+
 wait_dim_metier = ExternalTaskSensor(
     task_id='wait_for_dim_metier',
     external_dag_id='Dag_Metier',
@@ -240,5 +268,4 @@ wait_dim_metier = ExternalTaskSensor(
     dag=dag
 )
 
-
-[wait_dim_secteur,wait_dim_metier] >> transform >> load
+[wait_dim_entreprise],wait_dim_metier,wait_dim_secteur>>extract >> transform >> load

@@ -1,18 +1,39 @@
 import logging
+import re
+from datetime import datetime
 from pymongo import MongoClient
 from bson import ObjectId
 from bson.errors import InvalidId
-import re
-from datetime import datetime
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.sensors.external_task_sensor import ExternalTaskSensor
 from airflow.operators.dummy_operator import DummyOperator
 
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+def parse_date(date_value):
+    if isinstance(date_value, dict):
+        year = date_value.get("year")
+        month = date_value.get("month")
+        if isinstance(year, int) or (isinstance(year, str) and year.isdigit()):
+            year = int(year)
+        else:
+            year = None
+        if isinstance(month, int) or (isinstance(month, str) and month.isdigit()):
+            month = int(month)
+        else:
+            month = None
+        return year, month
+    elif isinstance(date_value, str):
+        if re.match(r"^\d{4}-\d{2}$", date_value):
+            year, month = map(int, date_value.split("-"))
+            return year, month
+        elif re.match(r"^\d{4}$", date_value):
+            return int(date_value), None
+    return None, None
 
 def get_mongodb_connection():
     client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
@@ -25,15 +46,6 @@ def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
 
-def get_max_experience_pk():
-    conn = get_postgres_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT COALESCE(MAX(experience_id), 0) FROM dim_experience")
-    max_pk = cursor.fetchone()[0]
-    cursor.close()
-    conn.close()
-    return max_pk
-
 def load_dim_secteur():
     conn = get_postgres_connection()
     cursor = conn.cursor()
@@ -41,7 +53,7 @@ def load_dim_secteur():
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
-    return {label.lower(): pk for pk, label in rows if label is not None}
+    return {label.lower(): pk for pk, label in rows if label}
 
 def load_dim_metier():
     conn = get_postgres_connection()
@@ -50,7 +62,33 @@ def load_dim_metier():
     rows = cursor.fetchall()
     cursor.close()
     conn.close()
-    return {label.lower(): pk for pk, label in rows if label is not None}
+    return {label.lower(): pk for pk, label in rows if label}
+
+def load_existing_experiences():
+    conn = get_postgres_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT experience_id, role_experience, nom_entreprise, annee_debut, mois_debut, annee_fin, mois_fin
+        FROM public.dim_experience
+    """)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    mapping = {}
+    for exp_id, role, entreprise, annee_debut, mois_debut, annee_fin, mois_fin in rows:
+        key = (role or '') + (entreprise or '') + str(annee_debut or '') + str(mois_debut or '') + str(annee_fin or '') + str(mois_fin or '')
+        mapping[key] = exp_id
+    return mapping
+
+def get_max_experience_pk():
+    conn = get_postgres_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT COALESCE(MAX(experience_id), 0) FROM dim_experience;")
+    max_pk = cursor.fetchone()[0]
+    cursor.close()
+    conn.close()
+    return max_pk
 
 def is_valid_objectid(value):
     try:
@@ -59,8 +97,8 @@ def is_valid_objectid(value):
     except InvalidId:
         return False
 
-def generate_code_experience(index):
-    return f"EXPR{index:04d}"
+def generate_code_experience(pk):
+    return f"EXPR{pk:04d}"
 
 def convert_bson(obj):
     if isinstance(obj, dict):
@@ -72,20 +110,24 @@ def convert_bson(obj):
     return obj
 
 
-
 def extract_experiences(**kwargs):
     client, _, collection, secteur_collection = get_mongodb_connection()
     label_to_pk_secteur = load_dim_secteur()
     label_to_pk_metier = load_dim_metier()
+    existing_experiences = load_existing_experiences()
+    current_pk = get_max_experience_pk()
     documents = collection.find()
     filtered_experiences = []
 
-    current_pk = get_max_experience_pk()
-    code_index = current_pk + 1
-
     for doc in documents:
         for profile_field in ['profile', 'simpleProfile']:
-            if profile_field in doc and doc[profile_field] and 'experiences' in doc[profile_field] and doc[profile_field]['experiences']:
+            if (
+                profile_field in doc and
+                doc[profile_field] and
+                isinstance(doc[profile_field], dict) and
+                'experiences' in doc[profile_field] and
+                isinstance(doc[profile_field]['experiences'], list)
+            ):
                 for experience in doc[profile_field]['experiences']:
                     if isinstance(experience, dict):
                         filtered_experience = {
@@ -99,30 +141,24 @@ def extract_experiences(**kwargs):
                         }
 
                         if not filtered_experience["role"] or not filtered_experience["ville"] or not filtered_experience["typeContrat"]:
-                            continue 
-
-                        def parse_date(date_str):
-                            if isinstance(date_str, str):
-                                if re.match(r"^\d{4}-\d{2}$", date_str):
-                                    year, month = date_str.split("-")
-                                    return int(year), int(month)
-                                elif re.match(r"^\d{4}$", date_str):
-                                    return int(date_str), None
-                            return None, None
+                            continue
 
                         start_year, start_month = parse_date(experience.get("du", ""))
                         end_year, end_month = parse_date(experience.get("au", ""))
-                        filtered_experience["du_year"] = start_year if start_year else ""
-                        filtered_experience["du_month"] = start_month if start_month else ""
-                        filtered_experience["au_year"] = end_year if end_year else ""
-                        filtered_experience["au_month"] = end_month if end_month else ""
+                        filtered_experience["du_year"] = start_year or ""
+                        filtered_experience["du_month"] = start_month or ""
+                        filtered_experience["au_year"] = end_year or ""
+                        filtered_experience["au_month"] = end_month or ""
 
-                        values = [filtered_experience[k] for k in filtered_experience]
-                        if not any(str(v).strip() for v in values):
-                            continue
+                        key = (filtered_experience["role"] or '') + (filtered_experience["entreprise"] or '') + str(start_year or '') + str(start_month or '') + str(end_year or '') + str(end_month or '')
+
+                        if key in existing_experiences:
+                            experience_pk = existing_experiences[key]
+                        else:
+                            current_pk += 1
+                            experience_pk = current_pk
 
                         secteur_id = filtered_experience["secteur"]
-                        secteur_doc = None
                         if secteur_id:
                             secteur_doc = secteur_collection.find_one({"_id": secteur_id})
                             if secteur_doc:
@@ -144,16 +180,14 @@ def extract_experiences(**kwargs):
                                             metier_pk_list.append(str(metier_pk))
 
                         filtered_experience["metier"] = metier_pk_list[0] if metier_pk_list else None
-                        filtered_experience["experience_pk"] = code_index
-                        filtered_experience["code_experience"] = generate_code_experience(code_index)
+                        filtered_experience["experience_pk"] = experience_pk
+                        filtered_experience["code_experience"] = generate_code_experience(experience_pk)
                         filtered_experiences.append(convert_bson(filtered_experience))
-                        code_index += 1
 
     client.close()
     kwargs['ti'].xcom_push(key='dim_experiences', value=filtered_experiences)
     logger.info(f"{len(filtered_experiences)} expériences extraites.")
     return filtered_experiences
-
 
 
 def insert_experiences_into_postgres(**kwargs):
@@ -197,14 +231,15 @@ def insert_experiences_into_postgres(**kwargs):
             exp["pays"],
             exp["ville"],
             exp["typeContrat"],
-            int(exp["secteur"]) if str(exp["secteur"]).isdigit() else None,
-            int(exp["metier"]) if str(exp["metier"]).isdigit() else None
+            int(exp["secteur"]) if exp["secteur"] and str(exp["secteur"]).isdigit() else None,
+            int(exp["metier"]) if exp["metier"] and str(exp["metier"]).isdigit() else None
         ))
 
     conn.commit()
     cursor.close()
     conn.close()
     logger.info(f"{len(experiences)} expériences insérées ou mises à jour.")
+
 
 dag = DAG(
     dag_id='dag_dim_experience',
@@ -233,7 +268,6 @@ wait_dim_metier = ExternalTaskSensor(
     dag=dag
 )
 
-
 extract_task = PythonOperator(
     task_id='extract_dim_experience',
     python_callable=extract_experiences,
@@ -253,7 +287,5 @@ end_task = DummyOperator(
     dag=dag
 )
 
-[wait_dim_secteur, wait_dim_metier] >> extract_task 
+[wait_dim_secteur, wait_dim_metier] >> extract_task
 extract_task >> load_task >> end_task
-
-

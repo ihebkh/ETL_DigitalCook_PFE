@@ -7,7 +7,6 @@ from airflow.operators.python import PythonOperator
 from airflow.sensors.external_task import ExternalTaskSensor
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -35,7 +34,7 @@ def load_nom_to_codeuniversite():
     return {nom.strip().lower(): code for nom, code in rows if nom and code}
 
 def generate_code_offre(counter: int):
-    return f"ofed{counter:04d}"
+    return f"OFFR{counter:04d}"
 
 def get_next_etude_pk():
     conn = get_postgres_connection()
@@ -62,7 +61,7 @@ def insert_or_update_offres_batch(offres_data):
     counter_code = len(existing_codes) + 1
     counter_pk = get_next_etude_pk()
 
-    for titre, codeuniv, dispo in offres_data:
+    for titre, codeuniv in offres_data:
         while True:
             code = generate_code_offre(counter_code)
             counter_code += 1
@@ -71,20 +70,18 @@ def insert_or_update_offres_batch(offres_data):
                 break
         cur.execute("""
             INSERT INTO public.dim_offre_etude (
-                offre_etude_id, code_offre_etude, titre_offre_etude, universite_id, disponibilite_offre_etude
+                offre_etude_id, code_offre_etude, titre_offre_etude, universite_id
             )
-            VALUES (%s, %s, %s, %s, %s)
-            ON CONFLICT (offre_etude_id) DO UPDATE
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (titre_offre_etude) DO UPDATE
             SET code_offre_etude = EXCLUDED.code_offre_etude,
                 titre_offre_etude = EXCLUDED.titre_offre_etude,
-                universite_id = EXCLUDED.universite_id,
-                disponibilite_offre_etude = EXCLUDED.disponibilite_offre_etude;
+                universite_id = EXCLUDED.universite_id;
         """, (
             counter_pk,
             code,
             titre,
-            codeuniv,
-            dispo
+            codeuniv
         ))
         counter_pk += 1
 
@@ -100,7 +97,6 @@ def extract_offres_etudes(**kwargs):
     cursor = offres_collection.find({}, {
         "titre": 1,
         "university": 1,
-        "disponibilite": 1,
         "criterias": 1
     })
 
@@ -110,11 +106,9 @@ def extract_offres_etudes(**kwargs):
         university_id = str(doc.get("university", "—"))
         university_name = id_to_name.get(university_id, "—").lower()
         university_code = name_to_code.get(university_name, "Non trouvé")
-        disponibilite = doc.get("disponibilite", "—")
-        offres_to_insert.append((titre, university_code, disponibilite))
+        offres_to_insert.append((titre, university_code))
 
     insert_or_update_offres_batch(offres_to_insert)
-
 
 dag = DAG(
     dag_id='dag_dim_offre_etudes',

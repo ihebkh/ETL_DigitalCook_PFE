@@ -26,13 +26,12 @@ def get_mongodb_connection():
     MONGO_COLLECTION = "frontusers"
 
     client = MongoClient(MONGO_URI)
-    mongo_db = client[MONGO_DB]
     
+    mongo_db = client[MONGO_DB]
     collection = mongo_db[MONGO_COLLECTION]
     secteur_collection = mongo_db["secteurdactivities"]
-    parrainage_collection = mongo_db["parrainages"]
     
-    return collection, secteur_collection,parrainage_collection
+    return collection, secteur_collection
 
 def safe_object_id(id_str):
     try:
@@ -70,7 +69,6 @@ def get_visa_counts_by_client():
         FROM fact_client_profile f
         JOIN dim_visa v ON f.visa_id = v.visa_id
         WHERE v.date_sortie_visa > CURRENT_DATE
-          AND v.nombre_entrees_visa ILIKE '%multiple%'
         GROUP BY f.client_id;
     """)
 
@@ -143,7 +141,7 @@ def get_etude_pk_from_postgres(niveau_etude):
     cur.execute("""
         SELECT niveau_etude_id 
         FROM public.dim_niveau_d_etudes 
-        WHERE lower(universite_etudes) = %s;
+        WHERE lower(nom_diplome) = %s;
     """, (niveau_etude,))
     
     result = cur.fetchone()
@@ -203,7 +201,7 @@ def get_language_fk_from_postgres(language_label, language_level):
     
     cur.execute("""
         SELECT langue_id 
-        FROM public.dim_languages 
+        FROM public.dim_langues 
         WHERE nom_langue = %s AND niveau_langue = %s;
     """, (language_label, language_level))
     
@@ -236,15 +234,15 @@ def get_interest_pk_from_postgres(interest):
     else:
         return None
 
-def get_preferedjoblocations_pk_from_postgres(pays, ville, region):
+def get_preferedjoblocations_pk_from_postgres(ville):
     conn = get_postgres_connection()
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT job_location_preferee_id 
-        FROM public.dim_preferedjoblocations 
-        WHERE pays_location_preferee = %s AND ville_location_preferee = %s AND region_location_preferee = %s;
-    """, (pays, ville, region))
+        SELECT ville_id 
+        FROM public.dim_ville 
+        WHERE nom_ville = %s ;
+    """, (ville,))
 
     result = cur.fetchone()
     cur.close()
@@ -341,13 +339,13 @@ def get_experience_fk_from_postgres(role, entreprise, type_contrat):
     values = []
 
     if role:
-        conditions.append("role = %s")
+        conditions.append("code_experience = %s")
         values.append(role.strip())
     if entreprise:
-        conditions.append("entreprise = %s")
+        conditions.append("nom_entreprise = %s")
         values.append(entreprise.strip())
     if type_contrat:
-        conditions.append("typecontrat = %s")
+        conditions.append("type_contrat = %s")
         values.append(type_contrat.strip())
 
     if not conditions:
@@ -509,27 +507,6 @@ def get_client_pk_from_postgres(nom, prenom):
     conn.close()
     return result[0] if result else None
 
-def get_parrainage_data():
-    _, _, parrainages_col = get_mongodb_connection()
-
-    parrainage_counts = defaultdict(int)
-    filleuls_par_client = defaultdict(list)
-
-    for doc in parrainages_col.find():
-        parrain_pk = doc.get("client_pk")
-        user_id = doc.get("userId")
-
-        if parrain_pk and user_id:
-            filleul_pk = get_client_pk_by_user_id(user_id)
-            if filleul_pk and filleul_pk != parrain_pk:
-                parrainage_counts[parrain_pk] += 1
-                filleuls_par_client[parrain_pk].append(filleul_pk)
-            else:
-                filleuls_par_client[parrain_pk].append(None)
-
-    return parrainage_counts, filleuls_par_client
-
-
 
 #matching 
 
@@ -545,11 +522,9 @@ def get_combined_profile_field(user, field_name):
     return profile_field + simple_profile_field
 
 def matchclient():
-    collection, secteur_collection, _ = get_mongodb_connection()
+    collection, secteur_collection = get_mongodb_connection()
     secteur_label_to_pk = load_dim_secteur()
     metier_label_to_pk = load_dim_metier()
-    parrainage_counts, filleuls_by_client = get_parrainage_data()
-    nb_parrainages_displayed = False
     
     mongo_data = collection.find({}, {
         "_id": 0, "matricule": 1,
@@ -682,11 +657,11 @@ def matchclient():
 #duree_experience
 
         if duree_exp_profile and isinstance(duree_exp_profile, dict) and (duree_exp_profile.get("year") or duree_exp_profile.get("month")):
-            experience_year = duree_exp_profile.get("year", 0)
-            experience_month = duree_exp_profile.get("month", 0)
+            experience_year = duree_exp_profile.get("year", None)
+            experience_month = duree_exp_profile.get("month", None)
         elif duree_exp_simple and isinstance(duree_exp_simple, dict):
-            experience_year = duree_exp_simple.get("year", 0)
-            experience_month = duree_exp_simple.get("month", 0)
+            experience_year = duree_exp_simple.get("year", None)
+            experience_month = duree_exp_simple.get("month", None)
         else:
             experience_year = 0
             experience_month = 0
@@ -763,10 +738,8 @@ def matchclient():
 #locations
 
         for location in preferedJobLocations:
-            pays = location.get("pays", "").strip()
             ville = location.get("ville", "").strip()
-            region = location.get("region", "").strip()
-            preferedjoblocations_pk = get_preferedjoblocations_pk_from_postgres(pays, ville, region)
+            preferedjoblocations_pk = get_preferedjoblocations_pk_from_postgres(ville)
             if preferedjoblocations_pk:
                 job_location_pk_list.append(str(preferedjoblocations_pk))
 #projets 
@@ -815,19 +788,19 @@ def matchclient():
             metier_id = metier_pk_list[i] if i < len(metier_pk_list) else None
 
             certification_counts = get_certification_counts()
-            nb_certifications_total = certification_counts.get(client_fk, 0)
+            nb_certifications_total = certification_counts.get(client_fk, None)
             nb_certifications_displayed = False
 
             language_counts = get_language_count_per_client()
-            nb_languages_total = language_counts.get(client_fk, 0)
+            nb_languages_total = language_counts.get(client_fk, None)
             nb_languages_displayed = False
 
             visa_counts = get_visa_counts_by_client()
-            nb_visa_valide = visa_counts.get(client_fk, 0)
+            nb_visa_valide = visa_counts.get(client_fk, None)
             visa_displayed = False
 
             project_counts = get_project_counts_by_client()
-            nb_projets_total = project_counts.get(client_fk, 0)
+            nb_projets_total = project_counts.get(client_fk, None)
             project_displayed = False
 
 
@@ -878,7 +851,7 @@ def matchclient():
                 project_count_display = None
 # experience :
             if not experience_count_displayed:
-                nb_exp = get_nb_experiences_per_client().get(client_fk, 0)
+                nb_exp = get_nb_experiences_per_client().get(client_fk, None)
                 experience_count_displayed = True
             else:
                 nb_exp = None
@@ -895,19 +868,13 @@ def matchclient():
                 birth_date_displayed = True
             else:
                 age = None
-# nombre de parrinage 
 
-            if not nb_parrainages_displayed:
-                nb_parrainages = parrainage_counts.get(client_fk, 0)
-                nb_parrainages_displayed = True
-            else:
-                nb_parrainages = None
 
 
             load_fact_date(client_fk, secteur_id, metier_id,counter,competence_fk,language_fk,
                           interest_pk,certification_pk,visa_pk,job_location_pk,
                            project_pk,permis_fk,experience_fk,year,month,nb_certif,nb_langues,visa_count_display
-                           ,project_count_display,nb_exp,study_level_fk,dispo,age,dim_date_pk,nb_parrainages)
+                           ,project_count_display,nb_exp,study_level_fk,dispo,age,dim_date_pk)
             
 
             line_count += 1
@@ -919,7 +886,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                     interest_fk, certification_pk, visa_pk, job_location_pk,
                     project_pk, permis_fk, experience_fk, year, month,
                     nb_certif, nb_langues, visa_count_display, project_count_display, nb_exp,
-                    study_level_fk, dispo, age, dim_date_pk, nb_parrainages):
+                    study_level_fk, dispo, age, dim_date_pk):
     try:
         fact_pk = generate_fact_pk(counter)
         conn = get_postgres_connection()
@@ -934,7 +901,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                 experience_id, annee_experience, mois_experience,
                 nombre_certifications, nombre_langues, nombre_visas_valides,
                 nombre_projets, nombre_experiences, etude_id, disponibilite, age_client,
-                date_id, nombre_parrainages
+                date_id
             )
             VALUES (%s, %s, %s,
                     %s, %s, %s,
@@ -943,7 +910,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                     %s, %s, %s,
                     %s, %s, %s,
                     %s, %s, %s,
-                    %s, %s, %s, %s)
+                    %s, %s, %s)
             ON CONFLICT (fact_id) DO UPDATE SET
                 client_id = EXCLUDED.client_id,
                 secteur_id = EXCLUDED.secteur_id,
@@ -967,8 +934,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                 etude_id = EXCLUDED.etude_id,
                 disponibilite = EXCLUDED.disponibilite,
                 age_client = EXCLUDED.age_client,
-                date_id = EXCLUDED.date_id,
-                nombre_parrainages = EXCLUDED.nombre_parrainages;
+                date_id = EXCLUDED.date_id;
         """, (
             client_fk, secteur_fk, metier_fk, fact_pk,
             competence_fk, language_fk, interest_fk,
@@ -977,7 +943,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
             experience_fk, year, month,
             nb_certif, nb_langues, visa_count_display,
             project_count_display, nb_exp,
-            study_level_fk, dispo, age, dim_date_pk, nb_parrainages
+            study_level_fk, dispo, age, dim_date_pk
         ))
 
         conn.commit()

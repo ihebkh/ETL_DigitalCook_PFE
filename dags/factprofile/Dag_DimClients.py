@@ -100,7 +100,7 @@ def load_data(**kwargs):
     insert_query = """
     INSERT INTO dim_client (
         client_id, matricule_client, nom_client, prenom_client, date_naissance, nationalite,
-        pays_residence, situation_familiale, etat_civil, photo_client, niveau_etudes_actuel,sexe,type_de_profil
+        pays_residence, situation, etat_civil, photo_client, niveau_etudes_actuel,sexe,type_de_profil
     ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s ,%s,%s)
     ON CONFLICT (matricule_client) DO UPDATE SET
         matricule_client = EXCLUDED.matricule_client,
@@ -109,7 +109,7 @@ def load_data(**kwargs):
         date_naissance = EXCLUDED.date_naissance,
         nationalite = EXCLUDED.nationalite,
         pays_residence = EXCLUDED.pays_residence,
-        situation_familiale = EXCLUDED.situation_familiale,
+        situation = EXCLUDED.situation,
         etat_civil = EXCLUDED.etat_civil,
         photo_client = EXCLUDED.photo_client,
         niveau_etudes_actuel = EXCLUDED.niveau_etudes_actuel,

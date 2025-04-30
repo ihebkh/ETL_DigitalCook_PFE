@@ -9,6 +9,8 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# ----------------- Connexions -----------------
+
 def get_mongodb_connection():
     try:
         MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
@@ -29,6 +31,19 @@ def get_postgres_connection():
     logger.info("PostgreSQL connection successful.")
     return conn
 
+# ----------------- Utilitaires -----------------
+
+def convert_datetime_and_objectid_to_string(value):
+    if isinstance(value, datetime):
+        return value.isoformat()
+    elif isinstance(value, ObjectId):
+        return str(value)
+    elif isinstance(value, dict):
+        return {key: convert_datetime_and_objectid_to_string(val) for key, val in value.items()}
+    elif isinstance(value, list):
+        return [convert_datetime_and_objectid_to_string(item) for item in value]
+    return value
+
 def get_max_visa_pk():
     conn = get_postgres_connection()
     cur = conn.cursor()
@@ -38,16 +53,24 @@ def get_max_visa_pk():
     conn.close()
     return max_pk
 
-def convert_datetime_and_objectid_to_string(value):
-    if isinstance(value, datetime):
-        return value.isoformat() 
-    elif isinstance(value, ObjectId):
-        return str(value)
-    elif isinstance(value, dict):
-        return {key: convert_datetime_and_objectid_to_string(val) for key, val in value.items()}
-    elif isinstance(value, list):
-        return [convert_datetime_and_objectid_to_string(item) for item in value]
-    return value
+def get_existing_visa_keys():
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT 
+            LOWER(COALESCE(type_visa, '')),
+            date_entree_visa,
+            date_sortie_visa,
+            LOWER(COALESCE(destination_visa, '')),
+            LOWER(COALESCE(nombre_entrees_visa, ''))
+        FROM dim_visa
+    """)
+    existing_keys = {tuple(row) for row in cur.fetchall()}
+    cur.close()
+    conn.close()
+    return existing_keys
+
+# ----------------- Extraction -----------------
 
 def extract_from_mongodb(**kwargs):
     try:
@@ -61,6 +84,8 @@ def extract_from_mongodb(**kwargs):
     except Exception as e:
         logger.error(f"Error extracting data from MongoDB: {e}")
         raise
+
+# ----------------- Transformation -----------------
 
 def transform_data(**kwargs):
     mongo_data = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='mongo_data')
@@ -87,14 +112,14 @@ def transform_data(**kwargs):
                     "date_entree": visa.get("dateEntree"),
                     "date_sortie": visa.get("dateSortie"),
                     "destination": visa.get("destination", "").strip() or None,
-                    "duree": visa.get("dureeValidite", {}).get("duree", 0),
-                    "duree_type": visa.get("dureeValidite", {}).get("type", "").strip() or None,
                     "nb_entree": visa.get("nbEntree", "").strip() or None
                 })
 
     kwargs['ti'].xcom_push(key='transformed_data', value=transformed_data)
     logger.info(f"{len(transformed_data)} visas transformed.")
     return transformed_data
+
+# ----------------- Chargement PostgreSQL -----------------
 
 def load_into_postgres(**kwargs):
     transformed_data = kwargs['ti'].xcom_pull(task_ids='transform_data', key='transformed_data')
@@ -103,26 +128,39 @@ def load_into_postgres(**kwargs):
         logger.info("No data to insert into PostgreSQL.")
         return
 
+    existing_keys = get_existing_visa_keys()
+    new_records = []
+
+    for record in transformed_data:
+        key = (
+            record["visa_type"].lower() if record["visa_type"] else '',
+            record["date_entree"],
+            record["date_sortie"],
+            record["destination"].lower() if record["destination"] else '',
+            record["nb_entree"].lower() if record["nb_entree"] else ''
+        )
+        if key not in existing_keys:
+            new_records.append(record)
+
+    if not new_records:
+        logger.info("No new visa records to insert.")
+        return
+
     conn = get_postgres_connection()
     cur = conn.cursor()
 
     insert_query = """
     INSERT INTO dim_visa (
         visa_id, code_visa, type_visa, date_entree_visa, date_sortie_visa,
-        destination_visa, duree_visa, type_duree_visa, nombre_entrees_visa
-    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-    ON CONFLICT (code_visa) DO UPDATE SET 
-        code_visa = EXCLUDED.code_visa,
-        type_visa = EXCLUDED.type_visa,
-        date_entree_visa = EXCLUDED.date_entree_visa,
-        date_sortie_visa = EXCLUDED.date_sortie_visa,
-        destination_visa = EXCLUDED.destination_visa,
-        duree_visa = EXCLUDED.duree_visa,
-        type_duree_visa = EXCLUDED.type_duree_visa,
-        nombre_entrees_visa = EXCLUDED.nombre_entrees_visa
+        destination_visa, nombre_entrees_visa
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s)
+    ON CONFLICT (type_visa, date_entree_visa, date_sortie_visa, destination_visa, nombre_entrees_visa)
+    DO UPDATE SET
+        visa_id = EXCLUDED.visa_id,
+        code_visa = EXCLUDED.code_visa;
     """
 
-    for record in transformed_data:
+    for record in new_records:
         values = (
             record["visa_pk"],
             record["visa_code"],
@@ -130,8 +168,6 @@ def load_into_postgres(**kwargs):
             record["date_entree"],
             record["date_sortie"],
             record["destination"],
-            record["duree"],
-            record["duree_type"],
             record["nb_entree"]
         )
         cur.execute(insert_query, values)
@@ -139,7 +175,9 @@ def load_into_postgres(**kwargs):
     conn.commit()
     cur.close()
     conn.close()
-    logger.info(f"{len(transformed_data)} visa records inserted/updated in PostgreSQL.")
+    logger.info(f"{len(new_records)} visa records inserted or updated.")
+
+# ----------------- Définition du DAG -----------------
 
 dag = DAG(
     'dag_dim_visa',
@@ -154,8 +192,6 @@ extract_task = PythonOperator(
     provide_context=True,
     dag=dag,
 )
-
-
 
 transform_task = PythonOperator(
     task_id='transform_data',

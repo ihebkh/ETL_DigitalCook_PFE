@@ -25,9 +25,9 @@ def get_postgres_connection():
 def get_max_language_pk_and_existing_labels():
     conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute("SELECT COALESCE(MAX(langue_id), 0) FROM dim_languages")
+    cur.execute("SELECT COALESCE(MAX(langue_id), 0) FROM dim_langues")
     max_pk = cur.fetchone()[0]
-    cur.execute("SELECT nom_langue FROM dim_languages")
+    cur.execute("SELECT nom_langue FROM dim_langues")
     existing_labels = {row[0] for row in cur.fetchall()}
     cur.close()
     conn.close()
@@ -89,7 +89,7 @@ def load_languages(**kwargs):
     cur = conn.cursor()
 
     insert_query = """
-    INSERT INTO dim_languages (
+    INSERT INTO dim_langues (
         langue_id, code_langue, nom_langue, niveau_langue
     ) VALUES (%s, %s, %s, %s)
     ON CONFLICT (langue_id) DO UPDATE SET
@@ -112,7 +112,7 @@ def load_languages(**kwargs):
     logger.info(f"{len(data)} lignes insérées/mises à jour dans PostgreSQL.")
 
 dag = DAG(
-    dag_id='Dag_DimLanguages',
+    dag_id='dag_dim_languages',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,

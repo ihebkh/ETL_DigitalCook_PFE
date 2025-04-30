@@ -31,20 +31,17 @@ def load_ville_mapping(pg_cursor):
     return {row[0]: row[1] for row in pg_cursor.fetchall()}
 
 def load_offreemploi_mapping(pg_cursor):
-    pg_cursor.execute("SELECT titre_offre_emploi, offre_emploi_id FROM public.dim_offreemploi")
-    return {row[0]: row[1] for row in pg_cursor.fetchall()}
+    pg_cursor.execute("SELECT titre_offre_emploi, offre_emploi_id FROM public.dim_offre_emploi")
+    return {row[0].strip().lower(): row[1] for row in pg_cursor.fetchall()}
+
 
 def load_offre_etude_mapping(pg_cursor):
     pg_cursor.execute("SELECT titre_offre_etude, offre_etude_id FROM public.dim_offre_etude")
-    return {row[0]: row[1] for row in pg_cursor.fetchall()}
+    return {row[0].strip().lower(): row[1] for row in pg_cursor.fetchall()}
 
 def load_formation_mapping(pg_cursor):
     pg_cursor.execute("SELECT titre_formation, formation_id FROM public.dim_formation")
-    return {row[0]: row[1] for row in pg_cursor.fetchall()}
-
-def load_date_mapping(pg_cursor):
-    pg_cursor.execute("SELECT date_id, code_date FROM public.dim_dates")
-    return {str(row[0]): row[1] for row in pg_cursor.fetchall()}
+    return {row[0].strip().lower(): row[1] for row in pg_cursor.fetchall()}
 
 def get_mongodb_collections():
     mongo_client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
@@ -76,7 +73,7 @@ def get_offre_pk_from_id(oid, mongo_collection, titre_to_pk):
     doc = mongo_collection.find_one({"_id": ObjectId(oid)})
     if not doc:
         return None, None, None
-    titre = doc.get("titre") or doc.get("titreFormation")
+    titre = (doc.get("titre") or doc.get("titreFormation") or "").strip().lower()
     min_salaire = doc.get("minSalaire")
     max_salaire = doc.get("maxSalaire")
     return titre_to_pk.get(titre, None), min_salaire, max_salaire
@@ -184,17 +181,14 @@ def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_ste
     """, (
         dossier_pk, client_pk, fact_code, current_step, type_de_contrat, influencer_pk,
         destination_pk, date_depart_pk,
-        # Assurez-vous de passer un seul élément, pas un tuple
-        offre_emploi_step2[0] if isinstance(offre_emploi_step2, tuple) else offre_emploi_step2,  # Uniquement l'ID
-        offre_etude_step2[0] if isinstance(offre_etude_step2, tuple) else offre_etude_step2,  # Uniquement l'ID
-        offre_emploi_step4[0] if isinstance(offre_emploi_step4, tuple) else offre_emploi_step4,  # Uniquement l'ID
-        offre_etude_step4[0] if isinstance(offre_etude_step4, tuple) else offre_etude_step4,  # Uniquement l'ID
+        offre_emploi_step2[0] if isinstance(offre_emploi_step2, tuple) else offre_emploi_step2,
+        offre_etude_step2[0] if isinstance(offre_etude_step2, tuple) else offre_etude_step2,
+        offre_emploi_step4[0] if isinstance(offre_emploi_step4, tuple) else offre_emploi_step4,
+        offre_etude_step4[0] if isinstance(offre_etude_step4, tuple) else offre_etude_step4,
         service_pk, service_prix, service_discount, service_extra,
         formation_pk, formation_prix, created_at, updated_at,
         minSalaire, maxSalaire
     ))
-
-
 def extract_fields():
     pg_conn, _ = get_postgres_cursor()
     pg_cursor = pg_conn.cursor()
@@ -211,17 +205,34 @@ def extract_fields():
     ville_name_to_pk = load_ville_mapping(pg_cursor)
     offre_titre_to_pk = load_offreemploi_mapping(pg_cursor)
     offre_etude_titre_to_pk = load_offre_etude_mapping(pg_cursor)
-    datecode_to_pk = load_date_mapping(pg_cursor)
 
     dossiers = dossiers_collection.find()
-    client_factcode_map = {}
-    current_fact_index = 1
+    collections_factcode_map = {}  # This will hold the fact_codes for each collection
+    collections_factcode_counters = {  # Separate counter for each collection
+        "dossiers": 1,
+        "frontusers": 1,
+        "users": 1,
+        "offredemplois": 1,
+        "offredetudes": 1,
+        "formations": 1,
+        "factures": 1,
+    }
     dossier_pk = 1
     fact_code_seen = set()         
     fact_code_date_seen = set()   
     created_at_seen = set()
     updated_at_seen = set()
     fact_code_seen1 = set()
+
+    # A helper function to generate a new fact_code for each collection
+    def generate_collection_fact_code(collection_name):
+        # Increment counter and create fact code
+        counter = collections_factcode_counters[collection_name]
+        fact_code = f"fact{str(counter).zfill(4)}"
+        
+        # Update the counter after generating the fact code
+        collections_factcode_counters[collection_name] += 1
+        return fact_code
 
     for doc in dossiers:
         profile_id = doc.get('profile')
@@ -233,23 +244,22 @@ def extract_fields():
         if not client_pk:
             continue
 
-        if client_pk not in client_factcode_map:
-            client_factcode_map[client_pk] = generate_fact_code(current_fact_index)
-            current_fact_index += 1
+        # Generate a unique fact_code for the "dossiers" collection
+        fact_code = generate_collection_fact_code("dossiers")
 
-        fact_code = client_factcode_map[client_pk]
+        # Process the document from MongoDB as before
         current_step = doc.get("currentStep")
         type_de_contrat = doc.get("firstStep", {}).get("typeDeContrat")
         charge_daffaire_id = doc.get("chargeDaffaire")
-        print(client_pk)
 
         name, last_name = get_name_lastname_from_users(charge_daffaire_id, users_collection)
-        influencer_pk = query_dim_influencer_for_name(pg_cursor, name, last_name)
+        recruteur_id = query_dim_influencer_for_name(pg_cursor, name, last_name)
 
         raw_date_depart = doc.get("firstStep", {}).get("dateDepart")
         date_depart_str = format_date_only(raw_date_depart)
-        date_depart_pk = datecode_to_pk.get(date_depart_str, None)
+        date_depart_pk = get_date_pk_from_date(pg_cursor, date_depart_str)
         destination_list = doc.get("firstStep", {}).get("destination", [])
+        print(fact_code,client_pk)
 
         offres_emploi_step2_ids = doc.get("secondStep", {}).get("selectedOffersDemploi", [])
         offres_etude_step2_ids = doc.get("secondStep", {}).get("selectedOffersDetude", [])
@@ -323,12 +333,13 @@ def extract_fields():
                 updated_at_str = None 
 
             if fact_code not in fact_code_seen1:
-                type_de_contrat_print = type_de_contrat if type_de_contrat else "Type de contrat non défini"
+                type_de_contrat_print = type_de_contrat if type_de_contrat else None
                 fact_code_seen1.add(fact_code)
             else:
                 type_de_contrat_print = None
 
-            # Get the values for the step4 salaries (min and max)
+
+
             min_salaire_step4_current = min_salaire_step4 if i < len(offres_emploi_step4) else None
             max_salaire_step4_current = max_salaire_step4 if i < len(offres_emploi_step4) else None
 
@@ -339,12 +350,12 @@ def extract_fields():
                 pg_cursor,
                 dossier_pk,
                 client_pk,
-                fact_code,
+                fact_code,  # Use the collection-specific fact_code
                 current_step_print,
                 type_de_contrat_print,
-                influencer_pk,
+                recruteur_id if recruteur_id else None,
                 ville_name_to_pk.get(destination_list[i], None) if i < len(destination_list) else None,
-                date_depart_pk,
+                date_depart_print,
                 offres_emploi_step2[i] if i < len(offres_emploi_step2) else None,
                 offres_etude_step2[i] if i < len(offres_etude_step2) else None,
                 offres_emploi_step4[i] if i < len(offres_emploi_step4) else None,

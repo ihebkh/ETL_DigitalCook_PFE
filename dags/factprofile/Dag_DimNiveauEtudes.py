@@ -25,21 +25,6 @@ def get_max_niveau_pk():
     conn.close()
     return max_pk
 
-def parse_date(date_input):
-    if isinstance(date_input, str):
-        try:
-            date = datetime.strptime(date_input, "%Y-%m-%d")
-            return date.month, date.year
-        except:
-            try:
-                date = datetime.strptime(date_input, "%Y")
-                return None, date.year
-            except:
-                return None, None
-    elif isinstance(date_input, dict):
-        return date_input.get("month"), date_input.get("year")
-    return None, None
-
 def extract_niveau_etudes(**kwargs):
     collection = get_mongodb_connection()
     data = []
@@ -48,33 +33,16 @@ def extract_niveau_etudes(**kwargs):
         for etude in doc.get("simpleProfile", {}).get("niveauDetudes", []):
             if not isinstance(etude, dict):
                 continue
-            universite = etude.get("school", "null")
-            course = etude.get("course", None)
-            label = etude.get("label", "null")
-            pays = etude.get("pays", "N/A")
-            diplome = etude.get("nomDiplome", "N/A")
-            du = etude.get("duree", {}).get("du", {})
-            au = etude.get("duree", {}).get("au", {})
-            start_m, start_y = parse_date(du)
-            end_m, end_y = parse_date(au)
-            data.append({"label": label, "universite": universite,
-                         "start_year": start_y, "start_month": start_m,
-                         "end_year": end_y, "end_month": end_m,
-                         "diplome": diplome, "pays": pays})
+            label = etude.get("label", "").strip()
+            if label and label.lower() != "null":
+                data.append({"label": label})
 
         for etude in doc.get("profile", {}).get("niveauDetudes", []):
             if not isinstance(etude, dict):
                 continue
-            universite = etude.get("universite", "null")
-            label = etude.get("label", "null")
-            pays = etude.get("pays", "N/A")
-            diplome = etude.get("nomDiplome", "N/A")
-            start_m, start_y = parse_date(etude.get("du", {}))
-            end_m, end_y = parse_date(etude.get("au", {}))
-            data.append({"label": label, "universite": universite,
-                         "start_year": start_y, "start_month": start_m,
-                         "end_year": end_y, "end_month": end_m,
-                         "diplome": diplome, "pays": pays})
+            label = etude.get("label", "").strip()
+            if label and label.lower() != "null":
+                data.append({"label": label})
 
     kwargs['ti'].xcom_push(key='niveau_raw_data', value=data)
     logger.info(f"{len(data)} niveaux d’études extraits.")
@@ -90,24 +58,18 @@ def transform_niveau_etudes(**kwargs):
     compteur = 0
 
     for row in raw_data:
+        label = row.get("label")
+        if not label or label.lower() == "null":
+            continue
+
         compteur += 1
         max_pk += 1
         code = f"DIP{compteur:03d}"
 
-        if row["label"] in [None, "null", ""]:
-            row["label"] = row.get("course", None)
-            row["course"] = None 
-
         transformed.append({
             "niveau_pk": max_pk,
             "code": code,
-            "label": row["label"],
-            "universite": row["universite"],
-            "start_year": row["start_year"],
-            "start_month": row["start_month"],
-            "end_year": row["end_year"],
-            "end_month": row["end_month"],
-            "pays": row["pays"]
+            "label": label
         })
 
     kwargs['ti'].xcom_push(key='niveau_transformed', value=transformed)
@@ -124,33 +86,19 @@ def load_niveau_etudes_postgres(**kwargs):
 
     insert_query = """
     INSERT INTO dim_niveau_d_etudes (
-        niveau_etude_id, code_diplome, nom_diplome, universite_etudes,
-        annee_debut_etudes, mois_debut_etudes, annee_fin_etudes, mois_fin_etudes,
-        pays_etudes
-    ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
-    ON CONFLICT (niveau_etude_id)
+        niveau_etude_id, code_diplome, nom_diplome
+    ) VALUES (%s, %s, %s)
+    ON CONFLICT (nom_diplome)
     DO UPDATE SET
         code_diplome = EXCLUDED.code_diplome,
-        nom_diplome = EXCLUDED.nom_diplome,
-        universite_etudes = EXCLUDED.universite_etudes,
-        annee_debut_etudes = EXCLUDED.annee_debut_etudes,
-        mois_debut_etudes = EXCLUDED.mois_debut_etudes,
-        annee_fin_etudes = EXCLUDED.annee_fin_etudes,
-        mois_fin_etudes = EXCLUDED.mois_fin_etudes,
-        pays_etudes = EXCLUDED.pays_etudes
+        nom_diplome = EXCLUDED.nom_diplome;
     """
 
     for row in data:
         cur.execute(insert_query, (
             row['niveau_pk'],
             row['code'],
-            row['label'],
-            row['universite'],
-            int(row['start_year']) if str(row['start_year']).isdigit() else None,
-            int(row['start_month']) if str(row['start_month']).isdigit() else None,
-            int(row['end_year']) if str(row['end_year']).isdigit() else None,
-            int(row['end_month']) if str(row['end_month']).isdigit() else None,
-            row['pays']
+            row['label']
         ))
 
     conn.commit()
