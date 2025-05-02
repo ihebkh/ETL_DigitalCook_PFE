@@ -1,115 +1,136 @@
-import logging
 from pymongo import MongoClient
-from datetime import datetime
 from bson import ObjectId
+from datetime import datetime
+import logging
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
+from airflow.sensors.external_task import ExternalTaskSensor
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-from airflow.sensors.external_task_sensor import ExternalTaskSensor
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def get_postgresql_connection():
-    hook = PostgresHook(postgres_conn_id="postgres")
-    return hook.get_conn()
-
-def get_mongodb_connection():
+def get_mongodb_collections():
     MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
     client = MongoClient(MONGO_URI)
-    mongo_db = client["PowerBi"]
-    collection = mongo_db["universities"]
-    return client, collection
+    db = client["PowerBi"]
+    return db["offredetudes"], db["universities"]
 
-def sanitize_for_json(doc):
-    if isinstance(doc, dict):
-        return {k: sanitize_for_json(v) for k, v in doc.items()}
-    elif isinstance(doc, list):
-        return [sanitize_for_json(item) for item in doc]
-    elif isinstance(doc, ObjectId):
-        return str(doc)
-    elif isinstance(doc, datetime):
-        return doc.isoformat()
-    else:
-        return doc
+def get_postgres_connection():
+    hook = PostgresHook(postgres_conn_id='postgres')
+    return hook.get_conn()
 
-def generate_codeuniv(counter):
-    return f"univ{counter:04d}"
+def load_universite_id_to_name(universities_collection):
+    cursor = universities_collection.find({}, {"_id": 1, "nom": 1})
+    return {str(doc["_id"]): doc.get("nom", "").strip().lower() for doc in cursor}
 
-def upsert_fact_universite(universite_pk, codeuniversite, nom_uni, pays):
-    conn = get_postgresql_connection()
+def load_nom_to_codeuniversite():
+    conn = get_postgres_connection()
     cur = conn.cursor()
-    cur.execute(""" 
-        INSERT INTO dim_universite (universite_id, code_universite, nom_universite, pays_universite)
-        VALUES (%s, %s, %s, %s)
-        ON CONFLICT (universite_id) DO UPDATE SET
-            code_universite = EXCLUDED.code_universite,  
-            nom_universite = EXCLUDED.nom_universite,
-            pays_universite = EXCLUDED.pays_universite;
-    """, (universite_pk, codeuniversite, nom_uni, pays))
+    cur.execute("SELECT nom_universite, universite_id FROM public.dim_universite;")
+    rows = cur.fetchall()
+    cur.close()
+    conn.close()
+    return {nom.strip().lower(): code for nom, code in rows if nom and code}
+
+def generate_code_offre(counter: int):
+    return f"OFFR{counter:04d}"
+
+def get_next_etude_pk():
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT MAX(offre_etude_id) FROM public.dim_offre_etude;")
+    max_pk = cur.fetchone()[0]
+    cur.close()
+    conn.close()
+    return (max_pk or 0) + 1
+
+def load_existing_codeoffres():
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT code_offre_etude FROM public.dim_offre_etude;")
+    codes = [r[0] for r in cur.fetchall()]
+    cur.close()
+    conn.close()
+    return set(codes)
+
+def insert_or_update_offres_batch(offres_data):
+    existing_codes = load_existing_codeoffres()
+    conn = get_postgres_connection()
+    cur = conn.cursor()
+    counter_code = len(existing_codes) + 1
+    counter_pk = get_next_etude_pk()
+
+    for titre, codeuniv in offres_data:
+        while True:
+            code = generate_code_offre(counter_code)
+            counter_code += 1
+            if code not in existing_codes:
+                existing_codes.add(code)
+                break
+        cur.execute("""
+            INSERT INTO public.dim_offre_etude (
+                offre_etude_id, code_offre_etude, titre_offre_etude, universite_id
+            )
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (titre_offre_etude) DO UPDATE
+            SET code_offre_etude = EXCLUDED.code_offre_etude,
+                titre_offre_etude = EXCLUDED.titre_offre_etude,
+                universite_id = EXCLUDED.universite_id;
+        """, (
+            counter_pk,
+            code,
+            titre,
+            codeuniv
+        ))
+        counter_pk += 1
+
     conn.commit()
     cur.close()
     conn.close()
 
-def extract_universites(**kwargs):
-    client, collection = get_mongodb_connection()
-    raw_data = list(collection.find({}, {
-        "nom": 1, "pays": 1, "created_at": 1, "ville": 1,
-        "filiere": 1, "partenairesAcademique": 1,
-        "partenairesProfessionnel": 1
-    }))
-    client.close()
-    cleaned_data = [sanitize_for_json(doc) for doc in raw_data]
-    kwargs['ti'].xcom_push(key='universites', value=cleaned_data)
+def extract_offres_etudes(**kwargs):
+    offres_collection, universities_collection = get_mongodb_collections()
+    id_to_name = load_universite_id_to_name(universities_collection)
+    name_to_code = load_nom_to_codeuniversite()
 
-def insert_universites(**kwargs):
-    universites = kwargs['ti'].xcom_pull(task_ids='extract_universites_task', key='universites')
-    if not universites:
-        logger.info("Aucune donnée à insérer.")
-        return
+    cursor = offres_collection.find({}, {
+        "titre": 1,
+        "university": 1,
+        "criterias": 1
+    })
 
-    universite_code_map = {}
-    code_counter = 1
-    total = 0
-    universite_pk_counter = 1
+    offres_to_insert = []
+    for doc in cursor:
+        titre = doc.get("titre", "—") 
+        university_id = str(doc.get("university", "—"))
+        university_name = id_to_name.get(university_id, "—").lower()
+        university_code = name_to_code.get(university_name, "Non trouvé")
+        offres_to_insert.append((titre, university_code))
 
-    for doc in universites:
-        nom_uni = doc.get("nom", "Université inconnue")
-        nom_uni_cleaned = nom_uni.strip().lower()
-
-        if nom_uni_cleaned not in universite_code_map:
-            universite_code_map[nom_uni_cleaned] = generate_codeuniv(code_counter)
-            code_counter += 1
-
-        codeuniversite = universite_code_map[nom_uni_cleaned]
-        pays = doc.get("pays")
-        universite_pk = universite_pk_counter
-        upsert_fact_universite(universite_pk, codeuniversite, nom_uni, pays)
-        universite_pk_counter += 1
-        total += 1
-
-    logger.info(f"Total universités insérées ou mises à jour : {total}")
+    insert_or_update_offres_batch(offres_to_insert)
 
 dag = DAG(
-    dag_id='dag_dim_universites',
-    start_date=datetime(2025, 1, 1),
+    dag_id='dag_dim_offre_etudes',
     schedule_interval='@daily',
+    start_date=datetime(2025, 1, 1),
     catchup=False
 )
 
-extract_task = PythonOperator(
-    task_id='extract_universites_task',
-    python_callable=extract_universites,
-    provide_context=True,
+wait_dim_universite = ExternalTaskSensor(
+    task_id='wait_for_dim_universite',
+    external_dag_id='dag_dim_universite',
+    external_task_id='load_dim_universite',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
     dag=dag
 )
 
-insert_task = PythonOperator(
-    task_id='insert_universites_task',
-    python_callable=insert_universites,
-    provide_context=True,
+extract_and_insert_task = PythonOperator(
+    task_id="extract_et_insert_dim_offres",
+    python_callable=extract_offres_etudes,
     dag=dag
 )
 
-
-extract_task >> insert_task
+wait_dim_universite >> extract_and_insert_task

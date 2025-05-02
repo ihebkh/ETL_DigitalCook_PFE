@@ -5,11 +5,9 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
-# Logging configuration
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# ---------------------- Connexions ----------------------
 
 def get_mongodb_collections():
     client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
@@ -22,7 +20,6 @@ def get_postgres_connection():
     logger.info("PostgreSQL connection successful.")
     return conn
 
-# ---------------------- Clé existante ----------------------
 
 def get_existing_user_keys():
     conn = get_postgres_connection()
@@ -33,7 +30,6 @@ def get_existing_user_keys():
     conn.close()
     return existing_keys
 
-# ---------------------- PK et code ----------------------
 
 def get_next_users_pk():
     conn = get_postgres_connection()
@@ -47,7 +43,6 @@ def get_next_users_pk():
 def generate_codeusers(index):
     return f"influ{index:04d}"
 
-# ---------------------- Extraction ----------------------
 
 def extract_users(**kwargs):
     users_collection, privileges_collection = get_mongodb_collections()
@@ -72,7 +67,7 @@ def extract_users(**kwargs):
         privilege_id = str(user.get("privilege", ""))
         privilege_label = privilege_map.get(privilege_id, "Non défini")
 
-        # Éviter les doublons
+
         if (nom, prenom, privilege_label) in existing_keys:
             continue
 
@@ -83,7 +78,6 @@ def extract_users(**kwargs):
     kwargs['ti'].xcom_push(key='users_data', value=users)
     logger.info(f"{len(users)} nouveaux utilisateurs extraits sans doublon.")
 
-# ---------------------- Insertion ----------------------
 
 def insert_users_to_dim_users(**kwargs):
     users = kwargs['ti'].xcom_pull(task_ids='extract_users', key='users_data')
@@ -112,7 +106,6 @@ def insert_users_to_dim_users(**kwargs):
     conn.close()
     logger.info(f"{inserted_count} utilisateurs insérés/mis à jour dans PostgreSQL.")
 
-# ---------------------- DAG ----------------------
 
 with DAG(
     dag_id='Dag_dim_recruteur',

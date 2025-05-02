@@ -109,7 +109,6 @@ def convert_bson(obj):
         return str(obj)
     return obj
 
-
 def extract_experiences(**kwargs):
     client, _, collection, secteur_collection = get_mongodb_connection()
     label_to_pk_secteur = load_dim_secteur()
@@ -130,25 +129,33 @@ def extract_experiences(**kwargs):
             ):
                 for experience in doc[profile_field]['experiences']:
                     if isinstance(experience, dict):
-                        filtered_experience = {
-                            "role": experience.get("role", ""),
-                            "entreprise": experience.get("entreprise", ""),
-                            "ville": experience.get("ville", {}).get("value", "") if isinstance(experience.get("ville", {}), dict) else experience.get("ville", ""),
-                            "pays": experience.get("pays", {}).get("value", "") if isinstance(experience.get("pays", {}), dict) else experience.get("pays", ""),
-                            "typeContrat": experience.get("typeContrat", {}).get("value", "") if isinstance(experience.get("typeContrat", {}), dict) else experience.get("typeContrat", ""),
-                            "secteur": experience.get("secteur", ""),
-                            "metier": experience.get("metier", ""),
-                        }
+                        role = experience.get("role", "") or experience.get("poste", "")
+                        entreprise = experience.get("entreprise", "")
+                        ville = experience.get("ville", {}).get("value", "") if isinstance(experience.get("ville", {}), dict) else experience.get("ville", "")
+                        pays = experience.get("pays", {}).get("value", "") if isinstance(experience.get("pays", {}), dict) else experience.get("pays", "")
+                        type_contrat = experience.get("typeContrat", {}).get("value", "") if isinstance(experience.get("typeContrat", {}), dict) else experience.get("typeContrat", "")
+                        secteur = experience.get("secteur", "")
+                        metier = experience.get("metier", "")
 
-                        if not filtered_experience["role"] or not filtered_experience["ville"] or not filtered_experience["typeContrat"]:
+                        if not role and not ville and not type_contrat:
                             continue
 
                         start_year, start_month = parse_date(experience.get("du", ""))
                         end_year, end_month = parse_date(experience.get("au", ""))
-                        filtered_experience["du_year"] = start_year or ""
-                        filtered_experience["du_month"] = start_month or ""
-                        filtered_experience["au_year"] = end_year or ""
-                        filtered_experience["au_month"] = end_month or ""
+
+                        filtered_experience = {
+                            "role": role,
+                            "entreprise": entreprise,
+                            "ville": ville,
+                            "pays": pays,
+                            "typeContrat": type_contrat,
+                            "secteur": secteur,
+                            "metier": metier,
+                            "du_year": start_year,
+                            "du_month": start_month,
+                            "au_year": end_year,
+                            "au_month": end_month
+                        }
 
                         key = (filtered_experience["role"] or '') + (filtered_experience["entreprise"] or '') + str(start_year or '') + str(start_month or '') + str(end_year or '') + str(end_month or '')
 
@@ -188,7 +195,6 @@ def extract_experiences(**kwargs):
     kwargs['ti'].xcom_push(key='dim_experiences', value=filtered_experiences)
     logger.info(f"{len(filtered_experiences)} expériences extraites.")
     return filtered_experiences
-
 
 def insert_experiences_into_postgres(**kwargs):
     experiences = kwargs['ti'].xcom_pull(task_ids='extract_dim_experience', key='dim_experiences')
@@ -282,10 +288,5 @@ load_task = PythonOperator(
     dag=dag
 )
 
-end_task = DummyOperator(
-    task_id='end_task',
-    dag=dag
-)
 
-[wait_dim_secteur, wait_dim_metier] >> extract_task
-extract_task >> load_task >> end_task
+[wait_dim_secteur, wait_dim_metier] >> extract_task >> load_task 

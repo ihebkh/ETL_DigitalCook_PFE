@@ -1,20 +1,21 @@
 from pymongo import MongoClient
 from datetime import datetime, timedelta
-import psycopg2
 from bson import ObjectId
 import logging
+from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.sensors.external_task_sensor import ExternalTaskSensor
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+
 def get_postgres_cursor():
-    return psycopg2.connect(
-        dbname="DW_DigitalCook",
-        user="iheb",
-        password="201JmT1896@",
-        host="monserveur-postgres.postgres.database.azure.com",
-        port="5432"
-    ), None
+    return PostgresHook(postgres_conn_id='postgres').get_conn().cursor()
+
+
 
 def get_client_pk_by_matricule(cursor, matricule):
     cursor.execute("SELECT client_id FROM public.dim_client WHERE matricule_client = %s", (str(matricule),))
@@ -77,8 +78,6 @@ def get_offre_pk_from_id(oid, mongo_collection, titre_to_pk):
     min_salaire = doc.get("minSalaire")
     max_salaire = doc.get("maxSalaire")
     return titre_to_pk.get(titre, None), min_salaire, max_salaire
-
-
 
 def get_services_for_dossier(dossier_id, factures_collection, pg_cursor):
     facture = factures_collection.find_one({"dossierId": dossier_id})
@@ -190,8 +189,7 @@ def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_ste
         minSalaire, maxSalaire
     ))
 def extract_fields():
-    pg_conn, _ = get_postgres_cursor()
-    pg_cursor = pg_conn.cursor()
+    pg_cursor = get_postgres_cursor()
     (
         dossiers_collection,
         frontusers_collection,
@@ -207,8 +205,8 @@ def extract_fields():
     offre_etude_titre_to_pk = load_offre_etude_mapping(pg_cursor)
 
     dossiers = dossiers_collection.find()
-    collections_factcode_map = {}  # This will hold the fact_codes for each collection
-    collections_factcode_counters = {  # Separate counter for each collection
+    collections_factcode_map = {}
+    collections_factcode_counters = {
         "dossiers": 1,
         "frontusers": 1,
         "users": 1,
@@ -224,13 +222,10 @@ def extract_fields():
     updated_at_seen = set()
     fact_code_seen1 = set()
 
-    # A helper function to generate a new fact_code for each collection
     def generate_collection_fact_code(collection_name):
-        # Increment counter and create fact code
         counter = collections_factcode_counters[collection_name]
         fact_code = f"fact{str(counter).zfill(4)}"
         
-        # Update the counter after generating the fact code
         collections_factcode_counters[collection_name] += 1
         return fact_code
 
@@ -244,10 +239,8 @@ def extract_fields():
         if not client_pk:
             continue
 
-        # Generate a unique fact_code for the "dossiers" collection
         fact_code = generate_collection_fact_code("dossiers")
 
-        # Process the document from MongoDB as before
         current_step = doc.get("currentStep")
         type_de_contrat = doc.get("firstStep", {}).get("typeDeContrat")
         charge_daffaire_id = doc.get("chargeDaffaire")
@@ -346,36 +339,163 @@ def extract_fields():
             formation_pk = formation_pks[i] if i < len(formation_pks) else None
             formation_prix_value = formation_prix[i] if i < len(formation_prix) else None
 
-            upsert_fact_dossier(
-                pg_cursor,
-                dossier_pk,
-                client_pk,
-                fact_code,  # Use the collection-specific fact_code
-                current_step_print,
-                type_de_contrat_print,
-                recruteur_id if recruteur_id else None,
-                ville_name_to_pk.get(destination_list[i], None) if i < len(destination_list) else None,
-                date_depart_print,
-                offres_emploi_step2[i] if i < len(offres_emploi_step2) else None,
-                offres_etude_step2[i] if i < len(offres_etude_step2) else None,
-                offres_emploi_step4[i] if i < len(offres_emploi_step4) else None,
-                offres_etude_step4[i] if i < len(offres_etude_step4) else None,
-                service_pk=services_info[i][0] if i < len(services_info) else None,
-                service_prix=services_info[i][1] if i < len(services_info) else None,
-                service_discount=services_info[i][2] if i < len(services_info) else None,
-                service_extra=services_info[i][3] if i < len(services_info) else None,
-                created_at=created_at_str,
-                updated_at=updated_at_str,
-                formation_pk=formation_pk,
-                formation_prix=formation_prix_value,
-                minSalaire=min_salaire_step4_current,  # Passer minSalaire de la step 4
-                maxSalaire=max_salaire_step4_current,  # Passer maxSalaire de la step 4
-            )
+            recruteur_id_value = recruteur_id if recruteur_id else None
+            destination_pk = ville_name_to_pk.get(destination_list[i], None) if i < len(destination_list) else None
+            offre_emploi_step2 = offres_emploi_step2[i] if i < len(offres_emploi_step2) else None
+            offre_etude_step2 = offres_etude_step2[i] if i < len(offres_etude_step2) else None
+            offre_emploi_step4 = offres_emploi_step4[i] if i < len(offres_emploi_step4) else None
+            offre_etude_step4 = offres_etude_step4[i] if i < len(offres_etude_step4) else None
 
-            dossier_pk += 1
+            service_pk = services_info[i][0] if i < len(services_info) else None
+            service_prix = services_info[i][1] if i < len(services_info) else None
+            service_discount = services_info[i][2] if i < len(services_info) else None
+            service_extra = services_info[i][3] if i < len(services_info) else None
 
-    pg_conn.commit()
-    pg_conn.close()
+    upsert_fact_dossier(
+        pg_cursor,
+        dossier_pk,
+        client_pk,
+        fact_code,
+        current_step_print,
+        type_de_contrat_print,
+        recruteur_id_value,
+        destination_pk,
+        date_depart_print,
+        offre_emploi_step2,
+        offre_etude_step2,
+        offre_emploi_step4,
+        offre_etude_step4,
+        service_pk=service_pk,
+        service_prix=service_prix,
+        service_discount=service_discount,
+        service_extra=service_extra,
+        created_at=created_at_str,
+        updated_at=updated_at_str,
+        formation_pk=formation_pk,
+        formation_prix=formation_prix_value,
+        minSalaire=min_salaire_step4_current,  
+        maxSalaire=max_salaire_step4_current,
+    )
 
-if __name__ == "__main__":
+    dossier_pk += 1
+
+dag = DAG(
+    'dag_fact_dossier',
+    schedule_interval='@daily',
+    start_date=datetime(2025, 1, 1),
+    catchup=False,
+)
+
+def run_etl(**kwargs):
     extract_fields()
+
+etl_task = PythonOperator(
+    task_id='run_fact_dossier_etl',
+    python_callable=run_etl,
+    provide_context=True,
+    dag=dag,
+)
+
+wait_dim_secteur = ExternalTaskSensor(
+    task_id='wait_for_dim_secteur',
+    external_dag_id='dag_dim_secteur',
+    external_task_id='load_into_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_dim_clients = ExternalTaskSensor(
+    task_id='wait_for_dim_clients',
+    external_dag_id='Dag_DimClients',             
+    external_task_id='load_data',                 
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_dim_metier = ExternalTaskSensor(
+    task_id='wait_for_dim_metier',
+    external_dag_id='Dag_Metier',
+    external_task_id='load_jobs_into_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_for_dim_recruteur = ExternalTaskSensor(
+    task_id='wait_for_dim_recruteur',
+    external_dag_id='Dag_dim_recruteur',
+    external_task_id='load_users_to_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_dim_dates_task = ExternalTaskSensor(
+    task_id='wait_for_dim_dates',
+    external_dag_id='dim_dates_dag',
+    external_task_id='load_dim_dates', 
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag 
+)
+
+wait_for_dim_formation = ExternalTaskSensor(
+    task_id='wait_for_dim_formation',
+    external_dag_id='dag_dim_formation',
+    external_task_id='load_formations',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_for_dim_offre_emplois = ExternalTaskSensor(
+    task_id='wait_for_dim_offre_emplois',
+    external_dag_id='dag_dim_offre_emplois',
+    external_task_id='load_task',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_for_dim_offre_etude = ExternalTaskSensor(
+    task_id='wait_for_dim_offre_etude',
+    external_dag_id='dag_dim_offre_etude',
+    external_task_id='load_task',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_for_dim_service = ExternalTaskSensor(
+    task_id='wait_for_dim_service',
+    external_dag_id='dag_dim_service',
+    external_task_id='load_services_to_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+wait_for_dim_ville = ExternalTaskSensor(
+    task_id='wait_for_dim_ville',
+    external_dag_id='dag_dim_villes',
+    external_task_id='load_villes_and_destinations_postgres',
+    mode='poke',
+    timeout=600,
+    poke_interval=30,
+    dag=dag
+)
+
+[wait_dim_clients , wait_dim_dates_task ,wait_for_dim_formation , wait_for_dim_offre_emplois , wait_for_dim_offre_etude , wait_for_dim_service,
+ wait_for_dim_ville]>>etl_task
+

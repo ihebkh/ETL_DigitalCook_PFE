@@ -9,7 +9,6 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# ----------------- Connexions -----------------
 
 def get_mongodb_connection():
     try:
@@ -31,7 +30,6 @@ def get_postgres_connection():
     logger.info("PostgreSQL connection successful.")
     return conn
 
-# ----------------- Utilitaires -----------------
 
 def convert_datetime_and_objectid_to_string(value):
     if isinstance(value, datetime):
@@ -70,7 +68,6 @@ def get_existing_visa_keys():
     conn.close()
     return existing_keys
 
-# ----------------- Extraction -----------------
 
 def extract_from_mongodb(**kwargs):
     try:
@@ -85,7 +82,6 @@ def extract_from_mongodb(**kwargs):
         logger.error(f"Error extracting data from MongoDB: {e}")
         raise
 
-# ----------------- Transformation -----------------
 
 def transform_data(**kwargs):
     mongo_data = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='mongo_data')
@@ -119,7 +115,6 @@ def transform_data(**kwargs):
     logger.info(f"{len(transformed_data)} visas transformed.")
     return transformed_data
 
-# ----------------- Chargement PostgreSQL -----------------
 
 def load_into_postgres(**kwargs):
     transformed_data = kwargs['ti'].xcom_pull(task_ids='transform_data', key='transformed_data')
@@ -177,7 +172,6 @@ def load_into_postgres(**kwargs):
     conn.close()
     logger.info(f"{len(new_records)} visa records inserted or updated.")
 
-# ----------------- Définition du DAG -----------------
 
 dag = DAG(
     'dag_dim_visa',

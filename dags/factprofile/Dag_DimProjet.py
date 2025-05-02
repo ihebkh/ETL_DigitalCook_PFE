@@ -8,7 +8,6 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# -------------------- Connexions --------------------
 
 def get_mongodb_connection():
     try:
@@ -23,7 +22,6 @@ def get_postgresql_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
 
-# -------------------- Données existantes --------------------
 
 def get_existing_projects_and_max_pk():
     conn = get_postgresql_connection()
@@ -42,7 +40,6 @@ def get_existing_projects_and_max_pk():
 def generate_project_code(pk):
     return f"PROJ{str(pk).zfill(3)}"
 
-# -------------------- Extraction --------------------
 
 def extract_from_mongodb(**kwargs):
     client, collection = get_mongodb_connection()
@@ -65,7 +62,6 @@ def extract_from_mongodb(**kwargs):
     kwargs['ti'].xcom_push(key='mongo_projects', value=projects)
     logger.info(f"{len(projects)} projets extraits depuis MongoDB.")
 
-# -------------------- Transformation --------------------
 
 def transform_data(**kwargs):
     mongo_projects = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='mongo_projects')
@@ -93,7 +89,6 @@ def transform_data(**kwargs):
     logger.info(f"{len(transformed)} projets transformés.")
     return transformed
 
-# -------------------- Chargement PostgreSQL --------------------
 
 def load_into_postgres(**kwargs):
     projects = kwargs['ti'].xcom_pull(task_ids='transform_data', key='transformed_projects')
@@ -127,7 +122,6 @@ def load_into_postgres(**kwargs):
     conn.close()
     logger.info(f"{len(projects)} projets insérés ou mis à jour.")
 
-# -------------------- DAG Definition --------------------
 
 dag = DAG(
     'dag_dim_projet',
