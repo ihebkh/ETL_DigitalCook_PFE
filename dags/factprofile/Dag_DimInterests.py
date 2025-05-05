@@ -25,12 +25,12 @@ def get_existing_interests_data():
     conn = get_postgres_connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT nom_interet, interet_id FROM Dim_interests")
+    cur.execute("SELECT nom_interet, interet_id FROM Dim_interet")
     existing_data = cur.fetchall()
     existing_interests = {row[0] for row in existing_data}
     existing_codes = {row[1] for row in existing_data}
 
-    cur.execute("SELECT COALESCE(MAX(interet_id), 0) FROM Dim_interests")
+    cur.execute("SELECT COALESCE(MAX(interet_id), 0) FROM Dim_interet")
     current_pk = cur.fetchone()[0]
 
     cur.close()
@@ -97,7 +97,7 @@ def load_interests(**kwargs):
     cur = conn.cursor()
 
     insert_query = """
-    INSERT INTO Dim_interests (interet_id, code_interet, nom_interet)
+    INSERT INTO Dim_interet (interet_id, code_interet, nom_interet)
     VALUES (%s, %s, %s)
     ON CONFLICT (interet_id) DO UPDATE SET
     nom_interet = EXCLUDED.nom_interet,
@@ -113,7 +113,7 @@ def load_interests(**kwargs):
     logger.info(f"{len(records)} lignes insérées ou mises à jour.")
 
 dag = DAG(
-    dag_id='dag_dim_Interests',
+    dag_id='dag_dim_interet',
     start_date=datetime(2025, 1, 1),
     schedule_interval='@daily',
     catchup=False

@@ -13,7 +13,10 @@ logger = logging.getLogger(__name__)
 
 
 def get_postgres_cursor():
-    return PostgresHook(postgres_conn_id='postgres').get_conn().cursor()
+    conn = PostgresHook(postgres_conn_id='postgres').get_conn()
+    conn.autocommit = False
+    return conn.cursor(), conn
+
 
 
 
@@ -22,13 +25,19 @@ def get_client_pk_by_matricule(cursor, matricule):
     result = cursor.fetchone()
     return result[0] if result else None
 
+def get_next_dossier_pk(pg_cursor):
+    pg_cursor.execute("SELECT COALESCE(MAX(dossier_id), 0) FROM public.fact_dossier;")
+    last_id = pg_cursor.fetchone()[0]
+    return last_id + 1
+
+
 def get_service_pk_from_nom_service(pg_cursor, nom_service):
     pg_cursor.execute("SELECT service_id FROM public.dim_service WHERE nom_service = %s", (nom_service,))
     result = pg_cursor.fetchone()
     return result[0] if result else None
 
 def load_ville_mapping(pg_cursor):
-    pg_cursor.execute("SELECT nom_ville, ville_id FROM public.dim_ville")
+    pg_cursor.execute("SELECT nom_region, region_id FROM public.dim_region")
     return {row[0]: row[1] for row in pg_cursor.fetchall()}
 
 def load_offreemploi_mapping(pg_cursor):
@@ -189,7 +198,8 @@ def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_ste
         minSalaire, maxSalaire
     ))
 def extract_fields():
-    pg_cursor = get_postgres_cursor()
+    pg_cursor, pg_conn = get_postgres_cursor()
+    dossier_pk = get_next_dossier_pk(pg_cursor)
     (
         dossiers_collection,
         frontusers_collection,
@@ -205,28 +215,20 @@ def extract_fields():
     offre_etude_titre_to_pk = load_offre_etude_mapping(pg_cursor)
 
     dossiers = dossiers_collection.find()
-    collections_factcode_map = {}
+
     collections_factcode_counters = {
-        "dossiers": 1,
-        "frontusers": 1,
-        "users": 1,
-        "offredemplois": 1,
-        "offredetudes": 1,
-        "formations": 1,
-        "factures": 1,
+        "dossiers": 1
     }
-    dossier_pk = 1
-    fact_code_seen = set()         
-    fact_code_date_seen = set()   
+    fact_code_seen = set()
+    fact_code_date_seen = set()
     created_at_seen = set()
     updated_at_seen = set()
     fact_code_seen1 = set()
 
-    def generate_collection_fact_code(collection_name):
-        counter = collections_factcode_counters[collection_name]
+    def generate_collection_fact_code():
+        counter = collections_factcode_counters["dossiers"]
         fact_code = f"fact{str(counter).zfill(4)}"
-        
-        collections_factcode_counters[collection_name] += 1
+        collections_factcode_counters["dossiers"] += 1
         return fact_code
 
     for doc in dossiers:
@@ -239,8 +241,7 @@ def extract_fields():
         if not client_pk:
             continue
 
-        fact_code = generate_collection_fact_code("dossiers")
-
+        fact_code = generate_collection_fact_code()
         current_step = doc.get("currentStep")
         type_de_contrat = doc.get("firstStep", {}).get("typeDeContrat")
         charge_daffaire_id = doc.get("chargeDaffaire")
@@ -252,7 +253,6 @@ def extract_fields():
         date_depart_str = format_date_only(raw_date_depart)
         date_depart_pk = get_date_pk_from_date(pg_cursor, date_depart_str)
         destination_list = doc.get("firstStep", {}).get("destination", [])
-        print(fact_code,client_pk)
 
         offres_emploi_step2_ids = doc.get("secondStep", {}).get("selectedOffersDemploi", [])
         offres_etude_step2_ids = doc.get("secondStep", {}).get("selectedOffersDetude", [])
@@ -263,7 +263,7 @@ def extract_fields():
         formation_pks = []
         formation_prix = []
         for formation in formations:
-            formation_id = formation.get("formation") 
+            formation_id = formation.get("formation")
             if formation_id:
                 titre_formation, prix = get_formation_title_and_price_by_id(formation_id, formations_collection)
                 if titre_formation and prix is not None:
@@ -271,7 +271,10 @@ def extract_fields():
                     formation_pks.append(formation_pk)
                     formation_prix.append(prix)
 
-        selected_offre_emploi_step4_pk, min_salaire_step4, max_salaire_step4 = get_offre_pk_from_id(selected_offre_emploi_step4_id, offredemplois_collection, offre_titre_to_pk) if selected_offre_emploi_step4_id else (None, None, None)
+        selected_offre_emploi_step4, min_salaire_step4, max_salaire_step4 = (
+            get_offre_pk_from_id(selected_offre_emploi_step4_id, offredemplois_collection, offre_titre_to_pk)
+            if selected_offre_emploi_step4_id else (None, None, None)
+        )
 
         offres_emploi_step2 = [
             get_offre_pk_from_id(oid, offredemplois_collection, offre_titre_to_pk) for oid in offres_emploi_step2_ids
@@ -281,7 +284,6 @@ def extract_fields():
             get_offre_pk_from_id(oid, offredetudes_collection, offre_etude_titre_to_pk) for oid in offres_etude_step2_ids
         ] if offres_etude_step2_ids else []
 
-        selected_offre_emploi_step4 = get_offre_pk_from_id(selected_offre_emploi_step4_id, offredemplois_collection, offre_titre_to_pk) if selected_offre_emploi_step4_id else None
         selected_offre_etude_step4 = get_offre_pk_from_id(selected_offre_etude_step4_id, offredetudes_collection, offre_etude_titre_to_pk) if selected_offre_etude_step4_id else None
 
         offres_emploi_step4 = [selected_offre_emploi_step4] if selected_offre_emploi_step4 else []
@@ -301,37 +303,20 @@ def extract_fields():
         )
 
         for i in range(max_length):
-            if fact_code not in fact_code_seen:
-                current_step_print = current_step
-                fact_code_seen.add(fact_code)
-            else:
-                current_step_print = None
+            current_step_print = current_step if fact_code not in fact_code_seen else None
+            fact_code_seen.add(fact_code)
 
-            if fact_code not in fact_code_date_seen:
-                date_depart_print = date_depart_pk
-                fact_code_date_seen.add(fact_code)
-            else:
-                date_depart_print = None
+            date_depart_print = date_depart_pk if fact_code not in fact_code_date_seen else None
+            fact_code_date_seen.add(fact_code)
 
-            if created_at not in created_at_seen:
-                created_at_str = get_date_pk_from_date(pg_cursor, created_at)
-                created_at_seen.add(created_at) 
-            else:
-                created_at_str = None
+            created_at_str = get_date_pk_from_date(pg_cursor, created_at) if created_at not in created_at_seen else None
+            created_at_seen.add(created_at)
 
-            if updated_at not in updated_at_seen:
-                updated_at_str = get_date_pk_from_date(pg_cursor, updated_at)
-                updated_at_seen.add(updated_at)
-            else:
-                updated_at_str = None 
+            updated_at_str = get_date_pk_from_date(pg_cursor, updated_at) if updated_at not in updated_at_seen else None
+            updated_at_seen.add(updated_at)
 
-            if fact_code not in fact_code_seen1:
-                type_de_contrat_print = type_de_contrat if type_de_contrat else None
-                fact_code_seen1.add(fact_code)
-            else:
-                type_de_contrat_print = None
-
-
+            type_de_contrat_print = type_de_contrat if fact_code not in fact_code_seen1 else None
+            fact_code_seen1.add(fact_code)
 
             min_salaire_step4_current = min_salaire_step4 if i < len(offres_emploi_step4) else None
             max_salaire_step4_current = max_salaire_step4 if i < len(offres_emploi_step4) else None
@@ -339,8 +324,7 @@ def extract_fields():
             formation_pk = formation_pks[i] if i < len(formation_pks) else None
             formation_prix_value = formation_prix[i] if i < len(formation_prix) else None
 
-            recruteur_id_value = recruteur_id if recruteur_id else None
-            destination_pk = ville_name_to_pk.get(destination_list[i], None) if i < len(destination_list) else None
+            destination_pk = ville_name_to_pk.get(destination_list[i]) if i < len(destination_list) else None
             offre_emploi_step2 = offres_emploi_step2[i] if i < len(offres_emploi_step2) else None
             offre_etude_step2 = offres_etude_step2[i] if i < len(offres_etude_step2) else None
             offre_emploi_step4 = offres_emploi_step4[i] if i < len(offres_emploi_step4) else None
@@ -351,33 +335,37 @@ def extract_fields():
             service_discount = services_info[i][2] if i < len(services_info) else None
             service_extra = services_info[i][3] if i < len(services_info) else None
 
-    upsert_fact_dossier(
-        pg_cursor,
-        dossier_pk,
-        client_pk,
-        fact_code,
-        current_step_print,
-        type_de_contrat_print,
-        recruteur_id_value,
-        destination_pk,
-        date_depart_print,
-        offre_emploi_step2,
-        offre_etude_step2,
-        offre_emploi_step4,
-        offre_etude_step4,
-        service_pk=service_pk,
-        service_prix=service_prix,
-        service_discount=service_discount,
-        service_extra=service_extra,
-        created_at=created_at_str,
-        updated_at=updated_at_str,
-        formation_pk=formation_pk,
-        formation_prix=formation_prix_value,
-        minSalaire=min_salaire_step4_current,  
-        maxSalaire=max_salaire_step4_current,
-    )
+            upsert_fact_dossier(
+                pg_cursor,
+                dossier_pk,
+                client_pk,
+                fact_code,
+                current_step_print,
+                type_de_contrat_print,
+                recruteur_id,
+                destination_pk,
+                date_depart_print,
+                offre_emploi_step2,
+                offre_etude_step2,
+                offre_emploi_step4,
+                offre_etude_step4,
+                service_pk,
+                service_prix,
+                service_discount,
+                service_extra,
+                formation_pk,
+                formation_prix_value,
+                created_at_str,
+                updated_at_str,
+                min_salaire_step4_current,
+                max_salaire_step4_current
+            )
 
-    dossier_pk += 1
+            dossier_pk += 1
+
+    pg_conn.commit()
+    pg_cursor.close()
+    pg_conn.close()
 
 dag = DAG(
     'dag_fact_dossier',
@@ -396,16 +384,6 @@ etl_task = PythonOperator(
     dag=dag,
 )
 
-wait_dim_secteur = ExternalTaskSensor(
-    task_id='wait_for_dim_secteur',
-    external_dag_id='dag_dim_secteur',
-    external_task_id='load_into_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
-
 wait_dim_clients = ExternalTaskSensor(
     task_id='wait_for_dim_clients',
     external_dag_id='Dag_DimClients',             
@@ -416,15 +394,6 @@ wait_dim_clients = ExternalTaskSensor(
     dag=dag
 )
 
-wait_dim_metier = ExternalTaskSensor(
-    task_id='wait_for_dim_metier',
-    external_dag_id='Dag_Metier',
-    external_task_id='load_jobs_into_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
 
 wait_for_dim_recruteur = ExternalTaskSensor(
     task_id='wait_for_dim_recruteur',
@@ -498,4 +467,3 @@ wait_for_dim_ville = ExternalTaskSensor(
 
 [wait_dim_clients , wait_dim_dates_task ,wait_for_dim_formation , wait_for_dim_offre_emplois , wait_for_dim_offre_etude , wait_for_dim_service,
  wait_for_dim_ville]>>etl_task
-

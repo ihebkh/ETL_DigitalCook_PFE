@@ -36,7 +36,7 @@ def generate_location_code(cursor, existing_codes):
     if not existing_codes: 
         return "LOC001"
     
-    cursor.execute("SELECT MAX(CAST(SUBSTRING(code_ville FROM 4) AS INTEGER)) FROM public.dim_ville WHERE code_ville LIKE 'LOC%'")
+    cursor.execute("SELECT MAX(CAST(SUBSTRING(code_region FROM 4) AS INTEGER)) FROM public.dim_region WHERE code_region LIKE 'LOC%'")
     max_code_number = cursor.fetchone()[0]
     
 
@@ -53,7 +53,7 @@ def handle_objectid(obj):
 
 
 def get_existing_villes(cursor):
-    cursor.execute("SELECT nom_ville FROM public.dim_ville")
+    cursor.execute("SELECT nom_region FROM public.dim_region")
     existing_entries = {row[0] for row in cursor.fetchall()}
     return existing_entries
 
@@ -95,12 +95,12 @@ def load_villes_and_destinations_postgres(**kwargs):
     cursor = conn.cursor()
 
     insert_query = """
-    INSERT INTO public.dim_ville (ville_id, code_ville, nom_ville)
+    INSERT INTO public.dim_ville (region_id, code_region, nom_region)
     VALUES (%s, %s, %s)
-    ON CONFLICT (nom_ville)
+    ON CONFLICT (nom_region)
     DO UPDATE SET
-        code_ville = EXCLUDED.code_ville,
-        nom_ville = EXCLUDED.nom_ville;
+        code_region = EXCLUDED.code_region,
+        nom_region = EXCLUDED.nom_region;
     """
 
     existing_entries = get_existing_villes(cursor)
@@ -131,21 +131,21 @@ def load_villes_and_destinations_postgres(**kwargs):
     logger.info(f"{inserted_count} villes et destinations insérées ou mises à jour dans PostgreSQL.")
 
 dag = DAG(
-    'dag_dim_villes',
+    'dag_dim_regions',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )
 
 extract_task = PythonOperator(
-    task_id='extract_villes_and_destinations',
+    task_id='extract_region',
     python_callable=extract_villes_and_destinations,
     provide_context=True,
     dag=dag,
 )
 
 load_task = PythonOperator(
-    task_id='load_villes_and_destinations_postgres',
+    task_id='load_region',
     python_callable=load_villes_and_destinations_postgres,
     provide_context=True,
     dag=dag,

@@ -8,24 +8,16 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.sensors.external_task_sensor import ExternalTaskSensor
-from airflow.operators.dummy_operator import DummyOperator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 def parse_date(date_value):
     if isinstance(date_value, dict):
         year = date_value.get("year")
         month = date_value.get("month")
-        if isinstance(year, int) or (isinstance(year, str) and year.isdigit()):
-            year = int(year)
-        else:
-            year = None
-        if isinstance(month, int) or (isinstance(month, str) and month.isdigit()):
-            month = int(month)
-        else:
-            month = None
+        year = int(year) if isinstance(year, (int, str)) and str(year).isdigit() else None
+        month = int(month) if isinstance(month, (int, str)) and str(month).isdigit() else None
         return year, month
     elif isinstance(date_value, str):
         if re.match(r"^\d{4}-\d{2}$", date_value):
@@ -46,49 +38,31 @@ def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
 
-def load_dim_secteur():
-    conn = get_postgres_connection()
-    cursor = conn.cursor()
+def load_dim_secteur(cursor):
     cursor.execute("SELECT secteur_id, nom_secteur FROM public.dim_secteur;")
     rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
     return {label.lower(): pk for pk, label in rows if label}
 
-def load_dim_metier():
-    conn = get_postgres_connection()
-    cursor = conn.cursor()
+def load_dim_metier(cursor):
     cursor.execute("SELECT metier_id, nom_metier FROM public.dim_metier;")
     rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
     return {label.lower(): pk for pk, label in rows if label}
 
-def load_existing_experiences():
-    conn = get_postgres_connection()
-    cursor = conn.cursor()
+def load_existing_experiences(cursor):
     cursor.execute("""
         SELECT experience_id, role_experience, nom_entreprise, annee_debut, mois_debut, annee_fin, mois_fin
         FROM public.dim_experience
     """)
     rows = cursor.fetchall()
-    cursor.close()
-    conn.close()
-
     mapping = {}
     for exp_id, role, entreprise, annee_debut, mois_debut, annee_fin, mois_fin in rows:
         key = (role or '') + (entreprise or '') + str(annee_debut or '') + str(mois_debut or '') + str(annee_fin or '') + str(mois_fin or '')
         mapping[key] = exp_id
     return mapping
 
-def get_max_experience_pk():
-    conn = get_postgres_connection()
-    cursor = conn.cursor()
+def get_max_experience_pk(cursor):
     cursor.execute("SELECT COALESCE(MAX(experience_id), 0) FROM dim_experience;")
-    max_pk = cursor.fetchone()[0]
-    cursor.close()
-    conn.close()
-    return max_pk
+    return cursor.fetchone()[0]
 
 def is_valid_objectid(value):
     try:
@@ -111,96 +85,98 @@ def convert_bson(obj):
 
 def extract_experiences(**kwargs):
     client, _, collection, secteur_collection = get_mongodb_connection()
-    label_to_pk_secteur = load_dim_secteur()
-    label_to_pk_metier = load_dim_metier()
-    existing_experiences = load_existing_experiences()
-    current_pk = get_max_experience_pk()
-    documents = collection.find()
-    filtered_experiences = []
+    conn = get_postgres_connection()
+    with conn:
+        with conn.cursor() as cursor:
+            label_to_pk_secteur = load_dim_secteur(cursor)
+            label_to_pk_metier = load_dim_metier(cursor)
+            existing_experiences = load_existing_experiences(cursor)
+            current_pk = get_max_experience_pk(cursor)
 
-    for doc in documents:
-        for profile_field in ['profile', 'simpleProfile']:
-            if (
-                profile_field in doc and
-                doc[profile_field] and
-                isinstance(doc[profile_field], dict) and
-                'experiences' in doc[profile_field] and
-                isinstance(doc[profile_field]['experiences'], list)
-            ):
-                for experience in doc[profile_field]['experiences']:
-                    if isinstance(experience, dict):
-                        role = experience.get("role", "") or experience.get("poste", "")
-                        entreprise = experience.get("entreprise", "")
-                        ville = experience.get("ville", {}).get("value", "") if isinstance(experience.get("ville", {}), dict) else experience.get("ville", "")
-                        pays = experience.get("pays", {}).get("value", "") if isinstance(experience.get("pays", {}), dict) else experience.get("pays", "")
-                        type_contrat = experience.get("typeContrat", {}).get("value", "") if isinstance(experience.get("typeContrat", {}), dict) else experience.get("typeContrat", "")
-                        secteur = experience.get("secteur", "")
-                        metier = experience.get("metier", "")
+            documents = collection.find()
+            filtered_experiences = []
 
-                        if not role and not ville and not type_contrat:
-                            continue
+            for doc in documents:
+                for profile_field in ['profile', 'simpleProfile']:
+                    if profile_field in doc and isinstance(doc[profile_field], dict):
+                        experiences = doc[profile_field].get('experiences')
 
-                        start_year, start_month = parse_date(experience.get("du", ""))
-                        end_year, end_month = parse_date(experience.get("au", ""))
+                        if isinstance(experiences, list):
+                            for experience in experiences:
+                                if isinstance(experience, dict):
+                                    role = experience.get("role", "") or experience.get("poste", "")
+                                    entreprise = experience.get("entreprise", "")
+                                    ville = experience.get("ville", {}).get("value", "") if isinstance(experience.get("ville", {}), dict) else experience.get("ville", "")
+                                    pays = experience.get("pays", {}).get("value", "") if isinstance(experience.get("pays", {}), dict) else experience.get("pays", "")
+                                    type_contrat = experience.get("typeContrat", {}).get("value", "") if isinstance(experience.get("typeContrat", {}), dict) else experience.get("typeContrat", "")
+                                    secteur = experience.get("secteur", "")
+                                    metier = experience.get("metier", "")
 
-                        filtered_experience = {
-                            "role": role,
-                            "entreprise": entreprise,
-                            "ville": ville,
-                            "pays": pays,
-                            "typeContrat": type_contrat,
-                            "secteur": secteur,
-                            "metier": metier,
-                            "du_year": start_year,
-                            "du_month": start_month,
-                            "au_year": end_year,
-                            "au_month": end_month
-                        }
+                                    if not role and not ville and not type_contrat:
+                                        continue
 
-                        key = (filtered_experience["role"] or '') + (filtered_experience["entreprise"] or '') + str(start_year or '') + str(start_month or '') + str(end_year or '') + str(end_month or '')
+                                    start_year, start_month = parse_date(experience.get("du", ""))
+                                    end_year, end_month = parse_date(experience.get("au", ""))
 
-                        if key in existing_experiences:
-                            experience_pk = existing_experiences[key]
+                                    filtered_experience = {
+                                        "role": role,
+                                        "entreprise": entreprise,
+                                        "ville": ville,
+                                        "pays": pays,
+                                        "typeContrat": type_contrat,
+                                        "secteur": secteur,
+                                        "metier": metier,
+                                        "du_year": start_year,
+                                        "du_month": start_month,
+                                        "au_year": end_year,
+                                        "au_month": end_month
+                                    }
+
+                                    key = (role or '') + (entreprise or '') + str(start_year or '') + str(start_month or '') + str(end_year or '') + str(end_month or '')
+                                    if key in existing_experiences:
+                                        experience_pk = existing_experiences[key]
+                                    else:
+                                        current_pk += 1
+                                        experience_pk = current_pk
+
+                                    secteur_id = filtered_experience["secteur"]
+                                    secteur_doc = None
+                                    if secteur_id:
+                                        secteur_doc = secteur_collection.find_one({"_id": secteur_id})
+                                        if secteur_doc:
+                                            secteur_label = secteur_doc.get("label", "").lower()
+                                            filtered_experience["secteur"] = label_to_pk_secteur.get(secteur_label, None)
+
+                                    metier_ids = filtered_experience["metier"]
+                                    metier_pk_list = []
+                                    if metier_ids:
+                                        if isinstance(metier_ids, str):
+                                            metier_ids = [metier_ids]
+                                        metier_ids = [ObjectId(m) for m in metier_ids if is_valid_objectid(m)]
+                                        if secteur_doc and "jobs" in secteur_doc:
+                                            for job in secteur_doc["jobs"]:
+                                                if job["_id"] in metier_ids:
+                                                    label = job.get("label", "").lower()
+                                                    metier_pk = label_to_pk_metier.get(label)
+                                                    if metier_pk:
+                                                        metier_pk_list.append(str(metier_pk))
+
+                                    filtered_experience["metier"] = metier_pk_list[0] if metier_pk_list else None
+                                    filtered_experience["experience_pk"] = experience_pk
+                                    filtered_experience["code_experience"] = generate_code_experience(experience_pk)
+
+                                    filtered_experiences.append(convert_bson(filtered_experience))
                         else:
-                            current_pk += 1
-                            experience_pk = current_pk
-
-                        secteur_id = filtered_experience["secteur"]
-                        if secteur_id:
-                            secteur_doc = secteur_collection.find_one({"_id": secteur_id})
-                            if secteur_doc:
-                                secteur_label = secteur_doc.get("label", "").lower()
-                                filtered_experience["secteur"] = label_to_pk_secteur.get(secteur_label, None)
-
-                        metier_ids = filtered_experience["metier"]
-                        metier_pk_list = []
-                        if metier_ids:
-                            if isinstance(metier_ids, str):
-                                metier_ids = [metier_ids]
-                            metier_ids = [ObjectId(m) for m in metier_ids] if isinstance(metier_ids, list) else [ObjectId(metier_ids)] if is_valid_objectid(metier_ids) else []
-                            if secteur_doc and "jobs" in secteur_doc:
-                                for job in secteur_doc["jobs"]:
-                                    if job["_id"] in metier_ids:
-                                        label = job.get("label", "").lower()
-                                        metier_pk = label_to_pk_metier.get(label)
-                                        if metier_pk:
-                                            metier_pk_list.append(str(metier_pk))
-
-                        filtered_experience["metier"] = metier_pk_list[0] if metier_pk_list else None
-                        filtered_experience["experience_pk"] = experience_pk
-                        filtered_experience["code_experience"] = generate_code_experience(experience_pk)
-                        filtered_experiences.append(convert_bson(filtered_experience))
-
+                            logger.warning(f"Aucune expérience valide dans '{profile_field}' pour user {doc.get('_id')}")
     client.close()
+    conn.close()
     kwargs['ti'].xcom_push(key='dim_experiences', value=filtered_experiences)
     logger.info(f"{len(filtered_experiences)} expériences extraites.")
     return filtered_experiences
 
 def insert_experiences_into_postgres(**kwargs):
     experiences = kwargs['ti'].xcom_pull(task_ids='extract_dim_experience', key='dim_experiences')
-    conn = get_postgres_connection()
-    cursor = conn.cursor()
-
+    hook = PostgresHook(postgres_conn_id='postgres')
     upsert_query = """
         INSERT INTO public.dim_experience (
             experience_id, code_experience, role_experience, nom_entreprise,
@@ -223,29 +199,27 @@ def insert_experiences_into_postgres(**kwargs):
             secteur_id = EXCLUDED.secteur_id,
             metier_id = EXCLUDED.metier_id;
     """
-
-    for exp in experiences:
-        cursor.execute(upsert_query, (
-            exp["experience_pk"],
-            exp["code_experience"],
-            exp["role"],
-            exp["entreprise"],
-            int(exp["du_year"]) if exp["du_year"] else None,
-            int(exp["du_month"]) if exp["du_month"] else None,
-            int(exp["au_year"]) if exp["au_year"] else None,
-            int(exp["au_month"]) if exp["au_month"] else None,
-            exp["pays"],
-            exp["ville"],
-            exp["typeContrat"],
-            int(exp["secteur"]) if exp["secteur"] and str(exp["secteur"]).isdigit() else None,
-            int(exp["metier"]) if exp["metier"] and str(exp["metier"]).isdigit() else None
-        ))
-
-    conn.commit()
-    cursor.close()
-    conn.close()
+    with hook.get_conn() as conn:
+        with conn.cursor() as cursor:
+            
+            for exp in experiences:
+                cursor.execute(upsert_query, (
+                    exp["experience_pk"],
+                    exp["code_experience"],
+                    exp["role"],
+                    exp["entreprise"],
+                    int(exp["du_year"]) if exp["du_year"] else None,
+                    int(exp["du_month"]) if exp["du_month"] else None,
+                    int(exp["au_year"]) if exp["au_year"] else None,
+                    int(exp["au_month"]) if exp["au_month"] else None,
+                    exp["pays"],
+                    exp["ville"],
+                    exp["typeContrat"],
+                    int(exp["secteur"]) if exp["secteur"] and str(exp["secteur"]).isdigit() else None,
+                    int(exp["metier"]) if exp["metier"] and str(exp["metier"]).isdigit() else None
+                ))
+            conn.commit()
     logger.info(f"{len(experiences)} expériences insérées ou mises à jour.")
-
 
 dag = DAG(
     dag_id='dag_dim_experience',
@@ -288,5 +262,4 @@ load_task = PythonOperator(
     dag=dag
 )
 
-
-[wait_dim_secteur, wait_dim_metier] >> extract_task >> load_task 
+[wait_dim_secteur, wait_dim_metier] >> extract_task >> load_task

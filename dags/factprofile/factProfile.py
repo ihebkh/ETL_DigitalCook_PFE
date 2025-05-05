@@ -138,7 +138,7 @@ def load_dim_languages(cur):
 def get_interest_pk_from_postgres(cur, interest):
     cur.execute("""
         SELECT interet_id
-        FROM public.dim_interests
+        FROM public.dim_interet
         WHERE LOWER(nom_interet) = %s;
     """, (interest.strip().lower(),))
     result = cur.fetchone()
@@ -147,9 +147,9 @@ def get_interest_pk_from_postgres(cur, interest):
 
 def get_preferedjoblocations_pk_from_postgres(cur, ville):
     cur.execute("""
-        SELECT ville_id
-        FROM public.dim_ville
-        WHERE nom_ville = %s;
+        SELECT region_id
+        FROM public.dim_region
+        WHERE nom_region = %s;
     """, (ville,))
     result = cur.fetchone()
     return result[0] if result else None
@@ -775,7 +775,6 @@ dag = DAG(
     start_date=datetime(2025, 1, 1),
     catchup=False
 )
-
 """
 wait_dim_secteur = ExternalTaskSensor(
     task_id='wait_for_dim_secteur',
@@ -902,15 +901,6 @@ wait_visa = ExternalTaskSensor(
         timeout=600,
         poke_interval=30
 )
-wait_dim_dates_task = ExternalTaskSensor(
-    task_id='wait_for_dim_dates',
-    external_dag_id='dim_dates_dag',
-    external_task_id='load_dim_dates', 
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag 
-)
 """
 task_run_etl = PythonOperator(
     task_id='run_etl_fact_client_profile',
@@ -922,9 +912,10 @@ end_task = EmptyOperator(
     task_id='end_task',
     dag=dag
 )
-
-#[wait_dim_metier,wait_dim_secteur,wait_dim_certifications,
-#wait_dim_clients,wait_dim_competences,wait_dim_experience,
-#wait_dim_interests,wait_dim_languages,wait_dim_niveau_etudes,
-#wait_dim_permis,wait_dim_locations,wait_projects,wait_visa,wait_dim_dates_task]>> 
+"""
+[wait_dim_metier,wait_dim_secteur,wait_dim_certifications,
+wait_dim_clients,wait_dim_competences,wait_dim_experience,
+wait_dim_interests,wait_dim_languages,wait_dim_niveau_etudes,
+wait_dim_permis,wait_dim_locations,wait_projects,wait_visa]>>
+"""
 task_run_etl>>end_task
