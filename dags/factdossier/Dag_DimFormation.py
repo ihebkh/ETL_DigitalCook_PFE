@@ -34,8 +34,7 @@ def convert_bson(obj):
 def generate_code_formation(pk):
     return f"formation{str(pk).zfill(4)}"
 
-def load_existing_formations():
-    conn = get_postgres_connection()
+def load_existing_formations(conn):
     cursor = conn.cursor()
     cursor.execute("""
         SELECT formation_id, titre_formation
@@ -43,20 +42,17 @@ def load_existing_formations():
     """)
     rows = cursor.fetchall()
     cursor.close()
-    conn.close()
     mapping = {}
     for formation_id, titre in rows:
         key = (titre or '')
         mapping[key] = formation_id
     return mapping
 
-def get_max_formation_pk():
-    conn = get_postgres_connection()
+def get_max_formation_pk(conn):
     cursor = conn.cursor()
     cursor.execute("SELECT COALESCE(MAX(formation_id), 0) FROM public.dim_formation;")
     max_pk = cursor.fetchone()[0]
     cursor.close()
-    conn.close()
     return max_pk
 
 def extract_formations(**kwargs):
@@ -75,10 +71,10 @@ def load_formations(**kwargs):
         logger.info("Aucune formation à charger.")
         return
 
-    existing_formations = load_existing_formations()
-    current_pk = get_max_formation_pk()
-
     conn = get_postgres_connection()
+    existing_formations = load_existing_formations(conn)
+    current_pk = get_max_formation_pk(conn)
+
     cursor = conn.cursor()
 
     query_upsert = """

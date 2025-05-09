@@ -21,20 +21,25 @@ def fetch_country_from_osm(city_name):
         }
         response = requests.get(url, headers=headers)
         if response.status_code != 200:
+            logger.error(f"Error fetching data from Nominatim for {city_name}: {response.status_code}")
             return "Error"
         data = response.json()
         if data:
             display_name = data[0].get("display_name", "")
             country = display_name.split(",")[-1].strip()
+            logger.info(f"Extracted country for {city_name}: {country}")
             return country
         else:
+            logger.warning(f"No data found for city: {city_name}")
             return "Unknown"
     except Exception as e:
+        logger.error(f"Error fetching data from Nominatim for {city_name}: {e}")
         return "Error"
 
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     conn = hook.get_conn()
+    logger.info("PostgreSQL connection successful.")
     return conn
 
 def get_secteur_map(cursor):
@@ -42,6 +47,7 @@ def get_secteur_map(cursor):
         cursor.execute("SELECT secteur_id, LOWER(nom_secteur) FROM public.dim_secteur;")
         return {label: pk for pk, label in cursor.fetchall()}
     except Exception as e:
+        logger.error(f"Erreur lors de la récupération des secteurs : {e}")
         return {}
 
 def get_metier_map(cursor):
@@ -49,6 +55,7 @@ def get_metier_map(cursor):
         cursor.execute("SELECT metier_id, LOWER(nom_metier) FROM public.dim_metier;")
         return {label: pk for pk, label in cursor.fetchall()}
     except Exception as e:
+        logger.error(f"Erreur lors de la récupération des métiers : {e}")
         return {}
 
 def get_entreprise_map(cursor):
@@ -56,6 +63,7 @@ def get_entreprise_map(cursor):
         cursor.execute("SELECT entreprise_id, LOWER(nom_entreprise) FROM public.dim_entreprise;")
         return {label: pk for pk, label in cursor.fetchall()}
     except Exception as e:
+        logger.error(f"Erreur lors de la récupération des entreprises : {e}")
         return {}
 
 def get_country_map(cursor):
@@ -84,6 +92,7 @@ def extract_offres_from_mongo():
         client, offres_col, _ = get_mongo_collections()
         cursor = offres_col.find({"isDeleted": False})
         offres = []
+
         for doc in cursor:
             offres.append({
                 "_id": doc.get("_id"),
@@ -96,10 +105,15 @@ def extract_offres_from_mongo():
                 "lieuSociete": doc.get("lieuSociete", "—"),
                 "pays": doc.get("pays", "—"),
             })
+
         client.close()
         cleaned = convert_bson(offres)
+        logger.info(f" {len(cleaned)} documents extraits depuis MongoDB.")
+        
         return cleaned
+
     except Exception as e:
+        logger.error(f" Erreur durant l'extraction MongoDB : {e}")
         return []
 
 def get_last_offre_id(cursor):
@@ -107,6 +121,7 @@ def get_last_offre_id(cursor):
         cursor.execute("SELECT COALESCE(MAX(offre_emploi_id), 0) FROM public.dim_offre_emploi;")
         return cursor.fetchone()[0]
     except Exception as e:
+        logger.error(f"Erreur lors de la récupération du dernier ID d'offre : {e}")
         return 0
 
 def transform_offres(raw_offres, cursor):
@@ -116,21 +131,26 @@ def transform_offres(raw_offres, cursor):
         entreprise_map = get_entreprise_map(cursor)
         country_map = get_country_map(cursor)
         last_id = get_last_offre_id(cursor)
+
         seen_titles = set()
         counter = last_id + 1
         transformed = []
+
         for doc in raw_offres:
             titre = doc["titre"]
             if not titre or titre.lower() in seen_titles:
                 continue
             seen_titles.add(titre.lower())
             offre_code = f"OFFR{str(counter).zfill(4)}"
+
             secteur_fk = metier_fk = entreprise_fk = None
             entreprise_fk = entreprise_map.get(doc["societe"].strip().lower())
+
             secteur_id = doc.get("secteur")
             metier_ids = doc.get("metier", [])
             if not isinstance(metier_ids, list):
                 metier_ids = [metier_ids]
+
             if secteur_id and ObjectId.is_valid(secteur_id):
                 client, _, secteurs_col = get_mongo_collections()
                 secteur_doc = secteurs_col.find_one({"_id": ObjectId(secteur_id)})
@@ -142,9 +162,12 @@ def transform_offres(raw_offres, cursor):
                             metier_label = job.get("label", "").strip().lower()
                             metier_fk = metier_map.get(metier_label)
                             break
+
+            # Get country from city name using OSM
             city_name = doc.get("lieuSociete", "").strip()
             country = fetch_country_from_osm(city_name) if city_name else "Unknown"
             country_id = country_map.get(country.lower(), None)
+
             transformed.append({
                 "offre_emploi_id": counter,
                 "offre_code": offre_code,
@@ -153,16 +176,23 @@ def transform_offres(raw_offres, cursor):
                 "metier_fk": metier_fk,
                 "entreprise_fk": entreprise_fk,
                 "typeContrat": doc["typeContrat"],
-                "pays_id": country_id
+                "pays_id": country_id,
             })
             counter += 1
+
+        logger.info(f" {len(transformed)} offres transformées avec succès.")
+        
         return transformed
+
     except Exception as e:
+        logger.error(f" Erreur durant la transformation : {e}")
         return []
 
 def load_offres_to_postgres(transformed_offres, cursor, conn):
     try:
         for offre in transformed_offres:
+            logger.info(f"Record : {offre}")
+            
             record = (
                 offre.get('offre_emploi_id'),
                 offre.get('offre_code'),
@@ -173,8 +203,13 @@ def load_offres_to_postgres(transformed_offres, cursor, conn):
                 offre.get('typeContrat'),
                 offre.get('pays_id')
             )
+
             if len(record) != 8:
+                logger.error(f"Erreur: Le record a un nombre incorrect d'éléments: {len(record)}")
                 continue
+
+            logger.info(f"Record modifié : {record}")
+
             cursor.execute("""
                 INSERT INTO public.dim_offre_emploi (
                     offre_emploi_id, code_offre_emploi, titre_offre_emploi, secteur_id, metier_id, entreprise_id,
@@ -190,8 +225,12 @@ def load_offres_to_postgres(transformed_offres, cursor, conn):
                     type_contrat_emploi = EXCLUDED.type_contrat_emploi,
                     pays_emploi = EXCLUDED.pays_emploi;
             """, record)
+
         conn.commit()
+        logger.info(f" {len(transformed_offres)} offres insérées ou mises à jour dans PostgreSQL.")
+
     except Exception as e:
+        logger.error(f" Erreur lors du chargement dans PostgreSQL : {e}")
         raise
 
 dag = DAG(
@@ -258,36 +297,4 @@ end_task = PythonOperator(
     dag=dag
 )
 
-wait_dim_secteur = ExternalTaskSensor(
-    task_id='wait_for_dim_secteur',
-    external_dag_id='dag_dim_secteur',
-    external_task_id='load_into_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
-
-wait_dim_metier = ExternalTaskSensor(
-    task_id='wait_for_dim_metier',
-    external_dag_id='Dag_Metier',
-    external_task_id='load_jobs_into_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
-wait_dim_entreprise = ExternalTaskSensor(
-    task_id='wait_for_dim_entreprise',
-    external_dag_id='dag_dim_entreprise',
-    external_task_id='load_into_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag 
-)
-
-
-
-
-start_task>>[wait_dim_entreprise,wait_dim_metier,wait_dim_secteur] >> extract >> transform >> load >> end_task
+start_task >> extract >> transform >> load >> end_task 

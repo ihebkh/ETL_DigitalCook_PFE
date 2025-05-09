@@ -22,13 +22,11 @@ def get_postgres_connection():
     logger.info("Connexion à PostgreSQL réussie.")
     return conn
 
-def get_max_client_pk():
-    conn = get_postgres_connection()
+def get_max_client_pk(conn):
     cur = conn.cursor()
     cur.execute("SELECT COALESCE(MAX(client_id), 0) FROM dim_client")
     max_pk = cur.fetchone()[0]
     cur.close()
-    conn.close()
     return max_pk
 
 def convert_bson(value):
@@ -55,8 +53,8 @@ def transform_data(**kwargs):
     raw_data = kwargs['ti'].xcom_pull(task_ids='extract_data', key='mongo_data')
     seen_matricules = set()
     transformed = []
-
-    max_pk = get_max_client_pk()
+    conn = get_postgres_connection()
+    max_pk = get_max_client_pk(conn)
 
     for record in raw_data:
         matricule = record.get("matricule")
@@ -86,6 +84,19 @@ def transform_data(**kwargs):
     kwargs['ti'].xcom_push(key='transformed_clients', value=transformed)
     logger.info(f"{len(transformed)} clients transformés.")
 
+def get_date_id_from_dim_dates(date_value, conn):
+    cur = conn.cursor()
+    
+    formatted_date = date_value.strftime('%Y-%m-%d') if isinstance(date_value, datetime) else date_value
+    
+    cur.execute("SELECT date_id, code_date FROM public.dim_dates WHERE code_date = %s", (formatted_date,))
+    date_data = cur.fetchone()
+    
+    cur.close()
+    
+    if date_data:
+        return date_data[0], date_data[1]
+    return None, None
 
 def load_data(**kwargs):
     data = kwargs['ti'].xcom_pull(task_ids='transform_data', key='transformed_clients')
@@ -118,12 +129,19 @@ def load_data(**kwargs):
     """
 
     for row in data:
+        birthdate = row.get("birthdate")
+        date_id, date_code = get_date_id_from_dim_dates(birthdate, conn)
+        
+        if not date_id:
+            logger.warning(f"No matching date found for birthdate: {birthdate}")
+            continue
+        
         cur.execute(insert_query, (
             row["client_pk"],
             row["matricule"],
             row.get("nom"),
             row.get("prenom"),
-            row.get("birthdate"),
+            date_id,
             row.get("nationality"),
             row.get("pays"),
             row.get("situation"),

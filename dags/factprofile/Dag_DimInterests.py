@@ -3,40 +3,53 @@ import logging
 from datetime import datetime
 from pymongo import MongoClient
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def get_mongodb_connection():
-    client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
-    db = client["PowerBi"]
-    collection = db["frontusers"]
-    return client, collection
-
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
-    conn = hook.get_conn()
-    logger.info("Connexion à PostgreSQL réussie.")
-    return conn
+    return hook.get_conn()
 
-def get_existing_interests_data():
-    conn = get_postgres_connection()
+def get_mongodb_connection():
+    client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
+    mongo_db = client["PowerBi"]
+    collection = mongo_db["frontusers"]
+    return client, collection
+
+def convert_bson(obj):
+    if isinstance(obj, dict):
+        return {k: convert_bson(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_bson(i) for i in obj]
+    elif isinstance(obj, ObjectId):
+        return str(obj)
+    elif isinstance(obj, datetime):
+        return obj.isoformat()
+    return obj
+
+def get_existing_interests(conn):
     cur = conn.cursor()
+    cur.execute("SELECT nom_interet FROM Dim_interet")
+    existing_interests = {row[0] for row in cur.fetchall()}
+    cur.close()
+    return existing_interests
 
-    cur.execute("SELECT nom_interet, interet_id FROM Dim_interet")
-    existing_data = cur.fetchall()
-    existing_interests = {row[0] for row in existing_data}
-    existing_codes = {row[1] for row in existing_data}
+def get_existing_codes(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT interet_id FROM Dim_interet")
+    existing_codes = {row[0] for row in cur.fetchall()}
+    cur.close()
+    return existing_codes
 
+def get_max_interet_id(conn):
+    cur = conn.cursor()
     cur.execute("SELECT COALESCE(MAX(interet_id), 0) FROM Dim_interet")
     current_pk = cur.fetchone()[0]
-
     cur.close()
-    conn.close()
-
-    return existing_interests, existing_codes, current_pk
+    return current_pk
 
 def extract_interests(**kwargs):
     client, collection = get_mongodb_connection()
@@ -69,7 +82,10 @@ def generate_interest_code(existing_codes):
 
 def transform_interests(**kwargs):
     extracted = kwargs['ti'].xcom_pull(task_ids='extract_interests', key='extracted_interests')
-    existing_interests, existing_codes, current_pk = get_existing_interests_data()
+    conn = get_postgres_connection()
+    existing_interests = get_existing_interests(conn)
+    existing_codes = get_existing_codes(conn)
+    current_pk = get_max_interet_id(conn)
 
     transformed = []
     for interest in extracted:
@@ -119,37 +135,37 @@ dag = DAG(
     catchup=False
 )
 
+start_task = PythonOperator(
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting extraction process..."),
+    dag=dag
+)
+
 extract_task = PythonOperator(
     task_id='extract_interests',
     python_callable=extract_interests,
     provide_context=True,
-    dag=dag,
+    dag=dag
 )
 
 transform_task = PythonOperator(
     task_id='transform_interests',
     python_callable=transform_interests,
     provide_context=True,
-    dag=dag,
+    dag=dag
 )
 
 load_task = PythonOperator(
     task_id='load_interests',
     python_callable=load_interests,
     provide_context=True,
-    dag=dag,
-)
-
-start_task = PythonOperator(
-    task_id='start_task',
-    python_callable=lambda: logger.info("Starting region extraction process..."),
     dag=dag
 )
 
 end_task = PythonOperator(
     task_id='end_task',
-    python_callable=lambda: logger.info("Region extraction process completed."),
+    python_callable=lambda: logger.info("Extraction process completed."),
     dag=dag
 )
 
-start_task>>extract_task >> transform_task >> load_task>>end_task
+start_task >> extract_task >> transform_task >> load_task >> end_task

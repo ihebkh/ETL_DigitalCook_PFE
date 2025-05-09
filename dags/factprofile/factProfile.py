@@ -147,9 +147,9 @@ def get_interest_pk_from_postgres(cur, interest):
 
 def get_preferedjoblocations_pk_from_postgres(cur, ville):
     cur.execute("""
-        SELECT region_id
-        FROM public.dim_region
-        WHERE nom_region = %s;
+        SELECT ville_id
+        FROM public.dim_ville
+        WHERE nom_ville = %s;
     """, (ville,))
     result = cur.fetchone()
     return result[0] if result else None

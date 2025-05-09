@@ -1,10 +1,9 @@
 import logging
 from pymongo import MongoClient
-from bson import ObjectId
-from datetime import datetime
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -16,88 +15,73 @@ def get_postgres_connection():
     return conn
 
 def get_mongodb_connection():
-    try:
-        MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
-        MONGO_DB = "PowerBi"
-        MONGO_COLLECTION = "formations"
-
-        client = MongoClient(MONGO_URI)
-        mongo_db = client[MONGO_DB]
-        collection = mongo_db[MONGO_COLLECTION]
-        logger.info("MongoDB connection successful.")
-        return client, mongo_db, collection
-    except Exception as e:
-        logger.error(f"Failed to connect to MongoDB: {e}")
-        raise
+    MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
+    MONGO_DB = "PowerBi"
+    MONGO_COLLECTION = "formations"
+    client = MongoClient(MONGO_URI)
+    mongo_db = client[MONGO_DB]
+    collection = mongo_db[MONGO_COLLECTION]
+    logger.info("MongoDB connection successful.")
+    return client, mongo_db, collection
 
 def generate_university_code(cursor):
-    cursor.execute("SELECT MAX(CAST(SUBSTRING(code_univ FROM 5) AS INTEGER)) FROM public.dim_universite WHERE code_univ LIKE 'univ%'")
+    cursor.execute("SELECT MAX(CAST(SUBSTRING(code_universite FROM 5) AS INTEGER)) FROM public.dim_universite WHERE code_universite LIKE 'univ%'")
     max_code_number = cursor.fetchone()[0]
-
     if max_code_number is None:
         return "univ0001"
-
     new_number = max_code_number + 1
     return f"univ{str(new_number).zfill(4)}"
 
-def extract_pays_and_universities(**kwargs):
+def fetch_pays_data(cursor):
+    cursor.execute("SELECT pays_id, nom_pays_en FROM public.dim_pays")
+    pays_data = cursor.fetchall()
+    return {country_name.lower(): pays_id for pays_id, country_name in pays_data}
+
+def extract_universities(**kwargs):
     client, _, collection = get_mongodb_connection()
-
     universities = []
-    countries = set()
-
-    universities_data = collection.find({}, {"_id": 0, "nom": 1, "pays": 1})
-    for record in universities_data:
-        if "nom" in record and "pays" in record:
-            universities.append(record["nom"])
-            countries.add(record["pays"])
-
+    for record in collection.find({}, {"_id": 0, "nom": 1, "pays": 1}):
+        nom = record.get("nom")
+        pays = record.get("pays")
+        if nom and pays:
+            universities.append({"nom": nom, "pays": pays})
     client.close()
-
     kwargs['ti'].xcom_push(key='universities', value=universities)
-    kwargs['ti'].xcom_push(key='countries', value=list(countries))
-
     logger.info(f"{len(universities)} universities extracted.")
-    logger.info(f"{len(countries)} countries extracted.")
 
 def load_universities_to_postgres(**kwargs):
     universities = kwargs['ti'].xcom_pull(task_ids='extract_universities', key='universities')
-    countries = kwargs['ti'].xcom_pull(task_ids='extract_universities', key='countries')
-
-    if universities is None or countries is None:
-        logger.error("XCom pull failed: 'universities' or 'countries' is None. Check upstream task and XCom keys.")
-        raise ValueError("XCom pull failed: 'universities' or 'countries' is None.")
-
-    logger.info(f"Received {len(universities)} universities from XCom.")
-    logger.info(f"Received {len(countries)} countries from XCom.")
-
+    if not universities:
+        logger.info("No universities to insert.")
+        return
     conn = get_postgres_connection()
     cursor = conn.cursor()
-
+    pays_mapping = fetch_pays_data(cursor)
     insert_query = """
-    INSERT INTO public.dim_universite (universite_id, code_universite, nom_universite, pays_universite)
+    INSERT INTO public.dim_universite (universite_id, code_universite, nom_universite, pays_id)
     VALUES (%s, %s, %s, %s)
     ON CONFLICT (nom_universite)
     DO UPDATE SET
         code_universite = EXCLUDED.code_universite,
         nom_universite = EXCLUDED.nom_universite,
-        pays_universite = EXCLUDED.pays_universite;
+        pays_id = EXCLUDED.pays_id;
     """
-
-    pk_counter = 1  # Start university_id at 1
+    pk_counter = 1
     inserted_count = 0
-
-    for university in universities:
+    for univ in universities:
+        nom = univ["nom"]
+        pays = univ["pays"]
+        pays_id = pays_mapping.get(pays.lower())
+        if not pays_id:
+            logger.warning(f"Country '{pays}' not found in dim_pays. Skipping university '{nom}'.")
+            continue
         code = generate_university_code(cursor)
-        for country in countries:
-            cursor.execute(insert_query, (pk_counter, code, university, country))
-            inserted_count += 1
-            pk_counter += 1  # Increment university_id for each new university
-
+        cursor.execute(insert_query, (pk_counter, code, nom, pays_id))
+        inserted_count += 1
+        pk_counter += 1
     conn.commit()
     cursor.close()
     conn.close()
-
     logger.info(f"{inserted_count} universities inserted or updated in PostgreSQL.")
 
 dag = DAG(
@@ -109,7 +93,7 @@ dag = DAG(
 
 extract_task = PythonOperator(
     task_id='extract_universities',
-    python_callable=extract_pays_and_universities,
+    python_callable=extract_universities,
     provide_context=True,
     dag=dag,
 )
@@ -122,13 +106,14 @@ load_task = PythonOperator(
 )
 
 start_task = PythonOperator(
-        task_id='start_task',
-        python_callable=lambda: logger.info("Starting recruitment extraction process..."),
- )
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting university extraction process..."),
+    dag=dag
+)
 end_task = PythonOperator(
-        task_id='end_task',
-        python_callable=lambda: logger.info("Recruitment extraction process completed."),
+    task_id='end_task',
+    python_callable=lambda: logger.info("University extraction process completed."),
+    dag=dag
 )
 
-
-start_task>>extract_task >> load_task>>end_task
+start_task >> extract_task >> load_task >> end_task

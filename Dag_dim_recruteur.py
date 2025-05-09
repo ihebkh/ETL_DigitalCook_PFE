@@ -140,4 +140,4 @@ with DAG(
         python_callable=lambda: logger.info("Processus d'extraction des recruteurs terminé.")
     )
 
-    start_task >> extract_task >> load_task >> end_task
+    start_task >> extract_task >> load_task >> end_task 

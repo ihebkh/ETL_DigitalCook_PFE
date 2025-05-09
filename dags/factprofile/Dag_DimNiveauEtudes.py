@@ -9,24 +9,29 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def get_mongodb_connection():
-    client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
-    return client["PowerBi"]["frontusers"]
+    try:
+        client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
+        db = client["PowerBi"]
+        collection = db["frontusers"]
+        logger.info("MongoDB connection successful.")
+        return client, collection
+    except Exception as e:
+        logger.error(f"Failed to connect to MongoDB: {e}")
+        raise
 
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
 
-def get_max_niveau_pk():
-    conn = get_postgres_connection()
+def get_max_niveau_pk(conn):
     cur = conn.cursor()
     cur.execute("SELECT COALESCE(MAX(niveau_etude_id), 0) FROM dim_niveau_d_etudes")
     max_pk = cur.fetchone()[0]
     cur.close()
-    conn.close()
     return max_pk
 
 def extract_niveau_etudes(**kwargs):
-    collection = get_mongodb_connection()
+    client, collection = get_mongodb_connection()
     data = []
 
     for doc in collection.find():
@@ -53,7 +58,8 @@ def transform_niveau_etudes(**kwargs):
         logger.info("Aucune donnée à transformer.")
         return
 
-    max_pk = get_max_niveau_pk()
+    conn = get_postgres_connection()
+    max_pk = get_max_niveau_pk(conn)
     transformed = []
     compteur = 0
 
@@ -130,16 +136,17 @@ with DAG(
         python_callable=load_niveau_etudes_postgres,
         provide_context=True,
     )
+
     start_task = PythonOperator(
-    task_id='start_task',
-    python_callable=lambda: logger.info("Starting region extraction process..."),
-    dag=dag
-)
+        task_id='start_task',
+        python_callable=lambda: logger.info("Starting region extraction process..."),
+        dag=dag
+    )
 
     end_task = PythonOperator(
-    task_id='end_task',
-    python_callable=lambda: logger.info("Region extraction process completed."),
-    dag=dag
-)
+        task_id='end_task',
+        python_callable=lambda: logger.info("Region extraction process completed."),
+        dag=dag
+    )
 
-    start_task>>extract_task >> transform_task >> load_task>>end_task
+    start_task >> extract_task >> transform_task >> load_task >> end_task

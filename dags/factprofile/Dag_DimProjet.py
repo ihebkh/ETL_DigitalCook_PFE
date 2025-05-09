@@ -17,23 +17,25 @@ def get_mongodb_connection():
         logger.error(f"MongoDB connection error: {e}")
         raise
 
-def get_postgresql_connection():
-    hook = PostgresHook(postgres_conn_id='postgres')
+def get_postgresql_connection(conn_id):
+    hook = PostgresHook(postgres_conn_id=conn_id)
     return hook.get_conn()
 
-def get_existing_projects_and_max_pk():
-    conn = get_postgresql_connection()
-    cur = conn.cursor()
+def get_existing_projects(conn_id):
+    with get_postgresql_connection(conn_id) as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT projet_id, nom_projet, code_projet FROM dim_projet")
+        existing = {(row[1]): (row[0], row[2]) for row in cur.fetchall()}
+        cur.close()
+    return existing
 
-    cur.execute("SELECT projet_id, nom_projet, code_projet FROM dim_projet")
-    existing = {(row[1]): (row[0], row[2]) for row in cur.fetchall()}
-
-    cur.execute("SELECT COALESCE(MAX(projet_id), 0) FROM dim_projet")
-    max_pk = cur.fetchone()[0]
-
-    cur.close()
-    conn.close()
-    return existing, max_pk
+def get_max_project_id(conn_id):
+    with get_postgresql_connection(conn_id) as conn:
+        cur = conn.cursor()
+        cur.execute("SELECT COALESCE(MAX(projet_id), 0) FROM dim_projet")
+        max_pk = cur.fetchone()[0]
+        cur.close()
+    return max_pk
 
 def generate_project_code(pk):
     return f"PROJ{str(pk).zfill(3)}"
@@ -58,9 +60,10 @@ def extract_from_mongodb(**kwargs):
     kwargs['ti'].xcom_push(key='mongo_projects', value=projects)
     logger.info(f"{len(projects)} projets extraits depuis MongoDB.")
 
-def transform_data(**kwargs):
+def transform_data(conn_id, **kwargs):
     mongo_projects = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='mongo_projects')
-    existing, max_pk = get_existing_projects_and_max_pk()
+    existing = get_existing_projects(conn_id)
+    max_pk = get_max_project_id(conn_id)
 
     transformed = []
 
@@ -84,13 +87,13 @@ def transform_data(**kwargs):
     logger.info(f"{len(transformed)} projets transformés.")
     return transformed
 
-def load_into_postgres(**kwargs):
+def load_into_postgres(conn_id, **kwargs):
     projects = kwargs['ti'].xcom_pull(task_ids='transform_data', key='transformed_projects')
     if not projects:
         logger.info("Aucune donnée à charger.")
         return
 
-    conn = get_postgresql_connection()
+    conn = get_postgresql_connection(conn_id)
     cur = conn.cursor()
 
     insert_query = """
@@ -121,6 +124,8 @@ dag = DAG(
     catchup=False,
 )
 
+conn_id = 'postgres'  # Remplacez par votre conn_id si nécessaire
+
 extract_task = PythonOperator(
     task_id='extract_from_mongodb',
     python_callable=extract_from_mongodb,
@@ -131,6 +136,7 @@ extract_task = PythonOperator(
 transform_task = PythonOperator(
     task_id='transform_data',
     python_callable=transform_data,
+    op_args=[conn_id],
     provide_context=True,
     dag=dag
 )
@@ -138,6 +144,7 @@ transform_task = PythonOperator(
 load_task = PythonOperator(
     task_id='load_into_postgres',
     python_callable=load_into_postgres,
+    op_args=[conn_id],
     provide_context=True,
     dag=dag
 )

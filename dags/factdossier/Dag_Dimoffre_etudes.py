@@ -76,7 +76,7 @@ def extract_offres_from_mongo(**context):
 def insert_offres_into_postgres(**context):
     offres_data = context['ti'].xcom_pull(task_ids='extract_offres_task', key='offres_data')
     if not offres_data:
-        logger.warning("⚠️ Aucune donnée à insérer.")
+        logger.warning(" Aucune donnée à insérer.")
         return
 
     pg_conn = get_postgres_connection()

@@ -1,5 +1,6 @@
 import logging
 import re
+import requests
 from datetime import datetime
 from pymongo import MongoClient
 from bson import ObjectId
@@ -11,6 +12,35 @@ from airflow.sensors.external_task_sensor import ExternalTaskSensor
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def fetch_country_from_osm(city_name):
+    try:
+        url = f"https://nominatim.openstreetmap.org/search?format=json&limit=1&q={city_name}"
+        headers = {
+            'User-Agent': 'YourAppName/1.0 (khmiriiheb3@gmail.com)',
+            'Accept-Language': 'en'
+        }
+        response = requests.get(url, headers=headers)
+        if response.status_code != 200:
+            logger.error(f"Error fetching data from Nominatim for {city_name}: {response.status_code}")
+            return None
+        data = response.json()
+        if data:
+            display_name = data[0].get("display_name", "")
+            country = display_name.split(",")[-1].strip()
+            logger.info(f"Extracted country for {city_name}: {country}")
+            return country
+        else:
+            logger.warning(f"No data found for city: {city_name}")
+            return None
+    except Exception as e:
+        logger.error(f"Error fetching data from Nominatim for {city_name}: {e}")
+        return None
+
+def load_dim_pays(cursor):
+    cursor.execute("SELECT pays_id, nom_pays_en FROM public.dim_pays;")
+    rows = cursor.fetchall()
+    return {label.lower(): pk for pk, label in rows if label}
 
 def parse_date(date_value):
     if isinstance(date_value, dict):
@@ -50,7 +80,7 @@ def load_dim_metier(cursor):
 
 def load_existing_experiences(cursor):
     cursor.execute("""
-        SELECT experience_id, role_experience, nom_entreprise, annee_debut, mois_debut, annee_fin, mois_fin
+        SELECT experience_id, role_experience, annee_debut, mois_debut, annee_fin, mois_fin
         FROM public.dim_experience
     """)
     rows = cursor.fetchall()
@@ -92,6 +122,7 @@ def extract_experiences(**kwargs):
             label_to_pk_metier = load_dim_metier(cursor)
             existing_experiences = load_existing_experiences(cursor)
             current_pk = get_max_experience_pk(cursor)
+            pays_map = load_dim_pays(cursor)
 
             documents = collection.find()
             filtered_experiences = []
@@ -100,29 +131,33 @@ def extract_experiences(**kwargs):
                 for profile_field in ['profile', 'simpleProfile']:
                     if profile_field in doc and isinstance(doc[profile_field], dict):
                         experiences = doc[profile_field].get('experiences')
-
                         if isinstance(experiences, list):
                             for experience in experiences:
                                 if isinstance(experience, dict):
                                     role = experience.get("role", "") or experience.get("poste", "")
                                     entreprise = experience.get("entreprise", "")
-                                    ville = experience.get("ville", {}).get("value", "") if isinstance(experience.get("ville", {}), dict) else experience.get("ville", "")
                                     pays = experience.get("pays", {}).get("value", "") if isinstance(experience.get("pays", {}), dict) else experience.get("pays", "")
                                     type_contrat = experience.get("typeContrat", {}).get("value", "") if isinstance(experience.get("typeContrat", {}), dict) else experience.get("typeContrat", "")
                                     secteur = experience.get("secteur", "")
                                     metier = experience.get("metier", "")
 
-                                    if not role and not ville and not type_contrat:
+                                    if not role and not type_contrat:
                                         continue
 
                                     start_year, start_month = parse_date(experience.get("du", ""))
                                     end_year, end_month = parse_date(experience.get("au", ""))
 
+                                    pays_id = None
+                                    if pays:
+                                        pays_id = pays_map.get(pays.lower())
+                                        if not pays_id:
+                                            country = fetch_country_from_osm(pays)
+                                            if country:
+                                                pays_id = pays_map.get(country.lower())
+
                                     filtered_experience = {
                                         "role": role,
-                                        "entreprise": entreprise,
-                                        "ville": ville,
-                                        "pays": pays,
+                                        "pays_id": pays_id,
                                         "typeContrat": type_contrat,
                                         "secteur": secteur,
                                         "metier": metier,
@@ -179,41 +214,36 @@ def insert_experiences_into_postgres(**kwargs):
     hook = PostgresHook(postgres_conn_id='postgres')
     upsert_query = """
         INSERT INTO public.dim_experience (
-            experience_id, code_experience, role_experience, nom_entreprise,
+            experience_id, code_experience, role_experience,
             annee_debut, mois_debut, annee_fin, mois_fin,
-            pays_experience, ville_experience, type_contrat,
+            pays_experience, type_contrat,
             secteur_id, metier_id
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (experience_id) DO UPDATE SET
             code_experience = EXCLUDED.code_experience,
             role_experience = EXCLUDED.role_experience,
-            nom_entreprise = EXCLUDED.nom_entreprise,
             annee_debut = EXCLUDED.annee_debut,
             mois_debut = EXCLUDED.mois_debut,
             annee_fin = EXCLUDED.annee_fin,
             mois_fin = EXCLUDED.mois_fin,
             pays_experience = EXCLUDED.pays_experience,
-            ville_experience = EXCLUDED.ville_experience,
             type_contrat = EXCLUDED.type_contrat,
             secteur_id = EXCLUDED.secteur_id,
             metier_id = EXCLUDED.metier_id;
     """
     with hook.get_conn() as conn:
         with conn.cursor() as cursor:
-            
             for exp in experiences:
                 cursor.execute(upsert_query, (
                     exp["experience_pk"],
                     exp["code_experience"],
                     exp["role"],
-                    exp["entreprise"],
                     int(exp["du_year"]) if exp["du_year"] else None,
                     int(exp["du_month"]) if exp["du_month"] else None,
                     int(exp["au_year"]) if exp["au_year"] else None,
                     int(exp["au_month"]) if exp["au_month"] else None,
-                    exp["pays"],
-                    exp["ville"],
+                    exp["pays_id"],
                     exp["typeContrat"],
                     int(exp["secteur"]) if exp["secteur"] and str(exp["secteur"]).isdigit() else None,
                     int(exp["metier"]) if exp["metier"] and str(exp["metier"]).isdigit() else None
@@ -273,5 +303,4 @@ end_task = PythonOperator(
     dag=dag
 )
 
-
-start_task>>[wait_dim_secteur, wait_dim_metier] >> extract_task >> load_task>>end_task
+start_task >>[wait_dim_secteur,wait_dim_metier]>> extract_task >> load_task>>end_task

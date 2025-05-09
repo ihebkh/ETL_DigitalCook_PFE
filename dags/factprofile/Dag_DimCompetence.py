@@ -21,25 +21,20 @@ def get_mongodb_connection():
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     conn = hook.get_conn()
-    logger.info("Connexion à PostgreSQL réussie.")
     return conn
 
-def get_existing_competences():
-    conn = get_postgres_connection()
+def get_existing_competences(conn):
     cur = conn.cursor()
     cur.execute("SELECT nom_competence FROM dim_competence")
     competences = {row[0] for row in cur.fetchall()}
     cur.close()
-    conn.close()
     return competences
 
-def get_next_competence_pk():
-    conn = get_postgres_connection()
+def get_next_competence_pk(conn):
     cur = conn.cursor()
     cur.execute("SELECT COALESCE(MAX(competence_id), 0) FROM dim_competence")
     max_pk = cur.fetchone()[0]
     cur.close()
-    conn.close()
     return max_pk + 1
 
 def extract_from_mongodb(**kwargs):
@@ -64,8 +59,9 @@ def extract_from_mongodb(**kwargs):
 
 def transform_competences(**kwargs):
     extracted_competencies = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='extracted_competencies')
-    existing_competences = get_existing_competences()
-    next_pk = get_next_competence_pk()
+    conn = get_postgres_connection()
+    existing_competences = get_existing_competences(conn)
+    next_pk = get_next_competence_pk(conn)
     transformed_data = []
 
     for comp in extracted_competencies:
@@ -80,6 +76,7 @@ def transform_competences(**kwargs):
             existing_competences.add(comp)
 
     kwargs['ti'].xcom_push(key='transformed_competences', value=transformed_data)
+    conn.close()
     logger.info(f"{len(transformed_data)} nouvelles compétences à insérer")
 
 def load_competences(**kwargs):
@@ -94,7 +91,7 @@ def load_competences(**kwargs):
     insert_query = """
     INSERT INTO dim_competence (competence_id, code_competence, nom_competence)
     VALUES (%s, %s, %s)
-    ON CONFLICT (competence_id)DO UPDATE SET
+    ON CONFLICT (competence_id) DO UPDATE SET
         code_competence = EXCLUDED.code_competence,
         nom_competence = EXCLUDED.nom_competence;
     """
@@ -147,6 +144,4 @@ end_task = PythonOperator(
     dag=dag
 )
 
-
-
-start_task >> extract_task >> transform_task >> load_task >>end_task
+start_task >> extract_task >> transform_task >> load_task >> end_task

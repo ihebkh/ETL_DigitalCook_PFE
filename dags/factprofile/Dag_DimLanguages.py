@@ -2,11 +2,15 @@ import logging
 from datetime import datetime
 from pymongo import MongoClient
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def get_postgres_connection():
+    hook = PostgresHook(postgres_conn_id='postgres')
+    return hook.get_conn()
 
 def get_mongodb_connection():
     MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
@@ -16,25 +20,30 @@ def get_mongodb_connection():
     logger.info("Connexion MongoDB réussie.")
     return client, collection
 
-def get_postgres_connection():
-    hook = PostgresHook(postgres_conn_id='postgres')
-    conn = hook.get_conn()
-    logger.info("Connexion PostgreSQL réussie.")
-    return conn
+def convert_bson(obj):
+    if isinstance(obj, dict):
+        return {k: convert_bson(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_bson(i) for i in obj]
+    elif isinstance(obj, ObjectId):
+        return str(obj)
+    elif isinstance(obj, datetime):
+        return obj.isoformat()
+    return obj
 
-def get_max_language_pk_and_existing_labels():
-    conn = get_postgres_connection()
+def get_max_language_pk(conn):
     cur = conn.cursor()
     cur.execute("SELECT COALESCE(MAX(langue_id), 0) FROM dim_langues")
     max_pk = cur.fetchone()[0]
+    cur.close()
+    return max_pk
+
+def get_existing_labels(conn):
+    cur = conn.cursor()
     cur.execute("SELECT nom_langue FROM dim_langues")
     existing_labels = {row[0] for row in cur.fetchall()}
     cur.close()
-    conn.close()
-    return max_pk, existing_labels
-
-def generate_langue_code(index):
-    return f"LANG{str(index).zfill(3)}"
+    return existing_labels
 
 def extract_from_mongodb(**kwargs):
     client, collection = get_mongodb_connection()
@@ -59,9 +68,16 @@ def extract_from_mongodb(**kwargs):
     kwargs['ti'].xcom_push(key='extracted_languages', value=languages)
     logger.info(f"{len(languages)} langues extraites.")
 
+def generate_langue_code(index):
+    return f"LANG{str(index).zfill(3)}"
+
 def transform_languages(**kwargs):
     languages = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='extracted_languages')
-    max_pk, existing_labels = get_max_language_pk_and_existing_labels()
+    conn = get_postgres_connection()
+    
+    max_pk = get_max_language_pk(conn)
+    existing_labels = get_existing_labels(conn)
+    
     transformed = []
     compteur = max_pk
 
@@ -129,26 +145,26 @@ transform_task = PythonOperator(
     task_id='transform_languages',
     python_callable=transform_languages,
     provide_context=True,
-    dag=dag,
+    dag=dag
 )
 
 load_task = PythonOperator(
     task_id='load_languages',
     python_callable=load_languages,
     provide_context=True,
-    dag=dag,
+    dag=dag
 )
+
 start_task = PythonOperator(
     task_id='start_task',
-    python_callable=lambda: logger.info("Starting region extraction process..."),
+    python_callable=lambda: logger.info("Starting extraction process..."),
     dag=dag
 )
 
 end_task = PythonOperator(
     task_id='end_task',
-    python_callable=lambda: logger.info("Region extraction process completed."),
+    python_callable=lambda: logger.info("Extraction process completed."),
     dag=dag
 )
 
-
-start_task>>extract_task >> transform_task >> load_task>>end_task
+start_task >> extract_task >> transform_task >> load_task >> end_task

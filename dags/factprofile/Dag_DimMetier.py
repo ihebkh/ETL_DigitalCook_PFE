@@ -1,12 +1,17 @@
 import logging
-from pymongo import MongoClient
 from datetime import datetime
+from pymongo import MongoClient
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def get_postgres_connection():
+    hook = PostgresHook(postgres_conn_id='postgres')
+    conn = hook.get_conn()
+    return conn
 
 def get_mongodb_connection():
     try:
@@ -19,28 +24,18 @@ def get_mongodb_connection():
         logger.error(f"Failed to connect to MongoDB: {e}")
         raise
 
-def get_postgres_connection():
-    hook = PostgresHook(postgres_conn_id='postgres')
-    conn = hook.get_conn()
-    logger.info("PostgreSQL connection successful.")
-    return conn
-
-def get_max_metier_pk():
-    conn = get_postgres_connection()
+def get_max_metier_pk(conn):
     cur = conn.cursor()
     cur.execute("SELECT COALESCE(MAX(metier_id), 0) FROM Dim_Metier")
     max_pk = cur.fetchone()[0]
     cur.close()
-    conn.close()
     return max_pk
 
-def get_existing_rome_codes():
-    conn = get_postgres_connection()
+def get_existing_rome_codes(conn):
     cur = conn.cursor()
     cur.execute("SELECT code_metier FROM Dim_Metier")
     rome_codes = {row[0] for row in cur.fetchall()}
     cur.close()
-    conn.close()
     return rome_codes
 
 def extract_jobs_from_mongodb(**kwargs):
@@ -49,6 +44,7 @@ def extract_jobs_from_mongodb(**kwargs):
         cursor = collection.find({}, {"_id": 0, "jobs": 1})
 
         jobs = []
+        seen_labels = set()
         for document in cursor:
             if "jobs" in document:
                 for job in document["jobs"]:
@@ -57,7 +53,9 @@ def extract_jobs_from_mongodb(**kwargs):
                             "label": job.get("label"),
                             "romeCode": job.get("romeCode")
                         }
-                        jobs.append(job_info)
+                        if job_info["romeCode"] not in seen_labels:
+                            jobs.append(job_info)
+                            seen_labels.add(job_info["romeCode"])
 
         client.close()
         kwargs['ti'].xcom_push(key='extracted_jobs', value=jobs)
@@ -66,6 +64,9 @@ def extract_jobs_from_mongodb(**kwargs):
         logger.error(f"Error extracting data from MongoDB: {e}")
         raise
 
+def generate_langue_code(index):
+    return f"LANG{str(index).zfill(3)}"
+
 def transform_jobs_data(**kwargs):
     try:
         jobs = kwargs['ti'].xcom_pull(task_ids='extract_jobs_from_mongodb', key='extracted_jobs')
@@ -73,15 +74,18 @@ def transform_jobs_data(**kwargs):
             logger.info("No jobs to transform.")
             return
 
-        current_pk = get_max_metier_pk()
-        existing_rome_codes = get_existing_rome_codes()
+        conn = get_postgres_connection()
+        max_pk = get_max_metier_pk(conn)
+        existing_rome_codes = get_existing_rome_codes(conn)
 
         transformed = []
+        compteur = max_pk
+
         for job in jobs:
             if job["romeCode"] not in existing_rome_codes:
-                current_pk += 1
+                compteur += 1
                 transformed.append({
-                    "metier_pk": current_pk,
+                    "metier_pk": compteur,
                     "romeCode": job["romeCode"],
                     "label": job["label"]
                 })
@@ -103,17 +107,18 @@ def load_jobs_into_postgres(**kwargs):
         conn = get_postgres_connection()
         cur = conn.cursor()
 
+        insert_query = """
+        INSERT INTO Dim_Metier (metier_id, code_metier, nom_metier)
+        VALUES (%s, %s, %s)
+        ON CONFLICT (metier_id) DO UPDATE SET
+            code_metier = EXCLUDED.code_metier,
+            nom_metier = EXCLUDED.nom_metier;
+        """
+
         for job in jobs_data:
-            try:
-                cur.execute("""
-                    INSERT INTO Dim_Metier (metier_id, code_metier, nom_metier)
-                    VALUES (%s, %s, %s)
-                    ON CONFLICT (metier_id) DO UPDATE SET
-                        code_metier = EXCLUDED.code_metier,
-                        nom_metier = EXCLUDED.nom_metier;
-                """, (job["metier_pk"], job["romeCode"], job["label"]))
-            except Exception as e:
-                logger.error(f"Error inserting job {job['romeCode']}: {e}")
+            cur.execute(insert_query, (
+                job["metier_pk"], job["romeCode"], job["label"]
+            ))
 
         conn.commit()
         cur.close()
@@ -130,30 +135,30 @@ dag = DAG(
     catchup=False,
 )
 
+start_task = PythonOperator(
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting region extraction process..."),
+    dag=dag
+)
+
 extract_task = PythonOperator(
     task_id='extract_jobs_from_mongodb',
     python_callable=extract_jobs_from_mongodb,
     provide_context=True,
-    dag=dag,
+    dag=dag
 )
 
 transform_task = PythonOperator(
     task_id='transform_jobs_data',
     python_callable=transform_jobs_data,
     provide_context=True,
-    dag=dag,
+    dag=dag
 )
 
 load_task = PythonOperator(
     task_id='load_jobs_into_postgres',
     python_callable=load_jobs_into_postgres,
     provide_context=True,
-    dag=dag,
-)
-
-start_task = PythonOperator(
-    task_id='start_task',
-    python_callable=lambda: logger.info("Starting region extraction process..."),
     dag=dag
 )
 
@@ -163,4 +168,4 @@ end_task = PythonOperator(
     dag=dag
 )
 
-start_task>>extract_task >> transform_task >> load_task>>end_task
+start_task >> extract_task >> transform_task >> load_task >> end_task

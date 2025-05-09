@@ -37,7 +37,7 @@ def get_service_pk_from_nom_service(pg_cursor, nom_service):
     return result[0] if result else None
 
 def load_ville_mapping(pg_cursor):
-    pg_cursor.execute("SELECT nom_region, region_id FROM public.dim_region")
+    pg_cursor.execute("SELECT nom_ville, ville_id FROM public.dim_ville")
     return {row[0]: row[1] for row in pg_cursor.fetchall()}
 
 def load_offreemploi_mapping(pg_cursor):
