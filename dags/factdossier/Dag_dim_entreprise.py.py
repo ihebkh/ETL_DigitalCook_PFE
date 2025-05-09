@@ -30,33 +30,76 @@ def get_next_entreprise_pk_and_code_counter():
     next_pk = (max_pk or 0) + 1
     return next_pk, next_pk
 
-def extract_all_entreprises(ti):
-    client, offres_col, frontusers_col, entreprises_col = get_mongo_collections()
+def extract_from_offredemplois(offres_col, villes_list=None):
+    if villes_list is None:
+        villes_list = []
+
     entreprises = set()
-
-    for doc in offres_col.find({"isDeleted": False}, {"societe": 1}):
+    for doc in offres_col.find({"isDeleted": False}, {"societe": 1, "ville": 1}):
         nom = doc.get("societe", "").strip()
-        if nom:
-            entreprises.add(nom)
+        ville_doc = doc.get("ville", "").strip()
+        if nom and (ville_doc in villes_list or not villes_list):
+            entreprises.add((nom, ville_doc, None))
+    logger.info(f"{len(entreprises)} entreprises extraites de 'offredemplois'.")
+    return entreprises
 
-    for doc in frontusers_col.find({}, {"profile.experiences.entreprise": 1, "simpleProfile.experiences.entreprise": 1}):
+def extract_from_frontusers(frontusers_col):
+    entreprises = set()
+    for doc in frontusers_col.find({}, {
+        "profile.experiences.entreprise": 1,
+        "profile.experiences.pays": 1,
+        "simpleProfile.experiences.entreprise": 1,
+        "simpleProfile.experiences.pays": 1
+    }):
         for profile_key in ["profile", "simpleProfile"]:
             profile = doc.get(profile_key, {})
             for exp in profile.get("experiences", []):
                 if isinstance(exp, dict):
-                    nom = exp.get("entreprise", "").strip()
-                    if nom:
-                        entreprises.add(nom)
+                    nom = exp.get("entreprise", "")
+                    pays = exp.get("pays", "")
 
-    for doc in entreprises_col.find({}, {"nom": 1}):
-        nom = doc.get("nom", "").strip()
+                    if isinstance(pays, dict):
+                        pays = pays.get("value", "")
+                    elif not isinstance(pays, str):
+                        pays = ""
+
+                    nom = nom.strip() if isinstance(nom, str) else ""
+                    pays = pays.strip()
+
+                    if nom:
+                        entreprises.add((nom, pays, None))
+    logger.info(f"{len(entreprises)} entreprises extraites de 'frontusers' avec pays.")
+    return entreprises
+
+def extract_from_entreprises(entreprises_col):
+    entreprises = set()
+    for doc in entreprises_col.find({}, {"nom": 1, "nombreEmployes": 1}):
+        nom = doc.get("nom", None).strip()
+        nombre_employes = doc.get("nombreEmployes", None)
         if nom:
-            entreprises.add(nom)
+            entreprises.add((nom, "", nombre_employes)) 
+    logger.info(f"{len(entreprises)} entreprises extraites de 'entreprises' avec nombre d'employés.")
+    return entreprises
+
+def extract_all_entreprises(ti):
+    client, offres_col, frontusers_col, entreprises_col = get_mongo_collections()
+
+    entreprises = set()
+    villes_list = []
+    for doc in offres_col.find({"isDeleted": False}, {"ville": 1}):
+        ville = doc.get("ville", None).strip()
+        if ville and ville not in villes_list:
+            villes_list.append(ville)
+
+    entreprises.update(extract_from_offredemplois(offres_col, villes_list=villes_list))
+    entreprises.update(extract_from_frontusers(frontusers_col))
+    entreprises.update(extract_from_entreprises(entreprises_col))
 
     client.close()
+
     entreprises_list = list(entreprises)
     ti.xcom_push(key='entreprises', value=entreprises_list)
-    logger.info(f"{len(entreprises_list)} entreprises extraites de MongoDB.")
+    logger.info(f"{len(entreprises_list)} entreprises extraites au total.")
 
 def insert_entreprises(ti):
     entreprises = ti.xcom_pull(task_ids='extract_all_entreprises', key='entreprises')
@@ -70,24 +113,30 @@ def insert_entreprises(ti):
     counter_pk, counter_code = get_next_entreprise_pk_and_code_counter()
     total = 0
 
-    for nom in entreprises:
+    for nom, ville, nombre_employes in entreprises:
         nom_clean = nom.strip() if nom else None
+        ville = ville.strip() if isinstance(ville, str) and ville.strip() else None
+
         if not nom_clean:
             continue
 
         codeentreprise = generate_entreprise_code(counter_code)
 
         cur.execute("""
-            INSERT INTO public.dim_entreprise (entreprise_id, code_entreprise, nom_entreprise)
-            VALUES (%s, %s, %s)
+            INSERT INTO public.dim_entreprise (entreprise_id, code_entreprise, nom_entreprise, ville, nombre_employes)
+            VALUES (%s, %s, %s, %s, %s)
             ON CONFLICT (nom_entreprise) DO UPDATE
             SET 
                 code_entreprise = EXCLUDED.code_entreprise,
-                nom_entreprise = EXCLUDED.nom_entreprise;
+                nom_entreprise = EXCLUDED.nom_entreprise,
+                ville = EXCLUDED.ville,
+                nombre_employes = EXCLUDED.nombre_employes;
         """, (
             counter_pk,
             codeentreprise,
-            nom_clean
+            nom_clean,
+            ville,
+            nombre_employes
         ))
 
         counter_pk += 1
@@ -106,6 +155,12 @@ dag = DAG(
     catchup=False
 )
 
+start_task = PythonOperator(
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting extraction process..."),
+    dag=dag,
+)
+
 extract_task = PythonOperator(
     task_id='extract_all_entreprises',
     python_callable=extract_all_entreprises,
@@ -120,4 +175,10 @@ insert_task = PythonOperator(
     dag=dag,
 )
 
-extract_task >> insert_task
+end_task = PythonOperator(
+    task_id='end_task',
+    python_callable=lambda: logger.info("Extraction process completed."),
+    dag=dag,
+)
+
+start_task >> extract_task >> insert_task >> end_task

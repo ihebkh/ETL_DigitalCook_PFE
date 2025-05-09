@@ -464,6 +464,18 @@ wait_for_dim_ville = ExternalTaskSensor(
     poke_interval=30,
     dag=dag
 )
+start_task = PythonOperator(
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting region extraction process..."),
+    dag=dag
+)
 
-[wait_dim_clients , wait_dim_dates_task ,wait_for_dim_formation , wait_for_dim_offre_emplois , wait_for_dim_offre_etude , wait_for_dim_service,
- wait_for_dim_ville]>>etl_task
+end_task = PythonOperator(
+    task_id='end_task',
+    python_callable=lambda: logger.info("Region extraction process completed."),
+    dag=dag
+)
+
+
+start_task>>[wait_dim_clients , wait_dim_dates_task ,wait_for_dim_formation , wait_for_dim_offre_emplois , wait_for_dim_offre_etude , wait_for_dim_service,
+ wait_for_dim_ville]>>etl_task>>end_task

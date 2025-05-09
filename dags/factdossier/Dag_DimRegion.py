@@ -36,10 +36,9 @@ def generate_location_code(cursor, existing_codes):
     if not existing_codes: 
         return "LOC001"
     
-    cursor.execute("SELECT MAX(CAST(SUBSTRING(code_region FROM 4) AS INTEGER)) FROM public.dim_region WHERE code_region LIKE 'LOC%'")
+    cursor.execute("SELECT MAX(CAST(SUBSTRING(code_ville FROM 4) AS INTEGER)) FROM public.dim_ville WHERE code_ville LIKE 'LOC%'")
     max_code_number = cursor.fetchone()[0]
     
-
     if max_code_number is None:
         return "LOC001"
     
@@ -51,24 +50,40 @@ def handle_objectid(obj):
         return str(obj)
     raise TypeError(f"Type {obj.__class__.__name__} not serializable")
 
-
 def get_existing_villes(cursor):
-    cursor.execute("SELECT nom_region FROM public.dim_region")
+    cursor.execute("SELECT nom_ville FROM public.dim_ville")
     existing_entries = {row[0] for row in cursor.fetchall()}
     return existing_entries
 
-def extract_villes_and_destinations(**kwargs):
-    client, _, collection_1, collection_2 = get_mongodb_connection()
+def extract_villes_and_pays_from_frontusers(**kwargs):
+    client, _, collection_1, _ = get_mongodb_connection()
 
     villes = set()
+    pays = set()
 
     frontusers_data = collection_1.find({}, {"_id": 0, "profile.preferedJobLocations": 1, "simpleProfile.preferedJobLocations": 1})
     for record in frontusers_data:
         for profile_key in ["profile", "simpleProfile"]:
             if profile_key in record and "preferedJobLocations" in record[profile_key]:
                 for location in record[profile_key]["preferedJobLocations"]:
-                    if isinstance(location, dict) and "ville" in location:
-                        villes.add(location["ville"])
+                    if isinstance(location, dict):
+                        if "ville" in location:
+                            villes.add(location["ville"])
+                        if "pays" in location:
+                            pays.add(location["pays"])
+
+    villes = list(villes)
+    pays = list(pays)
+    client.close()
+
+    kwargs['ti'].xcom_push(key='villes', value=villes)
+    kwargs['ti'].xcom_push(key='pays', value=pays)
+
+    logger.info(f"{len(villes)} villes et {len(pays)} pays extraits depuis frontusers.")
+
+def extract_destinations_from_dossiers(**kwargs):
+    client, _, _, collection_2 = get_mongodb_connection()
+
     destinations = set()
     dossiers_data = collection_2.find({}, {"_id": 0, "firstStep.destination": 1})
     for record in dossiers_data:
@@ -77,30 +92,35 @@ def extract_villes_and_destinations(**kwargs):
                 if isinstance(destination, str):
                     destinations.add(destination)
 
-    villes = list(villes)
     destinations = list(destinations)
     client.close()
 
-    kwargs['ti'].xcom_push(key='villes', value=villes)
     kwargs['ti'].xcom_push(key='destinations', value=destinations)
 
-    logger.info(f"{len(villes)} villes extraites.")
-    logger.info(f"{len(destinations)} destinations extraites.")
+    logger.info(f"{len(destinations)} destinations extraites depuis dossiers.")
 
-def load_villes_and_destinations_postgres(**kwargs):
-    villes = kwargs['ti'].xcom_pull(task_ids='extract_villes_and_destinations', key='villes')
-    destinations = kwargs['ti'].xcom_pull(task_ids='extract_villes_and_destinations', key='destinations')
+def load_villes_pays_and_destinations_postgres(**kwargs):
+    villes = kwargs['ti'].xcom_pull(task_ids='extract_villes_and_pays_from_frontusers', key='villes')
+    pays = kwargs['ti'].xcom_pull(task_ids='extract_villes_and_pays_from_frontusers', key='pays')
+    destinations = kwargs['ti'].xcom_pull(task_ids='extract_destinations_from_dossiers', key='destinations')
+
+    if villes is None or pays is None or destinations is None:
+        logger.error("XCom pull failed: 'villes', 'pays' or 'destinations' is None. Check upstream task and XCom keys.")
+        raise ValueError("XCom pull failed: 'villes', 'pays' or 'destinations' is None.")
+
+    logger.info(f"Received {len(villes)} villes, {len(pays)} pays, and {len(destinations)} destinations from XCom.")
 
     conn = get_postgres_connection()
     cursor = conn.cursor()
 
     insert_query = """
-    INSERT INTO public.dim_ville (region_id, code_region, nom_region)
-    VALUES (%s, %s, %s)
-    ON CONFLICT (nom_region)
+    INSERT INTO public.dim_ville (ville_id, code_ville, nom_ville, pays)
+    VALUES (%s, %s, %s, %s)
+    ON CONFLICT (nom_ville)
     DO UPDATE SET
-        code_region = EXCLUDED.code_region,
-        nom_region = EXCLUDED.nom_region;
+        code_ville = EXCLUDED.code_ville,
+        nom_ville = EXCLUDED.nom_ville,
+        pays = EXCLUDED.pays;
     """
 
     existing_entries = get_existing_villes(cursor)
@@ -108,18 +128,29 @@ def load_villes_and_destinations_postgres(**kwargs):
     pk_counter = 1
     inserted_count = 0
 
+    # Insertion des villes
     for ville in villes:
         if ville not in existing_entries:
             code = generate_location_code(cursor, existing_entries)
-            cursor.execute(insert_query, (pk_counter, code, ville))
+            cursor.execute(insert_query, (pk_counter, code, ville, None))  # Pays est None pour les villes
             inserted_count += 1
             pk_counter += 1
             existing_entries.add(ville)
 
+    # Insertion des pays
+    for pay in pays:
+        if pay not in existing_entries:
+            code = generate_location_code(cursor, existing_entries)
+            cursor.execute(insert_query, (pk_counter, code, pay, pay))  # Insertion du pays
+            inserted_count += 1
+            pk_counter += 1
+            existing_entries.add(pay)
+
+    # Insertion des destinations
     for destination in destinations:
         if destination not in existing_entries:
             code = generate_location_code(cursor, existing_entries)
-            cursor.execute(insert_query, (pk_counter, code, destination))
+            cursor.execute(insert_query, (pk_counter, code, destination, None))  # Pays est None pour les destinations
             inserted_count += 1
             pk_counter += 1
             existing_entries.add(destination)
@@ -128,27 +159,46 @@ def load_villes_and_destinations_postgres(**kwargs):
     cursor.close()
     conn.close()
 
-    logger.info(f"{inserted_count} villes et destinations insérées ou mises à jour dans PostgreSQL.")
+    logger.info(f"{inserted_count} villes, pays et destinations insérées ou mises à jour dans PostgreSQL.")
 
 dag = DAG(
-    'dag_dim_regions',
+    'dag_dim_villes',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )
 
-extract_task = PythonOperator(
-    task_id='extract_region',
-    python_callable=extract_villes_and_destinations,
+extract_villes_and_pays_task = PythonOperator(
+    task_id='extract_villes_and_pays_from_frontusers',
+    python_callable=extract_villes_and_pays_from_frontusers,
+    provide_context=True,
+    dag=dag,
+)
+
+extract_destinations_task = PythonOperator(
+    task_id='extract_destinations_from_dossiers',
+    python_callable=extract_destinations_from_dossiers,
     provide_context=True,
     dag=dag,
 )
 
 load_task = PythonOperator(
-    task_id='load_region',
-    python_callable=load_villes_and_destinations_postgres,
+    task_id='load_ville',
+    python_callable=load_villes_pays_and_destinations_postgres,
     provide_context=True,
     dag=dag,
 )
 
-extract_task >> load_task
+start_task = PythonOperator(
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting region extraction process..."),
+    dag=dag
+)
+
+end_task = PythonOperator(
+    task_id='end_task',
+    python_callable=lambda: logger.info("Region extraction process completed."),
+    dag=dag
+)
+
+start_task >> extract_villes_and_pays_task >> extract_destinations_task >> load_task >> end_task

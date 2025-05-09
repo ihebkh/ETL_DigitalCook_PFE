@@ -109,6 +109,12 @@ with DAG(
     schedule_interval='@daily',
     catchup=False
 ) as dag:
+    
+    start = PythonOperator(
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting formation extraction process..."),
+    dag=dag
+)
 
     extract_task = PythonOperator(
         task_id='extract_offres_task',
@@ -130,5 +136,10 @@ with DAG(
     poke_interval=30,
     dag=dag
 )
+    end_task = PythonOperator(
+    task_id='end_task',
+    python_callable=lambda: logger.info("Formation extraction process completed."),
+    dag=dag
+)
 
-wait_dim_universite >> extract_task >> insert_task
+start>>wait_dim_universite >> extract_task >> insert_task>>end_task

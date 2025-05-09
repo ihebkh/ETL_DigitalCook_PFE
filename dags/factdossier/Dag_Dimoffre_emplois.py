@@ -217,6 +217,12 @@ def load_task(**kwargs):
     transformed_offres = kwargs['ti'].xcom_pull(task_ids='transform_task')
     load_offres_to_postgres(transformed_offres)
 
+start_task = PythonOperator(
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting formation extraction process..."),
+    dag=dag
+)
+
 extract = PythonOperator(
     task_id='extract_task',
     python_callable=extract_task,
@@ -268,4 +274,10 @@ wait_dim_metier = ExternalTaskSensor(
     dag=dag
 )
 
-[wait_dim_entreprise,wait_dim_metier,wait_dim_secteur]>>extract >> transform >> load
+end_task = PythonOperator(
+    task_id='end_task',
+    python_callable=lambda: logger.info("Formation extraction process completed."),
+    dag=dag
+)
+
+extract>>[wait_dim_entreprise,wait_dim_metier,wait_dim_secteur]>>extract >> transform >> load >> end_task

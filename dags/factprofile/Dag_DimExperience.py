@@ -261,5 +261,17 @@ load_task = PythonOperator(
     provide_context=True,
     dag=dag
 )
+start_task = PythonOperator(
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting region extraction process..."),
+    dag=dag
+)
 
-[wait_dim_secteur, wait_dim_metier] >> extract_task >> load_task
+end_task = PythonOperator(
+    task_id='end_task',
+    python_callable=lambda: logger.info("Region extraction process completed."),
+    dag=dag
+)
+
+
+start_task>>[wait_dim_secteur, wait_dim_metier] >> extract_task >> load_task>>end_task

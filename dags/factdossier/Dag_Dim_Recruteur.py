@@ -114,6 +114,11 @@ with DAG(
     catchup=False,
 ) as dag:
 
+    start_task = PythonOperator(
+        task_id='start_task',
+        python_callable=lambda: logger.info("Starting recruitment extraction process..."),
+    )
+
     extract_task = PythonOperator(
         task_id='extract_users',
         python_callable=extract_users,
@@ -126,4 +131,9 @@ with DAG(
         provide_context=True
     )
 
-    extract_task >> load_task
+    end_task = PythonOperator(
+        task_id='end_task',
+        python_callable=lambda: logger.info("Recruitment extraction process completed."),
+    )
+
+    start_task >> extract_task >> load_task >> end_task

@@ -124,6 +124,12 @@ dag = DAG(
     catchup=False
 )
 
+start_task = PythonOperator(
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting formation extraction process..."),
+    dag=dag
+)
+
 extract_task = PythonOperator(
     task_id='extract_formations',
     python_callable=extract_formations,
@@ -138,4 +144,10 @@ load_task = PythonOperator(
     dag=dag
 )
 
-extract_task >> load_task
+end_task = PythonOperator(
+    task_id='end_task',
+    python_callable=lambda: logger.info("Formation extraction process completed."),
+    dag=dag
+)
+
+start_task >> extract_task >> load_task >> end_task

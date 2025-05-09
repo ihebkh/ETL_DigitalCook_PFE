@@ -8,7 +8,6 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
 def get_mongodb_connection():
     try:
         client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
@@ -22,13 +21,12 @@ def get_postgresql_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
 
-
 def get_existing_projects_and_max_pk():
     conn = get_postgresql_connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT projet_id, nom_projet, nom_entreprise_projet, code_projet FROM dim_projet")
-    existing = {(row[1], row[2]): (row[0], row[3]) for row in cur.fetchall()}
+    cur.execute("SELECT projet_id, nom_projet, code_projet FROM dim_projet")
+    existing = {(row[1]): (row[0], row[2]) for row in cur.fetchall()}
 
     cur.execute("SELECT COALESCE(MAX(projet_id), 0) FROM dim_projet")
     max_pk = cur.fetchone()[0]
@@ -39,7 +37,6 @@ def get_existing_projects_and_max_pk():
 
 def generate_project_code(pk):
     return f"PROJ{str(pk).zfill(3)}"
-
 
 def extract_from_mongodb(**kwargs):
     client, collection = get_mongodb_connection()
@@ -54,14 +51,12 @@ def extract_from_mongodb(**kwargs):
                     continue
 
                 projects.append({
-                    "nom_projet": proj.get("nomProjet"),
-                    "entreprise": proj.get("entreprise")
+                    "nom_projet": proj.get("nomProjet")
                 })
 
     client.close()
     kwargs['ti'].xcom_push(key='mongo_projects', value=projects)
     logger.info(f"{len(projects)} projets extraits depuis MongoDB.")
-
 
 def transform_data(**kwargs):
     mongo_projects = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='mongo_projects')
@@ -70,7 +65,7 @@ def transform_data(**kwargs):
     transformed = []
 
     for proj in mongo_projects:
-        key = (proj["nom_projet"], proj["entreprise"])
+        key = proj["nom_projet"]
         if key in existing:
             pk, code = existing[key]
         else:
@@ -89,7 +84,6 @@ def transform_data(**kwargs):
     logger.info(f"{len(transformed)} projets transformés.")
     return transformed
 
-
 def load_into_postgres(**kwargs):
     projects = kwargs['ti'].xcom_pull(task_ids='transform_data', key='transformed_projects')
     if not projects:
@@ -101,11 +95,10 @@ def load_into_postgres(**kwargs):
 
     insert_query = """
     INSERT INTO dim_projet (
-        projet_id, code_projet, nom_projet, nom_entreprise_projet
-    ) VALUES (%s, %s, %s, %s)
+        projet_id, code_projet, nom_projet
+    ) VALUES (%s, %s, %s)
     ON CONFLICT (projet_id) DO UPDATE SET
         nom_projet = EXCLUDED.nom_projet,
-        nom_entreprise_projet = EXCLUDED.nom_entreprise_projet,
         code_projet = EXCLUDED.code_projet;
     """
 
@@ -113,15 +106,13 @@ def load_into_postgres(**kwargs):
         cur.execute(insert_query, (
             p["projet_pk"],
             p["code_projet"],
-            p["nom_projet"],
-            p["entreprise"]
+            p["nom_projet"]
         ))
 
     conn.commit()
     cur.close()
     conn.close()
     logger.info(f"{len(projects)} projets insérés ou mis à jour.")
-
 
 dag = DAG(
     'dag_dim_projet',
@@ -151,4 +142,16 @@ load_task = PythonOperator(
     dag=dag
 )
 
-extract_task >> transform_task >> load_task
+start_task = PythonOperator(
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting region extraction process..."),
+    dag=dag
+)
+
+end_task = PythonOperator(
+    task_id='end_task',
+    python_callable=lambda: logger.info("Region extraction process completed."),
+    dag=dag
+)
+
+start_task >> extract_task >> transform_task >> load_task >> end_task

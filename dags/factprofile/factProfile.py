@@ -154,14 +154,7 @@ def get_preferedjoblocations_pk_from_postgres(cur, ville):
     result = cur.fetchone()
     return result[0] if result else None
 
-def get_permis_fk_from_postgres(cur, permis_code):
-    cur.execute("""
-        SELECT permis_id
-        FROM public.dim_permis_conduire
-        WHERE categorie_permis = %s;
-    """, (permis_code,))
-    result = cur.fetchone()
-    return result[0] if result else None
+
 
 
 def get_visa_pk_from_postgres(cur, visa_type):
@@ -361,7 +354,6 @@ def matchclient():
     mongo_data = collection.find({}, {
         "_id": 0, "matricule": 1,
         "profile.dureeExperience": 1,"simpleProfile.dureeExperience": 1,
-        "profile.permisConduire": 1,"simpleProfile.permisConduire": 1,
         "profile.certifications": 1,"simpleProfile.certifications": 1,
         "profile.competenceGenerales": 1,"simpleProfile.competenceGenerales": 1,
         "profile.languages": 1,"simpleProfile.languages": 1,
@@ -395,7 +387,7 @@ def matchclient():
         project_counts = get_project_counts_by_client(cur)
 
 
-        permis_fk_list, competence_fk_list, language_fk_list,interest_pk_list = [],[],[],[]
+        competence_fk_list, language_fk_list,interest_pk_list = [],[],[]
         interest_pk_list, job_location_pk_list, study_level_fk_list,visa_pk_list = [],[],[],[]
         project_pk_list,certification_pk_list,experience_fk_list = [],[],[]
         secteur_id_list,metier_id_list  = [],[]
@@ -409,7 +401,6 @@ def matchclient():
         projets = get_combined_profile_field(user, "projets")
         experiences = get_combined_profile_field(user, "experiences")
         certifications = get_combined_profile_field(user, "certifications")
-        permis = get_combined_profile_field(user, "permisConduire")
 
         experience_year = None
         experience_month = None
@@ -502,12 +493,7 @@ def matchclient():
 
         if metier_simple:
             metier_id_list.append(str(metier_simple))
-#permis de conduire
 
-        for permis in  permis:
-            permis_fk = get_permis_fk_from_postgres(cur,permis)
-            if permis_fk:
-                permis_fk_list.append(str(permis_fk))
 
 #experience
 
@@ -584,14 +570,13 @@ def matchclient():
 
         
 
-        max_length = max(len(permis_fk_list), len(competence_fk_list), len(language_fk_list), 
+        max_length = max(len(competence_fk_list), len(language_fk_list), 
                          len(interest_pk_list), len(job_location_pk_list), len(study_level_fk_list), 
                          len(visa_pk_list), len(project_pk_list), 
                          len(certification_pk_list), len(experience_fk_list), len(secteur_id_list), len(metier_id_list), 1)
         
 
         for i in range(max_length):
-            permis_fk = permis_fk_list[i] if i < len(permis_fk_list) else None
             competence_fk = competence_fk_list[i] if i < len(competence_fk_list) else None
             language_fk = language_fk_list[i] if i < len(language_fk_list) else None
             interest_pk = interest_pk_list[i] if i < len(interest_pk_list) else None
@@ -686,7 +671,7 @@ def matchclient():
 
             load_fact_date(client_fk, secteur_id, metier_id,counter,competence_fk,language_fk,
                           interest_pk,certification_pk,visa_pk,job_location_pk,
-                           project_pk,permis_fk,experience_fk,year,month,nb_certif,nb_langues,visa_count_display
+                           project_pk,experience_fk,year,month,nb_certif,nb_langues,visa_count_display
                            ,project_count_display,nb_exp,study_level_fk,dispo,age,dim_date_pk)
             
 
@@ -697,7 +682,7 @@ def matchclient():
 
 def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, language_fk,
                     interest_fk, certification_pk, visa_pk, job_location_pk,
-                    project_pk, permis_fk, experience_fk, year, month,
+                    project_pk, experience_fk, year, month,
                     nb_certif, nb_langues, visa_count_display, project_count_display, nb_exp,
                     study_level_fk, dispo, age, dim_date_pk):
     try:
@@ -710,13 +695,13 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                 client_id, secteur_id, metier_id, fact_id,
                 competence_generale_id, langue_id, interet_id,
                 certification_id, visa_id,
-                location_preferee_emploi_id, projet_id, permis_id,
+                location_preferee_emploi_id, projet_id,
                 experience_id, annee_experience, mois_experience,
                 nombre_certifications, nombre_langues, nombre_visas_valides,
                 nombre_projets, nombre_experiences, etude_id, disponibilite, age_client,
                 date_id
             )
-            VALUES (%s, %s, %s,
+            VALUES (%s, %s,
                     %s, %s, %s,
                     %s, %s, %s,
                     %s, %s, %s,
@@ -735,7 +720,6 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
                 visa_id = EXCLUDED.visa_id,
                 location_preferee_emploi_id = EXCLUDED.location_preferee_emploi_id,
                 projet_id = EXCLUDED.projet_id,
-                permis_id = EXCLUDED.permis_id,
                 experience_id = EXCLUDED.experience_id,
                 annee_experience = EXCLUDED.annee_experience,
                 mois_experience = EXCLUDED.mois_experience,
@@ -752,7 +736,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk, lan
             client_fk, secteur_fk, metier_fk, fact_pk,
             competence_fk, language_fk, interest_fk,
             certification_pk, visa_pk,
-            job_location_pk, project_pk, permis_fk,
+            job_location_pk, project_pk,
             experience_fk, year, month,
             nb_certif, nb_langues, visa_count_display,
             project_count_display, nb_exp,
@@ -775,7 +759,7 @@ dag = DAG(
     start_date=datetime(2025, 1, 1),
     catchup=False
 )
-"""
+
 wait_dim_secteur = ExternalTaskSensor(
     task_id='wait_for_dim_secteur',
     external_dag_id='dag_dim_secteur',
@@ -866,15 +850,7 @@ wait_dim_niveau_etudes = ExternalTaskSensor(
     dag=dag
 )
 
-wait_dim_permis = ExternalTaskSensor(
-    task_id='wait_for_dim_permis',
-    external_dag_id='Dag_DimPermisConduire',
-    external_task_id='load_into_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
+
 wait_dim_locations = ExternalTaskSensor(
     task_id='wait_for_dim_preferedjoblocations',
     external_dag_id='Dag_DimpreferedJobLocations',
@@ -901,21 +877,26 @@ wait_visa = ExternalTaskSensor(
         timeout=600,
         poke_interval=30
 )
-"""
+
 task_run_etl = PythonOperator(
     task_id='run_etl_fact_client_profile',
     python_callable=matchclient,
     provide_context=True,
     dag=dag
 )
-end_task = EmptyOperator(
-    task_id='end_task',
+
+start_task = PythonOperator(
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting region extraction process..."),
     dag=dag
 )
-"""
-[wait_dim_metier,wait_dim_secteur,wait_dim_certifications,
+
+end_task = PythonOperator(
+    task_id='end_task',
+    python_callable=lambda: logger.info("Region extraction process completed."),
+    dag=dag
+)
+start_task>>[wait_dim_metier,wait_dim_secteur,wait_dim_certifications,
 wait_dim_clients,wait_dim_competences,wait_dim_experience,
-wait_dim_interests,wait_dim_languages,wait_dim_niveau_etudes,
-wait_dim_permis,wait_dim_locations,wait_projects,wait_visa]>>
-"""
-task_run_etl>>end_task
+wait_dim_interests,wait_dim_languages,wait_dim_niveau_etudes,wait_dim_locations,wait_projects,wait_visa]>>task_run_etl>>end_task
+

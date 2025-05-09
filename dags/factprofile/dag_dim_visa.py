@@ -81,8 +81,8 @@ def transform_data(**kwargs):
                 if not visa:
                     continue
                 transformed_data.append({
-                    "visa_pk": None, 
-                    "visa_code": None, 
+                    "visa_pk": None,  # Will be set by generate_visa_ids
+                    "visa_code": None,  # Will be set by generate_visa_ids
                     "visa_type": visa.get("type", "").strip() or None,
                     "date_entree": visa.get("dateEntree"),
                     "date_sortie": visa.get("dateSortie"),
@@ -90,6 +90,7 @@ def transform_data(**kwargs):
                     "nb_entree": visa.get("nbEntree", "").strip() or None
                 })
 
+    # Generate visa_ids starting from 1
     transformed_data = generate_visa_ids(transformed_data)
     kwargs['ti'].xcom_push(key='transformed_data', value=transformed_data)
     return transformed_data
@@ -102,6 +103,9 @@ def load_into_postgres(**kwargs):
 
     conn = get_postgres_connection()
     cur = conn.cursor()
+
+    # First, truncate the table and its dependent tables using CASCADE
+    cur.execute("TRUNCATE TABLE dim_visa CASCADE")
 
     insert_query = """
     INSERT INTO dim_visa (
@@ -155,16 +159,4 @@ load_task = PythonOperator(
     dag=dag,
 )
 
-start_task = PythonOperator(
-    task_id='start_task',
-    python_callable=lambda: logger.info("Starting region extraction process..."),
-    dag=dag
-)
-
-end_task = PythonOperator(
-    task_id='end_task',
-    python_callable=lambda: logger.info("Region extraction process completed."),
-    dag=dag
-)
-
-start_task >>extract_task >> transform_task >> load_task >> end_task
+extract_task >> transform_task >> load_task 
