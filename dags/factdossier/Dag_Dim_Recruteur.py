@@ -113,9 +113,7 @@ with DAG(
     dag_id='Dag_dim_recruteur',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
-    catchup=False,
-    description='DAG pour la synchronisation des recruteurs entre MongoDB et PostgreSQL',
-    tags=['recruteurs', 'synchronisation']
+    catchup=False
 ) as dag:
 
     start_task = PythonOperator(

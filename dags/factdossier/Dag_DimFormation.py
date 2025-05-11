@@ -1,24 +1,59 @@
 import logging
+import psycopg2
 from pymongo import MongoClient
 from bson import ObjectId
-import datetime
-from datetime import datetime as dt
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.sensors.external_task_sensor import ExternalTaskSensor
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def get_postgres_connection():
-    hook = PostgresHook(postgres_conn_id='postgres')
-    return hook.get_conn()
+def get_postgres_cursor():
+    try:
+        conn = psycopg2.connect(
+            dbname="DW_DigitalCook",
+            user="postgres",
+            password="admin",
+            host="host.docker.internal",
+            port="5432"
+        )
+        cursor = conn.cursor()
+        logger.info("Connexion PostgreSQL réussie.")
+        return cursor, conn
+    except Exception as e:
+        logger.error(f"Erreur de connexion PostgreSQL : {e}")
+        return None, None
 
-def get_mongodb_connection():
+def get_secteur_map(cursor):
+    try:
+        cursor.execute("SELECT secteur_id, LOWER(nom_secteur) FROM public.dim_secteur;")
+        return {label: pk for pk, label in cursor.fetchall()}
+    except Exception as e:
+        logger.error(f"Erreur lors de la récupération des secteurs : {e}")
+        return {}
+
+def get_metier_map(cursor):
+    try:
+        cursor.execute("SELECT metier_id, LOWER(nom_metier) FROM public.dim_metier;")
+        return {label: pk for pk, label in cursor.fetchall()}
+    except Exception as e:
+        logger.error(f"Erreur lors de la récupération des métiers : {e}")
+        return {}
+
+def get_entreprise_map(cursor):
+    try:
+        cursor.execute("SELECT entreprise_id, LOWER(nom_entreprise) FROM public.dim_entreprise;")
+        return {label: pk for pk, label in cursor.fetchall()}
+    except Exception as e:
+        logger.error(f"Erreur lors de la récupération des entreprises : {e}")
+        return {}
+
+def get_mongo_collections():
     client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
-    mongo_db = client["PowerBi"]
-    collection = mongo_db["formations"]
-    return client, mongo_db, collection
+    db = client["PowerBi"]
+    return client, db["offredemplois"], db["secteurdactivities"]
 
 def convert_bson(obj):
     if isinstance(obj, dict):
@@ -27,98 +62,165 @@ def convert_bson(obj):
         return [convert_bson(i) for i in obj]
     elif isinstance(obj, ObjectId):
         return str(obj)
-    elif isinstance(obj, datetime.datetime):
-        return obj.isoformat()
     return obj
 
-def generate_code_formation(pk):
-    return f"formation{str(pk).zfill(4)}"
+def extract_offres_from_mongo():
+    try:
+        client, offres_col, _ = get_mongo_collections()
+        cursor = offres_col.find({"isDeleted": False})
+        offres = []
 
-def load_existing_formations(conn):
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT formation_id, titre_formation
-        FROM public.dim_formation
-    """)
-    rows = cursor.fetchall()
-    cursor.close()
-    mapping = {}
-    for formation_id, titre in rows:
-        key = (titre or '')
-        mapping[key] = formation_id
-    return mapping
+        for doc in cursor:
+            offres.append({
+                "_id": doc.get("_id"),
+                "titre": doc.get("titre", "").strip(),
+                "entreprise": doc.get("entreprise"),
+                "secteur": doc.get("secteur"),
+                "metier": doc.get("metier", []),
+                "typeContrat": doc.get("typeContrat", "—"),
+                "societe": doc.get("societe", "—"),
+                "lieuSociete": doc.get("lieuSociete", "—"),
+                "pays": doc.get("pays", "—"),
+            })
 
-def get_max_formation_pk(conn):
-    cursor = conn.cursor()
-    cursor.execute("SELECT COALESCE(MAX(formation_id), 0) FROM public.dim_formation;")
-    max_pk = cursor.fetchone()[0]
-    cursor.close()
-    return max_pk
+        client.close()
+        cleaned = convert_bson(offres)
+        logger.info(f" {len(cleaned)} documents extraits depuis MongoDB.")
+        
+        return cleaned
 
-def extract_formations(**kwargs):
-    client, mongo_db, collection = get_mongodb_connection()
-    formations = list(collection.find({}, {
-        "_id": 0, "titreFormation": 1, "domaine": 1
-    }))
-    client.close()
-    formations = convert_bson(formations)
-    kwargs['ti'].xcom_push(key='formations', value=formations)
-    logger.info(f"{len(formations)} formations extraites de MongoDB.")
+    except Exception as e:
+        logger.error(f" Erreur durant l'extraction MongoDB : {e}")
+        return []
 
-def load_formations(**kwargs):
-    formations = kwargs['ti'].xcom_pull(task_ids='extract_formations', key='formations')
-    if not formations:
-        logger.info("Aucune formation à charger.")
-        return
+def transform_offres(raw_offres, cursor):
+    try:
+        secteur_map = get_secteur_map(cursor)
+        metier_map = get_metier_map(cursor)
+        entreprise_map = get_entreprise_map(cursor)
 
-    conn = get_postgres_connection()
-    existing_formations = load_existing_formations(conn)
-    current_pk = get_max_formation_pk(conn)
+        seen_titles = set()
+        counter = 1
+        transformed = []
 
-    cursor = conn.cursor()
+        for doc in raw_offres:
+            titre = doc["titre"]
+            if not titre or titre.lower() in seen_titles:
+                continue
+            seen_titles.add(titre.lower())
+            offre_code = f"OFFR{str(counter).zfill(4)}"
 
-    query_upsert = """
-    INSERT INTO public.dim_formation (
-        formation_id, code_formation, titre_formation, domaine_formation
-    )
-    VALUES (%s, %s, %s, %s)
-    ON CONFLICT (titre_formation) DO UPDATE SET
-        code_formation = EXCLUDED.code_formation,
-        titre_formation = EXCLUDED.titre_formation,
-        domaine_formation = EXCLUDED.domaine_formation;
-    """
+            secteur_fk = metier_fk = entreprise_fk = None
+            entreprise_fk = entreprise_map.get(doc["societe"].strip().lower())
 
-    for formation in formations:
-        titre = formation.get("titreFormation", "")
-        domaine = formation.get("domaine", "")
+            secteur_id = doc.get("secteur")
+            metier_ids = doc.get("metier", [])
+            if not isinstance(metier_ids, list):
+                metier_ids = [metier_ids]
 
-        key = (titre or '')
+            if secteur_id and ObjectId.is_valid(secteur_id):
+                client, _, secteurs_col = get_mongo_collections()
+                secteur_doc = secteurs_col.find_one({"_id": ObjectId(secteur_id)})
+                if secteur_doc:
+                    label = secteur_doc.get("label", "").strip().lower()
+                    secteur_fk = secteur_map.get(label)
+                    for job in secteur_doc.get("jobs", []):
+                        if str(job.get("_id")) in metier_ids:
+                            metier_label = job.get("label", "").strip().lower()
+                            metier_fk = metier_map.get(metier_label)
+                            break
 
-        if key in existing_formations:
-            formation_id = existing_formations[key]
-        else:
-            current_pk += 1
-            formation_id = current_pk
+            transformed.append({
+                "offre_code": offre_code,
+                "titre": titre,
+                "secteur_fk": secteur_fk,
+                "metier_fk": metier_fk,
+                "entreprise_fk": entreprise_fk,
+                "typeContrat": doc["typeContrat"],
+                "pays": doc["pays"],
+            })
+            counter += 1
 
-        code = generate_code_formation(formation_id)
+        logger.info(f" {len(transformed)} offres transformées avec succès.")
+        
+        return transformed
 
-        data = (
-            formation_id, code, titre, domaine
-        )
+    except Exception as e:
+        logger.error(f" Erreur durant la transformation : {e}")
+        return []
 
-        cursor.execute(query_upsert, data)
+def load_offres_to_postgres(transformed_offres, cursor, conn):
+    try:
+        for offre in transformed_offres:
+            logger.info(f"Record : {offre}")
+            
+            record = (
+                offre.get('offre_code'),
+                offre.get('titre'),
+                offre.get('secteur_fk', None),
+                offre.get('metier_fk', None),
+                offre.get('entreprise_fk', None),
+                offre.get('typeContrat'),
+                offre.get('pays')
+            )
 
-    conn.commit()
-    cursor.close()
-    conn.close()
-    logger.info(f"{len(formations)} formations insérées ou mises à jour.")
+            if len(record) != 7:
+                logger.error(f"Erreur: Le record a un nombre incorrect d'éléments: {len(record)}")
+                continue
+
+            logger.info(f"Record modifié : {record}")
+
+            cursor.execute("""
+                INSERT INTO public.dim_offre_emploi (
+                    code_offre_emploi, titre_offre_emploi, secteur_id, metier_id, entreprise_id,
+                    type_contrat_emploi, pays_emploi
+                )
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (code_offre_emploi) DO UPDATE SET
+                    titre_offre_emploi = EXCLUDED.titre_offre_emploi,
+                    secteur_id = EXCLUDED.secteur_id,
+                    metier_id = EXCLUDED.metier_id,
+                    entreprise_id = EXCLUDED.entreprise_id,
+                    type_contrat_emploi = EXCLUDED.type_contrat_emploi,
+                    pays_emploi = EXCLUDED.pays_emploi;
+            """, record)
+
+        conn.commit()
+        logger.info(f" {len(transformed_offres)} offres insérées ou mises à jour dans PostgreSQL.")
+
+    except Exception as e:
+        logger.error(f" Erreur lors du chargement dans PostgreSQL : {e}")
+        raise
 
 dag = DAG(
-    dag_id='dag_dim_formation',
-    start_date=dt(2025, 1, 1),
+    dag_id='dag_dim_offre_emplois',
     schedule_interval='@daily',
+    start_date=datetime(2025, 1, 1),
     catchup=False
 )
+
+def extract_task():
+    raw_offres = extract_offres_from_mongo()
+    return raw_offres
+
+def transform_task(**kwargs):
+    raw_offres = kwargs['ti'].xcom_pull(task_ids='extract_task')
+    cursor, conn = get_postgres_cursor()
+    try:
+        transformed_offres = transform_offres(raw_offres, cursor)
+        return transformed_offres
+    finally:
+        cursor.close()
+        conn.close()
+
+def load_task(**kwargs):
+    transformed_offres = kwargs['ti'].xcom_pull(task_ids='transform_task')
+    cursor, conn = get_postgres_cursor()
+    try:
+        load_offres_to_postgres(transformed_offres, cursor, conn)
+    finally:
+        cursor.close()
+        conn.close()
 
 start_task = PythonOperator(
     task_id='start_task',
@@ -126,16 +228,22 @@ start_task = PythonOperator(
     dag=dag
 )
 
-extract_task = PythonOperator(
-    task_id='extract_formations',
-    python_callable=extract_formations,
+extract = PythonOperator(
+    task_id='extract_task',
+    python_callable=extract_task,
+    dag=dag
+)
+
+transform = PythonOperator(
+    task_id='transform_task',
+    python_callable=transform_task,
     provide_context=True,
     dag=dag
 )
 
-load_task = PythonOperator(
-    task_id='load_formations',
-    python_callable=load_formations,
+load = PythonOperator(
+    task_id='load_task',
+    python_callable=load_task,
     provide_context=True,
     dag=dag
 )
@@ -146,4 +254,4 @@ end_task = PythonOperator(
     dag=dag
 )
 
-start_task >> extract_task >> load_task >> end_task
+start_task >> extract >> transform >> load >> end_task 

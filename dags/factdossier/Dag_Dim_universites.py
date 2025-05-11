@@ -17,7 +17,7 @@ def get_postgres_connection():
 def get_mongodb_connection():
     MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
     MONGO_DB = "PowerBi"
-    MONGO_COLLECTION = "formations"
+    MONGO_COLLECTION = "universities"
     client = MongoClient(MONGO_URI)
     mongo_db = client[MONGO_DB]
     collection = mongo_db[MONGO_COLLECTION]

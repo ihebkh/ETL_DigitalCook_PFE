@@ -2,23 +2,22 @@ from pymongo import MongoClient
 from datetime import datetime, timedelta
 from bson import ObjectId
 import logging
+import requests
+import time
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.sensors.external_task_sensor import ExternalTaskSensor
+from typing import Tuple, Optional, Dict, Any, List
+from urllib.parse import quote
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
 
 def get_postgres_cursor():
     conn = PostgresHook(postgres_conn_id='postgres').get_conn()
     conn.autocommit = False
     return conn.cursor(), conn
-
-
-
 
 def get_client_pk_by_matricule(cursor, matricule):
     cursor.execute("SELECT client_id FROM public.dim_client WHERE matricule_client = %s", (str(matricule),))
@@ -30,20 +29,25 @@ def get_next_dossier_pk(pg_cursor):
     last_id = pg_cursor.fetchone()[0]
     return last_id + 1
 
-
 def get_service_pk_from_nom_service(pg_cursor, nom_service):
     pg_cursor.execute("SELECT service_id FROM public.dim_service WHERE nom_service = %s", (nom_service,))
     result = pg_cursor.fetchone()
     return result[0] if result else None
 
 def load_ville_mapping(pg_cursor):
-    pg_cursor.execute("SELECT nom_ville, ville_id FROM public.dim_ville")
+    pg_cursor.execute("SELECT LOWER(nom_pays_en), pays_id FROM public.dim_pays")
     return {row[0]: row[1] for row in pg_cursor.fetchall()}
+
+def get_pays_id_from_country(pg_cursor, country_name):
+    if not country_name:
+        return None
+    pg_cursor.execute("SELECT pays_id FROM public.dim_pays WHERE LOWER(nom_pays_en) = LOWER(%s)", (country_name,))
+    result = pg_cursor.fetchone()
+    return result[0] if result else None
 
 def load_offreemploi_mapping(pg_cursor):
     pg_cursor.execute("SELECT titre_offre_emploi, offre_emploi_id FROM public.dim_offre_emploi")
     return {row[0].strip().lower(): row[1] for row in pg_cursor.fetchall()}
-
 
 def load_offre_etude_mapping(pg_cursor):
     pg_cursor.execute("SELECT titre_offre_etude, offre_etude_id FROM public.dim_offre_etude")
@@ -113,6 +117,41 @@ def get_formation_title_and_price_by_id(formation_id, formations_collection):
     else:
         return None, None
 
+def fetch_country_from_osm(city_name):
+    try:
+        time.sleep(1)
+        encoded_city = quote(city_name)
+        url = f"https://nominatim.openstreetmap.org/search?format=json&limit=1&q={encoded_city}"
+        
+        headers = {
+            'User-Agent': 'DigitalCook/1.0 (khmiriiheb3@gmail.com)',
+            'Accept-Language': 'en'
+        }
+        
+        response = requests.get(url, headers=headers)
+        
+        if response.status_code != 200:
+            logger.error(f"Error fetching data from Nominatim for {city_name}: {response.status_code}")
+            return None
+            
+        data = response.json()
+        if not data:
+            logger.warning(f"No data found for city: {city_name}")
+            return None
+
+        display_name = data[0].get("display_name", "")
+        country = display_name.split(",")[-1].strip()
+        
+        country_parts = country.split()
+        if len(country_parts) > 1 and country_parts[-1].isupper():
+            country = country_parts[-1]
+        
+        logger.info(f"Extracted country for {city_name}: {country}")
+        return country
+            
+    except Exception as e:
+        logger.error(f"Error fetching data from Nominatim for {city_name}: {e}")
+        return None
 
 def get_name_lastname_from_users(charge_daffaire_id, users_collection):
     if not charge_daffaire_id:
@@ -149,7 +188,6 @@ def get_formation_pk_by_title(titre_formation, pg_cursor):
     )
     result = pg_cursor.fetchone()
     return result[0] if result else None
-
 
 def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_step, type_de_contrat,
                          influencer_pk, destination_pk, date_depart_pk,
@@ -197,6 +235,7 @@ def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_ste
         formation_pk, formation_prix, created_at, updated_at,
         minSalaire, maxSalaire
     ))
+
 def extract_fields():
     pg_cursor, pg_conn = get_postgres_cursor()
     dossier_pk = get_next_dossier_pk(pg_cursor)
@@ -254,6 +293,28 @@ def extract_fields():
         date_depart_pk = get_date_pk_from_date(pg_cursor, date_depart_str)
         destination_list = doc.get("firstStep", {}).get("destination", [])
 
+        valid_destinations = []
+        for destination in destination_list:
+            if not destination:
+                continue
+                
+            destination_lower = destination.lower()
+            if destination_lower in ville_name_to_pk:
+                valid_destinations.append(destination)
+            else:
+                logger.warning(f"Destination non trouvée dans le mapping: {destination}")
+                country = fetch_country_from_osm(destination)
+                if country:
+                    pays_id = get_pays_id_from_country(pg_cursor, country)
+                    if pays_id:
+                        ville_name_to_pk[destination_lower] = pays_id
+                        valid_destinations.append(destination)
+                        logger.info(f"Destination ajoutée au mapping: {destination} -> {country}")
+                    else:
+                        logger.error(f"Pays non trouvé dans dim_pays: {country}")
+                else:
+                    logger.error(f"Impossible de récupérer le pays pour: {destination}")
+
         offres_emploi_step2_ids = doc.get("secondStep", {}).get("selectedOffersDemploi", [])
         offres_etude_step2_ids = doc.get("secondStep", {}).get("selectedOffersDetude", [])
         selected_offre_emploi_step4_id = doc.get("fourthStep", {}).get("selectedOfferDemploi")
@@ -292,7 +353,7 @@ def extract_fields():
         services_info = get_services_for_dossier(doc["_id"], factures_collection, pg_cursor)
 
         max_length = max(
-            len(destination_list),
+            len(valid_destinations),
             len(offres_emploi_step2),
             len(offres_etude_step2),
             len(offres_emploi_step4),
@@ -324,7 +385,7 @@ def extract_fields():
             formation_pk = formation_pks[i] if i < len(formation_pks) else None
             formation_prix_value = formation_prix[i] if i < len(formation_prix) else None
 
-            destination_pk = ville_name_to_pk.get(destination_list[i]) if i < len(destination_list) else None
+            destination_pk = ville_name_to_pk.get(valid_destinations[i].lower()) if i < len(valid_destinations) else None
             offre_emploi_step2 = offres_emploi_step2[i] if i < len(offres_emploi_step2) else None
             offre_etude_step2 = offres_etude_step2[i] if i < len(offres_etude_step2) else None
             offre_emploi_step4 = offres_emploi_step4[i] if i < len(offres_emploi_step4) else None
@@ -368,7 +429,7 @@ def extract_fields():
     pg_conn.close()
 
 dag = DAG(
-    'dag_fact_dossier',
+    'dag_fact_profile_dossier',
     schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
@@ -393,7 +454,6 @@ wait_dim_clients = ExternalTaskSensor(
     poke_interval=30,
     dag=dag
 )
-
 
 wait_for_dim_recruteur = ExternalTaskSensor(
     task_id='wait_for_dim_recruteur',
@@ -464,6 +524,7 @@ wait_for_dim_ville = ExternalTaskSensor(
     poke_interval=30,
     dag=dag
 )
+
 start_task = PythonOperator(
     task_id='start_task',
     python_callable=lambda: logger.info("Starting region extraction process..."),
@@ -476,6 +537,12 @@ end_task = PythonOperator(
     dag=dag
 )
 
-
-start_task>>[wait_dim_clients , wait_dim_dates_task ,wait_for_dim_formation , wait_for_dim_offre_emplois , wait_for_dim_offre_etude , wait_for_dim_service,
- wait_for_dim_ville]>>etl_task>>end_task
+start_task >> [
+    wait_dim_clients,
+    wait_dim_dates_task,
+    wait_for_dim_formation,
+    wait_for_dim_offre_emplois,
+    wait_for_dim_offre_etude,
+    wait_for_dim_service,
+    wait_for_dim_ville
+] >> etl_task >> end_task
