@@ -720,8 +720,6 @@ dag = DAG(
     start_date=datetime(2025, 1, 1),
     catchup=False
 )
-"""
-
 wait_dim_clients = ExternalTaskSensor(
     task_id='wait_for_dim_clients',
     external_dag_id='Dag_DimClients',             
@@ -816,7 +814,7 @@ wait_visa = ExternalTaskSensor(
         timeout=600,
         poke_interval=30
 )
-"""
+
 task_run_etl = PythonOperator(
     task_id='run_etl_fact_client_profile',
     python_callable=matchclient,
@@ -827,9 +825,7 @@ end_task = EmptyOperator(
     task_id='end_task',
     dag=dag
 )
-"""
+
 [wait_dim_certifications,
 wait_dim_clients,wait_dim_competences,wait_dim_experience,
-wait_dim_interests,wait_dim_languages,wait_dim_niveau_etudes,wait_dim_locations,wait_projects,wait_visa]>>
-"""
-task_run_etl>>end_task
+wait_dim_interests,wait_dim_languages,wait_dim_niveau_etudes,wait_dim_locations,wait_projects,wait_visa]>>task_run_etl>>end_task
