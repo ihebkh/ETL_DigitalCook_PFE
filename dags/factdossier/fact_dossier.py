@@ -193,15 +193,18 @@ def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_ste
                          influencer_pk, destination_pk, date_depart_pk,
                          offre_emploi_step2, offre_etude_step2,
                          offre_emploi_step4, offre_etude_step4, service_pk, service_prix, service_discount, service_extra,
-                         formation_pk, formation_prix, created_at, updated_at, minSalaire, maxSalaire):
+                         formation_pk, formation_prix, created_at, updated_at, minSalaire, maxSalaire,
+                         status_first_step, status_second_step, status_third_step, status_fourth_step, status_fifth_step, status_sixth_step):
     pg_cursor.execute("""
         INSERT INTO public.fact_dossier (
             dossier_id, client_id, code_fact, etape_actuelle, type_contrat, recruteur_id, destination_id, date_depart_id,
             offre_emploi_step2_id, offre_etude_step2_id, offre_emploi_step4_id, offre_etude_step4_id,
             service_id, service_prix, remise_service, extra_service, formation_id, prix_formation, date_creation, date_mise_a_jour,
-            minsalaire, maxsalaire
+            minsalaire, maxsalaire,
+            etape_1, etape_2, etape_3, etape_4, etape_5, etape_6
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s)
         ON CONFLICT (dossier_id) DO UPDATE SET
             client_id = EXCLUDED.client_id,
             code_fact = EXCLUDED.code_fact,
@@ -223,7 +226,13 @@ def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_ste
             date_creation = EXCLUDED.date_creation,
             date_mise_a_jour = EXCLUDED.date_mise_a_jour,
             minsalaire = EXCLUDED.minsalaire,
-            maxsalaire = EXCLUDED.maxsalaire;
+            maxsalaire = EXCLUDED.maxsalaire,
+            etape_1 = EXCLUDED.etape_1,
+            etape_2 = EXCLUDED.etape_2,
+            etape_3 = EXCLUDED.etape_3,
+            etape_4 = EXCLUDED.etape_4,
+            etape_5 = EXCLUDED.etape_5,
+            etape_6 = EXCLUDED.etape_6;
     """, (
         dossier_pk, client_pk, fact_code, current_step, type_de_contrat, influencer_pk,
         destination_pk, date_depart_pk,
@@ -233,8 +242,10 @@ def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_ste
         offre_etude_step4[0] if isinstance(offre_etude_step4, tuple) else offre_etude_step4,
         service_pk, service_prix, service_discount, service_extra,
         formation_pk, formation_prix, created_at, updated_at,
-        minSalaire, maxSalaire
+        minSalaire, maxSalaire,
+        status_first_step, status_second_step, status_third_step, status_fourth_step, status_fifth_step, status_sixth_step
     ))
+
 
 def extract_fields():
     pg_cursor, pg_conn = get_postgres_cursor()
@@ -263,6 +274,12 @@ def extract_fields():
     created_at_seen = set()
     updated_at_seen = set()
     fact_code_seen1 = set()
+    status_first_step_seen = set()
+    status_second_step_seen = set()
+    status_third_step_seen = set()
+    status_fourth_step_seen = set()
+    status_fifth_step_seen = set()
+    status_sixth_step_seen = set()
 
     def generate_collection_fact_code():
         counter = collections_factcode_counters["dossiers"]
@@ -297,7 +314,7 @@ def extract_fields():
         for destination in destination_list:
             if not destination:
                 continue
-                
+            
             destination_lower = destination.lower()
             if destination_lower in ville_name_to_pk:
                 valid_destinations.append(destination)
@@ -352,6 +369,14 @@ def extract_fields():
 
         services_info = get_services_for_dossier(doc["_id"], factures_collection, pg_cursor)
 
+        # --- Extraction des statuts ---
+        status_first_step = doc.get("firstStep", {}).get("status")
+        status_second_step = doc.get("secondStep", {}).get("status")
+        status_third_step = doc.get("thirdStep", {}).get("status")
+        status_fourth_step = doc.get("fourthStep", {}).get("status")
+        status_fifth_step = doc.get("fifthStep", {}).get("status")
+        status_sixth_step = "accepte" if status_fifth_step == "accepte" else None
+
         max_length = max(
             len(valid_destinations),
             len(offres_emploi_step2),
@@ -378,6 +403,24 @@ def extract_fields():
 
             type_de_contrat_print = type_de_contrat if fact_code not in fact_code_seen1 else None
             fact_code_seen1.add(fact_code)
+
+            status_first_step_print = status_first_step if fact_code not in status_first_step_seen else None
+            status_first_step_seen.add(fact_code)
+
+            status_second_step_print = status_second_step if fact_code not in status_second_step_seen else None
+            status_second_step_seen.add(fact_code)
+
+            status_third_step_print = status_third_step if fact_code not in status_third_step_seen else None
+            status_third_step_seen.add(fact_code)
+
+            status_fourth_step_print = status_fourth_step if fact_code not in status_fourth_step_seen else None
+            status_fourth_step_seen.add(fact_code)
+
+            status_fifth_step_print = status_fifth_step if fact_code not in status_fifth_step_seen else None
+            status_fifth_step_seen.add(fact_code)
+
+            status_sixth_step_print = status_sixth_step if fact_code not in status_sixth_step_seen else None
+            status_sixth_step_seen.add(fact_code)
 
             min_salaire_step4_current = min_salaire_step4 if i < len(offres_emploi_step4) else None
             max_salaire_step4_current = max_salaire_step4 if i < len(offres_emploi_step4) else None
@@ -419,14 +462,20 @@ def extract_fields():
                 created_at_str,
                 updated_at_str,
                 min_salaire_step4_current,
-                max_salaire_step4_current
+                max_salaire_step4_current,
+                status_first_step_print,
+                status_second_step_print,
+                status_third_step_print,
+                status_fourth_step_print,
+                status_fifth_step_print,
+                status_sixth_step_print
             )
 
             dossier_pk += 1
 
     pg_conn.commit()
     pg_cursor.close()
-    pg_conn.close()
+    pg_conn.close() 
 
 dag = DAG(
     'dag_fact_profile_dossier',
@@ -444,7 +493,7 @@ etl_task = PythonOperator(
     provide_context=True,
     dag=dag,
 )
-
+"""
 wait_dim_clients = ExternalTaskSensor(
     task_id='wait_for_dim_clients',
     external_dag_id='Dag_DimClients',             
@@ -546,3 +595,5 @@ start_task >> [
     wait_for_dim_service,
     wait_for_dim_ville
 ] >> etl_task >> end_task
+"""
+etl_task
