@@ -95,6 +95,7 @@ def extract_offres_from_mongo():
                 "societe": doc.get("societe", "—"),
                 "lieuSociete": doc.get("lieuSociete", "—"),
                 "pays": doc.get("pays", "—"),
+                "niveauDexperience": doc.get("niveauDexperience", "—")
             })
         client.close()
         cleaned = convert_bson(offres)
@@ -145,6 +146,7 @@ def transform_offres(raw_offres, cursor):
             city_name = doc.get("lieuSociete", "").strip()
             country = fetch_country_from_osm(city_name) if city_name else "Unknown"
             country_id = country_map.get(country.lower(), None)
+            niveau_experience = doc.get("niveauDexperience", "—")
             transformed.append({
                 "offre_emploi_id": counter,
                 "offre_code": offre_code,
@@ -153,7 +155,8 @@ def transform_offres(raw_offres, cursor):
                 "metier_fk": metier_fk,
                 "entreprise_fk": entreprise_fk,
                 "typeContrat": doc["typeContrat"],
-                "pays_id": country_id
+                "pays_id": country_id,
+                "niveauDexperience": niveau_experience
             })
             counter += 1
         return transformed
@@ -171,16 +174,17 @@ def load_offres_to_postgres(transformed_offres, cursor, conn):
                 offre.get('metier_fk', None),
                 offre.get('entreprise_fk', None),
                 offre.get('typeContrat'),
-                offre.get('pays_id')
+                offre.get('pays_id'),
+                offre.get('niveauDexperience', "—")
             )
-            if len(record) != 8:
+            if len(record) != 9:
                 continue
             cursor.execute("""
                 INSERT INTO public.dim_offre_emploi (
                     offre_emploi_id, code_offre_emploi, titre_offre_emploi, secteur_id, metier_id, entreprise_id,
-                    type_contrat_emploi, pays_emploi
+                    type_contrat_emploi, pays_emploi, niveau_experience
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (offre_emploi_id) DO UPDATE SET
                     code_offre_emploi = EXCLUDED.code_offre_emploi,
                     titre_offre_emploi = EXCLUDED.titre_offre_emploi,
@@ -188,11 +192,14 @@ def load_offres_to_postgres(transformed_offres, cursor, conn):
                     metier_id = EXCLUDED.metier_id,
                     entreprise_id = EXCLUDED.entreprise_id,
                     type_contrat_emploi = EXCLUDED.type_contrat_emploi,
-                    pays_emploi = EXCLUDED.pays_emploi;
+                    pays_emploi = EXCLUDED.pays_emploi,
+                    niveau_experience = EXCLUDED.niveau_experience;
             """, record)
         conn.commit()
     except Exception as e:
+        logger.error(f"Erreur insertion en base: {e}")
         raise
+
 
 dag = DAG(
     dag_id='dag_dim_offre_emplois',
@@ -257,7 +264,7 @@ end_task = PythonOperator(
     python_callable=lambda: logger.info("Formation extraction process completed."),
     dag=dag
 )
-
+"""
 wait_dim_secteur = ExternalTaskSensor(
     task_id='wait_for_dim_secteur',
     external_dag_id='dag_dim_secteur',
@@ -291,3 +298,5 @@ wait_dim_entreprise = ExternalTaskSensor(
 
 
 start_task>>[wait_dim_entreprise,wait_dim_metier,wait_dim_secteur] >> extract >> transform >> load >> end_task
+"""
+extract >> transform >> load
