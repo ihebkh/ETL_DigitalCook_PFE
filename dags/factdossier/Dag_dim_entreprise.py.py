@@ -58,6 +58,16 @@ def fetch_pays_data(cursor):
     pays_data = cursor.fetchall()
     return {country_name.lower(): pays_id for pays_id, country_name in pays_data}
 
+def normalize_nombre_employes(nombre_employes):
+    if not nombre_employes:
+        return None
+    try:
+        # Remove any non-numeric characters except decimal point
+        clean_number = ''.join(c for c in str(nombre_employes) if c.isdigit() or c == '.')
+        return int(float(clean_number))
+    except (ValueError, TypeError):
+        return None
+
 def extract_from_offredemplois(offres_col, villes_list=None):
     if villes_list is None:
         villes_list = []
@@ -97,12 +107,12 @@ def extract_from_frontusers(frontusers_col):
 
 def extract_from_entreprises(entreprises_col):
     entreprises = set()
-    for doc in entreprises_col.find({}, {"nom": 1, "ville": 1, "nombreEmployes": 1}):
-        nom = doc.get("nom", None).strip()
-        ville = doc.get("ville", "").strip()
-        nombre_employes = doc.get("nombreEmployes", None)
+    for doc in entreprises_col.find({}, {"nom": 1, "nombreEmployes": 1}):
+        nom = doc.get("nom", "").strip()
+        nombre_employes = normalize_nombre_employes(doc.get("nombreEmployes"))
         if nom:
-            entreprises.add((nom, ville, nombre_employes)) 
+            # Since ville is not available in entreprises collection, we pass empty string
+            entreprises.add((nom, "", nombre_employes))
     logger.info(f"{len(entreprises)} entreprises extraites de 'entreprises' avec nombre d'employés.")
     return entreprises
 
@@ -114,9 +124,33 @@ def extract_all_entreprises(ti):
         ville = doc.get("ville", None)
         if ville and ville.strip() and ville not in villes_list:
             villes_list.append(ville.strip())
-    entreprises.update(extract_from_offredemplois(offres_col, villes_list=villes_list))
-    entreprises.update(extract_from_frontusers(frontusers_col))
-    entreprises.update(extract_from_entreprises(entreprises_col))
+    
+    # Extract from all sources
+    entreprises_from_offres = extract_from_offredemplois(offres_col, villes_list=villes_list)
+    entreprises_from_frontusers = extract_from_frontusers(frontusers_col)
+    entreprises_from_entreprises = extract_from_entreprises(entreprises_col)
+    
+    # Create a dictionary to merge data from different sources
+    merged_entreprises = {}
+    
+    # Process all sources and merge data
+    for sources in [entreprises_from_offres, entreprises_from_frontusers, entreprises_from_entreprises]:
+        for nom, ville, nombre_employes in sources:
+            if nom not in merged_entreprises:
+                merged_entreprises[nom] = {"ville": "", "nombre_employes": None}
+            
+            # Update ville if not empty
+            if ville:
+                merged_entreprises[nom]["ville"] = ville
+            
+            # Update nombre_employes if available
+            if nombre_employes is not None:
+                merged_entreprises[nom]["nombre_employes"] = nombre_employes
+    
+    # Convert merged dictionary back to set of tuples
+    entreprises = {(nom, data["ville"], data["nombre_employes"]) 
+                  for nom, data in merged_entreprises.items()}
+    
     client.close()
     entreprises_list = list(entreprises)
     ti.xcom_push(key='entreprises', value=entreprises_list)
@@ -132,24 +166,27 @@ def insert_entreprises(ti):
     pays_mapping = fetch_pays_data(cur)
     counter_pk, counter_code = get_next_entreprise_pk_and_code_counter(conn)
     total = 0
+    
     for nom, ville, nombre_employes in entreprises:
         nom_clean = nom.strip() if nom else None
         if not nom_clean:
             continue
+            
         pays_id = None
         if ville:
             country = fetch_country_from_osm(ville)
             pays_id = pays_mapping.get(country.lower())
+            
         codeentreprise = generate_entreprise_code(counter_code)
+        
         cur.execute("""
             INSERT INTO public.dim_entreprise (entreprise_id, code_entreprise, nom_entreprise, nombre_employes, pays_id)
             VALUES (%s, %s, %s, %s, %s)
             ON CONFLICT (nom_entreprise) DO UPDATE
             SET 
                 code_entreprise = EXCLUDED.code_entreprise,
-                nom_entreprise = EXCLUDED.nom_entreprise,
-                nombre_employes = EXCLUDED.nombre_employes,
-                pays_id = EXCLUDED.pays_id;
+                nombre_employes = COALESCE(EXCLUDED.nombre_employes, dim_entreprise.nombre_employes),
+                pays_id = COALESCE(EXCLUDED.pays_id, dim_entreprise.pays_id);
         """, (
             counter_pk,
             codeentreprise,
@@ -160,6 +197,7 @@ def insert_entreprises(ti):
         counter_pk += 1
         counter_code += 1
         total += 1
+    
     conn.commit()
     cur.close()
     conn.close()
@@ -167,7 +205,6 @@ def insert_entreprises(ti):
 
 dag = DAG(
     dag_id='dag_dim_entreprise',
-    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False
 )
@@ -198,4 +235,4 @@ end_task = PythonOperator(
     dag=dag,
 )
 
-start_task >> extract_task >> insert_task >> end_task
+start_task >> extract_task >> insert_task >> end_task 

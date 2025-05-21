@@ -51,11 +51,25 @@ def get_existing_visa_keys():
     return existing_keys
 
 def generate_visa_ids(transformed_data):
-    """Generate visa_ids starting from 1 for the current batch of data"""
-    for i, record in enumerate(transformed_data, start=1):
+    existing_keys = get_existing_visa_keys()
+    new_records = []
+    for record in transformed_data:
+        key = (
+            record["visa_type"].lower() if record["visa_type"] else '',
+            record["date_entree"],
+            record["date_sortie"],
+            record["destination"].lower() if record["destination"] else '',
+            record["nb_entree"].lower() if record["nb_entree"] else ''
+        )
+        if key not in existing_keys:
+            new_records.append(record)
+    
+    # Générer les IDs pour les nouveaux enregistrements
+    for i, record in enumerate(new_records, start=1):
         record["visa_pk"] = i
         record["visa_code"] = f"VISA{str(i).zfill(4)}"
-    return transformed_data
+    
+    return new_records
 
 def extract_from_mongodb(**kwargs):
     client, _, collection = get_mongodb_connection()
@@ -68,68 +82,120 @@ def extract_from_mongodb(**kwargs):
 def transform_data(**kwargs):
     mongo_data = kwargs['ti'].xcom_pull(task_ids='extract_from_mongodb', key='mongo_data')
     transformed_data = []
-
+    
     for record in mongo_data:
-        profiles = [record.get("profile", {})]
-        simple_profile = record.get("simpleProfile", {})
-        if simple_profile:
-            profiles.append(simple_profile)
-
-        for profile_item in profiles:
-            visas = profile_item.get("visa", [])
-            for visa in visas:
-                if not visa:
-                    continue
-                transformed_data.append({
-                    "visa_pk": None,  # Will be set by generate_visa_ids
-                    "visa_code": None,  # Will be set by generate_visa_ids
-                    "visa_type": visa.get("type", "").strip() or None,
-                    "date_entree": visa.get("dateEntree"),
-                    "date_sortie": visa.get("dateSortie"),
-                    "destination": visa.get("destination", "").strip() or None,
-                    "nb_entree": visa.get("nbEntree", "").strip() or None
-                })
-
-    # Generate visa_ids starting from 1
+        profile = record.get("profile", {})
+        if not profile:
+            continue
+            
+        visas = profile.get("visa", [])
+        for visa in visas:
+            if not visa:
+                continue
+                
+            # Gestion des dates
+            date_entree = None
+            date_sortie = None
+            
+            # Vérifier si dateEntree est un dictionnaire ou une chaîne
+            date_entree_raw = visa.get("dateEntree")
+            if isinstance(date_entree_raw, dict):
+                date_entree = date_entree_raw.get("$date")
+            elif isinstance(date_entree_raw, str):
+                date_entree = date_entree_raw
+                
+            # Vérifier si dateSortie est un dictionnaire ou une chaîne
+            date_sortie_raw = visa.get("dateSortie")
+            if isinstance(date_sortie_raw, dict):
+                date_sortie = date_sortie_raw.get("$date")
+            elif isinstance(date_sortie_raw, str):
+                date_sortie = date_sortie_raw
+            
+            # Conversion des dates en format datetime si nécessaire
+            if isinstance(date_entree, str):
+                try:
+                    date_entree = datetime.fromisoformat(date_entree.replace('Z', '+00:00'))
+                except ValueError:
+                    date_entree = None
+                    
+            if isinstance(date_sortie, str):
+                try:
+                    date_sortie = datetime.fromisoformat(date_sortie.replace('Z', '+00:00'))
+                except ValueError:
+                    date_sortie = None
+            
+            # Convertir les dates en chaînes de caractères pour la sérialisation
+            date_entree_str = date_entree.isoformat() if date_entree else None
+            date_sortie_str = date_sortie.isoformat() if date_sortie else None
+            
+            transformed_data.append({
+                "visa_pk": None,
+                "visa_code": None,
+                "visa_type": visa.get("type", "").strip() or None,
+                "date_entree": date_entree_str,
+                "date_sortie": date_sortie_str,
+                "destination": visa.get("destination", "").strip() or None,
+                "nb_entree": visa.get("nbEntree", "").strip() or None
+            })
+    
     transformed_data = generate_visa_ids(transformed_data)
     kwargs['ti'].xcom_push(key='transformed_data', value=transformed_data)
     return transformed_data
 
+def get_date_map(cursor):
+    cursor.execute("SELECT code_date, date_id FROM public.dim_dates;")
+    return {str(code): date_id for code, date_id in cursor.fetchall()}
+
 def load_into_postgres(**kwargs):
     transformed_data = kwargs['ti'].xcom_pull(task_ids='transform_data', key='transformed_data')
     if not transformed_data:
-        logger.info("No transformed data to process.")
+        logger.info("No new visa data to load")
         return
-
+        
     conn = get_postgres_connection()
     cur = conn.cursor()
-
-    # First, truncate the table and its dependent tables using CASCADE
-    cur.execute("TRUNCATE TABLE dim_visa CASCADE")
-
+    date_map = get_date_map(cur)
+    
     insert_query = """
     INSERT INTO dim_visa (
         visa_id, code_visa, type_visa, date_entree_visa, date_sortie_visa,
         destination_visa, nombre_entrees_visa
     ) VALUES (%s, %s, %s, %s, %s, %s, %s)
     """
-
-    for record in transformed_data:
-        values = (
-            record["visa_pk"],
-            record["visa_code"],
-            record["visa_type"],
-            record["date_entree"],
-            record["date_sortie"],
-            record["destination"],
-            record["nb_entree"]
-        )
-        cur.execute(insert_query, values)
-
-    conn.commit()
-    cur.close()
-    conn.close()
-    logger.info(f"{len(transformed_data)} visa records inserted.")
+    
+    try:
+        for record in transformed_data:
+            date_entree = record["date_entree"]
+            date_sortie = record["date_sortie"]
+            
+            # Convertir les dates en format string pour la recherche dans date_map
+            date_entree_str = date_entree[:10] if date_entree else None  # Prendre juste la partie date (YYYY-MM-DD)
+            date_sortie_str = date_sortie[:10] if date_sortie else None  # Prendre juste la partie date (YYYY-MM-DD)
+            
+            date_entree_id = date_map.get(date_entree_str) if date_entree_str else None
+            date_sortie_id = date_map.get(date_sortie_str) if date_sortie_str else None
+            
+            values = (
+                record["visa_pk"],
+                record["visa_code"],
+                record["visa_type"],
+                date_entree_id,
+                date_sortie_id,
+                record["destination"],
+                record["nb_entree"]
+            )
+            cur.execute(insert_query, values)
+        
+        conn.commit()
+        logger.info(f"Successfully loaded {len(transformed_data)} visa records")
+        
+    except Exception as e:
+        conn.rollback()
+        logger.error(f"Error loading visa data: {str(e)}")
+        raise
+    finally:
+        cur.close()
+        conn.close()
 
 dag = DAG(
     'dag_dim_visa',
@@ -159,4 +225,16 @@ load_task = PythonOperator(
     dag=dag,
 )
 
-extract_task >> transform_task >> load_task 
+start_task = PythonOperator(
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting visa extraction process..."),
+    dag=dag
+)
+
+end_task = PythonOperator(
+    task_id='end_task',
+    python_callable=lambda: logger.info("Visa extraction process completed."),
+    dag=dag
+)
+
+start_task >> extract_task >> transform_task >> load_task >> end_task 

@@ -107,7 +107,6 @@ def load_formations_to_postgres(transformed_formations):
 
 dag = DAG(
     dag_id='dag_dim_formations',
-    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False
 )

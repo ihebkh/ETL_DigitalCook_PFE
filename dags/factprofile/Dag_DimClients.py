@@ -54,14 +54,27 @@ def extract_data(**kwargs):
 
 def transform_data(**kwargs):
     raw_data = kwargs['ti'].xcom_pull(task_ids='extract_data', key='mongo_data')
+    if not raw_data:
+        logger.warning("Aucune donnée brute reçue pour transformation.")
+        return
+
     seen_matricules = set()
     transformed = []
     conn = get_postgres_connection()
     max_pk = get_max_client_pk(conn)
     pays_map = load_dim_pays(conn)
+    skipped_no_matricule = 0
+    skipped_duplicates = 0
+
     for record in raw_data:
         matricule = record.get("matricule")
-        if not matricule or matricule in seen_matricules:
+        if not matricule:
+            skipped_no_matricule += 1
+            logger.warning(f"Document ignoré (sans matricule): {record}")
+            continue
+        if matricule in seen_matricules:
+            skipped_duplicates += 1
+            logger.warning(f"Document ignoré (doublon matricule): {matricule}")
             continue
         seen_matricules.add(matricule)
         max_pk += 1
@@ -83,12 +96,30 @@ def transform_data(**kwargs):
             "gender": profile_data.get("gender"),
             "profileType": profile_data.get("profileType"),
         })
+
+    conn.close()
+    logger.info(f"Clients transformés : {len(transformed)}")
+    logger.info(f"Documents ignorés faute de matricule : {skipped_no_matricule}")
+    logger.info(f"Documents ignorés (doublons matricule) : {skipped_duplicates}")
+
     kwargs['ti'].xcom_push(key='transformed_clients', value=transformed)
-    logger.info(f"{len(transformed)} clients transformés.")
 
 def get_date_id_from_dim_dates(date_value, conn):
     cur = conn.cursor()
-    formatted_date = date_value.strftime('%Y-%m-%d') if isinstance(date_value, datetime) else date_value
+    formatted_date = None
+    if isinstance(date_value, str):
+        try:
+            dt = datetime.fromisoformat(date_value)
+            formatted_date = dt.strftime('%Y-%m-%d')
+        except Exception:
+            formatted_date = date_value
+    elif isinstance(date_value, datetime):
+        formatted_date = date_value.strftime('%Y-%m-%d')
+
+    if not formatted_date:
+        cur.close()
+        return None, None
+
     cur.execute("SELECT date_id, code_date FROM public.dim_dates WHERE code_date = %s", (formatted_date,))
     date_data = cur.fetchone()
     cur.close()
@@ -122,12 +153,13 @@ def load_data(**kwargs):
         sexe = EXCLUDED.sexe,
         type_de_profil = EXCLUDED.type_de_profil
     """
+    inserted_count = 0
     for row in data:
         birthdate = row.get("birthdate")
-        date_id, date_code = get_date_id_from_dim_dates(birthdate, conn)
-        if not date_id:
-            logger.warning(f"No matching date found for birthdate: {birthdate}")
-            continue
+        date_id = None
+        if birthdate:
+            date_id, _ = get_date_id_from_dim_dates(birthdate, conn)
+        # On insère None (NULL en PG) si date_id introuvable ou birthdate manquante
         cur.execute(insert_query, (
             row["client_pk"],
             row["matricule"],
@@ -143,14 +175,14 @@ def load_data(**kwargs):
             row.get("gender"),
             row.get("profileType")
         ))
+        inserted_count += 1
     conn.commit()
     cur.close()
     conn.close()
-    logger.info(f"{len(data)} clients insérés/mis à jour dans PostgreSQL.")
+    logger.info(f"{inserted_count} clients insérés/mis à jour dans PostgreSQL.")
 
 dag = DAG(
     dag_id='dag_dim_Clients',
-    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False
 )
@@ -188,4 +220,4 @@ end_task = PythonOperator(
     dag=dag
 )
 
-start_task >> extract_task >> transform_task >> load_task >> end_task
+start_task>>extract_task >> transform_task >> load_task>>end_task

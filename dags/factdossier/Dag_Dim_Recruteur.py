@@ -111,7 +111,6 @@ def insert_users_to_dim_users(**kwargs):
 
 with DAG(
     dag_id='Dag_dim_recruteur',
-    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False
 ) as dag:

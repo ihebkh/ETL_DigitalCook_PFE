@@ -173,7 +173,7 @@ def insert_pays():
     """
 
     for pays in pays_data:
-        cur.execute(insert_query, (pays[0], pays[1]))  # Only using English names and country codes
+        cur.execute(insert_query, (pays[0], pays[1]))
     
     conn.commit()
     cur.close()

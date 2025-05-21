@@ -114,7 +114,6 @@ def load_niveau_etudes_postgres(**kwargs):
 
 with DAG(
     dag_id='dag_dim_niveau_etudes',
-    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 ) as dag:

@@ -32,7 +32,7 @@ def create_date_df(start_date, end_date):
 
 def load_dim_dates_to_postgres(**kwargs):
     try:
-        start_date = '1980-01-01'
+        start_date = '1970-01-01'
         end_date = '2030-01-01'
         df = create_date_df(start_date, end_date)
 

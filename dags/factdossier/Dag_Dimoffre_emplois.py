@@ -203,7 +203,6 @@ def load_offres_to_postgres(transformed_offres, cursor, conn):
 
 dag = DAG(
     dag_id='dag_dim_offre_emplois',
-    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False
 )
@@ -264,39 +263,9 @@ end_task = PythonOperator(
     python_callable=lambda: logger.info("Formation extraction process completed."),
     dag=dag
 )
-"""
-wait_dim_secteur = ExternalTaskSensor(
-    task_id='wait_for_dim_secteur',
-    external_dag_id='dag_dim_secteur',
-    external_task_id='load_into_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
-
-wait_dim_metier = ExternalTaskSensor(
-    task_id='wait_for_dim_metier',
-    external_dag_id='Dag_Metier',
-    external_task_id='load_jobs_into_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
-wait_dim_entreprise = ExternalTaskSensor(
-    task_id='wait_for_dim_entreprise',
-    external_dag_id='dag_dim_entreprise',
-    external_task_id='load_into_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag 
-)
 
 
 
 
-start_task>>[wait_dim_entreprise,wait_dim_metier,wait_dim_secteur] >> extract >> transform >> load >> end_task
-"""
-extract >> transform >> load
+
+start_task>> extract >> transform >> load >> end_task

@@ -86,7 +86,6 @@ def load_universities_to_postgres(**kwargs):
 
 dag = DAG(
     'dag_dim_universites',
-    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )

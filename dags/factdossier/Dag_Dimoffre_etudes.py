@@ -106,7 +106,6 @@ default_args = {
 with DAG(
     dag_id='dag_dim_offre_etude',
     default_args=default_args,
-    schedule_interval='@daily',
     catchup=False
 ) as dag:
     
@@ -127,19 +126,11 @@ with DAG(
         python_callable=insert_offres_into_postgres,
         provide_context=True
     )
-    wait_dim_universite = ExternalTaskSensor(
-    task_id='wait_for_dim_universite',
-    external_dag_id='dag_dim_universite',
-    external_task_id='load_dim_universite',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
+
     end_task = PythonOperator(
     task_id='end_task',
     python_callable=lambda: logger.info("Formation extraction process completed."),
     dag=dag
 )
 
-start>>wait_dim_universite >> extract_task >> insert_task>>end_task
+start >> extract_task >> insert_task>>end_task

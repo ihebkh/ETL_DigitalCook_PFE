@@ -457,7 +457,6 @@ def extract_fields():
 
 dag = DAG(
     'dag_fact_profile_dossier',
-    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )
@@ -470,86 +469,6 @@ etl_task = PythonOperator(
     python_callable=run_etl,
     provide_context=True,
     dag=dag,
-)
-"""
-wait_dim_clients = ExternalTaskSensor(
-    task_id='wait_for_dim_clients',
-    external_dag_id='Dag_DimClients',             
-    external_task_id='load_data',                 
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
-
-wait_for_dim_recruteur = ExternalTaskSensor(
-    task_id='wait_for_dim_recruteur',
-    external_dag_id='Dag_dim_recruteur',
-    external_task_id='load_users_to_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
-
-wait_dim_dates_task = ExternalTaskSensor(
-    task_id='wait_for_dim_dates',
-    external_dag_id='dim_dates_dag',
-    external_task_id='load_dim_dates', 
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag 
-)
-
-wait_for_dim_formation = ExternalTaskSensor(
-    task_id='wait_for_dim_formation',
-    external_dag_id='dag_dim_formation',
-    external_task_id='load_formations',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
-
-wait_for_dim_offre_emplois = ExternalTaskSensor(
-    task_id='wait_for_dim_offre_emplois',
-    external_dag_id='dag_dim_offre_emplois',
-    external_task_id='load_task',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
-
-wait_for_dim_offre_etude = ExternalTaskSensor(
-    task_id='wait_for_dim_offre_etude',
-    external_dag_id='dag_dim_offre_etude',
-    external_task_id='load_task',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
-
-wait_for_dim_service = ExternalTaskSensor(
-    task_id='wait_for_dim_service',
-    external_dag_id='dag_dim_service',
-    external_task_id='load_services_to_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
-)
-
-wait_for_dim_ville = ExternalTaskSensor(
-    task_id='wait_for_dim_ville',
-    external_dag_id='dag_dim_villes',
-    external_task_id='load_villes_and_destinations_postgres',
-    mode='poke',
-    timeout=600,
-    poke_interval=30,
-    dag=dag
 )
 
 start_task = PythonOperator(
@@ -564,13 +483,5 @@ end_task = PythonOperator(
     dag=dag
 )
 
-start_task >> [
-    wait_dim_clients,
-    wait_for_dim_formation,
-    wait_for_dim_offre_emplois,
-    wait_for_dim_offre_etude,
-    wait_for_dim_service,
-    wait_for_dim_ville
-] >> etl_task >> end_task
-"""
-etl_task
+
+start_task >>etl_task >> end_task

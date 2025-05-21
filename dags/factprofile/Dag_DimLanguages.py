@@ -129,7 +129,6 @@ def load_languages(**kwargs):
 
 dag = DAG(
     dag_id='dag_dim_languages',
-    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )

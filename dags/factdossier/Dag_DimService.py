@@ -94,7 +94,6 @@ def load_services_to_postgres(**kwargs):
 dag = DAG(
     'dag_dim_service',
     start_date=datetime(2025, 1, 1),
-    schedule_interval='@daily',
     catchup=False,
 )
 
