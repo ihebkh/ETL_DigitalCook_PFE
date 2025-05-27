@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 with DAG(
-    dag_id="master_trigger_dag",
+    dag_id="run_dossier_dag",
     start_date=datetime(2025, 1, 1),
     schedule_interval="@daily",
     catchup=False

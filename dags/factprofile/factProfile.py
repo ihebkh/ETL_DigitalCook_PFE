@@ -489,7 +489,6 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk,
 
 dag = DAG(
     'dag_client_profile',
-    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False
 )

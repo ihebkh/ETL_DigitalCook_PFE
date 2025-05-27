@@ -9,64 +9,11 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# ---------------------- EXTRACT ----------------------
 def get_mongo_collections():
     client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
     db = client["PowerBi"]
     return client, db["offredemplois"], db["frontusers"], db["entreprises"]
-
-def get_postgres_connection():
-    hook = PostgresHook(postgres_conn_id='postgres')
-    return hook.get_conn()
-
-def generate_entreprise_code(counter):
-    return f"entre{str(counter).zfill(4)}"
-
-def get_next_entreprise_pk_and_code_counter(conn):
-    cur = conn.cursor()
-    cur.execute("SELECT MAX(entreprise_id) FROM public.dim_entreprise;")
-    max_pk = cur.fetchone()[0]
-    cur.close()
-    next_pk = (max_pk or 0) + 1
-    return next_pk, next_pk
-
-def fetch_country_from_osm(city_name):
-    try:
-        url = f"https://nominatim.openstreetmap.org/search?format=json&limit=1&q={city_name}"
-        headers = {
-            'User-Agent': 'YourAppName/1.0 (khmiriiheb3@gmail.com)',
-            'Accept-Language': 'en'
-        }
-        response = requests.get(url, headers=headers)
-        if response.status_code != 200:
-            logger.error(f"Error fetching data from Nominatim for {city_name}: {response.status_code}")
-            return "Error"
-        data = response.json()
-        if data:
-            display_name = data[0].get("display_name", "")
-            country = display_name.split(",")[-1].strip()
-            logger.info(f"Extracted country for {city_name}: {country}")
-            return country
-        else:
-            logger.warning(f"No data found for city: {city_name}")
-            return "Unknown"
-    except Exception as e:
-        logger.error(f"Error fetching data from Nominatim for {city_name}: {e}")
-        return "Error"
-
-def fetch_pays_data(cursor):
-    cursor.execute("SELECT pays_id, nom_pays_en FROM public.dim_pays")
-    pays_data = cursor.fetchall()
-    return {country_name.lower(): pays_id for pays_id, country_name in pays_data}
-
-def normalize_nombre_employes(nombre_employes):
-    if not nombre_employes:
-        return None
-    try:
-        # Remove any non-numeric characters except decimal point
-        clean_number = ''.join(c for c in str(nombre_employes) if c.isdigit() or c == '.')
-        return int(float(clean_number))
-    except (ValueError, TypeError):
-        return None
 
 def extract_from_offredemplois(offres_col, villes_list=None):
     if villes_list is None:
@@ -111,10 +58,18 @@ def extract_from_entreprises(entreprises_col):
         nom = doc.get("nom", "").strip()
         nombre_employes = normalize_nombre_employes(doc.get("nombreEmployes"))
         if nom:
-            # Since ville is not available in entreprises collection, we pass empty string
             entreprises.add((nom, "", nombre_employes))
     logger.info(f"{len(entreprises)} entreprises extraites de 'entreprises' avec nombre d'employés.")
     return entreprises
+
+def normalize_nombre_employes(nombre_employes):
+    if not nombre_employes:
+        return None
+    try:
+        clean_number = ''.join(c for c in str(nombre_employes) if c.isdigit() or c == '.')
+        return int(float(clean_number))
+    except (ValueError, TypeError):
+        return None
 
 def extract_all_entreprises(ti):
     client, offres_col, frontusers_col, entreprises_col = get_mongo_collections()
@@ -124,38 +79,72 @@ def extract_all_entreprises(ti):
         ville = doc.get("ville", None)
         if ville and ville.strip() and ville not in villes_list:
             villes_list.append(ville.strip())
-    
-    # Extract from all sources
+    # Extraction depuis toutes les sources
     entreprises_from_offres = extract_from_offredemplois(offres_col, villes_list=villes_list)
     entreprises_from_frontusers = extract_from_frontusers(frontusers_col)
     entreprises_from_entreprises = extract_from_entreprises(entreprises_col)
-    
-    # Create a dictionary to merge data from different sources
+    # Fusionner les données extraites
     merged_entreprises = {}
-    
-    # Process all sources and merge data
     for sources in [entreprises_from_offres, entreprises_from_frontusers, entreprises_from_entreprises]:
         for nom, ville, nombre_employes in sources:
             if nom not in merged_entreprises:
                 merged_entreprises[nom] = {"ville": "", "nombre_employes": None}
-            
-            # Update ville if not empty
             if ville:
                 merged_entreprises[nom]["ville"] = ville
-            
-            # Update nombre_employes if available
             if nombre_employes is not None:
                 merged_entreprises[nom]["nombre_employes"] = nombre_employes
-    
-    # Convert merged dictionary back to set of tuples
-    entreprises = {(nom, data["ville"], data["nombre_employes"]) 
-                  for nom, data in merged_entreprises.items()}
-    
+    entreprises = {(nom, data["ville"], data["nombre_employes"]) for nom, data in merged_entreprises.items()}
     client.close()
     entreprises_list = list(entreprises)
     ti.xcom_push(key='entreprises', value=entreprises_list)
     logger.info(f"{len(entreprises_list)} entreprises extraites au total.")
 
+# ---------------------- TRANSFORM ----------------------
+def fetch_country_from_osm(city_name):
+    try:
+        url = f"https://nominatim.openstreetmap.org/search?format=json&limit=1&q={city_name}"
+        headers = {
+            'User-Agent': 'YourAppName/1.0 (khmiriiheb3@gmail.com)',
+            'Accept-Language': 'en'
+        }
+        response = requests.get(url, headers=headers)
+        if response.status_code != 200:
+            logger.error(f"Error fetching data from Nominatim for {city_name}: {response.status_code}")
+            return "Error"
+        data = response.json()
+        if data:
+            display_name = data[0].get("display_name", "")
+            country = display_name.split(",")[-1].strip()
+            logger.info(f"Extracted country for {city_name}: {country}")
+            return country
+        else:
+            logger.warning(f"No data found for city: {city_name}")
+            return "Unknown"
+    except Exception as e:
+        logger.error(f"Error fetching data from Nominatim for {city_name}: {e}")
+        return "Error"
+
+def fetch_pays_data(cursor):
+    cursor.execute("SELECT pays_id, nom_pays_en FROM public.dim_pays")
+    pays_data = cursor.fetchall()
+    return {country_name.lower(): pays_id for pays_id, country_name in pays_data}
+
+def generate_entreprise_code(counter):
+    return f"entre{str(counter).zfill(4)}"
+
+def get_postgres_connection():
+    hook = PostgresHook(postgres_conn_id='postgres')
+    return hook.get_conn()
+
+def get_next_entreprise_pk_and_code_counter(conn):
+    cur = conn.cursor()
+    cur.execute("SELECT MAX(entreprise_id) FROM public.dim_entreprise;")
+    max_pk = cur.fetchone()[0]
+    cur.close()
+    next_pk = (max_pk or 0) + 1
+    return next_pk, next_pk
+
+# ---------------------- LOAD (avec gestion de la redondance) ----------------------
 def insert_entreprises(ti):
     entreprises = ti.xcom_pull(task_ids='extract_all_entreprises', key='entreprises')
     if not entreprises:
@@ -166,19 +155,16 @@ def insert_entreprises(ti):
     pays_mapping = fetch_pays_data(cur)
     counter_pk, counter_code = get_next_entreprise_pk_and_code_counter(conn)
     total = 0
-    
     for nom, ville, nombre_employes in entreprises:
         nom_clean = nom.strip() if nom else None
         if not nom_clean:
             continue
-            
         pays_id = None
         if ville:
             country = fetch_country_from_osm(ville)
             pays_id = pays_mapping.get(country.lower())
-            
         codeentreprise = generate_entreprise_code(counter_code)
-        
+        # La clause ON CONFLICT permet d'éviter la redondance (doublons)
         cur.execute("""
             INSERT INTO public.dim_entreprise (entreprise_id, code_entreprise, nom_entreprise, nombre_employes, pays_id)
             VALUES (%s, %s, %s, %s, %s)
@@ -197,12 +183,12 @@ def insert_entreprises(ti):
         counter_pk += 1
         counter_code += 1
         total += 1
-    
     conn.commit()
     cur.close()
     conn.close()
     logger.info(f"{total} entreprises insérées ou mises à jour dans dim_entreprise.")
 
+# ---------------------- DAG DEFINITION ----------------------
 dag = DAG(
     dag_id='dag_dim_entreprise',
     start_date=datetime(2025, 1, 1),
@@ -235,4 +221,5 @@ end_task = PythonOperator(
     dag=dag,
 )
 
+# Dépendances du DAG
 start_task >> extract_task >> insert_task >> end_task 

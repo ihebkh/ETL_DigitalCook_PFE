@@ -183,7 +183,6 @@ def insert_experiences_into_postgres(**kwargs):
 
 dag = DAG(
     dag_id='dag_dim_experience',
-    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False
 )

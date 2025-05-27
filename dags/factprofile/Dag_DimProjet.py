@@ -119,7 +119,6 @@ def load_into_postgres(conn_id, **kwargs):
 
 dag = DAG(
     'dag_dim_projet',
-    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )

@@ -95,7 +95,6 @@ def load_into_postgres(ti):
 
 dag = DAG(
      'dag_dim_certifications', 
-    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )

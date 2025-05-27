@@ -199,7 +199,6 @@ def load_into_postgres(**kwargs):
 
 dag = DAG(
     'dag_dim_visa',
-    schedule_interval='@daily',
     start_date=datetime(2025, 1, 1),
     catchup=False,
 )
