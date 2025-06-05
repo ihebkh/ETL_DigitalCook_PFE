@@ -111,7 +111,7 @@ with DAG(
 
     end_task = PythonOperator(
         task_id='end_task',
-        python_callable=lambda: logger.info("✅ Fin du DAG d'insertion/mise à jour des pays.")
+        python_callable=lambda: logger.info(" Fin du DAG d'insertion/mise à jour des pays.")
     )
 
     start_task >> extract_task >> load_task >> end_task

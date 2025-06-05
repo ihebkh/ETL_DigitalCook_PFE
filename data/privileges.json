@@ -1,0 +1,1123 @@
+[{
+  "_id": {
+    "$oid": "65ef33c0d56ba460938af9f8"
+  },
+  "label": "TopAdmin",
+  "themeColor": "#00205d",
+  "allowedModules": [
+    {
+      "module": {
+        "label": "EtudiantsModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479c6"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479c5"
+      }
+    },
+    {
+      "module": {
+        "label": "DemandeursModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479c8"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479c7"
+      }
+    },
+    {
+      "module": {
+        "label": "EntreprisesModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479ca"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479c9"
+      }
+    },
+    {
+      "module": {
+        "label": "UsersModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479cc"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479cb"
+      }
+    },
+    {
+      "module": {
+        "label": "EntiteCommercialModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479ce"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479cd"
+      }
+    },
+    {
+      "module": {
+        "label": "OffreDemploiModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479d0"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479cf"
+      }
+    },
+    {
+      "module": {
+        "label": "OffreDetudeModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479d2"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479d1"
+      }
+    },
+    {
+      "module": {
+        "label": "CandidatModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479d4"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479d3"
+      }
+    },
+    {
+      "module": {
+        "label": "LeadsModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479d6"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479d5"
+      }
+    },
+    {
+      "module": {
+        "label": "MessagerieModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479d8"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479d7"
+      }
+    },
+    {
+      "module": {
+        "label": "SecteurActiviteModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479da"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479d9"
+      }
+    },
+    {
+      "module": {
+        "label": "UniversityModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479dc"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479db"
+      }
+    },
+    {
+      "module": {
+        "label": "DossierModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479de"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479dd"
+      }
+    },
+    {
+      "module": {
+        "label": "PrivilegeModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479e0"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479df"
+      }
+    },
+    {
+      "module": {
+        "label": "FormationModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479e2"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479e1"
+      }
+    },
+    {
+      "module": {
+        "label": "AgenceModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479e4"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479e3"
+      }
+    },
+    {
+      "module": {
+        "label": "InfluencerModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479e6"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479e5"
+      }
+    },
+    {
+      "module": {
+        "label": "CentreFinancementModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479e8"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479e7"
+      }
+    },
+    {
+      "module": {
+        "label": "ApporteurModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479ea"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479e9"
+      }
+    },
+    {
+      "module": {
+        "label": "ProduitModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479ec"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479eb"
+      }
+    },
+    {
+      "module": {
+        "label": "CommandeModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479ee"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479ed"
+      }
+    },
+    {
+      "module": {
+        "label": "ContactsModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "670fdadc410f4cbacd6479f0"
+        }
+      },
+      "_id": {
+        "$oid": "670fdadc410f4cbacd6479ef"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-11T16:39:28.499Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-10-16T15:25:16.394Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66bc8a706b3efeaedd9f036b"
+  },
+  "label": "agence",
+  "themeColor": "#1976d2",
+  "allowedModules": [
+    {
+      "module": {
+        "label": "AgenceModule",
+        "isRead": true,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c0b40eb7542f05b1a5e4f3"
+        }
+      },
+      "_id": {
+        "$oid": "66c0b40eb7542f05b1a5e4f2"
+      }
+    },
+    {
+      "module": {
+        "label": "InfluencerModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c0b40eb7542f05b1a5e4f5"
+        }
+      },
+      "_id": {
+        "$oid": "66c0b40eb7542f05b1a5e4f4"
+      }
+    },
+    {
+      "module": {
+        "label": "ParrainageModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "66c0b40eb7542f05b1a5e4f7"
+        }
+      },
+      "_id": {
+        "$oid": "66c0b40eb7542f05b1a5e4f6"
+      }
+    },
+    {
+      "module": {
+        "label": "PrivilegeModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "66c0b40eb7542f05b1a5e4f9"
+        }
+      },
+      "_id": {
+        "$oid": "66c0b40eb7542f05b1a5e4f8"
+      }
+    },
+    {
+      "module": {
+        "label": "CandidatModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "66c0b40eb7542f05b1a5e4fb"
+        }
+      },
+      "_id": {
+        "$oid": "66c0b40eb7542f05b1a5e4fa"
+      }
+    },
+    {
+      "module": {
+        "label": "SecteurActiviteModule",
+        "isRead": true,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c0b40eb7542f05b1a5e4fd"
+        }
+      },
+      "_id": {
+        "$oid": "66c0b40eb7542f05b1a5e4fc"
+      }
+    },
+    {
+      "module": {
+        "label": "UsersModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "66c0b40eb7542f05b1a5e4ff"
+        }
+      },
+      "_id": {
+        "$oid": "66c0b40eb7542f05b1a5e4fe"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-08-14T10:44:00.267Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-08-17T14:30:38.693Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66bdd6d6232f31a74e06a74d"
+  },
+  "label": "influenceur",
+  "themeColor": "#435c23",
+  "allowedModules": [
+    {
+      "module": {
+        "label": "EtudiantsModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d2092f"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d2092e"
+      }
+    },
+    {
+      "module": {
+        "label": "DemandeursModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d20931"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d20930"
+      }
+    },
+    {
+      "module": {
+        "label": "EntreprisesModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d20933"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d20932"
+      }
+    },
+    {
+      "module": {
+        "label": "UsersModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d20935"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d20934"
+      }
+    },
+    {
+      "module": {
+        "label": "EntiteCommercialModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d20937"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d20936"
+      }
+    },
+    {
+      "module": {
+        "label": "OffreDemploiModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d20939"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d20938"
+      }
+    },
+    {
+      "module": {
+        "label": "OffreDetudeModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d2093b"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d2093a"
+      }
+    },
+    {
+      "module": {
+        "label": "CandidatModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d2093d"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d2093c"
+      }
+    },
+    {
+      "module": {
+        "label": "LeadsModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d2093f"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d2093e"
+      }
+    },
+    {
+      "module": {
+        "label": "MessagerieModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d20941"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d20940"
+      }
+    },
+    {
+      "module": {
+        "label": "SecteurActiviteModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d20943"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d20942"
+      }
+    },
+    {
+      "module": {
+        "label": "UniversityModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d20945"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d20944"
+      }
+    },
+    {
+      "module": {
+        "label": "DossierModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d20947"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d20946"
+      }
+    },
+    {
+      "module": {
+        "label": "PrivilegeModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d20949"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d20948"
+      }
+    },
+    {
+      "module": {
+        "label": "FormationModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d2094b"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d2094a"
+      }
+    },
+    {
+      "module": {
+        "label": "AgenceModule",
+        "isRead": false,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66c7097fa28907b602d2094d"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d2094c"
+      }
+    },
+    {
+      "module": {
+        "label": "InfluencerModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "66c7097fa28907b602d2094f"
+        }
+      },
+      "_id": {
+        "$oid": "66c7097fa28907b602d2094e"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-08-15T10:22:14.177Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-08-22T09:48:47.333Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66bde90035f3f26fe4abd3df"
+  },
+  "label": "commercial",
+  "themeColor": "#1800ad",
+  "allowedModules": [
+    {
+      "module": {
+        "label": "EtudiantsModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b2926342d"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b2926342c"
+      }
+    },
+    {
+      "module": {
+        "label": "DemandeursModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b2926342f"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b2926342e"
+      }
+    },
+    {
+      "module": {
+        "label": "EntreprisesModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b29263431"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b29263430"
+      }
+    },
+    {
+      "module": {
+        "label": "UsersModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b29263433"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b29263432"
+      }
+    },
+    {
+      "module": {
+        "label": "EntiteCommercialModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b29263435"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b29263434"
+      }
+    },
+    {
+      "module": {
+        "label": "OffreDemploiModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b29263437"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b29263436"
+      }
+    },
+    {
+      "module": {
+        "label": "OffreDetudeModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b29263439"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b29263438"
+      }
+    },
+    {
+      "module": {
+        "label": "CandidatModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b2926343b"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b2926343a"
+      }
+    },
+    {
+      "module": {
+        "label": "LeadsModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b2926343d"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b2926343c"
+      }
+    },
+    {
+      "module": {
+        "label": "MessagerieModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b2926343f"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b2926343e"
+      }
+    },
+    {
+      "module": {
+        "label": "SecteurActiviteModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b29263441"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b29263440"
+      }
+    },
+    {
+      "module": {
+        "label": "UniversityModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b29263443"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b29263442"
+      }
+    },
+    {
+      "module": {
+        "label": "DossierModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b29263445"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b29263444"
+      }
+    },
+    {
+      "module": {
+        "label": "PrivilegeModule",
+        "isRead": true,
+        "isWrite": false,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b29263447"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b29263446"
+      }
+    },
+    {
+      "module": {
+        "label": "FormationModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b29263449"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b29263448"
+      }
+    },
+    {
+      "module": {
+        "label": "AgenceModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b2926344b"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b2926344a"
+      }
+    },
+    {
+      "module": {
+        "label": "InfluencerModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b2926344d"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b2926344c"
+      }
+    },
+    {
+      "module": {
+        "label": "CentreFinancementModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b2926344f"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b2926344e"
+      }
+    },
+    {
+      "module": {
+        "label": "CommandeModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b29263451"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b29263450"
+      }
+    },
+    {
+      "module": {
+        "label": "ProduitModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b29263453"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b29263452"
+      }
+    },
+    {
+      "module": {
+        "label": "ApporteurModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b29263455"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b29263454"
+      }
+    },
+    {
+      "module": {
+        "label": "ContactsModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6799f7fdce5b9f2b29263457"
+        }
+      },
+      "_id": {
+        "$oid": "6799f7fdce5b9f2b29263456"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-08-15T11:39:45.101Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-01-29T09:42:21.631Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66c89734b336ca5c727ded05"
+  },
+  "label": "topApporteur",
+  "themeColor": "#13356b",
+  "allowedModules": [
+    {
+      "module": {
+        "label": "EntreprisesModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "66eacd10cbcd4deb9d17e3f3"
+        }
+      },
+      "_id": {
+        "$oid": "66eacd10cbcd4deb9d17e3f2"
+      }
+    },
+    {
+      "module": {
+        "label": "UniversityModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "66eacd10cbcd4deb9d17e3f5"
+        }
+      },
+      "_id": {
+        "$oid": "66eacd10cbcd4deb9d17e3f4"
+      }
+    },
+    {
+      "module": {
+        "label": "UsersModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "66eacd10cbcd4deb9d17e3f7"
+        }
+      },
+      "_id": {
+        "$oid": "66eacd10cbcd4deb9d17e3f6"
+      }
+    },
+    {
+      "module": {
+        "label": "PrivilegeModule",
+        "isRead": true,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66eacd10cbcd4deb9d17e3f9"
+        }
+      },
+      "_id": {
+        "$oid": "66eacd10cbcd4deb9d17e3f8"
+      }
+    },
+    {
+      "module": {
+        "label": "SecteurActiviteModule",
+        "isRead": true,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66eacd10cbcd4deb9d17e3fb"
+        }
+      },
+      "_id": {
+        "$oid": "66eacd10cbcd4deb9d17e3fa"
+      }
+    },
+    {
+      "module": {
+        "label": "ApporteurModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "66eacd10cbcd4deb9d17e3fd"
+        }
+      },
+      "_id": {
+        "$oid": "66eacd10cbcd4deb9d17e3fc"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-08-23T14:05:40.527Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-09-18T12:52:32.611Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "66cc4a6db90251eed88c6136"
+  },
+  "label": "apporteur",
+  "themeColor": "",
+  "allowedModules": [
+    {
+      "module": {
+        "label": "UniversityModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "66cc99a78b147a37e1ece448"
+        }
+      },
+      "_id": {
+        "$oid": "66cc99a78b147a37e1ece447"
+      }
+    },
+    {
+      "module": {
+        "label": "EntreprisesModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "66cc99a78b147a37e1ece44a"
+        }
+      },
+      "_id": {
+        "$oid": "66cc99a78b147a37e1ece449"
+      }
+    },
+    {
+      "module": {
+        "label": "SecteurActiviteModule",
+        "isRead": true,
+        "isWrite": false,
+        "_id": {
+          "$oid": "66cc99a78b147a37e1ece44c"
+        }
+      },
+      "_id": {
+        "$oid": "66cc99a78b147a37e1ece44b"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-08-26T09:27:09.716Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-08-26T15:05:11.789Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6720b093dddb712958a01b1d"
+  },
+  "label": "contacts",
+  "themeColor": "",
+  "allowedModules": [
+    {
+      "module": {
+        "label": "ContactsModule",
+        "isRead": true,
+        "isWrite": true,
+        "_id": {
+          "$oid": "6720b093dddb712958a01b1f"
+        }
+      },
+      "_id": {
+        "$oid": "6720b093dddb712958a01b1e"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-10-29T09:53:23.100Z"
+  },
+  "__v": 0
+}]

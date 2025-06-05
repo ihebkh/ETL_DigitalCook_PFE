@@ -1,0 +1,180 @@
+[{
+  "_id": {
+    "$oid": "77ae91614ad2440c9e037732"
+  },
+  "nomfiliere": "Informatique Appliquée",
+  "domaine": "Technologie",
+  "diplome": "Licence",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "df549dcc0042481481b8ff31"
+  },
+  "nomfiliere": "Génie Électrique",
+  "domaine": "Ingénierie",
+  "diplome": "Master",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "f54c9e5689f94b80ba6cf7c9"
+  },
+  "nomfiliere": "Marketing Digital",
+  "domaine": "Communication",
+  "diplome": "Licence",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "c895ce462af9408da99b8579"
+  },
+  "nomfiliere": "Sciences Biomédicales",
+  "domaine": "Santé",
+  "diplome": "Master",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "18fabd74a1484f6d89e2c0ac"
+  },
+  "nomfiliere": "Design Graphique",
+  "domaine": "Arts Appliqués",
+  "diplome": "Licence",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "0b5bf391912744c493e738f0"
+  },
+  "nomfiliere": "Comptabilité et Finance",
+  "domaine": "Économie",
+  "diplome": "Licence",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "8ebeddb6956d4f318a6487d4"
+  },
+  "nomfiliere": "Management de Projets",
+  "domaine": "Gestion",
+  "diplome": "Master",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "f127c83b4bfe42419d8dbf16"
+  },
+  "nomfiliere": "Langues Étrangères Appliquées",
+  "domaine": "Lettres et Langues",
+  "diplome": "Licence",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "30418daf5f4c46888930b13d"
+  },
+  "nomfiliere": "Intelligence Artificielle",
+  "domaine": "Technologie",
+  "diplome": "Doctorat",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "f7baa5cf1fd542c4a96e4628"
+  },
+  "nomfiliere": "Sciences Politiques",
+  "domaine": "Sciences Sociales",
+  "diplome": "Master",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "ae4161ffa2024d7bae10579d"
+  },
+  "nomfiliere": "Génie Civil",
+  "domaine": "Ingénierie",
+  "diplome": "Ingénieur",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "35c4aae21e31492daaa909ee"
+  },
+  "nomfiliere": "Génie Électrique",
+  "domaine": "Ingénierie",
+  "diplome": "Ingénieur",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "2bcd5a4621684a28864d452f"
+  },
+  "nomfiliere": "Génie Mécanique",
+  "domaine": "Ingénierie",
+  "diplome": "Ingénieur",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "24fe24adfe9d455b93e94695"
+  },
+  "nomfiliere": "Génie Industriel",
+  "domaine": "Ingénierie",
+  "diplome": "Ingénieur",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "b8e895fab1514fb895573e95"
+  },
+  "nomfiliere": "Génie Informatique",
+  "domaine": "Ingénierie",
+  "diplome": "Ingénieur",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "60c66749e8864da2bb265c83"
+  },
+  "nomfiliere": "Génie Énergétique",
+  "domaine": "Ingénierie",
+  "diplome": "Ingénieur",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "5c7723ae7c204f63b6b85297"
+  },
+  "nomfiliere": "Génie Chimique",
+  "domaine": "Ingénierie",
+  "diplome": "Ingénieur",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "b34c2f043e784ca3a28ac09a"
+  },
+  "nomfiliere": "Génie Biomédical",
+  "domaine": "Ingénierie",
+  "diplome": "Ingénieur",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "cfecb9c3245d4ac0bc368d63"
+  },
+  "nomfiliere": "Génie des Procédés",
+  "domaine": "Ingénierie",
+  "diplome": "Ingénieur",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "7c9acb1d94f4405a9dc506d6"
+  },
+  "nomfiliere": "Génie Télécommunications",
+  "domaine": "Ingénierie",
+  "diplome": "Ingénieur",
+  "__v": 0
+}]

@@ -1,5 +1,4 @@
 import logging
-import psycopg2
 import requests
 from pymongo import MongoClient
 from bson import ObjectId
@@ -7,6 +6,7 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.sensors.external_task_sensor import ExternalTaskSensor
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.models import Variable
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
@@ -66,7 +66,8 @@ def get_country_map(cursor):
         return {}
 
 def get_mongo_collections():
-    client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
+    MONGO_URI = Variable.get("MONGO_URI")
+    client = MongoClient(MONGO_URI)
     db = client["PowerBi"]
     return client, db["offredemplois"], db["secteurdactivities"]
 
@@ -263,9 +264,5 @@ end_task = PythonOperator(
     python_callable=lambda: logger.info("Formation extraction process completed."),
     dag=dag
 )
-
-
-
-
 
 start_task>> extract >> transform >> load >> end_task

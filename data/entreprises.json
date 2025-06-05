@@ -1,0 +1,5016 @@
+[{
+  "_id": {
+    "$oid": "8f71e106e8ac46caaadfd88a"
+  },
+  "nom": "MedTech",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80498",
+  "email": "medtech@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.medtech.com",
+  "nombreEmployes": "74",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "b53b2ed729634babb8e35118"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "b4e0d9944442494188c75b01"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f34"
+  }
+},
+{
+  "_id": {
+    "$oid": "17252dd37c374c338fb25119"
+  },
+  "nom": "DigitalMinds",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80497",
+  "email": "digitalminds@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.digitalminds.com",
+  "nombreEmployes": "162",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80497"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "22871f3754c942be8248fff5"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "b3366214c4314adb9f93d7ec"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f34"
+  }
+},
+{
+  "_id": {
+    "$oid": "310cb11e5aa84546ae737747"
+  },
+  "nom": "UrbanDevelopment",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439021",
+  "email": "urbandevelopment@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.urbandevelopment.com",
+  "nombreEmployes": "135",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439021"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "781b4bb600734a51ad8461f1"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "d2919937514d4c64abbd6fda"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f36"
+  }
+},
+{
+  "_id": {
+    "$oid": "ed11806695494ce2a2208653"
+  },
+  "nom": "RetailMaster",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439021",
+  "email": "retailmaster@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.retailmaster.com",
+  "nombreEmployes": "353",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439021"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "dc2a677ae1e94a8ab1a9ee7e"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "17efd1bd98c34dc090afa5f0"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f36"
+  }
+},
+{
+  "_id": {
+    "$oid": "ab5a489b308c4ab7918aa987"
+  },
+  "nom": "SecureIT",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439021",
+  "email": "secureit@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.secureit.com",
+  "nombreEmployes": "45",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439021"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "85887bc443eb4a55ab821148"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "b4817ec72cca4a27bbcebd28"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f36"
+  }
+},
+{
+  "_id": {
+    "$oid": "7faebb3267b642c2aec773bb"
+  },
+  "nom": "NextGen Innovation",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439031",
+  "email": "nextgeninnovation@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.nextgeninnovation.com",
+  "nombreEmployes": "466",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "ffde922bef6d497a84fb2989"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "36bb0c9298d3473fbe936641"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f36"
+  }
+},
+{
+  "_id": {
+    "$oid": "327c4475bea64cb9bbd4dc21"
+  },
+  "nom": "TechSolu",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439051",
+  "email": "techsolu@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.techsolu.com",
+  "nombreEmployes": "17",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439051"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "ac6da4f4ef69443989271761"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "2b2c01575dca48139de56c17"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f3a"
+  }
+},
+{
+  "_id": {
+    "$oid": "a2703ccd76b041898f550609"
+  },
+  "nom": "MedTech",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439061",
+  "email": "medtech@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.medtech.com",
+  "nombreEmployes": "147",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "ef23a965c4d94049aa58115a"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "368ed1f6a28d44c9bac6429f"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f3a"
+  }
+},
+{
+  "_id": {
+    "$oid": "2575e45d05174b34baa3106e"
+  },
+  "nom": "DigitalMinds",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439071",
+  "email": "digitalminds@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.digitalminds.com",
+  "nombreEmployes": "310",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439071"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "52f7126e70a74e6fac752210"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "7d073cc2d1bf4fb0b75cac41"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f3c"
+  }
+},
+{
+  "_id": {
+    "$oid": "d407589cc652418ea3de8257"
+  },
+  "nom": "SmartData",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439081",
+  "email": "smartdata@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.smartdata.com",
+  "nombreEmployes": "312",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439081"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "5b0329392ef3485daf34e15c"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "e9c765cea858471a97a00cf9"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "2faf72e7a1b74c0486818929"
+  },
+  "nom": "FutureTransport",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439081",
+  "email": "futuretransport@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.futuretransport.com",
+  "nombreEmployes": "422",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439081"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "0ddc3fb1e0354ad9ab0ba944"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "d787fcfeece946268d2b56b1"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "554a741c475746369d4ddc69"
+  },
+  "nom": "NextGen Innovation",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439141",
+  "email": "nextgeninnovation@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.nextgeninnovation.com",
+  "nombreEmployes": "55",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "32b6903f2a784993b0726ae6"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "3096680da1ea4ad19866b1e0"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "5a88896212f449748f31283e"
+  },
+  "nom": "EduWorld",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439131",
+  "email": "eduworld@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.eduworld.com",
+  "nombreEmployes": "338",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439131"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "08fe2bf9f8704889a5f9e5fd"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "eca2d4a2bb0a4d39a88d305a"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "7a57134e8f594555b6b5a386"
+  },
+  "nom": "TechSolu",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439121",
+  "email": "techsolu@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.techsolu.com",
+  "nombreEmployes": "335",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439121"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "f3aa62cc0aad4b28bd100912"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "844ca85929154a268820c7f6"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "1f683ccdbfbc45459b7b1a53"
+  },
+  "nom": "InnovativeCom",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439111",
+  "email": "innovativecom@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.innovativecom.com",
+  "nombreEmployes": "410",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439111"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "07bd3063f294411195a6f605"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "5b0d5e5629794101b61e828b"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "d20a935458364eed96ef4a2e"
+  },
+  "nom": "Société Générale Tunisie",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80497",
+  "email": "sociétégénéraletunisie@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.sociétégénéraletunisie.tn",
+  "nombreEmployes": "306",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80497"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "9b227b8c915e4fe3b5dcac75"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "f674df6f647a4525a694c50b"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "1627eb92e9774818b361bf89"
+  },
+  "nom": "Goodyear Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439011",
+  "email": "goodyeartunisie@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.goodyeartunisie.tn",
+  "nombreEmployes": "278",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439011"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "e9852b0c88184811ad16cf23"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "1a80219d7cf346a9b11cbb29"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "b1014deef27b482ca50d38fe"
+  },
+  "nom": "Zitouna Bank",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439021",
+  "email": "zitounabank@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.zitounabank.tn",
+  "nombreEmployes": "486",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439021"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "81317577a57a40ca8920400a"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "326d2f6f43124f1a8f0bb0c0"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "8ad7d927066b439d83417feb"
+  },
+  "nom": "Fakhfakh Holding",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439031",
+  "email": "fakhfakhholding@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.fakhfakhholding.tn",
+  "nombreEmployes": "384",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "c789525ed49b48f1bf25b6d1"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "7f53d329f942431da2c1d20a"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "1121bb8075ef45dc8ffca9bf"
+  },
+  "nom": "Yasser Motors",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439051",
+  "email": "yassermotors@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.yassermotors.tn",
+  "nombreEmployes": "129",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439051"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "ffb6e8e2b07f49498ad269d6"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "14ed2f459aed44ed9ed50dc7"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "86143cf3843e4b0da0bc9b1c"
+  },
+  "nom": "Orange Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439081",
+  "email": "orangetunisie@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.orangetunisie.tn",
+  "nombreEmployes": "366",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439081"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "84a3d4d9fbdd4079bb8f5632"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "e077459a11e54ce4aabc9308"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "b8d04ef31a7447f4bafb7454"
+  },
+  "nom": "Société Tunisienne de Banque (STB)",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439081",
+  "email": "sociététunisiennedebanque(stb)@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.sociététunisiennedebanque(stb).tn",
+  "nombreEmployes": "140",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439081"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "7017d9316c074ee8b034f852"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "6a0773a49f1b4a73b77af356"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "6bc0eaa31941454d873fd772"
+  },
+  "nom": "Poulina Group Holding",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439141",
+  "email": "poulinagroupholding@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.poulinagroupholding.tn",
+  "nombreEmployes": "372",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "d50277425cb445c6857c82a1"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "14f39b858f9840fea9e227b4"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "97e035ea436248709749e66f"
+  },
+  "nom": "Tunisair",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439121",
+  "email": "tunisair@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.tunisair.tn",
+  "nombreEmployes": "149",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439121"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "04bae8fa4c9c42af86b7d709"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "f8302237b84443d890e540b4"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "909f3fca7c6e4cd78588b53b"
+  },
+  "nom": "Sidi Bou Said Business School",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439111",
+  "email": "sidibousaidbusinessschool@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.sidibousaidbusinessschool.tn",
+  "nombreEmployes": "212",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439111"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "3ab24b09505942ee8681139a"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.933Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.933Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "1d244c8248344fbbb27950b9"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "06a403655c6c4f188ba862fb"
+  },
+  "nom": "Yasser Motors",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439101",
+  "email": "yassermotors@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.yassermotors.tn",
+  "nombreEmployes": "487",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439101"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "91eb891bf480459790629460"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.933Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.933Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "f872dfc4082f48ad9df098d1"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "9271f6e623c54b4d9a15b7a0"
+  },
+  "nom": "Deloitte",
+  "description": "Deloitte est une entreprise mondiale fournissant des services professionnels dans l'audit, le conseil et la fiscalité.",
+  "email": "deloitte@example.com",
+  "telephone": "+216 71 234 683",
+  "siteWeb": "https://www.deloitte.com",
+  "nombreEmployes": "5000",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Nadia Ben Ali",
+      "poste": "Directrice IT",
+      "telephone": "+216 24 567 700",
+      "_id": {
+        "$oid": "e92b372dc9274b1fa4e20cbf"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T09:30:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T09:30:00.000Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "deloitte_logo.jpg",
+    "fileLink_Document": "/data/deloitte_logo.jpg",
+    "_id": {
+      "$oid": "f19f3e749d7b48debf94b4f3"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "ebe83ce5e3d44e48a419c2f5"
+  },
+  "nom": "TechSolu",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80499",
+  "email": "techsolu@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.techsolu.com",
+  "nombreEmployes": "24",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "28231b72842c4a5ea8695870"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.691Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.691Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "453cc7c4ad1b4672b97ad0e8"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f34"
+  }
+},
+{
+  "_id": {
+    "$oid": "c11bb49fd30648ecadb0d421"
+  },
+  "nom": "BioAgriculture",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80499",
+  "email": "bioagriculture@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.bioagriculture.com",
+  "nombreEmployes": "127",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "b68f1847f8c443ed9c50345f"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.693Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.693Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "f0db582a00944e15a512b501"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f34"
+  }
+},
+{
+  "_id": {
+    "$oid": "b97ba606728143bca48763dc"
+  },
+  "nom": "NextGen Telecom",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80497",
+  "email": "nextgentelecom@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.nextgentelecom.com",
+  "nombreEmployes": "167",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80497"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "32ae411802c44e65bd912c77"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "4963abf6bafb445b87cd7113"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f34"
+  }
+},
+{
+  "_id": {
+    "$oid": "3393aec2713a4db88280adc9"
+  },
+  "nom": "InfoTech Solutions",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439031",
+  "email": "infotechsolutions@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.infotechsolutions.com",
+  "nombreEmployes": "377",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "b31b1b15c1e44fcba5eb374c"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "a86fb0b082d241de8fcfb959"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f36"
+  }
+},
+{
+  "_id": {
+    "$oid": "f632838eb98e46e7a9cc34c6"
+  },
+  "nom": "InnovativeCom",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439061",
+  "email": "innovativecom@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.innovativecom.com",
+  "nombreEmployes": "241",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "2682ec191c4648cd89a39224"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "65b3d0e359f94bcfbd81719e"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f3a"
+  }
+},
+{
+  "_id": {
+    "$oid": "499c00a62e5f4461a13a07e7"
+  },
+  "nom": "CloudWare",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439071",
+  "email": "cloudware@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.cloudware.com",
+  "nombreEmployes": "356",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439071"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "ae62b0f58b0743de9b0b4142"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "19841596d1024468a1eff938"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f3c"
+  }
+},
+{
+  "_id": {
+    "$oid": "15680a62deb7441dba866510"
+  },
+  "nom": "GlobalRetail",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439081",
+  "email": "globalretail@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.globalretail.com",
+  "nombreEmployes": "438",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439081"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "f51ca20fa36543b6a0c659ec"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "4d983f15cc6045b0aca0c2f5"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f3c"
+  }
+},
+{
+  "_id": {
+    "$oid": "a9ac2f31255043a9b2899bba"
+  },
+  "nom": "UrbanDevelopment",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439091",
+  "email": "urbandevelopment@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.urbandevelopment.com",
+  "nombreEmployes": "115",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "dcb90dff31ce43b8ae94d76b"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "da0377e73e7f46a5bc55e1e7"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "5865cec345864f7eb91d41f9"
+  },
+  "nom": "MediaPartners",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439131",
+  "email": "mediapartners@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.mediapartners.com",
+  "nombreEmployes": "35",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439131"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "81c59eea005a44a4a070be78"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "cebe9594987243618c9a45a9"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "96d1269a0ce74fa08b94f5cf"
+  },
+  "nom": "GreenEnergy Co",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439121",
+  "email": "greenenergyco@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.greenenergyco.com",
+  "nombreEmployes": "111",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439121"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "3fdf0e5707a24e3fa66c213c"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "97d206626d344d03aff9a582"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "425abefeff07471380652851"
+  },
+  "nom": "BioAgriculture",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439121",
+  "email": "bioagriculture@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.bioagriculture.com",
+  "nombreEmployes": "52",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439121"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "8697e489b0e642e3b5369d7f"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "a12d60d959654e029835a10c"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "15e3ec41b6ea4689b2289938"
+  },
+  "nom": "MedTech",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439111",
+  "email": "medtech@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.medtech.com",
+  "nombreEmployes": "196",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439111"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "088024bd33234c329aca7f31"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "f7fb259266b546dea34db4f7"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "b30f9a3b8c9f4d0b9fd40d6d"
+  },
+  "nom": "DigitalMinds",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439101",
+  "email": "digitalminds@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.digitalminds.com",
+  "nombreEmployes": "312",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439101"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "da63a23c877b4e1d913678f8"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "92c4561a46ec463d8677114d"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "86376967a5ab43c8bb4ea330"
+  },
+  "nom": "Banque de Tunisie",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80498",
+  "email": "banquedetunisie@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.banquedetunisie.tn",
+  "nombreEmployes": "488",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "22db906542ef414c99ebc573"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "558298cbed864ef7b9afee29"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "63e1a3987ff340b3b84ccf95"
+  },
+  "nom": "Attijari Bank",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80498",
+  "email": "attijaribank@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.attijaribank.tn",
+  "nombreEmployes": "86",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "0a49c5265875470e9df5650f"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "76ac83f5d8fe4aa5a4538743"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "d0a11b425fcc45c48fbdbd20"
+  },
+  "nom": "Tunisair",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439021",
+  "email": "tunisair@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.tunisair.tn",
+  "nombreEmployes": "84",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439021"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "6f938d867c3e4e179350b258"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "f4214422db874f1cb5e46b82"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "8e5ea219560f49ceaf54731d"
+  },
+  "nom": "Karthago Group",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439031",
+  "email": "karthagogroup@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.karthagogroup.tn",
+  "nombreEmployes": "421",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "1c51272c6f434694b2e237f1"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "e0c6dd2d5a884555b854d3bf"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "d9fcb7bdf44f4c1da04262fc"
+  },
+  "nom": "Cosider",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439051",
+  "email": "cosider@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.cosider.tn",
+  "nombreEmployes": "96",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439051"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "e98d3a1665834d1085e2f6a2"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "a01f35ef4594498c8ef78ec7"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "0066cbbe9a1e46fb986da3cc"
+  },
+  "nom": "Arab Tunisian Bank",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439091",
+  "email": "arabtunisianbank@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.arabtunisianbank.tn",
+  "nombreEmployes": "204",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "5557cea8e70346cd9ca94043"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "cece108534284defb827d3f3"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "a7c07d06568e491485752e98"
+  },
+  "nom": "Société Générale Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439091",
+  "email": "sociétégénéraletunisie@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.sociétégénéraletunisie.tn",
+  "nombreEmployes": "152",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "882f65738ccb4dad9a30093a"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "18c8d70ed024456eb6985101"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "12e9051d77834a258ac5aecc"
+  },
+  "nom": "Banque Nationale Agricole (BNA)",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439141",
+  "email": "banquenationaleagricole(bna)@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.banquenationaleagricole(bna).tn",
+  "nombreEmployes": "52",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "635fcd5732564c699fc00ffd"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "e58cd9fcb4f84024829628c0"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "4e74fe2c2a9a46a694e61891"
+  },
+  "nom": "Carrefour Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439141",
+  "email": "carrefourtunisie@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.carrefourtunisie.tn",
+  "nombreEmployes": "49",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "553747282f3e4598ad536434"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "f5188d0cf103499f97ee57e4"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "09b6a8e76e4f4da98a16e474"
+  },
+  "nom": "Goodyear Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439131",
+  "email": "goodyeartunisie@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.goodyeartunisie.tn",
+  "nombreEmployes": "419",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439131"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "7d9891d0bc0747bbbdb59530"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "fda676b74d11405188f77ac2"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "83920d09589a4008a0f8e11e"
+  },
+  "nom": "DHL Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439131",
+  "email": "dhltunisie@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.dhltunisie.tn",
+  "nombreEmployes": "413",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439131"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "9ae434f693474a18a9d17d85"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "476a9e36a565467ca6037607"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "d33fd5d82d9a4d42a08b0b2d"
+  },
+  "nom": "Sofrecom",
+  "description": "Entreprise spécialisée dans la transformation digitale et les services IT.",
+  "email": "sofrecom@example.com",
+  "telephone": "+216 71 234 890",
+  "siteWeb": "https://www.sofrecom.com",
+  "nombreEmployes": "150",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Khaled Khemiri",
+      "poste": "Directeur de projet",
+      "telephone": "+216 24 567 891",
+      "_id": {
+        "$oid": "b38442d3a2e64d6fbb089032"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T08:00:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T08:00:00.000Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "sofrecom_logo.jpg",
+    "fileLink_Document": "/data/sofrecom_logo.jpg",
+    "_id": {
+      "$oid": "e45a09b4b53d45b889faecb6"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "a23c12ab2a2c44b59b041a52"
+  },
+  "nom": "UBCI",
+  "description": "Banque tunisienne offrant des services financiers à distance.",
+  "email": "ubci@example.com",
+  "telephone": "+216 71 456 789",
+  "siteWeb": "https://www.ubci.com",
+  "nombreEmployes": "1000",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Sami Gharbi",
+      "poste": "Directeur de la banque en ligne",
+      "telephone": "+216 24 123 456",
+      "_id": {
+        "$oid": "e2d6bbba35b540cb8338f2e0"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T08:20:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T08:20:00.000Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "ubci_logo.jpg",
+    "fileLink_Document": "/data/ubci_logo.jpg",
+    "_id": {
+      "$oid": "3fd678c0d78943c9b3fe847e"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "3f9cb0e206cb47f5a4e5f324"
+  },
+  "nom": "BIAT",
+  "description": "Banque tunisienne offrant des services financiers et bancaires.",
+  "email": "biat@example.com",
+  "telephone": "+216 71 234 689",
+  "siteWeb": "https://www.biat.com",
+  "nombreEmployes": "2000",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Fathi Chouaieb",
+      "poste": "Responsable service client",
+      "telephone": "+216 24 567 890",
+      "_id": {
+        "$oid": "fa876ab91b244ccdb7d0341f"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T08:30:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T08:30:00.000Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "biat_logo.jpg",
+    "fileLink_Document": "/data/biat_logo.jpg",
+    "_id": {
+      "$oid": "aa934eb7b6b34e439ed859d0"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "56be4330de8f48b5912b0f5d"
+  },
+  "nom": "Sopra RH",
+  "description": "Sopra RH offre des services de gestion des ressources humaines.",
+  "email": "soprah@example.com",
+  "telephone": "+216 71 234 692",
+  "siteWeb": "https://www.soprah.com",
+  "nombreEmployes": "300",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Sami Haddad",
+      "poste": "Directeur RH",
+      "telephone": "+216 24 123 457",
+      "_id": {
+        "$oid": "ad9cbfa4e2634fc9b39d8483"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T08:40:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T08:40:00.000Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "soprah_logo.jpg",
+    "fileLink_Document": "/data/soprah_logo.jpg",
+    "_id": {
+      "$oid": "f2bff12b5b1b463f91fd455d"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "9fceded8f9e74279b8eddb88"
+  },
+  "nom": "Avaxia",
+  "description": "Entreprise spécialisée dans les services IT et la transformation digitale.",
+  "email": "avaxia@example.com",
+  "telephone": "+216 71 234 690",
+  "siteWeb": "https://www.avaxia.com",
+  "nombreEmployes": "120",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Amine Khlifi",
+      "poste": "Directeur IT",
+      "telephone": "+216 24 567 894",
+      "_id": {
+        "$oid": "eb9a3fbda3a94e1f9f8ff2d8"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T09:00:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T09:00:00.000Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "avaxia_logo.jpg",
+    "fileLink_Document": "/data/avaxia_logo.jpg",
+    "_id": {
+      "$oid": "9a8c5be963f3408b876a2a89"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "4d7c2c1c0c5a44a58b8b8a7b"
+  },
+  "nom": "PwC",
+  "description": "PwC est une entreprise internationale fournissant des services en audit, conseil et fiscalité.",
+  "email": "pwc@example.com",
+  "telephone": "+216 71 234 681",
+  "siteWeb": "https://www.pwc.com",
+  "nombreEmployes": "2500",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Sophie Bouaziz",
+      "poste": "Partner",
+      "telephone": "+216 24 234 678",
+      "_id": {
+        "$oid": "8d62ad7c74b64a3d9b189cdb"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T09:10:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T09:10:00.000Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "pwc_logo.jpg",
+    "fileLink_Document": "/data/pwc_logo.jpg",
+    "_id": {
+      "$oid": "b7e98e3ab23b4c3f8b063a8b"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "1c43abf94cf24e8c8b04a82c"
+  },
+  "nom": "KPMG",
+  "description": "KPMG est une entreprise offrant des services en audit, conseil et fiscalité à travers le monde.",
+  "email": "kpmg@example.com",
+  "telephone": "+216 71 234 684",
+  "siteWeb": "https://home.kpmg",
+  "nombreEmployes": "4000",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Khaled Touati",
+      "poste": "Responsable audit",
+      "telephone": "+216 24 567 711",
+      "_id": {
+        "$oid": "f4e35cbb5c5e4a89b8da5f4b"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T09:40:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T09:40:00.000Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "kpmg_logo.jpg",
+    "fileLink_Document": "/data/kpmg_logo.jpg",
+    "_id": {
+      "$oid": "4c3d9fe02cf94ec48ab3f7bc"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "0f36b55015484b05ae7e4cbd"
+  },
+  "nom": "CloudWare",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80497",
+  "email": "cloudware@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.cloudware.com",
+  "nombreEmployes": "330",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80497"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "2ba994ae66a742d3be0ccba5"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "5a96bb1207204ca69e14869d"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f34"
+  }
+},
+{
+  "_id": {
+    "$oid": "1ebcb5135c294842a3eccc46"
+  },
+  "nom": "GlobalRetail",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439011",
+  "email": "globalretail@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.globalretail.com",
+  "nombreEmployes": "493",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439011"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "eee9bb41de2648ceb6419885"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "9dadf94e660d4d608362b177"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f34"
+  }
+},
+{
+  "_id": {
+    "$oid": "94b3acc21f5447fbb7cd32af"
+  },
+  "nom": "FoodPlus",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439031",
+  "email": "foodplus@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.foodplus.com",
+  "nombreEmployes": "279",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "17ad2cffeb8945cebbe989a5"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "b4f5dccfa44b4c4fba71a36a"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f36"
+  }
+},
+{
+  "_id": {
+    "$oid": "cfed4726ddba407e8ba18e99"
+  },
+  "nom": "MediaPartners",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439041",
+  "email": "mediapartners@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.mediapartners.com",
+  "nombreEmployes": "412",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439041"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "5ce0f2a2ced14053a86808c4"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "f8ee4bcf91344f93826c3c2b"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f36"
+  }
+},
+{
+  "_id": {
+    "$oid": "8d21085caba44c4ba1a20421"
+  },
+  "nom": "LogisticsPro",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439041",
+  "email": "logisticspro@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.logisticspro.com",
+  "nombreEmployes": "476",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439041"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "0370995d6c1e4aadb6c291f1"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "020ee61011604064a3b9f79d"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f3a"
+  }
+},
+{
+  "_id": {
+    "$oid": "a3d927783ca04a94bb3f6d76"
+  },
+  "nom": "EduWorld",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439041",
+  "email": "eduworld@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.eduworld.com",
+  "nombreEmployes": "389",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439041"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "3fd6cc667f3243189c38cbcf"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "a7ba9ac581514b1f8a8015af"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f3a"
+  }
+},
+{
+  "_id": {
+    "$oid": "cbd403d604344f28821741d9"
+  },
+  "nom": "GreenEnergy Co",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439051",
+  "email": "greenenergyco@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.greenenergyco.com",
+  "nombreEmployes": "297",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439051"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "d67bad95b38a44c6b0fadaaf"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "e35d7eda52a8439eb3bf813a"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f3a"
+  }
+},
+{
+  "_id": {
+    "$oid": "9f26703730fe498d8380eb69"
+  },
+  "nom": "NextGen Telecom",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439071",
+  "email": "nextgentelecom@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.nextgentelecom.com",
+  "nombreEmployes": "277",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439071"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "48adbb35858a4ab0a34ef39d"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "028fd4a47dce492bb2c4d7da"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f3c"
+  }
+},
+{
+  "_id": {
+    "$oid": "b4c6b3029c8847848bff780f"
+  },
+  "nom": "RetailMaster",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439091",
+  "email": "retailmaster@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.retailmaster.com",
+  "nombreEmployes": "498",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "0c47dcc595f240078f6cccbe"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "eafddc26f4a64675881c7f9a"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "19e6119304b54609934b7dc8"
+  },
+  "nom": "SmartConstruction",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439111",
+  "email": "smartconstruction@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.smartconstruction.com",
+  "nombreEmployes": "108",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439111"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "df28725258c34b76b067393f"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "8dafbe3e22e04d1ea591145d"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "a9b06c32e4e54972932755ac"
+  },
+  "nom": "NextGen Telecom",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439101",
+  "email": "nextgentelecom@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.nextgentelecom.com",
+  "nombreEmployes": "151",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439101"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "ff66f058d7f14355b3ad425a"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "2eacb70cae954ae1a754ca10"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "73d6cccbcb124e6e97d4d230"
+  },
+  "nom": "Société Tunisienne de Banque (STB)",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80499",
+  "email": "sociététunisiennedebanque(stb)@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.sociététunisiennedebanque(stb).tn",
+  "nombreEmployes": "262",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "2fc0a4a7e8a742e3a1b55668"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.929Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.929Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "fccb7c0c02164c3a87814e68"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "a4a8de511da949e9a7856616"
+  },
+  "nom": "Banque Nationale Agricole (BNA)",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80497",
+  "email": "banquenationaleagricole(bna)@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.banquenationaleagricole(bna).tn",
+  "nombreEmployes": "434",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80497"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "e2ae1413f5244a678962c657"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "8b66cb4013f74cd6ba0eb9d4"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "2dcfea1910c1401f9b68f476"
+  },
+  "nom": "Poulina Group Holding",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80497",
+  "email": "poulinagroupholding@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.poulinagroupholding.tn",
+  "nombreEmployes": "272",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80497"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "a97a2b8d5f294f5d839096b1"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "116d041d99914330a36119c1"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "f76b101d240b4532b4d574c5"
+  },
+  "nom": "DHL Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439021",
+  "email": "dhltunisie@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.dhltunisie.tn",
+  "nombreEmployes": "297",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439021"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "9a43294bb2484dd9b0878508"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "cb0075b1fea747e297549161"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "da1d1d58f0a04ea8913f59e6"
+  },
+  "nom": "TAV Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439031",
+  "email": "tavtunisie@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.tavtunisie.tn",
+  "nombreEmployes": "230",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "6a6f66dd5e59434e90651745"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "b21a3bc629164773b376aa70"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "b6bd53defabe42d1a085d6ae"
+  },
+  "nom": "Sidi Bou Said Business School",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439041",
+  "email": "sidibousaidbusinessschool@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.sidibousaidbusinessschool.tn",
+  "nombreEmployes": "68",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439041"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "6096a6e1648b4257bd525ba0"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "f4e2a66fdbb14c73a04d8ae9"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "a015b7bb8afc497bafab455c"
+  },
+  "nom": "Coca-Cola Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439041",
+  "email": "coca-colatunisie@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.coca-colatunisie.tn",
+  "nombreEmployes": "59",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439041"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "0dcf6a006b1d45db99478a9c"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "549cc693852b4da1a06e3d9a"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "9ae562012a204b91a7580537"
+  },
+  "nom": "Biolife Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439061",
+  "email": "biolifetunisie@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.biolifetunisie.tn",
+  "nombreEmployes": "184",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "c19059b634cf4f17a906cc4d"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "e8496ba699c94d57b585c7aa"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "e641236694a84c8682a60cd1"
+  },
+  "nom": "Steg Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439061",
+  "email": "stegtunisie@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.stegtunisie.tn",
+  "nombreEmployes": "338",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "c8e129c0d3b84a338bb75e0a"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "a614e4b3c1734b48a537c200"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "bb26699ddc71497e8696b57b"
+  },
+  "nom": "Sewan Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439061",
+  "email": "sewantunisie@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.sewantunisie.tn",
+  "nombreEmployes": "406",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "d9d9fdafd96443d198864fd1"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "6826a95bcf9148298b28083e"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "ebb7beeafa524c6ea10cd44c"
+  },
+  "nom": "MobiTel",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439071",
+  "email": "mobitel@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.mobitel.tn",
+  "nombreEmployes": "141",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439071"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "8d61620669ff458aacc6f2ac"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "6d9894bc2b22404493806bff"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "5b65b078715c43fb98697dd9"
+  },
+  "nom": "TAV Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439121",
+  "email": "tavtunisie@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.tavtunisie.tn",
+  "nombreEmployes": "303",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439121"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "ae3d3abf2abd4459b35736e1"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.933Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.933Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "0758f3e7561a439995b6e3ba"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "b66ff3ab0aef4329bbfbbeec"
+  },
+  "nom": "Karthago Group",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439111",
+  "email": "karthagogroup@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.karthagogroup.tn",
+  "nombreEmployes": "298",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439111"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "da0ca9bf2d0741ca88d39dd0"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.933Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.933Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "1a6bebe04af548bdbd965c8f"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "a8c8f5d77b3b4182b6a3a1d5"
+  },
+  "nom": "TunisiaTech",
+  "description": "Entreprise tunisienne active dans le secteur IT.",
+  "email": "tunisiatech@example.com",
+  "telephone": "+216 71 234 567",
+  "siteWeb": "https://www.tunisiatech.com",
+  "nombreEmployes": "50",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Ahmed Ben Ali",
+      "poste": "Responsable technique",
+      "telephone": "+216 24 567 890",
+      "_id": {
+        "$oid": "d3b93ec97a2c45a9b374f01b"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:50:15.691Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:50:15.691Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo_tunisiatech.jpg",
+    "fileLink_Document": "/data/logo_tunisiatech.jpg",
+    "_id": {
+      "$oid": "ab0c7f1bc35e45a3b68bcfd6"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "bfc880b203f445a7832c7e05"
+  },
+  "nom": "GreenEnergy Co",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80499",
+  "email": "greenenergyco@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.greenenergyco.com",
+  "nombreEmployes": "468",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "0a9635676d08487f8c02653f"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.692Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.692Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "62ca8cad78c94e6a863f521d"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f34"
+  }
+},
+{
+  "_id": {
+    "$oid": "97ef639a5707424f805ae104"
+  },
+  "nom": "InnovativeCom",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80498",
+  "email": "innovativecom@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.innovativecom.com",
+  "nombreEmployes": "312",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "815e867207914d849fe61d6b"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "4ada560014e64a149e1f61ee"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f34"
+  }
+},
+{
+  "_id": {
+    "$oid": "e05913ac6e444e20b3dd0baa"
+  },
+  "nom": "SmartConstruction",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80498",
+  "email": "smartconstruction@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.smartconstruction.com",
+  "nombreEmployes": "348",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "96b5bd5a9e8e4877abbe86ba"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "e93bea1b19a04df2975f5a70"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f34"
+  }
+},
+{
+  "_id": {
+    "$oid": "19fc7517b8554032b857fd9d"
+  },
+  "nom": "SmartData",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439011",
+  "email": "smartdata@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.smartdata.com",
+  "nombreEmployes": "43",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439011"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "9285716da68e4793b3a56d46"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "863a7c1d5da14e1f83045792"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f36"
+  }
+},
+{
+  "_id": {
+    "$oid": "9d700a44196c4dae9d51ea44"
+  },
+  "nom": "FutureTransport",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439011",
+  "email": "futuretransport@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.futuretransport.com",
+  "nombreEmployes": "121",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439011"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "49e6d3c0d5e746a799823cf3"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.694Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "43fef77b2c2d4c5bb15a3d75"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597b05d47125a1d06f36"
+  }
+},
+{
+  "_id": {
+    "$oid": "a6916a540d97472895cbc4d2"
+  },
+  "nom": "BioAgriculture",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439051",
+  "email": "bioagriculture@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.bioagriculture.com",
+  "nombreEmployes": "176",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439051"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "f40887d8d26246dd88eee386"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "7ee8365228f84b008a6b16e4"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f3a"
+  }
+},
+{
+  "_id": {
+    "$oid": "d68850f010d848ff83cfd1c6"
+  },
+  "nom": "SmartConstruction",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439061",
+  "email": "smartconstruction@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.smartconstruction.com",
+  "nombreEmployes": "295",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "ce9726a84e7e4ef79aa9cada"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "05ee3f6b774c4bd69f9e0110"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f3c"
+  }
+},
+{
+  "_id": {
+    "$oid": "96808c8b35614ddbbee1eba9"
+  },
+  "nom": "SecureIT",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439091",
+  "email": "secureit@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.secureit.com",
+  "nombreEmployes": "187",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "fb2a60bd2dbc455aae3597d8"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "e5515dfc5b344556bca5418e"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "23922a8ff77d485192e0887d"
+  },
+  "nom": "InfoTech Solutions",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439141",
+  "email": "infotechsolutions@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.infotechsolutions.com",
+  "nombreEmployes": "459",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "776b2648bc014d7ab89e96b7"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.695Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "bb1670aa60f6436ebb45f1c3"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "f66ff43d77124ea886d65b16"
+  },
+  "nom": "FoodPlus",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439141",
+  "email": "foodplus@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.foodplus.com",
+  "nombreEmployes": "287",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "908221fe240e4a2989cb6159"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "7104555eec194076ae52c0e7"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "cbf547d6d4354bedb9285f5d"
+  },
+  "nom": "LogisticsPro",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439131",
+  "email": "logisticspro@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.logisticspro.com",
+  "nombreEmployes": "162",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439131"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "03ac298e4fa6488c926532c1"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "423b864539f9452e8196a189"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "2aecdc1ebb234cef94064bcc"
+  },
+  "nom": "CloudWare",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439101",
+  "email": "cloudware@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.cloudware.com",
+  "nombreEmployes": "435",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439101"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "4ae659e533e54b588f4ab104"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:43:15.696Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "dee5ceeac299421aa8cecd1d"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "466a988a63954733a1f491c8"
+  },
+  "nom": "Tunisiana",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80499",
+  "email": "tunisiana@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.tunisiana.tn",
+  "nombreEmployes": "46",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "8a1dfcabca9c4a8dae1d6fab"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.928Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.928Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "789d4af45091414684a5f72b"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "59322b8f9ad9439fbfa67c98"
+  },
+  "nom": "Orange Tunisie",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80499",
+  "email": "orangetunisie@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.orangetunisie.tn",
+  "nombreEmployes": "157",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "245283fa1e8b4ebbba0be605"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.929Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.929Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "c4854d906e84413d80b8798b"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "50e5c8ed4c764fdab8c2fe70"
+  },
+  "nom": "Arab Tunisian Bank",
+  "description": "Entreprise active dans le secteur c92b1ef2bd3c4d7aa9e80498",
+  "email": "arabtunisianbank@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.arabtunisianbank.tn",
+  "nombreEmployes": "284",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "045c11f8b5884647a01cca64"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "38810b107ec2430aae5e9b61"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "3a12fe2bc5e54a9f939c0236"
+  },
+  "nom": "Carrefour Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439011",
+  "email": "carrefourtunisie@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.carrefourtunisie.tn",
+  "nombreEmployes": "114",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439011"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "810e6a2bfaac45518fe8ff7c"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "cc3656d6022743d0b5580f6c"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "ba37a35446904b8fb94661d6"
+  },
+  "nom": "Monoprix Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439011",
+  "email": "monoprixtunisie@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.monoprixtunisie.tn",
+  "nombreEmployes": "458",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439011"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "19d06cbc8b3049e48ebd0ee3"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.930Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "bab8b70e542a44a1a22c4300"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "073ce540388e480e874db805"
+  },
+  "nom": "Groupe Délice",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439041",
+  "email": "groupedélice@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.groupedélice.tn",
+  "nombreEmployes": "87",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439041"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "1e0273adad84479683536569"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "8b4ee00a3c8b44fba9d31db1"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "fe48290b65b84176bb1c5d2f"
+  },
+  "nom": "Acumed Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439051",
+  "email": "acumedtunisie@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.acumedtunisie.tn",
+  "nombreEmployes": "42",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439051"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "f576d82229884f94a0bb4faa"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "e4c69222c28d45b599f1b64d"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "3f2acb478cf34cb993efe430"
+  },
+  "nom": "Yassir",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439071",
+  "email": "yassir@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.yassir.tn",
+  "nombreEmployes": "325",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439071"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "a72b4811c9224ed29b266de1"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "e3018ffcebe94f1eb0f13bbf"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "70957e50dd9e47bb8e262d45"
+  },
+  "nom": "Tunisiana",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439071",
+  "email": "tunisiana@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.tunisiana.tn",
+  "nombreEmployes": "141",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439071"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "ffaeac3adf8c4b7f89b53ab5"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "79694b93894547d0bd8848a1"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "80a8ee6908b147c3a9c8dbd4"
+  },
+  "nom": "Banque de Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439081",
+  "email": "banquedetunisie@example.com",
+  "telephone": "+33 6 00 00 00 54",
+  "siteWeb": "https://www.banquedetunisie.tn",
+  "nombreEmployes": "451",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439081"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 54",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 54",
+      "_id": {
+        "$oid": "97dcba31746b4986a6bf9cbd"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.931Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo54.jpg",
+    "fileLink_Document": "/data/logo54.jpg",
+    "_id": {
+      "$oid": "741a2afe2b5b465782acb4ea"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "a8a2378d3a974519a8d2d2de"
+  },
+  "nom": "Attijari Bank",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439091",
+  "email": "attijaribank@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.attijaribank.tn",
+  "nombreEmployes": "77",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "e4341d038e634ef8a4df9548"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "8096ae8421624c89a7aecc86"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "7e1c5355dfc449bdafe7d5de"
+  },
+  "nom": "Monoprix Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439131",
+  "email": "monoprixtunisie@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.monoprixtunisie.tn",
+  "nombreEmployes": "225",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439131"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "b487dfdf401b44468322bb59"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "5127b38b165e4ec4aeda1030"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "04d2da14a6f549dabac053b0"
+  },
+  "nom": "Zitouna Bank",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439121",
+  "email": "zitounabank@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.zitounabank.tn",
+  "nombreEmployes": "342",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439121"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "b584f660f87f4e2ca9750e1e"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.932Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "c5fdd7ebc2fb4412a50b5c25"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "3031ee76a33d4fbd912cc473"
+  },
+  "nom": "Fakhfakh Holding",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439111",
+  "email": "fakhfakhholding@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.fakhfakhholding.tn",
+  "nombreEmployes": "170",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439111"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "38483d2585b84774a3f2d38b"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.933Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.933Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "1d35983937df47b89ee8eba5"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "d171bbef081c4bc4862f461a"
+  },
+  "nom": "Groupe Délice",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439101",
+  "email": "groupedélice@example.com",
+  "telephone": "+33 6 00 00 00 52",
+  "siteWeb": "https://www.groupedélice.tn",
+  "nombreEmployes": "224",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439101"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 52",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 52",
+      "_id": {
+        "$oid": "cceddbf18106447598cdf441"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.933Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.933Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo52.jpg",
+    "fileLink_Document": "/data/logo52.jpg",
+    "_id": {
+      "$oid": "26143092e511486ca9ee1ec7"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "17d693def5ef4ae98ba33600"
+  },
+  "nom": "Coca-Cola Tunisie",
+  "description": "Entreprise active dans le secteur 507f1f77bcf86cd799439101",
+  "email": "coca-colatunisie@example.com",
+  "telephone": "+33 6 00 00 00 53",
+  "siteWeb": "https://www.coca-colatunisie.tn",
+  "nombreEmployes": "495",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439101"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Personne 53",
+      "poste": "Responsable",
+      "telephone": "+33 1 23 45 67 53",
+      "_id": {
+        "$oid": "bf1fd82e363a4772a68e4b3f"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T07:44:10.933Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T07:44:10.933Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "logo53.jpg",
+    "fileLink_Document": "/data/logo53.jpg",
+    "_id": {
+      "$oid": "7029570e296948fbbf7caab7"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "9db0b84cc9534e34a67d9f53"
+  },
+  "nom": "DigitalCook",
+  "description": "Entreprise spécialisée dans la gestion des services numériques.",
+  "email": "digitalcook@example.com",
+  "telephone": "+216 71 234 675",
+  "siteWeb": "https://www.digitalcook.com",
+  "nombreEmployes": "80",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Mona Nadhir",
+      "poste": "Responsable RH",
+      "telephone": "+216 29 111 222",
+      "_id": {
+        "$oid": "d99d9d9e2abf44ab6a5a1b72"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T08:10:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T08:10:00.000Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "digitalcook_logo.jpg",
+    "fileLink_Document": "/data/digitalcook_logo.jpg",
+    "_id": {
+      "$oid": "fdd1a6d7b62b45ac8c2e77e5"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "1a879a929bd648d39c77d4e1"
+  },
+  "nom": "Swiss Premium Negoce",
+  "description": "Entreprise active dans la vente et la négociation de produits.",
+  "email": "swisspremium@example.com",
+  "telephone": "+216 71 234 694",
+  "siteWeb": "https://www.swisspremiumnegoce.com",
+  "nombreEmployes": "100",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Mohamed Sassi",
+      "poste": "Responsable des ventes",
+      "telephone": "+216 24 567 893",
+      "_id": {
+        "$oid": "bbf3ddad897f4c65b76d5a12"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T08:50:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T08:50:00.000Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "swisspremium_logo.jpg",
+    "fileLink_Document": "/data/swisspremium_logo.jpg",
+    "_id": {
+      "$oid": "d6f4f9e5e5e24b8b989baaf5"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+},
+{
+  "_id": {
+    "$oid": "7455fd944d7a45f9b8c2c3f4"
+  },
+  "nom": "EY",
+  "description": "EY est une entreprise internationale fournissant des services en audit, conseil, fiscalité et transactions.",
+  "email": "ey@example.com",
+  "telephone": "+216 71 234 682",
+  "siteWeb": "https://www.ey.com",
+  "nombreEmployes": "3000",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "contactPersonel": [
+    {
+      "nom": "Faycel Ben Hassen",
+      "poste": "Manager",
+      "telephone": "+216 24 567 699",
+      "_id": {
+        "$oid": "d8e9f0fddcb146c5b8349bca"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2025-04-07T09:20:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-04-07T09:20:00.000Z"
+  },
+  "brochures": [],
+  "logo": {
+    "fileName": "ey_logo.jpg",
+    "fileLink_Document": "/data/ey_logo.jpg",
+    "_id": {
+      "$oid": "ab5a36e28be24a6d9779e042"
+    }
+  },
+  "verified": true,
+  "isActive": true,
+  "addedBy": {
+    "$oid": "6806597c05d47125a1d06f38"
+  }
+}]

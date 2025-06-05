@@ -1,0 +1,1463 @@
+[{
+  "_id": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "label": "Secteur bancaire",
+  "jobs": [
+    {
+      "romeCode": "C1200",
+      "label": "Conseiller clientèle bancaire",
+      "mainName": "Conseiller clientèle bancaire",
+      "subDomain": "Secteur bancaire",
+      "_id": {
+        "$oid": "a1b2c3d4e5f60708090a0b0c"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Conseiller clientèle bancaire",
+          "_id": {
+            "$oid": "aa11bb22cc33dd44ee55ff66"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "C1201",
+      "label": "Chargé d’affaires entreprises",
+      "mainName": "Chargé d’affaires entreprises",
+      "subDomain": "Secteur bancaire",
+      "_id": {
+        "$oid": "b2c3d4e5f60708090a0b0c1d"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Chargé d’affaires entreprises",
+          "_id": {
+            "$oid": "bb22cc33dd44ee55ff66aa11"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "C1202",
+      "label": "Analyste financier",
+      "mainName": "Analyste financier",
+      "subDomain": "Secteur bancaire",
+      "_id": {
+        "$oid": "c3d4e5f60708090a0b0c1d2e"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Analyste financier",
+          "_id": {
+            "$oid": "cc33dd44ee55ff66aa11bb22"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "C1203",
+      "label": "Gestionnaire de patrimoine",
+      "mainName": "Gestionnaire de patrimoine",
+      "subDomain": "Secteur bancaire",
+      "_id": {
+        "$oid": "d4e5f60708090a0b0c1d2e3f"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Gestionnaire de patrimoine",
+          "_id": {
+            "$oid": "dd44ee55ff66aa11bb22cc33"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "C1204",
+      "label": "Trader",
+      "mainName": "Trader",
+      "subDomain": "Secteur bancaire",
+      "_id": {
+        "$oid": "e5f60708090a0b0c1d2e3f40"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Trader",
+          "_id": {
+            "$oid": "ee55ff66aa11bb22cc33dd44"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "label": "Secteur assurance",
+  "jobs": [
+    {
+      "romeCode": "C1300",
+      "label": "Conseiller en assurance",
+      "mainName": "Conseiller en assurance",
+      "subDomain": "Secteur assurance",
+      "_id": {
+        "$oid": "f1a2b3c4d5e60708090a0b0c"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Conseiller en assurance",
+          "_id": {
+            "$oid": "fa11bb22cc33dd44ee55ff77"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "C1301",
+      "label": "Gestionnaire de contrats d’assurance",
+      "mainName": "Gestionnaire de contrats d’assurance",
+      "subDomain": "Secteur assurance",
+      "_id": {
+        "$oid": "f2b3c4d5e60708090a0b0c1d"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Gestionnaire de contrats d’assurance",
+          "_id": {
+            "$oid": "fb22cc33dd44ee55ff66aa22"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "C1302",
+      "label": "Souscripteur en assurance",
+      "mainName": "Souscripteur en assurance",
+      "subDomain": "Secteur assurance",
+      "_id": {
+        "$oid": "f3c4d5e60708090a0b0c1d2e"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Souscripteur en assurance",
+          "_id": {
+            "$oid": "fc33dd44ee55ff66aa11bb33"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "C1303",
+      "label": "Actuaire",
+      "mainName": "Actuaire",
+      "subDomain": "Secteur assurance",
+      "_id": {
+        "$oid": "f4d5e60708090a0b0c1d2e3f"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Actuaire",
+          "_id": {
+            "$oid": "fd44ee55ff66aa11bb22cc44"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "C1304",
+      "label": "Expert en sinistres",
+      "mainName": "Expert en sinistres",
+      "subDomain": "Secteur assurance",
+      "_id": {
+        "$oid": "f5e60708090a0b0c1d2e3f50"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Expert en sinistres",
+          "_id": {
+            "$oid": "fe55ff66aa11bb22cc33dd55"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80497"
+  },
+  "label": "Secteur de l'énergie",
+  "jobs": [
+    {
+      "romeCode": "H1101",
+      "label": "Ingénieur en énergies renouvelables",
+      "mainName": "Ingénieur en énergies renouvelables",
+      "subDomain": "Secteur de l'énergie",
+      "_id": {
+        "$oid": "e1a2b3c4d5e60708090a0b0c"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Ingénieur en énergies renouvelables",
+          "_id": {
+            "$oid": "ea11bb22cc33dd44ee55ff88"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "H1102",
+      "label": "Technicien de maintenance en énergie",
+      "mainName": "Technicien de maintenance en énergie",
+      "subDomain": "Secteur de l'énergie",
+      "_id": {
+        "$oid": "e2b3c4d5e60708090a0b0c1d"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Technicien de maintenance en énergie",
+          "_id": {
+            "$oid": "eb22cc33dd44ee55ff66aa33"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "H1103",
+      "label": "Chef de projet énergie",
+      "mainName": "Chef de projet énergie",
+      "subDomain": "Secteur de l'énergie",
+      "_id": {
+        "$oid": "e3c4d5e60708090a0b0c1d2e"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Chef de projet énergie",
+          "_id": {
+            "$oid": "ec33dd44ee55ff66aa11bb44"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "H1104",
+      "label": "Conducteur de centrale thermique",
+      "mainName": "Conducteur de centrale thermique",
+      "subDomain": "Secteur de l'énergie",
+      "_id": {
+        "$oid": "e4d5e60708090a0b0c1d2e3f"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Conducteur de centrale thermique",
+          "_id": {
+            "$oid": "ed44ee55ff66aa11bb22cc55"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "H1105",
+      "label": "Responsable d’exploitation énergétique",
+      "mainName": "Responsable d’exploitation énergétique",
+      "subDomain": "Secteur de l'énergie",
+      "_id": {
+        "$oid": "e5e60708090a0b0c1d2e3f60"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Responsable d’exploitation énergétique",
+          "_id": {
+            "$oid": "ee55ff66aa11bb22cc33dd66"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439011"
+  },
+  "label": "Secteur immobilier",
+  "jobs": [
+    {
+      "romeCode": "C1501",
+      "label": "Agent immobilier",
+      "mainName": "Agent immobilier",
+      "subDomain": "Secteur immobilier",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439012"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Agent immobilier",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439013"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "C1502",
+      "label": "Gestionnaire de biens immobiliers",
+      "mainName": "Gestionnaire de biens immobiliers",
+      "subDomain": "Secteur immobilier",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439014"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Gestionnaire de biens immobiliers",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439015"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "C1503",
+      "label": "Expert immobilier",
+      "mainName": "Expert immobilier",
+      "subDomain": "Secteur immobilier",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439016"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Expert immobilier",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439017"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "C1504",
+      "label": "Chargé de gestion locative",
+      "mainName": "Chargé de gestion locative",
+      "subDomain": "Secteur immobilier",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439018"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Chargé de gestion locative",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439019"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "C1505",
+      "label": "Négociateur immobilier",
+      "mainName": "Négociateur immobilier",
+      "subDomain": "Secteur immobilier",
+      "_id": {
+        "$oid": "507f1f77bcf86cd79943901a"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Négociateur immobilier",
+          "_id": {
+            "$oid": "507f1f77bcf86cd79943901b"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439021"
+  },
+  "label": "Secteur agroalimentaire",
+  "jobs": [
+    {
+      "romeCode": "A1401",
+      "label": "Opérateur de production agroalimentaire",
+      "mainName": "Opérateur de production agroalimentaire",
+      "subDomain": "Secteur agroalimentaire",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439022"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Opérateur de production agroalimentaire",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439023"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "A1402",
+      "label": "Technicien de laboratoire agroalimentaire",
+      "mainName": "Technicien de laboratoire agroalimentaire",
+      "subDomain": "Secteur agroalimentaire",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439024"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Technicien de laboratoire agroalimentaire",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439025"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "A1403",
+      "label": "Responsable qualité agroalimentaire",
+      "mainName": "Responsable qualité agroalimentaire",
+      "subDomain": "Secteur agroalimentaire",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439026"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Responsable qualité agroalimentaire",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439027"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "A1404",
+      "label": "Chef de ligne de production alimentaire",
+      "mainName": "Chef de ligne de production alimentaire",
+      "subDomain": "Secteur agroalimentaire",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439028"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Chef de ligne de production alimentaire",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439029"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "A1405",
+      "label": "Ingénieur en agroalimentaire",
+      "mainName": "Ingénieur en agroalimentaire",
+      "subDomain": "Secteur agroalimentaire",
+      "_id": {
+        "$oid": "507f1f77bcf86cd79943902a"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Ingénieur en agroalimentaire",
+          "_id": {
+            "$oid": "507f1f77bcf86cd79943902b"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "label": "Secteur de la santé",
+  "jobs": [
+    {
+      "romeCode": "J1101",
+      "label": "Médecin généraliste",
+      "mainName": "Médecin généraliste",
+      "subDomain": "Secteur de la santé",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439032"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Médecin généraliste",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439033"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "J1102",
+      "label": "Infirmier",
+      "mainName": "Infirmier",
+      "subDomain": "Secteur de la santé",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439034"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Infirmier",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439035"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "J1103",
+      "label": "Pharmacien",
+      "mainName": "Pharmacien",
+      "subDomain": "Secteur de la santé",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439036"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Pharmacien",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439037"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "J1104",
+      "label": "Aide-soignant",
+      "mainName": "Aide-soignant",
+      "subDomain": "Secteur de la santé",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439038"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Aide-soignant",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439039"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "J1105",
+      "label": "Chirurgien",
+      "mainName": "Chirurgien",
+      "subDomain": "Secteur de la santé",
+      "_id": {
+        "$oid": "507f1f77bcf86cd79943903a"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Chirurgien",
+          "_id": {
+            "$oid": "507f1f77bcf86cd79943903b"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439041"
+  },
+  "label": "Secteur du BTP",
+  "jobs": [
+    {
+      "romeCode": "F1101",
+      "label": "Maçon",
+      "mainName": "Maçon",
+      "subDomain": "Secteur du BTP",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439042"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Maçon",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439043"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "F1102",
+      "label": "Conducteur de travaux",
+      "mainName": "Conducteur de travaux",
+      "subDomain": "Secteur du BTP",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439044"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Conducteur de travaux",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439045"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "F1103",
+      "label": "Chef de chantier",
+      "mainName": "Chef de chantier",
+      "subDomain": "Secteur du BTP",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439046"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Chef de chantier",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439047"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "F1104",
+      "label": "Électricien du bâtiment",
+      "mainName": "Électricien du bâtiment",
+      "subDomain": "Secteur du BTP",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439048"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Électricien du bâtiment",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439049"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "F1105",
+      "label": "Plombier",
+      "mainName": "Plombier",
+      "subDomain": "Secteur du BTP",
+      "_id": {
+        "$oid": "507f1f77bcf86cd79943904a"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Plombier",
+          "_id": {
+            "$oid": "507f1f77bcf86cd79943904b"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "label": "Secteur des télécommunications",
+  "jobs": [
+    {
+      "romeCode": "I1201",
+      "label": "Technicien télécoms",
+      "mainName": "Technicien télécoms",
+      "subDomain": "Secteur des télécommunications",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439062"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Technicien télécoms",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439063"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "I1202",
+      "label": "Ingénieur réseaux",
+      "mainName": "Ingénieur réseaux",
+      "subDomain": "Secteur des télécommunications",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439064"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Ingénieur réseaux",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439065"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "I1203",
+      "label": "Administrateur systèmes et réseaux",
+      "mainName": "Administrateur systèmes et réseaux",
+      "subDomain": "Secteur des télécommunications",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439066"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Administrateur systèmes et réseaux",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439067"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439051"
+  },
+  "label": "Secteur des médias",
+  "jobs": [
+    {
+      "romeCode": "E1101",
+      "label": "Journaliste",
+      "mainName": "Journaliste",
+      "subDomain": "Secteur des médias",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439052"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Journaliste",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439053"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "E1102",
+      "label": "Rédacteur web",
+      "mainName": "Rédacteur web",
+      "subDomain": "Secteur des médias",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439054"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Rédacteur web",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439055"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "E1103",
+      "label": "Chargé de communication",
+      "mainName": "Chargé de communication",
+      "subDomain": "Secteur des médias",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439056"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Chargé de communication",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439057"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439071"
+  },
+  "label": "Secteur des pure players",
+  "jobs": [
+    {
+      "romeCode": "M1801",
+      "label": "Traffic manager",
+      "mainName": "Traffic manager",
+      "subDomain": "Secteur des pure players",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439072"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Traffic manager",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439073"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "M1802",
+      "label": "Responsable e-commerce",
+      "mainName": "Responsable e-commerce",
+      "subDomain": "Secteur des pure players",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439074"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Responsable e-commerce",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439075"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "M1803",
+      "label": "Data analyst",
+      "mainName": "Data analyst",
+      "subDomain": "Secteur des pure players",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439076"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Data analyst",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439077"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439081"
+  },
+  "label": "Secteur aéronautique",
+  "jobs": [
+    {
+      "romeCode": "H2501",
+      "label": "Mécanicien aéronautique",
+      "mainName": "Mécanicien aéronautique",
+      "subDomain": "Secteur aéronautique",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439082"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Mécanicien aéronautique",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439083"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "H2502",
+      "label": "Technicien avionique",
+      "mainName": "Technicien avionique",
+      "subDomain": "Secteur aéronautique",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439084"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Technicien avionique",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439085"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "H2503",
+      "label": "Ingénieur aéronautique",
+      "mainName": "Ingénieur aéronautique",
+      "subDomain": "Secteur aéronautique",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439086"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Ingénieur aéronautique",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439087"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "label": "Secteur IT",
+  "jobs": [
+    {
+      "romeCode": "M1804",
+      "label": "Administrateur base de données",
+      "mainName": "Administrateur base de données",
+      "subDomain": "Secteur IT",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439092"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Administrateur base de données",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439093"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "M1805",
+      "label": "Développeur DevOps",
+      "mainName": "Développeur DevOps",
+      "subDomain": "Secteur IT",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439094"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Développeur DevOps",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439095"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "M1806",
+      "label": "Chef de projet informatique",
+      "mainName": "Chef de projet informatique",
+      "subDomain": "Secteur IT",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439096"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Chef de projet informatique",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439097"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "M1807",
+      "label": "Architecte cloud",
+      "mainName": "Architecte cloud",
+      "subDomain": "Secteur IT",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439098"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Architecte cloud",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439099"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "M1808",
+      "label": "Ingénieur cybersécurité",
+      "mainName": "Ingénieur cybersécurité",
+      "subDomain": "Secteur IT",
+      "_id": {
+        "$oid": "507f1f77bcf86cd79943909a"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Ingénieur cybersécurité",
+          "_id": {
+            "$oid": "507f1f77bcf86cd79943909b"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "label": "Secteur commerce",
+  "jobs": [
+    {
+      "romeCode": "D1101",
+      "label": "Vendeur en magasin",
+      "mainName": "Vendeur en magasin",
+      "subDomain": "Secteur commerce",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439142"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Vendeur en magasin",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439143"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "D1102",
+      "label": "Responsable de boutique",
+      "mainName": "Responsable de boutique",
+      "subDomain": "Secteur commerce",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439144"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Responsable de boutique",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439145"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439131"
+  },
+  "label": "Secteur éducation",
+  "jobs": [
+    {
+      "romeCode": "K2101",
+      "label": "Enseignant",
+      "mainName": "Enseignant",
+      "subDomain": "Secteur éducation",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439132"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Enseignant",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439133"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "K2102",
+      "label": "Formateur professionnel",
+      "mainName": "Formateur professionnel",
+      "subDomain": "Secteur éducation",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439134"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Formateur professionnel",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439135"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439121"
+  },
+  "label": "Secteur tourisme",
+  "jobs": [
+    {
+      "romeCode": "G1101",
+      "label": "Agent de voyage",
+      "mainName": "Agent de voyage",
+      "subDomain": "Secteur tourisme",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439122"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Agent de voyage",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439123"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "G1102",
+      "label": "Guide touristique",
+      "mainName": "Guide touristique",
+      "subDomain": "Secteur tourisme",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439124"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Guide touristique",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439125"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439111"
+  },
+  "label": "Secteur juridique",
+  "jobs": [
+    {
+      "romeCode": "K1101",
+      "label": "Avocat",
+      "mainName": "Avocat",
+      "subDomain": "Secteur juridique",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439112"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Avocat",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439113"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "K1102",
+      "label": "Juriste d'entreprise",
+      "mainName": "Juriste d'entreprise",
+      "subDomain": "Secteur juridique",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439114"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Juriste d'entreprise",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439115"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439101"
+  },
+  "label": "Secteur logistique",
+  "jobs": [
+    {
+      "romeCode": "N1101",
+      "label": "Agent logistique",
+      "mainName": "Agent logistique",
+      "subDomain": "Secteur logistique",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439102"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Agent logistique",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439103"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "N1102",
+      "label": "Responsable entrepôt",
+      "mainName": "Responsable entrepôt",
+      "subDomain": "Secteur logistique",
+      "_id": {
+        "$oid": "507f1f77bcf86cd799439104"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Responsable entrepôt",
+          "_id": {
+            "$oid": "507f1f77bcf86cd799439105"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439092"
+  },
+  "label": "Secteur Data",
+  "jobs": [
+    {
+      "romeCode": "D1101",
+      "label": "Data Analyst",
+      "mainName": "Data Analyst",
+      "subDomain": "Secteur Data",
+      "_id": {
+        "$oid": "a1b2c3d4e5f60708090a0b0c"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Data Analyst",
+          "_id": {
+            "$oid": "aa11bb22cc33dd44ee55ff66"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "D1102",
+      "label": "Data Scientist",
+      "mainName": "Data Scientist",
+      "subDomain": "Secteur Data",
+      "_id": {
+        "$oid": "b2c3d4e5f60708090a0b0c1d"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Data Scientist",
+          "_id": {
+            "$oid": "bb22cc33dd44ee55ff66aa11"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "D1103",
+      "label": "Data Engineer",
+      "mainName": "Data Engineer",
+      "subDomain": "Secteur Data",
+      "_id": {
+        "$oid": "c3d4e5f60708090a0b0c1d2e"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Data Engineer",
+          "_id": {
+            "$oid": "cc33dd44ee55ff66aa11bb22"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "D1104",
+      "label": "Big Data",
+      "mainName": "Big Data",
+      "subDomain": "Secteur Data",
+      "_id": {
+        "$oid": "d4e5f60708090a0b0c1d2e3f"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Big Data",
+          "_id": {
+            "$oid": "dd44ee55ff66aa11bb22cc33"
+          }
+        }
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "507f1f77bcf86cd799439093"
+  },
+  "label": "Secteur Dev",
+  "jobs": [
+    {
+      "romeCode": "C1200",
+      "label": "Mobile Development",
+      "mainName": "Mobile Developer",
+      "subDomain": "Secteur Dev",
+      "_id": {
+        "$oid": "a1b2c3d4e5f60708090a0b0c"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Développeur Mobile",
+          "_id": {
+            "$oid": "aa11bb22cc33dd44ee55ff66"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "C1201",
+      "label": "Web Development",
+      "mainName": "Web Developer",
+      "subDomain": "Secteur Dev",
+      "_id": {
+        "$oid": "b2c3d4e5f60708090a0b0c1d"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Développeur Web",
+          "_id": {
+            "$oid": "bb22cc33dd44ee55ff66aa11"
+          }
+        }
+      ]
+    },
+    {
+      "romeCode": "C1202",
+      "label": "Desktop Development",
+      "mainName": "Desktop Developer",
+      "subDomain": "Secteur Dev",
+      "_id": {
+        "$oid": "c3d4e5f60708090a0b0c1d2e"
+      },
+      "domaineDeCompetences": [],
+      "labels": [
+        {
+          "language": "fr",
+          "label": "Développeur Desktop",
+          "_id": {
+            "$oid": "cc33dd44ee55ff66aa11bb22"
+          }
+        }
+      ]
+    }
+  ]
+}]

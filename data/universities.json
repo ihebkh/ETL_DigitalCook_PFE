@@ -1,0 +1,1578 @@
+[{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3219"
+  },
+  "nom": "Université ESPRIT",
+  "pays": "Tunisia",
+  "ville": [
+    "Tunis"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Informatique",
+      "domaine": "Sciences et technologies",
+      "diplome": "Master en Informatique",
+      "siteWeb": "https://www.esprit.tn",
+      "compus": [
+        "Tunis"
+      ],
+      "prix": "2000 TND",
+      "prerequis": "Baccalauréat + 2 ans",
+      "adresse": "Tunis",
+      "codePostal": "1000",
+      "_id": {
+        "$oid": "9d3bdcd097b84f25998e3d01"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T10:40:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T10:40:00.000Z"
+  },
+  "numTel": "+216 70 121 122",
+  "adresse": "Tunis, Tunisia",
+  "email": "info@esprit.tn",
+  "langue": [
+    "Arabe (C1)",
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.esprit.tn",
+  "description": "Université privée en Tunisie spécialisée en informatique et sciences appliquées.",
+  "contact": [
+    {
+      "nom": "Dr. Ahmed Hamed",
+      "poste": "Responsable des admissions",
+      "telephone": "+216 70 121 123",
+      "_id": {
+        "$oid": "2c34dd4bb83e487db8c0f358"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "esprit_logo.jpg",
+    "fileLink_Document": "/data/esprit_logo.jpg",
+    "_id": {
+      "$oid": "37b75b9f5c86462b953ced8b"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3220"
+  },
+  "nom": "Université Tekup",
+  "pays": "Tunisia",
+  "ville": [
+    "Tunis"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Informatique",
+      "domaine": "Informatique et systèmes",
+      "diplome": "Bachelor en Informatique",
+      "siteWeb": "https://www.tekup.tn",
+      "compus": [
+        "Tunis"
+      ],
+      "prix": "1500 TND",
+      "prerequis": "Baccalauréat",
+      "adresse": "Tunis",
+      "codePostal": "1000",
+      "_id": {
+        "$oid": "1a23456dcb174df9a98f8fbc"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T10:50:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T10:50:00.000Z"
+  },
+  "numTel": "+216 71 541 234",
+  "adresse": "Tunis, Tunisia",
+  "email": "contact@tekup.tn",
+  "langue": [
+    "Arabe (C1)",
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.tekup.tn",
+  "description": "Université privée tunisienne spécialisée en informatique et technologies de l'information.",
+  "contact": [
+    {
+      "nom": "Prof. Sami Mansouri",
+      "poste": "Directeur académique",
+      "telephone": "+216 71 541 235",
+      "_id": {
+        "$oid": "97b1fe34e0a243d28e3d5fe5"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "tekup_logo.jpg",
+    "fileLink_Document": "/data/tekup_logo.jpg",
+    "_id": {
+      "$oid": "bfa65cc1c4e84948a7659e0f"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3221"
+  },
+  "nom": "Université de la Manouba",
+  "pays": "Tunisia",
+  "ville": [
+    "Manouba"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Génie Logiciel",
+      "domaine": "Informatique",
+      "diplome": "Master en Génie Logiciel",
+      "siteWeb": "https://www.uma.tn",
+      "compus": [
+        "Manouba"
+      ],
+      "prix": "1200 TND",
+      "prerequis": "Baccalauréat + 3 ans",
+      "adresse": "Manouba, Tunis",
+      "codePostal": "2010",
+      "_id": {
+        "$oid": "8c7689c8dcb14fb9989b4b35"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T11:00:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T11:00:00.000Z"
+  },
+  "numTel": "+216 71 600 550",
+  "adresse": "Manouba, Tunis, Tunisia",
+  "email": "admissions@uma.tn",
+  "langue": [
+    "Arabe (C1)",
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.uma.tn",
+  "description": "Université publique tunisienne offrant des formations en génie logiciel.",
+  "contact": [
+    {
+      "nom": "Prof. Mohamed Guesmi",
+      "poste": "Chef de département",
+      "telephone": "+216 71 600 551",
+      "_id": {
+        "$oid": "7fb7c32ab59747bdbf9c1d28"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "uma_logo.jpg",
+    "fileLink_Document": "/data/uma_logo.jpg",
+    "_id": {
+      "$oid": "d3c8c6794e7341d6b0f4ed5f"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3222"
+  },
+  "nom": "Université Paris-Saclay",
+  "pays": "France",
+  "ville": [
+    "Paris"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Mathématiques et Informatique",
+      "domaine": "Sciences et Technologies",
+      "diplome": "Master en Mathématiques Appliquées",
+      "siteWeb": "https://www.universite-paris-saclay.fr",
+      "compus": [
+        "Paris-Saclay"
+      ],
+      "prix": "2000 EUR",
+      "prerequis": "Baccalauréat + 3 ans",
+      "adresse": "91190 Gif-sur-Yvette, France",
+      "codePostal": "91190",
+      "_id": {
+        "$oid": "8b58bcf3ad1c416ab44ac3e7"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T11:10:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T11:10:00.000Z"
+  },
+  "numTel": "+33 1 69 15 50 00",
+  "adresse": "91190 Gif-sur-Yvette, France",
+  "email": "contact@universite-paris-saclay.fr",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.universite-paris-saclay.fr",
+  "description": "Université française spécialisée dans les sciences, l'ingénierie et les technologies.",
+  "contact": [
+    {
+      "nom": "Prof. Jean Dupont",
+      "poste": "Directeur des études",
+      "telephone": "+33 1 69 15 50 01",
+      "_id": {
+        "$oid": "a13c7f2989b24fb7b27612fa"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "paris-saclay_logo.jpg",
+    "fileLink_Document": "/data/paris-saclay_logo.jpg",
+    "_id": {
+      "$oid": "3e6d2c8797c346739a703a92"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3223"
+  },
+  "nom": "University of California, Berkeley",
+  "pays": "USA",
+  "ville": [
+    "Berkeley"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Computer Science",
+      "domaine": "Informatique",
+      "diplome": "PhD en Informatique",
+      "siteWeb": "https://eecs.berkeley.edu",
+      "compus": [
+        "Berkeley"
+      ],
+      "prix": "50000 USD",
+      "prerequis": "Baccalauréat + 4 ans",
+      "adresse": "Berkeley, CA 94720, USA",
+      "codePostal": "94720",
+      "_id": {
+        "$oid": "7e23ddbd54ba462c82091372"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T11:20:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T11:20:00.000Z"
+  },
+  "numTel": "+1 510-642-3187",
+  "adresse": "Berkeley, CA 94720, USA",
+  "email": "admissions@berkeley.edu",
+  "langue": [
+    "Anglais (C1)"
+  ],
+  "siteWeb": "https://eecs.berkeley.edu",
+  "description": "Université américaine de renom en sciences et technologies.",
+  "contact": [
+    {
+      "nom": "Dr. David Smith",
+      "poste": "Directeur du département informatique",
+      "telephone": "+1 510-642-3188",
+      "_id": {
+        "$oid": "d89d2c2c972347299b8fc943"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "berkeley_logo.jpg",
+    "fileLink_Document": "/data/berkeley_logo.jpg",
+    "_id": {
+      "$oid": "c4dfe6b7c7f5491185756b3a"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3224"
+  },
+  "nom": "King Abdulaziz University",
+  "pays": "KSA",
+  "ville": [
+    "Jeddah"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Biotechnologie",
+      "domaine": "Sciences de la vie",
+      "diplome": "Master en Biotechnologie",
+      "siteWeb": "https://www.kau.edu.sa",
+      "compus": [
+        "Jeddah"
+      ],
+      "prix": "25000 SAR",
+      "prerequis": "Baccalauréat + 3 ans",
+      "adresse": "Jeddah, KSA",
+      "codePostal": "21589",
+      "_id": {
+        "$oid": "8b58bcf3ad1c416ab44ac3e8"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T11:30:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T11:30:00.000Z"
+  },
+  "numTel": "+966 12 695 2000",
+  "adresse": "Jeddah, KSA",
+  "email": "admissions@kau.edu.sa",
+  "langue": [
+    "Arabe (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.kau.edu.sa",
+  "description": "Université en Arabie Saoudite spécialisée en biotechnologie et sciences de la vie.",
+  "contact": [
+    {
+      "nom": "Dr. Aisha Al-Harbi",
+      "poste": "Responsable des admissions",
+      "telephone": "+966 12 695 2001",
+      "_id": {
+        "$oid": "b72c8b35cb4c44b498b5e7bb"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "kau_logo.jpg",
+    "fileLink_Document": "/data/kau_logo.jpg",
+    "_id": {
+      "$oid": "d276a3c0994a4e3fa0beae2d"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3226"
+  },
+  "nom": "Technical University of Munich",
+  "pays": "Germany",
+  "ville": [
+    "Munich"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Electrical Engineering",
+      "domaine": "Engineering",
+      "diplome": "Master en Génie Electrique",
+      "siteWeb": "https://www.tum.de",
+      "compus": [
+        "Munich"
+      ],
+      "prix": "1500 EUR",
+      "prerequis": "Baccalauréat + 4 ans",
+      "adresse": "Munich, Germany",
+      "codePostal": "80333",
+      "_id": {
+        "$oid": "a23fd25cb7f74eb48c25ecf7"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T11:50:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T11:50:00.000Z"
+  },
+  "numTel": "+49 89 289 01",
+  "adresse": "Munich, Germany",
+  "email": "admissions@tum.de",
+  "langue": [
+    "Allemand (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.tum.de",
+  "description": "Université allemande de renommée mondiale en ingénierie et technologie.",
+  "contact": [
+    {
+      "nom": "Dr. Michael Kruger",
+      "poste": "Directeur des admissions",
+      "telephone": "+49 89 289 01 01",
+      "_id": {
+        "$oid": "f9834d3f87c742649b5b8ad8"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "tum_logo.jpg",
+    "fileLink_Document": "/data/tum_logo.jpg",
+    "_id": {
+      "$oid": "d9932f68e26448f08978f9d7"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3227"
+  },
+  "nom": "University of Cambridge",
+  "pays": "United Kingdom",
+  "ville": [
+    "Cambridge"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Physics",
+      "domaine": "Sciences",
+      "diplome": "PhD en Physique",
+      "siteWeb": "https://www.cam.ac.uk",
+      "compus": [
+        "Cambridge"
+      ],
+      "prix": "25000 GBP",
+      "prerequis": "Baccalauréat + 4 ans",
+      "adresse": "Cambridge, UK",
+      "codePostal": "CB2 1TN",
+      "_id": {
+        "$oid": "d8fa81d923a7468b83f8fb4a"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T12:00:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T12:00:00.000Z"
+  },
+  "numTel": "+44 1223 337733",
+  "adresse": "Cambridge, UK",
+  "email": "admissions@cam.ac.uk",
+  "langue": [
+    "Anglais (C1)"
+  ],
+  "siteWeb": "https://www.cam.ac.uk",
+  "description": "Université de renommée mondiale en sciences et arts.",
+  "contact": [
+    {
+      "nom": "Dr. Alan Fitzgerald",
+      "poste": "Directeur des admissions",
+      "telephone": "+44 1223 337734",
+      "_id": {
+        "$oid": "a7394d3f3cb44de5be9fda1a"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "cambridge_logo.jpg",
+    "fileLink_Document": "/data/cambridge_logo.jpg",
+    "_id": {
+      "$oid": "d56f663fbbd64b02a198b1b3"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3225"
+  },
+  "nom": "Université de Lyon",
+  "pays": "France",
+  "ville": [
+    "Lyon"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Physique",
+      "domaine": "Sciences",
+      "diplome": "Master en Physique Théorique",
+      "siteWeb": "https://www.univ-lyon1.fr",
+      "compus": [
+        "Lyon"
+      ],
+      "prix": "3000 EUR",
+      "prerequis": "Baccalauréat + 3 ans",
+      "adresse": "Lyon, France",
+      "codePostal": "69008",
+      "_id": {
+        "$oid": "8d9dcb7bb8c74ad299fb0b89"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T11:40:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T11:40:00.000Z"
+  },
+  "numTel": "+33 4 72 44 80 00",
+  "adresse": "Lyon, France",
+  "email": "contact@univ-lyon1.fr",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.univ-lyon1.fr",
+  "description": "Université française de renom dans le domaine des sciences.",
+  "contact": [
+    {
+      "nom": "Dr. Jean-Luc Chabane",
+      "poste": "Chef de département",
+      "telephone": "+33 4 72 44 80 01",
+      "_id": {
+        "$oid": "b093cc8c53db431db0b34e5a"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "lyon_university_logo.jpg",
+    "fileLink_Document": "/data/lyon_university_logo.jpg",
+    "_id": {
+      "$oid": "9c8b5d2bcf4f4a259328ee4e"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3228"
+  },
+  "nom": "Université de Berlin",
+  "pays": "Germany",
+  "ville": [
+    "Berlin"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Sciences Sociales",
+      "domaine": "Sciences Humaines",
+      "diplome": "Master en Sciences Sociales",
+      "siteWeb": "https://www.hu-berlin.de",
+      "compus": [
+        "Berlin"
+      ],
+      "prix": "2000 EUR",
+      "prerequis": "Baccalauréat + 3 ans",
+      "adresse": "Berlin, Allemagne",
+      "codePostal": "10115",
+      "_id": {
+        "$oid": "b71d94ed63b54b3792496e28"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T12:10:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T12:10:00.000Z"
+  },
+  "numTel": "+49 30 2093 2401",
+  "adresse": "Berlin, Allemagne",
+  "email": "info@hu-berlin.de",
+  "langue": [
+    "Allemand (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.hu-berlin.de",
+  "description": "Université allemande spécialisée en sciences humaines et sociales.",
+  "contact": [
+    {
+      "nom": "Prof. Sabine Müller",
+      "poste": "Directrice du département",
+      "telephone": "+49 30 2093 2402",
+      "_id": {
+        "$oid": "d72f15a8ed204d16a2754b6b"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "hu_berlin_logo.jpg",
+    "fileLink_Document": "/data/hu_berlin_logo.jpg",
+    "_id": {
+      "$oid": "b7e6c3cd4dca4a56b8bcd010"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3230"
+  },
+  "nom": "Université de Barcelone",
+  "pays": "Spain",
+  "ville": [
+    "Barcelona"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Architecture",
+      "domaine": "Architecture et urbanisme",
+      "diplome": "Master en Architecture",
+      "siteWeb": "https://www.ub.edu",
+      "compus": [
+        "Barcelona"
+      ],
+      "prix": "1500 EUR",
+      "prerequis": "Baccalauréat + 3 ans",
+      "adresse": "Barcelona, Espagne",
+      "codePostal": "08007",
+      "_id": {
+        "$oid": "b2f7429ebd7a4235a5a7b4c1"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T12:30:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T12:30:00.000Z"
+  },
+  "numTel": "+34 93 402 12 34",
+  "adresse": "Barcelona, Espagne",
+  "email": "contact@ub.edu",
+  "langue": [
+    "Espagnol (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.ub.edu",
+  "description": "Université espagnole de renom dans le domaine de l'architecture.",
+  "contact": [
+    {
+      "nom": "Prof. Ana García",
+      "poste": "Directrice des études",
+      "telephone": "+34 93 402 12 35",
+      "_id": {
+        "$oid": "d97f2a0bb5fc43838d13442d"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "ub_logo.jpg",
+    "fileLink_Document": "/data/ub_logo.jpg",
+    "_id": {
+      "$oid": "c83b94c1e8ed4a87b76b29a0"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3229"
+  },
+  "nom": "Université de Milan",
+  "pays": "Italy",
+  "ville": [
+    "Milan"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Économie et Gestion",
+      "domaine": "Économie",
+      "diplome": "Master en Économie Internationale",
+      "siteWeb": "https://www.unimi.it",
+      "compus": [
+        "Milan"
+      ],
+      "prix": "2500 EUR",
+      "prerequis": "Baccalauréat + 3 ans",
+      "adresse": "Milan, Italie",
+      "codePostal": "20122",
+      "_id": {
+        "$oid": "c1f2adf29d7741a2b0a79934"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T12:20:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T12:20:00.000Z"
+  },
+  "numTel": "+39 02 503 141",
+  "adresse": "Milan, Italie",
+  "email": "contact@unimi.it",
+  "langue": [
+    "Italien (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.unimi.it",
+  "description": "Université italienne de renom spécialisée en économie et gestion.",
+  "contact": [
+    {
+      "nom": "Prof. Giorgio Rossi",
+      "poste": "Chef de département",
+      "telephone": "+39 02 503 142",
+      "_id": {
+        "$oid": "e72c56b34bfc4bb88e5b97bb"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "unimi_logo.jpg",
+    "fileLink_Document": "/data/unimi_logo.jpg",
+    "_id": {
+      "$oid": "f6c3d837433d4f7c88f5d76b"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3231"
+  },
+  "nom": "Université de Heidelberg",
+  "pays": "Germany",
+  "ville": [
+    "Heidelberg"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Biologie",
+      "domaine": "Sciences naturelles",
+      "diplome": "Master en Biologie Cellulaire et Moléculaire",
+      "siteWeb": "https://www.uni-heidelberg.de",
+      "compus": [
+        "Heidelberg"
+      ],
+      "prix": "4000 EUR",
+      "prerequis": "Baccalauréat + 3 ans",
+      "adresse": "Heidelberg, Allemagne",
+      "codePostal": "69120",
+      "_id": {
+        "$oid": "f8ac6c10aab34d1fb22b99f3"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T12:40:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T12:40:00.000Z"
+  },
+  "numTel": "+49 6221 54 00",
+  "adresse": "Heidelberg, Allemagne",
+  "email": "contact@uni-heidelberg.de",
+  "langue": [
+    "Allemand (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.uni-heidelberg.de",
+  "description": "Université allemande historique spécialisée en biologie et sciences naturelles.",
+  "contact": [
+    {
+      "nom": "Dr. Ursula Schmidt",
+      "poste": "Directrice du département",
+      "telephone": "+49 6221 54 00 01",
+      "_id": {
+        "$oid": "c6a8c62f29c74c5e9255a4f7"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "heidelberg_logo.jpg",
+    "fileLink_Document": "/data/heidelberg_logo.jpg",
+    "_id": {
+      "$oid": "6db32fcdf8fa4f59a4b10671"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3232"
+  },
+  "nom": "Université de Melbourne",
+  "pays": "Australia",
+  "ville": [
+    "Melbourne"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Droit",
+      "domaine": "Droit et Sciences Politiques",
+      "diplome": "Master en Droit International",
+      "siteWeb": "https://www.unimelb.edu.au",
+      "compus": [
+        "Melbourne"
+      ],
+      "prix": "4500 AUD",
+      "prerequis": "Baccalauréat + 3 ans",
+      "adresse": "Melbourne, Australie",
+      "codePostal": "3010",
+      "_id": {
+        "$oid": "5b760b256e5a48a4b4c5e343"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T12:50:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T12:50:00.000Z"
+  },
+  "numTel": "+61 3 9035 5511",
+  "adresse": "Melbourne, Australie",
+  "email": "admissions@unimelb.edu.au",
+  "langue": [
+    "Anglais (C1)"
+  ],
+  "siteWeb": "https://www.unimelb.edu.au",
+  "description": "Université australienne de renom, offrant des formations en droit international.",
+  "contact": [
+    {
+      "nom": "Prof. Jane White",
+      "poste": "Responsable des admissions",
+      "telephone": "+61 3 9035 5512",
+      "_id": {
+        "$oid": "9c0b3c91b21f47438a0d1a56"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "unimelb_logo.jpg",
+    "fileLink_Document": "/data/unimelb_logo.jpg",
+    "_id": {
+      "$oid": "a68d9bfc3c6447a091687f0d"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3233"
+  },
+  "nom": "Université de Tokyo",
+  "pays": "Japan",
+  "ville": [
+    "Tokyo"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Ingénierie",
+      "domaine": "Technologies et Ingénierie",
+      "diplome": "PhD en Ingénierie des Systèmes",
+      "siteWeb": "https://www.u-tokyo.ac.jp",
+      "compus": [
+        "Tokyo"
+      ],
+      "prix": "6000 JPY",
+      "prerequis": "Baccalauréat + 4 ans",
+      "adresse": "Tokyo, Japon",
+      "codePostal": "113-8654",
+      "_id": {
+        "$oid": "c918d31e2f2f4086acb6d51f"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T13:00:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T13:00:00.000Z"
+  },
+  "numTel": "+81 3 3812 2111",
+  "adresse": "Tokyo, Japon",
+  "email": "admissions@u-tokyo.ac.jp",
+  "langue": [
+    "Japonais (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.u-tokyo.ac.jp",
+  "description": "Université japonaise de renommée mondiale en ingénierie et technologies.",
+  "contact": [
+    {
+      "nom": "Prof. Takashi Sato",
+      "poste": "Responsable des admissions",
+      "telephone": "+81 3 3812 2112",
+      "_id": {
+        "$oid": "9d2fd92423ab4b9d80f4b23f"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "utokyo_logo.jpg",
+    "fileLink_Document": "/data/utokyo_logo.jpg",
+    "_id": {
+      "$oid": "3451c89c88c14a48b679fd06"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3234"
+  },
+  "nom": "Université de Zurich",
+  "pays": "Switzerland",
+  "ville": [
+    "Zurich"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Informatique",
+      "domaine": "Technologies",
+      "diplome": "Master en Informatique",
+      "siteWeb": "https://www.uzh.ch",
+      "compus": [
+        "Zurich"
+      ],
+      "prix": "8000 CHF",
+      "prerequis": "Baccalauréat + 3 ans",
+      "adresse": "Zurich, Suisse",
+      "codePostal": "8006",
+      "_id": {
+        "$oid": "f47a9305d4414da3a542c681"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T13:10:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T13:10:00.000Z"
+  },
+  "numTel": "+41 44 635 22 11",
+  "adresse": "Zurich, Suisse",
+  "email": "info@uzh.ch",
+  "langue": [
+    "Allemand (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.uzh.ch",
+  "description": "Université suisse spécialisée en sciences informatiques.",
+  "contact": [
+    {
+      "nom": "Prof. Markus Keller",
+      "poste": "Directeur du département",
+      "telephone": "+41 44 635 22 12",
+      "_id": {
+        "$oid": "c0f5c28b374142ea8cfc25b7"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "uzh_logo.jpg",
+    "fileLink_Document": "/data/uzh_logo.jpg",
+    "_id": {
+      "$oid": "b62bfa24d8ad46d8b788aa07"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3235"
+  },
+  "nom": "University of Sydney",
+  "pays": "Australia",
+  "ville": [
+    "Sydney"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Médecine",
+      "domaine": "Médecine et Santé",
+      "diplome": "Doctorat en Médecine",
+      "siteWeb": "https://www.sydney.edu.au",
+      "compus": [
+        "Sydney"
+      ],
+      "prix": "30000 AUD",
+      "prerequis": "Baccalauréat + 3 ans",
+      "adresse": "Sydney, Australie",
+      "codePostal": "2006",
+      "_id": {
+        "$oid": "b74c96ab6d0b4a688a3b6d0c"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T13:20:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T13:20:00.000Z"
+  },
+  "numTel": "+61 2 9351 2222",
+  "adresse": "Sydney, Australie",
+  "email": "contact@usyd.edu.au",
+  "langue": [
+    "Anglais (C1)"
+  ],
+  "siteWeb": "https://www.sydney.edu.au",
+  "description": "Université australienne offrant des formations en médecine et en santé.",
+  "contact": [
+    {
+      "nom": "Dr. Claire Harris",
+      "poste": "Responsable des admissions",
+      "telephone": "+61 2 9351 2223",
+      "_id": {
+        "$oid": "db703d4c79fc45e88a776e5b"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "sydney_logo.jpg",
+    "fileLink_Document": "/data/sydney_logo.jpg",
+    "_id": {
+      "$oid": "a7456cbeb88f421f85a3fb91"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3236"
+  },
+  "nom": "Université de Porto",
+  "pays": "Portugal",
+  "ville": [
+    "Porto"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Médecine",
+      "domaine": "Médecine et Sciences de la Santé",
+      "diplome": "Doctorat en Médecine",
+      "siteWeb": "https://www.up.pt",
+      "compus": [
+        "Porto"
+      ],
+      "prix": "2500 EUR",
+      "prerequis": "Baccalauréat + 4 ans",
+      "adresse": "Porto, Portugal",
+      "codePostal": "4200-072",
+      "_id": {
+        "$oid": "6d7c9c71eaf84b31a85b7be2"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T13:30:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T13:30:00.000Z"
+  },
+  "numTel": "+351 22 557 10 00",
+  "adresse": "Porto, Portugal",
+  "email": "info@up.pt",
+  "langue": [
+    "Portugais (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.up.pt",
+  "description": "Université portugaise de renom en médecine et sciences de la santé.",
+  "contact": [
+    {
+      "nom": "Dr. Ana Silva",
+      "poste": "Directrice des admissions",
+      "telephone": "+351 22 557 10 01",
+      "_id": {
+        "$oid": "f0d5416cdb1c44a4b7fa3fa4"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "porto_logo.jpg",
+    "fileLink_Document": "/data/porto_logo.jpg",
+    "_id": {
+      "$oid": "f80f1b3d93cd4d43b3f69ab9"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3238"
+  },
+  "nom": "University of Oxford",
+  "pays": "United Kingdom",
+  "ville": [
+    "Oxford"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Lettres et Sciences Humaines",
+      "domaine": "Lettres",
+      "diplome": "PhD en Littérature Comparée",
+      "siteWeb": "https://www.ox.ac.uk",
+      "compus": [
+        "Oxford"
+      ],
+      "prix": "25000 GBP",
+      "prerequis": "Baccalauréat + 4 ans",
+      "adresse": "Oxford, Royaume-Uni",
+      "codePostal": "OX1 2JD",
+      "_id": {
+        "$oid": "6b79890209a64a1d87e3b2d4"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T13:20:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T13:20:00.000Z"
+  },
+  "numTel": "+44 1865 270000",
+  "adresse": "Oxford, Royaume-Uni",
+  "email": "contact@ox.ac.uk",
+  "langue": [
+    "Anglais (C1)"
+  ],
+  "siteWeb": "https://www.ox.ac.uk",
+  "description": "Université britannique de renommée mondiale spécialisée en lettres et sciences humaines.",
+  "contact": [
+    {
+      "nom": "Prof. James Smith",
+      "poste": "Responsable des admissions",
+      "telephone": "+44 1865 270001",
+      "_id": {
+        "$oid": "a4313469a8b54c4b8c4e7795"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "oxford_logo.jpg",
+    "fileLink_Document": "/data/oxford_logo.jpg",
+    "_id": {
+      "$oid": "f2495372bb814ae98e90274b"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3237"
+  },
+  "nom": "Université de Barcelone",
+  "pays": "Spain",
+  "ville": [
+    "Barcelona"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Architecture",
+      "domaine": "Architecture et urbanisme",
+      "diplome": "Master en Architecture",
+      "siteWeb": "https://www.ub.edu",
+      "compus": [
+        "Barcelona"
+      ],
+      "prix": "1500 EUR",
+      "prerequis": "Baccalauréat + 3 ans",
+      "adresse": "Barcelona, Espagne",
+      "codePostal": "08007",
+      "_id": {
+        "$oid": "b2f7429ebd7a4235a5a7b4c1"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T13:10:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T13:10:00.000Z"
+  },
+  "numTel": "+34 93 402 12 34",
+  "adresse": "Barcelona, Espagne",
+  "email": "contact@ub.edu",
+  "langue": [
+    "Espagnol (C1)",
+    "Anglais (B2)"
+  ],
+  "siteWeb": "https://www.ub.edu",
+  "description": "Université espagnole de renom dans le domaine de l'architecture.",
+  "contact": [
+    {
+      "nom": "Prof. Ana García",
+      "poste": "Directrice des études",
+      "telephone": "+34 93 402 12 35",
+      "_id": {
+        "$oid": "d97f2a0bb5fc43838d13442d"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "ub_logo.jpg",
+    "fileLink_Document": "/data/ub_logo.jpg",
+    "_id": {
+      "$oid": "c83b94c1e8ed4a87b76b29a0"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3239"
+  },
+  "nom": "University of California, Berkeley",
+  "pays": "United States",
+  "ville": [
+    "Berkeley"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Informatique",
+      "domaine": "Technologie et Sciences",
+      "diplome": "PhD en Informatique",
+      "siteWeb": "https://eecs.berkeley.edu",
+      "compus": [
+        "Berkeley"
+      ],
+      "prix": "50000 USD",
+      "prerequis": "Baccalauréat + 4 ans",
+      "adresse": "Berkeley, California, USA",
+      "codePostal": "94720",
+      "_id": {
+        "$oid": "4e7b8e6b09f84f8b8143751c"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T13:30:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T13:30:00.000Z"
+  },
+  "numTel": "+1 510 642 5111",
+  "adresse": "Berkeley, USA",
+  "email": "admissions@berkeley.edu",
+  "langue": [
+    "Anglais (C1)"
+  ],
+  "siteWeb": "https://eecs.berkeley.edu",
+  "description": "Université américaine de renom dans le domaine de l'informatique et des sciences de l'ingénierie.",
+  "contact": [
+    {
+      "nom": "Prof. Mary Johnson",
+      "poste": "Directrice du département",
+      "telephone": "+1 510 642 5112",
+      "_id": {
+        "$oid": "bb290029cf0e4e349872a48e"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "berkeley_logo.jpg",
+    "fileLink_Document": "/data/berkeley_logo.jpg",
+    "_id": {
+      "$oid": "6899d7a55f4c4b2f80f56a90"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3241"
+  },
+  "nom": "Université de Cambridge",
+  "pays": "United Kingdom",
+  "ville": [
+    "Cambridge"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Ingénierie",
+      "domaine": "Ingénierie et Technologies",
+      "diplome": "Master en Génie Électrique",
+      "siteWeb": "https://www.cam.ac.uk",
+      "compus": [
+        "Cambridge"
+      ],
+      "prix": "28000 GBP",
+      "prerequis": "Baccalauréat + 3 ans",
+      "adresse": "Cambridge, Royaume-Uni",
+      "codePostal": "CB2 1TN",
+      "_id": {
+        "$oid": "a509c9db9f08475d939978db"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T13:50:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T13:50:00.000Z"
+  },
+  "numTel": "+44 1223 337733",
+  "adresse": "Cambridge, Royaume-Uni",
+  "email": "info@cam.ac.uk",
+  "langue": [
+    "Anglais (C1)"
+  ],
+  "siteWeb": "https://www.cam.ac.uk",
+  "description": "Université de renommée mondiale spécialisée en ingénierie et technologies.",
+  "contact": [
+    {
+      "nom": "Prof. Jonathan Green",
+      "poste": "Responsable des admissions",
+      "telephone": "+44 1223 337734",
+      "_id": {
+        "$oid": "682f3d22044d49b49b93d5ea"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "cambridge_logo.jpg",
+    "fileLink_Document": "/data/cambridge_logo.jpg",
+    "_id": {
+      "$oid": "f09c254b3cc541f79f1c8b56"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3242"
+  },
+  "nom": "Université d'Oxford",
+  "pays": "United Kingdom",
+  "ville": [
+    "Oxford"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Lettres et Sciences Humaines",
+      "domaine": "Lettres",
+      "diplome": "PhD en Littérature Comparée",
+      "siteWeb": "https://www.ox.ac.uk",
+      "compus": [
+        "Oxford"
+      ],
+      "prix": "30000 GBP",
+      "prerequis": "Baccalauréat + 4 ans",
+      "adresse": "Oxford, Royaume-Uni",
+      "codePostal": "OX1 2JD",
+      "_id": {
+        "$oid": "adf5a6db0c4c4a2c8de455f0"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T14:00:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T14:00:00.000Z"
+  },
+  "numTel": "+44 1865 270000",
+  "adresse": "Oxford, Royaume-Uni",
+  "email": "admissions@ox.ac.uk",
+  "langue": [
+    "Anglais (C1)"
+  ],
+  "siteWeb": "https://www.ox.ac.uk",
+  "description": "Université britannique de renommée mondiale dans le domaine des lettres et des sciences humaines.",
+  "contact": [
+    {
+      "nom": "Prof. Stephen Wilson",
+      "poste": "Responsable des admissions",
+      "telephone": "+44 1865 270001",
+      "_id": {
+        "$oid": "c98df96a9c964d83b73f61b9"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "oxford_logo.jpg",
+    "fileLink_Document": "/data/oxford_logo.jpg",
+    "_id": {
+      "$oid": "8321a5356d5b4d289feb8d7b"
+    }
+  },
+  "verified": true
+},
+{
+  "_id": {
+    "$oid": "64f7f4d72d314122bdfb3240"
+  },
+  "nom": "Université de Melbourne",
+  "pays": "Australia",
+  "ville": [
+    "Melbourne"
+  ],
+  "filiere": [
+    {
+      "nomfiliere": "Informatique",
+      "domaine": "Technologie",
+      "diplome": "Master en Informatique Appliquée",
+      "siteWeb": "https://www.unimelb.edu.au",
+      "compus": [
+        "Melbourne"
+      ],
+      "prix": "3000 AUD",
+      "prerequis": "Baccalauréat + 3 ans",
+      "adresse": "Melbourne, Australie",
+      "codePostal": "3010",
+      "_id": {
+        "$oid": "b85f839918c14bb3817a4646"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-07T13:40:00.000Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2024-04-07T13:40:00.000Z"
+  },
+  "numTel": "+61 3 9035 5511",
+  "adresse": "Melbourne, Australie",
+  "email": "admissions@unimelb.edu.au",
+  "langue": [
+    "Anglais (C1)"
+  ],
+  "siteWeb": "https://www.unimelb.edu.au",
+  "description": "Université australienne spécialisée en technologies et informatique.",
+  "contact": [
+    {
+      "nom": "Dr. Rachel Scott",
+      "poste": "Directrice des admissions",
+      "telephone": "+61 3 9035 5512",
+      "_id": {
+        "$oid": "a17c826f85d34f4b8d4724ff"
+      }
+    }
+  ],
+  "isActive": true,
+  "partenairesAcademique": [],
+  "partenairesProfessionnel": [],
+  "brochures": [],
+  "logo": {
+    "fileName": "unimelb_logo.jpg",
+    "fileLink_Document": "/data/unimelb_logo.jpg",
+    "_id": {
+      "$oid": "e78652fe1d6e49d68a045b45"
+    }
+  },
+  "verified": true
+}]

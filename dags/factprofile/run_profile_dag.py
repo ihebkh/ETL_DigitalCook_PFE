@@ -20,13 +20,6 @@ with DAG(
         dag=dag
     )
 
-    trigger_visa = TriggerDagRunOperator(
-        task_id="trigger_dag_dim_visa",
-        trigger_dag_id="dag_dim_visa",
-        conf={"manual_trigger": True},
-        wait_for_completion=True
-    )
-
     trigger_certifications = TriggerDagRunOperator(
         task_id="trigger_dag_dim_certifications",
         trigger_dag_id="dag_dim_certifications",
@@ -110,5 +103,5 @@ with DAG(
         dag=dag
     )
 
-start_task>>[trigger_visa,trigger_certifications,trigger_clients,trigger_competences,trigger_experience,trigger_interet,
-             trigger_langues,trigger_metier,trigger_niveau_etudes,trigger_projets,trigger_secteur,trigger_visa]>>trigger_fact_profile>>end_task
+start_task>>[trigger_certifications,trigger_clients,trigger_competences,trigger_experience,trigger_interet,
+             trigger_langues,trigger_metier,trigger_niveau_etudes,trigger_projets,trigger_secteur]>>trigger_fact_profile>>end_task

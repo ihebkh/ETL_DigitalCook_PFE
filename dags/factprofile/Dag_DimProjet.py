@@ -4,18 +4,23 @@ from datetime import datetime
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.models import Variable
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+
 def get_mongodb_connection():
     try:
-        client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
+        mongo_uri = Variable.get("MONGO_URI")
+        client = MongoClient(mongo_uri)
         collection = client["PowerBi"]["frontusers"]
         return client, collection
     except Exception as e:
         logger.error(f"MongoDB connection error: {e}")
         raise
+
 
 def get_postgresql_connection(conn_id):
     hook = PostgresHook(postgres_conn_id=conn_id)
@@ -123,7 +128,7 @@ dag = DAG(
     catchup=False,
 )
 
-conn_id = 'postgres'  # Remplacez par votre conn_id si nécessaire
+conn_id = 'postgres'
 
 extract_task = PythonOperator(
     task_id='extract_from_mongodb',

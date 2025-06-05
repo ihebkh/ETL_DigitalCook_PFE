@@ -3,6 +3,7 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.sensors.external_task_sensor import ExternalTaskSensor
+from airflow.models import Variable
 from pymongo import MongoClient
 from bson import ObjectId
 import logging
@@ -17,9 +18,11 @@ def generate_offre_etude_pk(index: int) -> int:
     return index
 
 def get_mongo_collections():
-    client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
+    MONGO_URI = Variable.get("MONGO_URI")
+    client = MongoClient(MONGO_URI)
     db = client["PowerBi"]
     return client, db["offredetudes"], db["universities"]
+
 
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')

@@ -7,16 +7,20 @@ from bson.errors import InvalidId
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.models import Variable
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def get_mongodb_connection():
-    MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
-    MONGO_DB = "PowerBi"
-    client = MongoClient(MONGO_URI)
-    mongo_db = client[MONGO_DB]
-    collection = mongo_db["frontusers"]
+    mongo_uri = Variable.get("MONGO_URI")
+    mongo_db_name = "PowerBi"
+    mongo_collection_name = "frontusers"
+
+    client = MongoClient(mongo_uri)
+    mongo_db = client[mongo_db_name]
+    collection = mongo_db[mongo_collection_name]
     return client, mongo_db, collection
 
 def get_postgres_connection():

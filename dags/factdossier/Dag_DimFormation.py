@@ -4,6 +4,7 @@ from bson import ObjectId
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.models import Variable
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
@@ -15,7 +16,8 @@ def get_postgres_connection():
     return conn
 
 def get_mongo_collections():
-    client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
+    MONGO_URI = Variable.get("MONGO_URI")
+    client = MongoClient(MONGO_URI)
     db = client["PowerBi"]
     return client, db["formations"]
 

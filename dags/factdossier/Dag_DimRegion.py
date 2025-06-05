@@ -6,13 +6,14 @@ from datetime import datetime
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.models import Variable
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def get_mongodb_connection():
     try:
-        MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
+        MONGO_URI = Variable.get("MONGO_URI")
         MONGO_DB = "PowerBi"
         MONGO_COLLECTION_1 = "frontusers"
 

@@ -1,4 +1,3 @@
-import json
 from pymongo import MongoClient
 from bson import ObjectId
 from bson.errors import InvalidId
@@ -10,6 +9,7 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.sensors.external_task_sensor import ExternalTaskSensor
 from airflow.operators.empty import EmptyOperator 
+from airflow.models import Variable
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -18,8 +18,10 @@ def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
 
+
+
 def get_mongodb_connection():
-    MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
+    MONGO_URI = Variable.get("MONGO_URI")
     MONGO_DB = "PowerBi"
     MONGO_COLLECTION = "frontusers"
 
@@ -30,6 +32,7 @@ def get_mongodb_connection():
     secteur_collection = mongo_db["secteurdactivities"]
     
     return collection, secteur_collection
+
 
 def safe_object_id(id_str):
     try:
@@ -101,24 +104,6 @@ def get_preferedjoblocations_pk_from_postgres(cur, ville):
         FROM public.dim_ville
         WHERE nom_ville = %s;
     """, (ville,))
-    result = cur.fetchone()
-    return result[0] if result else None
-
-def get_visa_pk_from_postgres(cur, visa_data):
-    if not visa_data:
-        return None
-        
-    visa_type = visa_data.get("type", "").strip()
-    destination = visa_data.get("destination", "").strip()
-    nb_entree = visa_data.get("nbEntree", "").strip()
-    
-    cur.execute("""
-        SELECT visa_id 
-        FROM public.dim_visa
-        WHERE LOWER(type_visa) = LOWER(%s)
-        AND LOWER(destination_visa) = LOWER(%s)
-        AND LOWER(nombre_entrees_visa) = LOWER(%s)
-    """, (visa_type, destination, nb_entree))
     result = cur.fetchone()
     return result[0] if result else None
 
@@ -229,7 +214,6 @@ def matchclient():
                 "profile.interests": 1, "simpleProfile.interests": 1,
                 "profile.preferedJobLocations": 1, "simpleProfile.preferedJobLocations": 1,
                 "profile.niveauDetudes": 1, "simpleProfile.niveauDetudes": 1,
-                "profile.visa": 1, "simpleProfile.visa": 1,
                 "profile.projets": 1, "simpleProfile.projets": 1,
                 "profile.secteur": 1, "simpleProfile.secteur": 1,
                 "profile.metier": 1, "simpleProfile.metier": 1,
@@ -252,7 +236,6 @@ def matchclient():
                 interest_pk_list = []
                 job_location_pk_list = []
                 study_level_fk_list = []
-                visa_pk_list = []
                 project_pk_list = []
                 certification_pk_list = []
                 experience_fk_list = []
@@ -264,7 +247,6 @@ def matchclient():
                 interests = get_combined_profile_field(user, "interests")
                 preferedJobLocations = get_combined_profile_field(user, "preferedJobLocations")
                 niveau_etudes = get_combined_profile_field(user, "niveauDetudes")
-                visa = get_combined_profile_field(user, "visa")
                 projets = get_combined_profile_field(user, "projets")
                 experiences = get_combined_profile_field(user, "experiences")
                 certifications = get_combined_profile_field(user, "certifications")
@@ -371,15 +353,6 @@ def matchclient():
                             else:
                                 logger.warning(f"Projet non trouvé dans dim_projet: {nom_projet}")
 
-                # Process visas
-                for visa in visa:
-                    if isinstance(visa, dict):
-                        visa_pk = get_visa_pk_from_postgres(cur, visa)
-                        if visa_pk:
-                            visa_pk_list.append(str(visa_pk))
-                        else:
-                            logger.warning(f"Visa non trouvé dans dim_visa: {visa.get('type', '')}")
-
                 # Process certifications
                 for certification in certifications:
                     certification_pk = get_certification_pk_from_postgres(cur, certification)
@@ -391,7 +364,7 @@ def matchclient():
 
                 max_length = max(len(competence_fk_list), len(language_fk_list),
                                len(interest_pk_list), len(job_location_pk_list),
-                               len(study_level_fk_list), len(visa_pk_list),
+                               len(study_level_fk_list),
                                len(project_pk_list), len(certification_pk_list),
                                len(experience_fk_list), len(secteur_id_list),
                                len(metier_id_list), 1)
@@ -402,7 +375,6 @@ def matchclient():
                     interest_pk = interest_pk_list[i] if i < len(interest_pk_list) else None
                     job_location_pk = job_location_pk_list[i] if i < len(job_location_pk_list) else None
                     study_level_fk = study_level_fk_list[i] if i < len(study_level_fk_list) else None
-                    visa_pk = visa_pk_list[i] if i < len(visa_pk_list) else None
                     project_pk = project_pk_list[i] if i < len(project_pk_list) else None
                     certification_pk = certification_pk_list[i] if i < len(certification_pk_list) else None
                     experience_fk = experience_fk_list[i] if i < len(experience_fk_list) else None
@@ -422,7 +394,7 @@ def matchclient():
                     load_fact_date(
                         client_fk, secteur_id, metier_id, counter,
                         competence_fk, language_fk, interest_pk,
-                        certification_pk, visa_pk, job_location_pk,
+                        certification_pk, job_location_pk,
                         project_pk, experience_fk, experience_year,
                         experience_month, study_level_fk,
                         disponibilite, age, dim_date_pk
@@ -434,7 +406,7 @@ def matchclient():
             print(f"\nTotal lines: {line_count}")
 
 def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk,
-                  language_fk, interest_fk, certification_pk, visa_pk,
+                  language_fk, interest_fk, certification_pk,
                   job_location_pk, project_pk, experience_fk, year, month,
                   study_level_fk, dispo, age, dim_date_pk):
     try:
@@ -446,12 +418,12 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk,
             INSERT INTO fact_client_profile (
                 client_id, secteur_id, metier_id, fact_id,
                 competence_generale_id, langue_id, interet_id,
-                certification_id, visa_id, location_preferee_emploi_id,
+                certification_id, location_preferee_emploi_id,
                 projet_id, experience_id, annee_experience,
                 mois_experience, etude_id,
                 disponibilite, age_client, date_id
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s,
                     %s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (fact_id) DO UPDATE SET
                 client_id = EXCLUDED.client_id,
@@ -461,7 +433,6 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk,
                 langue_id = EXCLUDED.langue_id,
                 interet_id = EXCLUDED.interet_id,
                 certification_id = EXCLUDED.certification_id,
-                visa_id = EXCLUDED.visa_id,
                 location_preferee_emploi_id = EXCLUDED.location_preferee_emploi_id,
                 projet_id = EXCLUDED.projet_id,
                 experience_id = EXCLUDED.experience_id,
@@ -474,7 +445,7 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk,
         """, (
             client_fk, secteur_fk, metier_fk, fact_pk,
             competence_fk, language_fk, interest_fk,
-            certification_pk, visa_pk, job_location_pk,
+            certification_pk, job_location_pk,
             project_pk, experience_fk, year, month,
             study_level_fk, dispo, age, dim_date_pk
         ))

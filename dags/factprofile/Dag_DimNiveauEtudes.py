@@ -4,13 +4,17 @@ from pymongo import MongoClient
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.models import Variable
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+
 def get_mongodb_connection():
     try:
-        client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
+        mongo_uri = Variable.get("MONGO_URI")
+        client = MongoClient(mongo_uri)
         db = client["PowerBi"]
         collection = db["frontusers"]
         logger.info("MongoDB connection successful.")
@@ -18,6 +22,7 @@ def get_mongodb_connection():
     except Exception as e:
         logger.error(f"Failed to connect to MongoDB: {e}")
         raise
+
 
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')

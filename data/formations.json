@@ -1,0 +1,4243 @@
+[{
+  "_id": {
+    "$oid": "c94ee60f613a467aaab020bd"
+  },
+  "titreFormation": "Préparation au TCF - Test de Connaissance du Français",
+  "dateDebut": {
+    "$date": "2024-06-15T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-13T00:00:00.000Z"
+  },
+  "description": "Formation intensive pour maîtriser les compétences requises pour le TCF. Axée sur la compréhension orale, écrite et l'expression.",
+  "domaine": "Langues",
+  "siteWeb": "https://www.ciep.fr/tcf",
+  "prix": 350,
+  "criterias": [
+    {
+      "label": "Langue",
+      "value": "Français",
+      "_id": {
+        "$oid": "16633292a78346828300ef3c"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "C1",
+      "_id": {
+        "$oid": "8e1ded9f0a7f4463a8167f9e"
+      }
+    },
+    {
+      "label": "Public ciblé",
+      "value": "Tous publics",
+      "_id": {
+        "$oid": "f9d7e414278e496498ba9bd6"
+      }
+    }
+  ],
+  "ville": "Sousse",
+  "adresse": "Centre 1, Nabeul",
+  "centreDeFormation": "Institut Français de Tunis",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:03:49.360Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:03:49.360Z"
+  },
+  "logo": {
+    "fileName": "logo_langue_real_1.png",
+    "_id": {
+      "$oid": "643e3a3f2b96462e9d0271a1"
+    }
+  },
+  "duree": "3 mois",
+  "hoursNumber": 90,
+  "sessions": [
+    {
+      "label": "session officielle 1",
+      "start": {
+        "$date": "2024-06-30T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-15T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "369cccbb9be4406ba0f5aa82"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Brochure PDF",
+      "fileName": "brochure_langue_real_1.pdf",
+      "fileLink_Documents": "/docs/c60e17f7-09a5-4f50-b903-cb1605667dc0.pdf",
+      "_id": {
+        "$oid": "6196e498149a42059dddf3a5"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "e8998af8200b4e87b19fb582"
+  },
+  "titreFormation": "Espagnol conversationnel - Niveau B1",
+  "dateDebut": {
+    "$date": "2024-06-20T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-18T00:00:00.000Z"
+  },
+  "description": "Formation pratique axée sur la conversation quotidienne en espagnol, avec mises en situation et jeux de rôle.",
+  "domaine": "Langues",
+  "siteWeb": "https://www.cervantes.es",
+  "prix": 280,
+  "criterias": [
+    {
+      "label": "Langue",
+      "value": "Espagnol",
+      "_id": {
+        "$oid": "cc0efb603509496286f47109"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "B2",
+      "_id": {
+        "$oid": "fb115636f3d746e09fd45a64"
+      }
+    },
+    {
+      "label": "Public ciblé",
+      "value": "Professionnels",
+      "_id": {
+        "$oid": "ee7cee69d7be44b1a4d5e68b"
+      }
+    }
+  ],
+  "ville": "Sousse",
+  "adresse": "Avenue des langues 2, Nabeul",
+  "centreDeFormation": "Instituto Cervantes",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "hybride",
+  "created_at": {
+    "$date": "2025-04-13T14:07:04.080Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:07:04.080Z"
+  },
+  "logo": {
+    "fileName": "logo_langue_extra_2.png",
+    "_id": {
+      "$oid": "ee1a0175048340bb8184f6aa"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 60,
+  "sessions": [
+    {
+      "label": "session langue extra 2",
+      "start": {
+        "$date": "2024-06-30T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-15T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "f49c898e929140e0b088f3e8"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme officiel",
+      "fileName": "programme_langue_extra_2.pdf",
+      "fileLink_Documents": "/docs/392698ee-9a95-411c-8db7-76f4b6e18386.pdf",
+      "_id": {
+        "$oid": "06c097c6c7184da1a4760b62"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "a9a7360ef9024594acced7f5"
+  },
+  "titreFormation": "Google Analytics Certification",
+  "dateDebut": {
+    "$date": "2024-06-14T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-10T00:00:00.000Z"
+  },
+  "description": "Certificat gratuit par Google validant la compréhension de l’analyse de trafic web avec Google Analytics.",
+  "domaine": "Certification IT",
+  "siteWeb": "https://skillshop.withgoogle.com",
+  "prix": 0,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certificat officiel",
+      "_id": {
+        "$oid": "ea3a3fff78394a13b651d103"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Intermédiaire",
+      "_id": {
+        "$oid": "aef371a9fd3d426caac999e5"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme officielle",
+  "centreDeFormation": "Google Skillshop",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:13:01.963Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:13:01.963Z"
+  },
+  "logo": {
+    "fileName": "logo_cert_10.png",
+    "_id": {
+      "$oid": "10baaa5904834d4689a19705"
+    }
+  },
+  "duree": "2 semaines",
+  "hoursNumber": 20,
+  "sessions": [
+    {
+      "label": "session certif 10",
+      "start": {
+        "$date": "2024-06-19T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-06-24T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "98e7c87984ca4ccf9dcd94b4"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus",
+      "fileName": "syllabus_cert_10.pdf",
+      "fileLink_Documents": "/docs/d86f0668-eecc-4fbf-a7f7-c7658ffc9ca8.pdf",
+      "_id": {
+        "$oid": "7873c60e33c94bea81ab2088"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "aa239285e4134feb9d67dec5"
+  },
+  "titreFormation": "Certified Ethical Hacker (CEH)",
+  "dateDebut": {
+    "$date": "2024-07-10T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-08-04T00:00:00.000Z"
+  },
+  "description": "Certification de l'EC-Council axée sur l’apprentissage des techniques utilisées par les hackers pour tester la sécurité des systèmes.",
+  "domaine": "Certification IT",
+  "siteWeb": "https://www.eccouncil.org/programs/certified-ethical-hacker-ceh/",
+  "prix": 1200,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certificat officiel",
+      "_id": {
+        "$oid": "9e3f1011d6c04e9b90ed076b"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Intermédiaire",
+      "_id": {
+        "$oid": "474a1640586945c59b129d87"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme officielle",
+  "centreDeFormation": "EC-Council",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:13:01.962Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:13:01.962Z"
+  },
+  "logo": {
+    "fileName": "logo_cert_1.png",
+    "_id": {
+      "$oid": "72ddcfd239c94a79980a4455"
+    }
+  },
+  "duree": "5 jours",
+  "hoursNumber": 40,
+  "sessions": [
+    {
+      "label": "session certif 1",
+      "start": {
+        "$date": "2024-07-15T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-20T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "5c2ca573914848ee81cb2ec5"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus",
+      "fileName": "syllabus_cert_1.pdf",
+      "fileLink_Documents": "/docs/9d949ba7-47df-438b-a458-c17a8712578f.pdf",
+      "_id": {
+        "$oid": "21f972c765cc4b82b4a2f6a3"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "5c37e0e93ab946e29adbfd1a"
+  },
+  "titreFormation": "CompTIA Security+",
+  "dateDebut": {
+    "$date": "2024-07-13T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-08-01T00:00:00.000Z"
+  },
+  "description": "Certification d’entrée en cybersécurité validant les compétences fondamentales en sécurité des réseaux, gestion des risques et cryptographie.",
+  "domaine": "Certification IT",
+  "siteWeb": "https://www.comptia.org/certifications/security",
+  "prix": 400,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certificat officiel",
+      "_id": {
+        "$oid": "61c9397f5b6c4a47adfbdf15"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Fondamentaux",
+      "_id": {
+        "$oid": "930caad3190a49c29468eaba"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme officielle",
+  "centreDeFormation": "CompTIA",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:13:01.962Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:13:01.962Z"
+  },
+  "logo": {
+    "fileName": "logo_cert_2.png",
+    "_id": {
+      "$oid": "dda5673eeb6b40058804d67d"
+    }
+  },
+  "duree": "5 jours",
+  "hoursNumber": 40,
+  "sessions": [
+    {
+      "label": "session certif 2",
+      "start": {
+        "$date": "2024-07-18T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-23T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "355af8a32ef44bdbb57f2c32"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus",
+      "fileName": "syllabus_cert_2.pdf",
+      "fileLink_Documents": "/docs/879bf47b-a00b-4bb2-868a-ba94c0d134bf.pdf",
+      "_id": {
+        "$oid": "7fbfec60a2764e10ba6da48b"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "44c895e07e40473ca1ff9cca"
+  },
+  "titreFormation": "Microsoft Certified: Azure Data Engineer Associate (DP-203)",
+  "dateDebut": {
+    "$date": "2024-06-13T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-02T00:00:00.000Z"
+  },
+  "description": "Concevoir et implémenter des solutions de données avec Azure Synapse, Data Factory et autres outils.",
+  "domaine": "Certifications Microsoft",
+  "siteWeb": "https://learn.microsoft.com/en-us/certifications/azure-data-engineer/",
+  "prix": 165,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Microsoft",
+      "_id": {
+        "$oid": "2880389f24ad47dfb6eca487"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Fundamentals",
+      "_id": {
+        "$oid": "49bf9572a94b452782b15e5b"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme Microsoft Learn",
+  "centreDeFormation": "Microsoft Learn",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:14:58.387Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:14:58.387Z"
+  },
+  "logo": {
+    "fileName": "logo_microsoft_cert_8.png",
+    "_id": {
+      "$oid": "82c50c1d13a549f38ee7789b"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 80,
+  "sessions": [
+    {
+      "label": "session ms certif 8",
+      "start": {
+        "$date": "2024-06-16T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-06-23T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "9e5570e99b9d4fbca8533b4b"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus officiel",
+      "fileName": "syllabus_ms_cert_8.pdf",
+      "fileLink_Documents": "/docs/21c0fadb-4882-46da-be85-a0d3a1521cb1.pdf",
+      "_id": {
+        "$oid": "48e69e3b2f844ce1add0355d"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "5c343404280f49158e966078"
+  },
+  "titreFormation": "Microsoft Certified: Azure Administrator Associate (AZ-104)",
+  "dateDebut": {
+    "$date": "2024-07-08T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-22T00:00:00.000Z"
+  },
+  "description": "Gérer les identités, le stockage, la gouvernance et les ressources cloud Azure dans une entreprise.",
+  "domaine": "Certifications Microsoft",
+  "siteWeb": "https://learn.microsoft.com/en-us/certifications/azure-administrator/",
+  "prix": 165,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Microsoft",
+      "_id": {
+        "$oid": "5dec606fc549403ebfea0c93"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Expert",
+      "_id": {
+        "$oid": "aa17763e1a654e2d96f16ead"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme Microsoft Learn",
+  "centreDeFormation": "Microsoft Learn",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:14:58.386Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:14:58.386Z"
+  },
+  "logo": {
+    "fileName": "logo_microsoft_cert_2.png",
+    "_id": {
+      "$oid": "ea9bac1755054050aa2c4bb6"
+    }
+  },
+  "duree": "1 mois",
+  "hoursNumber": 40,
+  "sessions": [
+    {
+      "label": "session ms certif 2",
+      "start": {
+        "$date": "2024-07-11T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-18T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "ba45e6b434344e0aa8fd3e86"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus officiel",
+      "fileName": "syllabus_ms_cert_2.pdf",
+      "fileLink_Documents": "/docs/c1b0c1d5-64cc-49c4-8088-1c77c4e430d4.pdf",
+      "_id": {
+        "$oid": "8841e27ce2ad4fe9b019f466"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6a94a1d1b73f49399d92e44a"
+  },
+  "titreFormation": "Microsoft Certified: Azure Data Scientist Associate (DP-100)",
+  "dateDebut": {
+    "$date": "2024-06-20T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-08T00:00:00.000Z"
+  },
+  "description": "Utiliser Azure Machine Learning pour former, évaluer et déployer des modèles prédictifs.",
+  "domaine": "Certifications Microsoft",
+  "siteWeb": "https://learn.microsoft.com/en-us/certifications/azure-data-scientist/",
+  "prix": 165,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Microsoft",
+      "_id": {
+        "$oid": "6e44a329883f4f67a50f8499"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Fundamentals",
+      "_id": {
+        "$oid": "93c8902b504942dfa5ff0e1d"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme Microsoft Learn",
+  "centreDeFormation": "Microsoft Learn",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:14:58.387Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:14:58.387Z"
+  },
+  "logo": {
+    "fileName": "logo_microsoft_cert_7.png",
+    "_id": {
+      "$oid": "2fb01d5a50514ffa8d51dd76"
+    }
+  },
+  "duree": "1.5 mois",
+  "hoursNumber": 60,
+  "sessions": [
+    {
+      "label": "session ms certif 7",
+      "start": {
+        "$date": "2024-06-23T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-06-30T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "fe4924c2d1494c1dbde6f3cb"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus officiel",
+      "fileName": "syllabus_ms_cert_7.pdf",
+      "fileLink_Documents": "/docs/22298663-40c8-4c53-b933-b37e4cf45828.pdf",
+      "_id": {
+        "$oid": "9074b8962cb7419da21217c9"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "dd135cf2971f4ca5b1ec4db2"
+  },
+  "titreFormation": "AWS Certified Developer – Associate",
+  "dateDebut": {
+    "$date": "2024-07-01T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-20T00:00:00.000Z"
+  },
+  "description": "Développement et maintenance d’applications AWS, SDKs, outils de déploiement et services de base.",
+  "domaine": "Certifications AWS",
+  "siteWeb": "https://aws.amazon.com/certification/certified-developer-associate/",
+  "prix": 150,
+  "criterias": [
+    {
+      "label": "Niveau",
+      "value": "Associate",
+      "_id": {
+        "$oid": "0018e6d62d6d4895aebcefe8"
+      }
+    },
+    {
+      "label": "Type",
+      "value": "Certification officielle AWS",
+      "_id": {
+        "$oid": "38fef2d8a0574eae8ab28fb8"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "AWS Certification Portal",
+  "centreDeFormation": "AWS Training & Certification",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:16:09.139Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:16:09.139Z"
+  },
+  "logo": {
+    "fileName": "logo_aws_cert_3.png",
+    "_id": {
+      "$oid": "2bf7aaae230d4a3197e4bfa4"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 90,
+  "sessions": [
+    {
+      "label": "session aws certif 3",
+      "start": {
+        "$date": "2024-07-05T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-11T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "c7bbde3787cf4791aea7dcfc"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Guide officiel",
+      "fileName": "guide_aws_cert_3.pdf",
+      "fileLink_Documents": "/docs/46ec7294-8110-4909-a8dd-7ee7adad1174.pdf",
+      "_id": {
+        "$oid": "e5af2bf5796d4266a992f4d7"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "fbb5c75183d343b18ac93aa3"
+  },
+  "titreFormation": "AWS Certified SysOps Administrator – Associate",
+  "dateDebut": {
+    "$date": "2024-06-19T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-19T00:00:00.000Z"
+  },
+  "description": "Déploiement, gestion et opérations sur AWS. Surveillance, automatisation, et sécurité.",
+  "domaine": "Certifications AWS",
+  "siteWeb": "https://aws.amazon.com/certification/certified-sysops-admin-associate/",
+  "prix": 150,
+  "criterias": [
+    {
+      "label": "Niveau",
+      "value": "Foundational",
+      "_id": {
+        "$oid": "f1b1ddc794524e5c9e1bfadb"
+      }
+    },
+    {
+      "label": "Type",
+      "value": "Certification officielle AWS",
+      "_id": {
+        "$oid": "c060f6943b9b448c84e8509e"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "AWS Certification Portal",
+  "centreDeFormation": "AWS Training & Certification",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:16:09.139Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:16:09.139Z"
+  },
+  "logo": {
+    "fileName": "logo_aws_cert_4.png",
+    "_id": {
+      "$oid": "5aa17a13dfb644c185105ce6"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 100,
+  "sessions": [
+    {
+      "label": "session aws certif 4",
+      "start": {
+        "$date": "2024-06-23T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-06-29T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "0b9b763e5a6c4749bfb05b81"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Guide officiel",
+      "fileName": "guide_aws_cert_4.pdf",
+      "fileLink_Documents": "/docs/5fdd2e21-8771-4344-af68-594e6057845f.pdf",
+      "_id": {
+        "$oid": "8d444dc0044444599a73405e"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "06e3fc1241504b00a7e80c7a"
+  },
+  "titreFormation": "Cisco Certified Network Associate (CCNA)",
+  "dateDebut": {
+    "$date": "2024-06-26T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-08T00:00:00.000Z"
+  },
+  "description": "Fondamentaux des réseaux, sécurité, automatisation et programmation réseau.",
+  "domaine": "Cisco",
+  "siteWeb": "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html",
+  "prix": 300,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Cisco",
+      "_id": {
+        "$oid": "9304f1b28c4f45719cb21c30"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Professional",
+      "_id": {
+        "$oid": "38341e988ae94865b762d527"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Cisco Certification Portal",
+  "centreDeFormation": "Cisco Networking Academy",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:18:14.443Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:18:14.443Z"
+  },
+  "logo": {
+    "fileName": "logo_cisco_1.png",
+    "_id": {
+      "$oid": "3692d2a396db41c99426fbf5"
+    }
+  },
+  "duree": "10 semaines",
+  "hoursNumber": 80,
+  "sessions": [
+    {
+      "label": "session cisco 1",
+      "start": {
+        "$date": "2024-07-01T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-08T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "350135a7e60b4a77805d6283"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme",
+      "fileName": "programme_cisco_1.pdf",
+      "fileLink_Documents": "/docs/28bf6edd-2203-4212-a1e5-69167f4cc800.pdf",
+      "_id": {
+        "$oid": "e0ba7f76a8fa4d51ae070a18"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "18e2d619e9d8463c865f61ae"
+  },
+  "titreFormation": "Google Ads Search Certification",
+  "dateDebut": {
+    "$date": "2024-06-21T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-15T00:00:00.000Z"
+  },
+  "description": "Utiliser Google Ads pour créer des campagnes de recherche efficaces et ciblées.",
+  "domaine": "Marketing Digital",
+  "siteWeb": "https://skillshop.withgoogle.com",
+  "prix": 0,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Marketing Digital",
+      "_id": {
+        "$oid": "86a1ab6058de44e5a757feb7"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Professionnel",
+      "_id": {
+        "$oid": "e67bf0e8eb2143fd9f8adc9d"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Marketing Digital Learning Platform",
+  "centreDeFormation": "Google Skillshop",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:19:54.515Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:19:54.515Z"
+  },
+  "logo": {
+    "fileName": "logo_marketing digital_4.png",
+    "_id": {
+      "$oid": "6e74a77c34ef4f8c94d05941"
+    }
+  },
+  "duree": "4 heures",
+  "hoursNumber": 4,
+  "sessions": [
+    {
+      "label": "session marketing digital 4",
+      "start": {
+        "$date": "2024-06-24T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-01T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "27cb9b9aa33047328dcb77e6"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme détaillé",
+      "fileName": "programme_marketing digital_4.pdf",
+      "fileLink_Documents": "/docs/ce51cf1d-41e5-42d4-9963-1abf1f58f8a7.pdf",
+      "_id": {
+        "$oid": "95d31420ef944215aa30d668"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "3f7b868ed4b9403bbc6ac021"
+  },
+  "titreFormation": "Interaction Design Foundation: Become a UX Designer from Scratch",
+  "dateDebut": {
+    "$date": "2024-07-06T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-16T00:00:00.000Z"
+  },
+  "description": "Approche complète de la psychologie utilisateur, design thinking et architecture de l'information.",
+  "domaine": "UI/UX Design",
+  "siteWeb": "https://www.interaction-design.org",
+  "prix": 168,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle UI/UX Design",
+      "_id": {
+        "$oid": "20bf32751cdb42c2a387e019"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Professionnel",
+      "_id": {
+        "$oid": "eb4bf3d70d244f3a80589bbf"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "UI/UX Design Learning Platform",
+  "centreDeFormation": "Interaction Design Foundation",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:19:54.516Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:19:54.516Z"
+  },
+  "logo": {
+    "fileName": "logo_ui/ux design_3.png",
+    "_id": {
+      "$oid": "ccfadf2532c04fd8a626ed71"
+    }
+  },
+  "duree": "3 mois",
+  "hoursNumber": 100,
+  "sessions": [
+    {
+      "label": "session ui/ux design 3",
+      "start": {
+        "$date": "2024-07-09T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-16T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "cdfedc7035ca4d9f975bbc95"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme détaillé",
+      "fileName": "programme_ui/ux design_3.pdf",
+      "fileLink_Documents": "/docs/2c6eec17-9598-4eca-9606-0c89d4031d25.pdf",
+      "_id": {
+        "$oid": "6bc9e1200aa4404480a6bdf6"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "03e45069e4d448749ee66210"
+  },
+  "titreFormation": "Préparation au TOEIC - Test of English for International Communication",
+  "dateDebut": {
+    "$date": "2024-07-08T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-08-02T00:00:00.000Z"
+  },
+  "description": "Programme structuré pour améliorer votre score TOEIC, axé sur le vocabulaire professionnel et la compréhension orale.",
+  "domaine": "Langues",
+  "siteWeb": "https://www.etsglobal.org",
+  "prix": 400,
+  "criterias": [
+    {
+      "label": "Langue",
+      "value": "Anglais",
+      "_id": {
+        "$oid": "9a3d96d897d442f5ba7cfed6"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "A2",
+      "_id": {
+        "$oid": "52a560ba4bf44c6e8ff457b7"
+      }
+    },
+    {
+      "label": "Public ciblé",
+      "value": "Professionnels",
+      "_id": {
+        "$oid": "62afeab311db4e02b2c8a849"
+      }
+    }
+  ],
+  "ville": "Bizerte",
+  "adresse": "Centre 2, Bizerte",
+  "centreDeFormation": "British Council Tunis",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "hybride",
+  "created_at": {
+    "$date": "2025-04-13T14:03:49.361Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:03:49.361Z"
+  },
+  "logo": {
+    "fileName": "logo_langue_real_2.png",
+    "_id": {
+      "$oid": "049dce04c58343b8b922acfd"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 60,
+  "sessions": [
+    {
+      "label": "session officielle 2",
+      "start": {
+        "$date": "2024-07-23T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-08-07T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "2fd115600f904f1c8fa2caf6"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Brochure PDF",
+      "fileName": "brochure_langue_real_2.pdf",
+      "fileLink_Documents": "/docs/a589623d-e9f2-4a2b-a55f-69589e7859e2.pdf",
+      "_id": {
+        "$oid": "7f5cac57c74e49bb9c006cc6"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "8e81859d27ee48b88c63fe68"
+  },
+  "titreFormation": "Anglais professionnel pour le monde du travail",
+  "dateDebut": {
+    "$date": "2024-07-04T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-24T00:00:00.000Z"
+  },
+  "description": "Formation conçue pour améliorer l'anglais en contexte professionnel : réunions, e-mails, appels téléphoniques.",
+  "domaine": "Langues",
+  "siteWeb": "https://www.wallstreetenglish.tn",
+  "prix": 500,
+  "criterias": [
+    {
+      "label": "Langue",
+      "value": "Anglais",
+      "_id": {
+        "$oid": "ffd3f768e14042d488de148a"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "A2",
+      "_id": {
+        "$oid": "306947bcee74403183adc094"
+      }
+    },
+    {
+      "label": "Public ciblé",
+      "value": "Étudiants",
+      "_id": {
+        "$oid": "4bba825460c642e6accbd56b"
+      }
+    }
+  ],
+  "ville": "Sousse",
+  "adresse": "Centre 4, Sfax",
+  "centreDeFormation": "Wall Street English Tunis",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:03:49.362Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:03:49.362Z"
+  },
+  "logo": {
+    "fileName": "logo_langue_real_4.png",
+    "_id": {
+      "$oid": "38c5272f98794b3b887596b4"
+    }
+  },
+  "duree": "4 mois",
+  "hoursNumber": 120,
+  "sessions": [
+    {
+      "label": "session officielle 4",
+      "start": {
+        "$date": "2024-07-19T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-08-03T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "a1b53f3808634e81a4bd61fc"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Brochure PDF",
+      "fileName": "brochure_langue_real_4.pdf",
+      "fileLink_Documents": "/docs/b66467c2-4721-4fe5-b0fe-352f44a94446.pdf",
+      "_id": {
+        "$oid": "d8484ada87184475ba1c4064"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "23f522edfabe43cfba8c97cd"
+  },
+  "titreFormation": "Google Professional Data Engineer",
+  "dateDebut": {
+    "$date": "2024-07-08T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-08-03T00:00:00.000Z"
+  },
+  "description": "Certificat Google Cloud pour les ingénieurs de données, axé sur la modélisation, la transformation et l’automatisation des pipelines de données.",
+  "domaine": "Certification IT",
+  "siteWeb": "https://cloud.google.com/certification/data-engineer",
+  "prix": 200,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certificat officiel",
+      "_id": {
+        "$oid": "2898579018b44acf88f8cec7"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Avancé",
+      "_id": {
+        "$oid": "cb6c3312a4ec4dabbb31bc29"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme officielle",
+  "centreDeFormation": "Google Cloud",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:13:01.963Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:13:01.963Z"
+  },
+  "logo": {
+    "fileName": "logo_cert_5.png",
+    "_id": {
+      "$oid": "afe037ad1d1642cc914b35e9"
+    }
+  },
+  "duree": "3 mois",
+  "hoursNumber": 120,
+  "sessions": [
+    {
+      "label": "session certif 5",
+      "start": {
+        "$date": "2024-07-13T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-18T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "19cb5349f3f947a59a254033"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus",
+      "fileName": "syllabus_cert_5.pdf",
+      "fileLink_Documents": "/docs/b5964ffc-448a-46c5-aceb-28c9ff4f51b5.pdf",
+      "_id": {
+        "$oid": "7326a46e5eda482f9a37bc7e"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "1f592a4eb8204837957cc825"
+  },
+  "titreFormation": "Certified Kubernetes Administrator (CKA)",
+  "dateDebut": {
+    "$date": "2024-07-06T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-29T00:00:00.000Z"
+  },
+  "description": "Certification officielle de la Cloud Native Computing Foundation pour administrer des clusters Kubernetes.",
+  "domaine": "Certification IT",
+  "siteWeb": "https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/",
+  "prix": 395,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certificat officiel",
+      "_id": {
+        "$oid": "240b033bca7b4e3db40c1029"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Avancé",
+      "_id": {
+        "$oid": "9e01522d41834088a7302117"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme officielle",
+  "centreDeFormation": "Linux Foundation",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:13:01.963Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:13:01.963Z"
+  },
+  "logo": {
+    "fileName": "logo_cert_7.png",
+    "_id": {
+      "$oid": "f7b949b66dcf4d809512afa1"
+    }
+  },
+  "duree": "4 semaines",
+  "hoursNumber": 40,
+  "sessions": [
+    {
+      "label": "session certif 7",
+      "start": {
+        "$date": "2024-07-11T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-16T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "5eaa3dd53c78456f83c088b9"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus",
+      "fileName": "syllabus_cert_7.pdf",
+      "fileLink_Documents": "/docs/3875dcdf-3604-475b-8d3c-f4aa51c820fd.pdf",
+      "_id": {
+        "$oid": "222915c7758547178193e606"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "1d899aa215f3426c9999d819"
+  },
+  "titreFormation": "Certified Data Analyst – Microsoft Power BI (PL-300)",
+  "dateDebut": {
+    "$date": "2024-06-21T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-02T00:00:00.000Z"
+  },
+  "description": "Certification pour les analystes de données souhaitant valider leurs compétences en Power BI et modélisation de données.",
+  "domaine": "Certification IT",
+  "siteWeb": "https://learn.microsoft.com/en-us/certifications/power-bi-data-analyst-associate/",
+  "prix": 165,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certificat officiel",
+      "_id": {
+        "$oid": "ebfa34c42f594c1587705199"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Avancé",
+      "_id": {
+        "$oid": "31404f8b55a74ada91916b51"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme officielle",
+  "centreDeFormation": "Microsoft Learn",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:13:01.963Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:13:01.963Z"
+  },
+  "logo": {
+    "fileName": "logo_cert_9.png",
+    "_id": {
+      "$oid": "c4aedf1e2cf941d0916f17c2"
+    }
+  },
+  "duree": "1 mois",
+  "hoursNumber": 40,
+  "sessions": [
+    {
+      "label": "session certif 9",
+      "start": {
+        "$date": "2024-06-26T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-01T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "860a07cb5cb640d9b34c2ffc"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus",
+      "fileName": "syllabus_cert_9.pdf",
+      "fileLink_Documents": "/docs/1f588cff-9ac7-4f6d-a7f0-ef28ea372846.pdf",
+      "_id": {
+        "$oid": "c61efc186e2441ccaf8efc98"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "982def7818e14b6189a7de2a"
+  },
+  "titreFormation": "Microsoft Certified: Power BI Data Analyst Associate (PL-300)",
+  "dateDebut": {
+    "$date": "2024-07-12T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-23T00:00:00.000Z"
+  },
+  "description": "Préparer, modéliser, visualiser et analyser les données à l’aide de Power BI.",
+  "domaine": "Certifications Microsoft",
+  "siteWeb": "https://learn.microsoft.com/en-us/certifications/power-bi-data-analyst-associate/",
+  "prix": 165,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Microsoft",
+      "_id": {
+        "$oid": "110d92f22ed84493801ae30f"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Fundamentals",
+      "_id": {
+        "$oid": "88c4fc9d7dd74d7d934599e9"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme Microsoft Learn",
+  "centreDeFormation": "Microsoft Learn",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:14:58.386Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:14:58.386Z"
+  },
+  "logo": {
+    "fileName": "logo_microsoft_cert_4.png",
+    "_id": {
+      "$oid": "5b7274ad87bc4505890adb0d"
+    }
+  },
+  "duree": "1 mois",
+  "hoursNumber": 40,
+  "sessions": [
+    {
+      "label": "session ms certif 4",
+      "start": {
+        "$date": "2024-07-15T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-22T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "bd28938b240446c88bb45241"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus officiel",
+      "fileName": "syllabus_ms_cert_4.pdf",
+      "fileLink_Documents": "/docs/eb8ebcaa-60ad-45a9-a229-e9be3d852a21.pdf",
+      "_id": {
+        "$oid": "8a08314516dc4ea0bb1b1794"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "335c02d7c2874e66ade4373c"
+  },
+  "titreFormation": "AWS Certified Solutions Architect – Associate",
+  "dateDebut": {
+    "$date": "2024-07-11T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-08-03T00:00:00.000Z"
+  },
+  "description": "Compétences en conception de systèmes distribués sur AWS avec haute disponibilité et tolérance aux pannes.",
+  "domaine": "Certifications AWS",
+  "siteWeb": "https://aws.amazon.com/certification/certified-solutions-architect-associate/",
+  "prix": 150,
+  "criterias": [
+    {
+      "label": "Niveau",
+      "value": "Specialty",
+      "_id": {
+        "$oid": "fe93d73f9e5f4b38a738561e"
+      }
+    },
+    {
+      "label": "Type",
+      "value": "Certification officielle AWS",
+      "_id": {
+        "$oid": "a202b01df4b9401a9ef6c95b"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "AWS Certification Portal",
+  "centreDeFormation": "AWS Training & Certification",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:16:09.139Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:16:09.139Z"
+  },
+  "logo": {
+    "fileName": "logo_aws_cert_2.png",
+    "_id": {
+      "$oid": "219b564fc7384db6bd76d250"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 80,
+  "sessions": [
+    {
+      "label": "session aws certif 2",
+      "start": {
+        "$date": "2024-07-15T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-21T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "d37baace0cff4f3ca70ae3ef"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Guide officiel",
+      "fileName": "guide_aws_cert_2.pdf",
+      "fileLink_Documents": "/docs/6fd5db61-169f-463e-8294-6f1ee84290d1.pdf",
+      "_id": {
+        "$oid": "d297ee9547d8439e972617c2"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "5436dcc6b1bb46378076fdff"
+  },
+  "titreFormation": "Google Professional Data Engineer",
+  "dateDebut": {
+    "$date": "2024-07-05T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-08-04T00:00:00.000Z"
+  },
+  "description": "Conception et maintenance de systèmes de traitement des données, modélisation, et ML sur GCP.",
+  "domaine": "Google Cloud",
+  "siteWeb": "https://cloud.google.com/certification/data-engineer",
+  "prix": 200,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Google Cloud",
+      "_id": {
+        "$oid": "9bc44666c6d34ae5afcd7f79"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Associate",
+      "_id": {
+        "$oid": "5b83367775194d668c0311c1"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Google Cloud Certification Portal",
+  "centreDeFormation": "Google Cloud",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:18:14.443Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:18:14.443Z"
+  },
+  "logo": {
+    "fileName": "logo_google cloud_3.png",
+    "_id": {
+      "$oid": "eb09a740da414195a8901307"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 80,
+  "sessions": [
+    {
+      "label": "session google cloud 3",
+      "start": {
+        "$date": "2024-07-10T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-17T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "b5162815d47b49c8b2ed1950"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme",
+      "fileName": "programme_google cloud_3.pdf",
+      "fileLink_Documents": "/docs/cc442618-a001-49cc-9239-17cc795197a2.pdf",
+      "_id": {
+        "$oid": "3404438401a848b58edcf799"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "2802493fe6bb40bc81c2fc80"
+  },
+  "titreFormation": "Cisco Certified Network Professional (CCNP) Enterprise",
+  "dateDebut": {
+    "$date": "2024-06-24T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-08T00:00:00.000Z"
+  },
+  "description": "Routage, commutation, dépannage, et technologies avancées pour réseaux d’entreprise.",
+  "domaine": "Cisco",
+  "siteWeb": "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/professional/ccnp-enterprise.html",
+  "prix": 400,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Cisco",
+      "_id": {
+        "$oid": "cbb40a2863cf48a19f5b472e"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Associate",
+      "_id": {
+        "$oid": "20e6e745cc1f4fe3827f43b5"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Cisco Certification Portal",
+  "centreDeFormation": "Cisco Networking Academy",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:18:14.444Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:18:14.444Z"
+  },
+  "logo": {
+    "fileName": "logo_cisco_2.png",
+    "_id": {
+      "$oid": "857bd5222cb24bbe9e451b1a"
+    }
+  },
+  "duree": "3 mois",
+  "hoursNumber": 100,
+  "sessions": [
+    {
+      "label": "session cisco 2",
+      "start": {
+        "$date": "2024-06-29T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-06T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "3e41369714eb47d693154734"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme",
+      "fileName": "programme_cisco_2.pdf",
+      "fileLink_Documents": "/docs/51570e22-22ae-4aa6-8c21-97cbb5f06dcb.pdf",
+      "_id": {
+        "$oid": "ae29a2a2027f4bf09793e884"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "9071ce3b116e41ecbe10d63a"
+  },
+  "titreFormation": "Meta Certified Digital Marketing Associate",
+  "dateDebut": {
+    "$date": "2024-06-19T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-19T00:00:00.000Z"
+  },
+  "description": "Certification d’introduction aux outils publicitaires de Meta (Facebook & Instagram).",
+  "domaine": "Marketing Digital",
+  "siteWeb": "https://www.facebook.com/business/learn/certification",
+  "prix": 99,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Marketing Digital",
+      "_id": {
+        "$oid": "a6dde35b62a94b5a8f3483a9"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Intermédiaire",
+      "_id": {
+        "$oid": "f1f855f2611147d5a0d14f43"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Marketing Digital Learning Platform",
+  "centreDeFormation": "Meta Blueprint",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:19:54.515Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:19:54.515Z"
+  },
+  "logo": {
+    "fileName": "logo_marketing digital_2.png",
+    "_id": {
+      "$oid": "d05c2b381df241b59e163afb"
+    }
+  },
+  "duree": "2 semaines",
+  "hoursNumber": 20,
+  "sessions": [
+    {
+      "label": "session marketing digital 2",
+      "start": {
+        "$date": "2024-06-22T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-06-29T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "4b3989129d0a4343810bf6e6"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme détaillé",
+      "fileName": "programme_marketing digital_2.pdf",
+      "fileLink_Documents": "/docs/486caf67-15f7-4645-81d5-5bafcd17ec98.pdf",
+      "_id": {
+        "$oid": "ea6e5485eddd4730ae748647"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "eb7bd286641b43ef96e46b18"
+  },
+  "titreFormation": "Growth Hacking Certification – Growth Tribe",
+  "dateDebut": {
+    "$date": "2024-06-14T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-09T00:00:00.000Z"
+  },
+  "description": "Formation certifiante pour accélérer la croissance d’un produit avec les outils modernes du digital.",
+  "domaine": "Growth Hacking",
+  "siteWeb": "https://growthtribe.io",
+  "prix": 950,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Growth Hacking",
+      "_id": {
+        "$oid": "efa41c73ebd94b5d891aa4c5"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Avancé",
+      "_id": {
+        "$oid": "9b7e38520b83437da89e20ed"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Portail Growth Hacking",
+  "centreDeFormation": "Growth Tribe",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:21:19.171Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:21:19.171Z"
+  },
+  "logo": {
+    "fileName": "logo_growth hacking_1.png",
+    "_id": {
+      "$oid": "69333b22443f4e78a8005b76"
+    }
+  },
+  "duree": "5 semaines",
+  "hoursNumber": 40,
+  "sessions": [
+    {
+      "label": "session growth hacking 1",
+      "start": {
+        "$date": "2024-06-17T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-06-24T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "aff6d0ae5094414ea161c05a"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme complet",
+      "fileName": "programme_growth hacking_1.pdf",
+      "fileLink_Documents": "/docs/8cdd3123-186e-4fda-ab33-cff4b0debf1a.pdf",
+      "_id": {
+        "$oid": "21938b2dfcc34fc0b64785d7"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "025fee3c0f4943d9a5a4a3e2"
+  },
+  "titreFormation": "After Effects CC – Motion Design Essentiel",
+  "dateDebut": {
+    "$date": "2024-07-09T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-29T00:00:00.000Z"
+  },
+  "description": "Formation complète à l’animation 2D et aux effets visuels avec Adobe After Effects.",
+  "domaine": "Motion Design",
+  "siteWeb": "https://www.udemy.com/course/after-effects-motion-design/",
+  "prix": 20,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Motion Design",
+      "_id": {
+        "$oid": "0d5b9618b2c74349953722e1"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Avancé",
+      "_id": {
+        "$oid": "ee6992237b3149dcac7977bf"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Portail Motion Design",
+  "centreDeFormation": "Udemy",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:21:19.171Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:21:19.171Z"
+  },
+  "logo": {
+    "fileName": "logo_motion design_2.png",
+    "_id": {
+      "$oid": "ae1cfc19feab4cd4abcb7a18"
+    }
+  },
+  "duree": "1.5 mois",
+  "hoursNumber": 50,
+  "sessions": [
+    {
+      "label": "session motion design 2",
+      "start": {
+        "$date": "2024-07-12T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-19T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "d782e8052eff429a8c10787d"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme complet",
+      "fileName": "programme_motion design_2.pdf",
+      "fileLink_Documents": "/docs/9f9aaef0-5e71-47e4-bf79-0b9c9d9ddb95.pdf",
+      "_id": {
+        "$oid": "fa179c37fa3e4b26844d53de"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6b3527cac94245e7892b1c5c"
+  },
+  "titreFormation": "Product Management Fundamentals – edX (U. of Maryland)",
+  "dateDebut": {
+    "$date": "2024-07-12T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-29T00:00:00.000Z"
+  },
+  "description": "Introduction aux fondamentaux de la gestion de produit : roadmap, user stories, analyse de marché.",
+  "domaine": "Product Management",
+  "siteWeb": "https://www.edx.org/course/product-management-fundamentals",
+  "prix": 199,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Product Management",
+      "_id": {
+        "$oid": "e0998630e17244f19ff5be0c"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Avancé",
+      "_id": {
+        "$oid": "b94cd289389b471081fefb30"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Portail Product Management",
+  "centreDeFormation": "edX",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:21:19.171Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:21:19.171Z"
+  },
+  "logo": {
+    "fileName": "logo_product management_2.png",
+    "_id": {
+      "$oid": "6d37b47290d14febb51e3fe4"
+    }
+  },
+  "duree": "4 semaines",
+  "hoursNumber": 40,
+  "sessions": [
+    {
+      "label": "session product management 2",
+      "start": {
+        "$date": "2024-07-15T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-22T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "0d4a1e8d8d74409fa18bb2df"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme complet",
+      "fileName": "programme_product management_2.pdf",
+      "fileLink_Documents": "/docs/78e01bf2-a041-4534-bc8d-e53b871133c1.pdf",
+      "_id": {
+        "$oid": "aa49e0e57f724479a333c207"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "f8f601ef9e1a45e2923ee55b"
+  },
+  "titreFormation": "Allemand pour débutants - Niveau A1",
+  "dateDebut": {
+    "$date": "2024-07-03T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-18T00:00:00.000Z"
+  },
+  "description": "Initiation à la langue allemande pour les débutants. Cours axés sur la grammaire, le vocabulaire de base et les dialogues simples.",
+  "domaine": "Langues",
+  "siteWeb": "https://www.goethe.de/tunisie",
+  "prix": 320,
+  "criterias": [
+    {
+      "label": "Langue",
+      "value": "Allemand",
+      "_id": {
+        "$oid": "477bbbce240843ec93a522f7"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "B2",
+      "_id": {
+        "$oid": "0252a6ccb2864c6cbbd7ec5a"
+      }
+    },
+    {
+      "label": "Public ciblé",
+      "value": "Étudiants",
+      "_id": {
+        "$oid": "d6ee54c8f4b4465494bb87c4"
+      }
+    }
+  ],
+  "ville": "Bizerte",
+  "adresse": "Avenue des langues 1, Nabeul",
+  "centreDeFormation": "Goethe-Institut Tunis",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "présentiel",
+  "created_at": {
+    "$date": "2025-04-13T14:07:04.080Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:07:04.080Z"
+  },
+  "logo": {
+    "fileName": "logo_langue_extra_1.png",
+    "_id": {
+      "$oid": "25a09d05700248b88712fe67"
+    }
+  },
+  "duree": "3 mois",
+  "hoursNumber": 90,
+  "sessions": [
+    {
+      "label": "session langue extra 1",
+      "start": {
+        "$date": "2024-07-13T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-28T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "46eacf44396748989e7e5cd3"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme officiel",
+      "fileName": "programme_langue_extra_1.pdf",
+      "fileLink_Documents": "/docs/ec4dc752-42b4-44e8-88f3-f30cca8fdc21.pdf",
+      "_id": {
+        "$oid": "0a205df97cd24c8ea923b9e1"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "09cd0f6f292445859f814d47"
+  },
+  "titreFormation": "Anglais juridique pour professionnels du droit",
+  "dateDebut": {
+    "$date": "2024-06-20T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-19T00:00:00.000Z"
+  },
+  "description": "Formation spécialisée en anglais juridique, couvrant les terminologies et les situations juridiques réelles.",
+  "domaine": "Langues",
+  "siteWeb": "https://www.englishforlawyers.com",
+  "prix": 450,
+  "criterias": [
+    {
+      "label": "Langue",
+      "value": "Anglais",
+      "_id": {
+        "$oid": "50e9cbd9ac10436fa306e15b"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "A2",
+      "_id": {
+        "$oid": "f849191c65f9425eb00eed9b"
+      }
+    },
+    {
+      "label": "Public ciblé",
+      "value": "Professionnels",
+      "_id": {
+        "$oid": "08777753f2c04c28bad67005"
+      }
+    }
+  ],
+  "ville": "Bizerte",
+  "adresse": "Avenue des langues 4, Bizerte",
+  "centreDeFormation": "Académie Juridique Internationale",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:07:04.080Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:07:04.080Z"
+  },
+  "logo": {
+    "fileName": "logo_langue_extra_4.png",
+    "_id": {
+      "$oid": "68411a2218e44e06a591d18b"
+    }
+  },
+  "duree": "1 mois",
+  "hoursNumber": 40,
+  "sessions": [
+    {
+      "label": "session langue extra 4",
+      "start": {
+        "$date": "2024-06-30T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-15T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "f58b7487efca4ee28c4611a8"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme officiel",
+      "fileName": "programme_langue_extra_4.pdf",
+      "fileLink_Documents": "/docs/fa062c79-e00e-4290-8010-bbc3c523d2b1.pdf",
+      "_id": {
+        "$oid": "9807409bb4e24653890e7d3a"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "a6cfc497f5f24cec91a4545d"
+  },
+  "titreFormation": "Microsoft Certified: Azure Solutions Architect Expert (AZ-305)",
+  "dateDebut": {
+    "$date": "2024-06-24T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-06T00:00:00.000Z"
+  },
+  "description": "Concevoir des solutions cloud, hautement disponibles, évolutives et sécurisées sur Azure.",
+  "domaine": "Certifications Microsoft",
+  "siteWeb": "https://learn.microsoft.com/en-us/certifications/azure-solutions-architect/",
+  "prix": 165,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Microsoft",
+      "_id": {
+        "$oid": "6a6df9cf7a5343e2bb88053d"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Expert",
+      "_id": {
+        "$oid": "6a947ac0925946c2997f6e9e"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme Microsoft Learn",
+  "centreDeFormation": "Microsoft Learn",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:14:58.386Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:14:58.386Z"
+  },
+  "logo": {
+    "fileName": "logo_microsoft_cert_3.png",
+    "_id": {
+      "$oid": "dc0b254f627d4f759b065529"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 80,
+  "sessions": [
+    {
+      "label": "session ms certif 3",
+      "start": {
+        "$date": "2024-06-27T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-04T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "d163be10eeea4446b34d998c"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus officiel",
+      "fileName": "syllabus_ms_cert_3.pdf",
+      "fileLink_Documents": "/docs/19115b20-597b-4708-9e85-9a645f8fc301.pdf",
+      "_id": {
+        "$oid": "28ac00e5ff7d40b59db7b189"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "d9ef21d05b214e54a9513307"
+  },
+  "titreFormation": "Microsoft Certified: Security, Compliance, and Identity Fundamentals (SC-900)",
+  "dateDebut": {
+    "$date": "2024-06-21T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-03T00:00:00.000Z"
+  },
+  "description": "Concepts de sécurité, conformité et identité dans les services cloud Microsoft.",
+  "domaine": "Certifications Microsoft",
+  "siteWeb": "https://learn.microsoft.com/en-us/certifications/security-compliance-and-identity-fundamentals/",
+  "prix": 99,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Microsoft",
+      "_id": {
+        "$oid": "f0e13e508ccc46c1b5218309"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Expert",
+      "_id": {
+        "$oid": "15832d3544e3492b94d11660"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme Microsoft Learn",
+  "centreDeFormation": "Microsoft Learn",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:14:58.387Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:14:58.387Z"
+  },
+  "logo": {
+    "fileName": "logo_microsoft_cert_5.png",
+    "_id": {
+      "$oid": "e1c4faaa74df464095370648"
+    }
+  },
+  "duree": "2 semaines",
+  "hoursNumber": 25,
+  "sessions": [
+    {
+      "label": "session ms certif 5",
+      "start": {
+        "$date": "2024-06-24T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-01T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "c3d6ce64eec44e6e96d2cd47"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus officiel",
+      "fileName": "syllabus_ms_cert_5.pdf",
+      "fileLink_Documents": "/docs/798106ce-c7c9-463e-9db3-7b80fd2c3623.pdf",
+      "_id": {
+        "$oid": "9e2bfd64e82745b1a2a16b70"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "ea79e1d26a1047d5b34f65ab"
+  },
+  "titreFormation": "Microsoft Certified: Azure AI Fundamentals (AI-900)",
+  "dateDebut": {
+    "$date": "2024-07-03T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-13T00:00:00.000Z"
+  },
+  "description": "Introduction aux concepts de l’intelligence artificielle et services Azure AI.",
+  "domaine": "Certifications Microsoft",
+  "siteWeb": "https://learn.microsoft.com/en-us/certifications/azure-ai-fundamentals/",
+  "prix": 99,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Microsoft",
+      "_id": {
+        "$oid": "1c035d2628c4447196e42139"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Fundamentals",
+      "_id": {
+        "$oid": "a759146c5e0f4421a46e6695"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme Microsoft Learn",
+  "centreDeFormation": "Microsoft Learn",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:14:58.387Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:14:58.387Z"
+  },
+  "logo": {
+    "fileName": "logo_microsoft_cert_6.png",
+    "_id": {
+      "$oid": "84247967fa684831a7b43416"
+    }
+  },
+  "duree": "2 semaines",
+  "hoursNumber": 30,
+  "sessions": [
+    {
+      "label": "session ms certif 6",
+      "start": {
+        "$date": "2024-07-06T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-13T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "9af1a3de29914c569e51a987"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus officiel",
+      "fileName": "syllabus_ms_cert_6.pdf",
+      "fileLink_Documents": "/docs/5b974e08-72ae-45c3-9412-ca7c094ada68.pdf",
+      "_id": {
+        "$oid": "0c6a51cce09d4320913fdf4d"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "9a8efadc438740a48693329f"
+  },
+  "titreFormation": "AWS Certified DevOps Engineer – Professional",
+  "dateDebut": {
+    "$date": "2024-07-04T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-16T00:00:00.000Z"
+  },
+  "description": "CI/CD, automatisation, surveillance, sécurité et opérations dans les environnements AWS.",
+  "domaine": "Certifications AWS",
+  "siteWeb": "https://aws.amazon.com/certification/certified-devops-engineer-professional/",
+  "prix": 300,
+  "criterias": [
+    {
+      "label": "Niveau",
+      "value": "Foundational",
+      "_id": {
+        "$oid": "da9ed58a6bbb434c97c37261"
+      }
+    },
+    {
+      "label": "Type",
+      "value": "Certification officielle AWS",
+      "_id": {
+        "$oid": "6263708501a84c3898bd1a00"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "AWS Certification Portal",
+  "centreDeFormation": "AWS Training & Certification",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:16:09.140Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:16:09.140Z"
+  },
+  "logo": {
+    "fileName": "logo_aws_cert_6.png",
+    "_id": {
+      "$oid": "6e5a8c1fe2d1453b8e391c13"
+    }
+  },
+  "duree": "3 mois",
+  "hoursNumber": 120,
+  "sessions": [
+    {
+      "label": "session aws certif 6",
+      "start": {
+        "$date": "2024-07-08T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-14T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "65c3775b296145799d4c75a6"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Guide officiel",
+      "fileName": "guide_aws_cert_6.pdf",
+      "fileLink_Documents": "/docs/1c9aa9cf-a981-4256-ba74-2432c1ce8345.pdf",
+      "_id": {
+        "$oid": "a6fc53ba7dc145558f79d5eb"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "b81604e9a88746a7b7ed92a5"
+  },
+  "titreFormation": "AWS Certified Data Analytics – Specialty",
+  "dateDebut": {
+    "$date": "2024-06-29T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-28T00:00:00.000Z"
+  },
+  "description": "Utilisation d’AWS pour recueillir, stocker, traiter, visualiser et sécuriser les données à grande échelle.",
+  "domaine": "Certifications AWS",
+  "siteWeb": "https://aws.amazon.com/certification/certified-data-analytics-specialty/",
+  "prix": 300,
+  "criterias": [
+    {
+      "label": "Niveau",
+      "value": "Associate",
+      "_id": {
+        "$oid": "358e549b89304e109505c97c"
+      }
+    },
+    {
+      "label": "Type",
+      "value": "Certification officielle AWS",
+      "_id": {
+        "$oid": "0312eb58c6434d90a16ba113"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "AWS Certification Portal",
+  "centreDeFormation": "AWS Training & Certification",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:16:09.140Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:16:09.140Z"
+  },
+  "logo": {
+    "fileName": "logo_aws_cert_7.png",
+    "_id": {
+      "$oid": "b17c7a98e9354a20a4573988"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 100,
+  "sessions": [
+    {
+      "label": "session aws certif 7",
+      "start": {
+        "$date": "2024-07-03T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-09T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "60f1e89639444e978f143dcb"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Guide officiel",
+      "fileName": "guide_aws_cert_7.pdf",
+      "fileLink_Documents": "/docs/1947efb1-62b9-42bc-9607-0001a4b6885c.pdf",
+      "_id": {
+        "$oid": "ae00f213a1224adc84314cce"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "920b043d88e74accaa054adb"
+  },
+  "titreFormation": "Cisco Certified CyberOps Associate",
+  "dateDebut": {
+    "$date": "2024-06-17T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-06-29T00:00:00.000Z"
+  },
+  "description": "Compétences de base pour les centres d'opérations de sécurité (SOC).",
+  "domaine": "Cisco",
+  "siteWeb": "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/cyberops-associate.html",
+  "prix": 300,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Cisco",
+      "_id": {
+        "$oid": "e4d0ee3637df4a67994d4d68"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Associate",
+      "_id": {
+        "$oid": "df7e37ef841e4878b15e8950"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Cisco Certification Portal",
+  "centreDeFormation": "Cisco Networking Academy",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:18:14.444Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:18:14.444Z"
+  },
+  "logo": {
+    "fileName": "logo_cisco_3.png",
+    "_id": {
+      "$oid": "173176033feb412c85fb577a"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 70,
+  "sessions": [
+    {
+      "label": "session cisco 3",
+      "start": {
+        "$date": "2024-06-22T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-06-29T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "53928631304d480cba4f2371"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme",
+      "fileName": "programme_cisco_3.pdf",
+      "fileLink_Documents": "/docs/9a5baa0d-0b9f-4686-beb2-0ad45cbf1355.pdf",
+      "_id": {
+        "$oid": "1378cbd7c838413892f06516"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "c3941f7871674c019d1a30f0"
+  },
+  "titreFormation": "Growth Hacking & Acquisition – LiveMentor",
+  "dateDebut": {
+    "$date": "2024-07-06T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-24T00:00:00.000Z"
+  },
+  "description": "Formation pratique avec mentorat pour lancer des stratégies d’acquisition rentables.",
+  "domaine": "Growth Hacking",
+  "siteWeb": "https://www.livementor.com/formations/growth-hacking",
+  "prix": 700,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Growth Hacking",
+      "_id": {
+        "$oid": "26f7153bbfd14144b5d5d458"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Intermédiaire",
+      "_id": {
+        "$oid": "c6dac93c60a54fb4a15f8be0"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Portail Growth Hacking",
+  "centreDeFormation": "LiveMentor",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:21:19.171Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:21:19.171Z"
+  },
+  "logo": {
+    "fileName": "logo_growth hacking_2.png",
+    "_id": {
+      "$oid": "c5b2224ec43d4bd5a38a04a6"
+    }
+  },
+  "duree": "1 mois",
+  "hoursNumber": 45,
+  "sessions": [
+    {
+      "label": "session growth hacking 2",
+      "start": {
+        "$date": "2024-07-09T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-16T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "35047b8b72c84fdfae0cb6dc"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme complet",
+      "fileName": "programme_growth hacking_2.pdf",
+      "fileLink_Documents": "/docs/73787cdc-0330-40a6-8ce0-368c9913a88a.pdf",
+      "_id": {
+        "$oid": "b3c8d0c4c4b64a9e8cc65f5c"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "29ad5d3728ed471793def0ce"
+  },
+  "titreFormation": "Product Manager Certificate – Product School",
+  "dateDebut": {
+    "$date": "2024-06-28T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-09T00:00:00.000Z"
+  },
+  "description": "Programme complet couvrant le cycle de vie produit, l’UX, l’agilité, et la priorisation.",
+  "domaine": "Product Management",
+  "siteWeb": "https://www.productschool.com/product-management-certification",
+  "prix": 4100,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Product Management",
+      "_id": {
+        "$oid": "85eab050978a4484a033e16f"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Avancé",
+      "_id": {
+        "$oid": "32097876d78145b2b85fe501"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Portail Product Management",
+  "centreDeFormation": "Product School",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:21:19.171Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:21:19.171Z"
+  },
+  "logo": {
+    "fileName": "logo_product management_1.png",
+    "_id": {
+      "$oid": "233622d532e64ca89fc91e3f"
+    }
+  },
+  "duree": "8 semaines",
+  "hoursNumber": 80,
+  "sessions": [
+    {
+      "label": "session product management 1",
+      "start": {
+        "$date": "2024-07-01T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-08T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "8c98cdfcbae54e22b3840e23"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme complet",
+      "fileName": "programme_product management_1.pdf",
+      "fileLink_Documents": "/docs/11599299-2b05-4314-815f-07781fe6ee1c.pdf",
+      "_id": {
+        "$oid": "70b70e784f1b4eb6a17c2325"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "4445ec1c4e414387a974b200"
+  },
+  "titreFormation": "Préparation à l'IELTS - International English Language Testing System",
+  "dateDebut": {
+    "$date": "2024-06-30T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-17T00:00:00.000Z"
+  },
+  "description": "Cours complet pour maîtriser les quatre compétences de l’IELTS (écoute, lecture, écriture, expression orale).",
+  "domaine": "Langues",
+  "siteWeb": "https://ielts.britishcouncil.org",
+  "prix": 420,
+  "criterias": [
+    {
+      "label": "Langue",
+      "value": "Anglais",
+      "_id": {
+        "$oid": "c5f3f793fe7045d9bcdb4230"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "A2",
+      "_id": {
+        "$oid": "78e8576306ce4f24937c7e7d"
+      }
+    },
+    {
+      "label": "Public ciblé",
+      "value": "Professionnels",
+      "_id": {
+        "$oid": "2c49865eedb64cbf9dd80e41"
+      }
+    }
+  ],
+  "ville": "Bizerte",
+  "adresse": "Centre 3, Nabeul",
+  "centreDeFormation": "AMIDEAST Tunisie",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "présentiel",
+  "created_at": {
+    "$date": "2025-04-13T14:03:49.361Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:03:49.361Z"
+  },
+  "logo": {
+    "fileName": "logo_langue_real_3.png",
+    "_id": {
+      "$oid": "e1673fa6b20c40b496c1a359"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 80,
+  "sessions": [
+    {
+      "label": "session officielle 3",
+      "start": {
+        "$date": "2024-07-15T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-30T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "000c8b50f7404b29915f504c"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Brochure PDF",
+      "fileName": "brochure_langue_real_3.pdf",
+      "fileLink_Documents": "/docs/00ba110b-0d08-4ab2-9565-e09a13e75123.pdf",
+      "_id": {
+        "$oid": "2266a223b6084ce288d8c9ec"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "2ceb15859cd4491aa5900e82"
+  },
+  "titreFormation": "Préparation au DELF B2 - Diplôme d'Études en Langue Française",
+  "dateDebut": {
+    "$date": "2024-06-14T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-06-24T00:00:00.000Z"
+  },
+  "description": "Formation approfondie pour réussir l’examen du DELF B2, avec des exercices types, simulations et examens blancs.",
+  "domaine": "Langues",
+  "siteWeb": "https://www.france-education-international.fr",
+  "prix": 380,
+  "criterias": [
+    {
+      "label": "Langue",
+      "value": "Préparation",
+      "_id": {
+        "$oid": "8e7c08a172034d31ac3a139c"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "B1",
+      "_id": {
+        "$oid": "c0e0ba5fbffc4ec1a0ae9d40"
+      }
+    },
+    {
+      "label": "Public ciblé",
+      "value": "Étudiants",
+      "_id": {
+        "$oid": "83ca0d4d3b614e0783da3fc3"
+      }
+    }
+  ],
+  "ville": "Tunis",
+  "adresse": "Avenue des langues 3, Nabeul",
+  "centreDeFormation": "Alliance Française de Tunis",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "hybride",
+  "created_at": {
+    "$date": "2025-04-13T14:07:04.080Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:07:04.080Z"
+  },
+  "logo": {
+    "fileName": "logo_langue_extra_3.png",
+    "_id": {
+      "$oid": "4040cd2e30f04cceb915be80"
+    }
+  },
+  "duree": "3 mois",
+  "hoursNumber": 100,
+  "sessions": [
+    {
+      "label": "session langue extra 3",
+      "start": {
+        "$date": "2024-06-24T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-09T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "a8173a4257714b749682a282"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme officiel",
+      "fileName": "programme_langue_extra_3.pdf",
+      "fileLink_Documents": "/docs/0f4b8e53-1d46-4771-b581-82b4d172f536.pdf",
+      "_id": {
+        "$oid": "c6b877e7abc74c4086c538f2"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "3b2f94f2519b47b19d32b059"
+  },
+  "titreFormation": "Italien intermédiaire - Niveau A2-B1",
+  "dateDebut": {
+    "$date": "2024-06-14T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-06-27T00:00:00.000Z"
+  },
+  "description": "Renforcement des compétences linguistiques italiennes avec une approche communicative et culturelle.",
+  "domaine": "Langues",
+  "siteWeb": "https://www.iictunisi.esteri.it",
+  "prix": 300,
+  "criterias": [
+    {
+      "label": "Langue",
+      "value": "Italien",
+      "_id": {
+        "$oid": "c62728e6b91842039b069052"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "A1",
+      "_id": {
+        "$oid": "b8aa3a735f5f434189e7eb11"
+      }
+    },
+    {
+      "label": "Public ciblé",
+      "value": "Étudiants",
+      "_id": {
+        "$oid": "89174bf55ca34a25842c5747"
+      }
+    }
+  ],
+  "ville": "Sousse",
+  "adresse": "Avenue des langues 5, Nabeul",
+  "centreDeFormation": "Institut Culturel Italien de Tunis",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:07:04.080Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:07:04.080Z"
+  },
+  "logo": {
+    "fileName": "logo_langue_extra_5.png",
+    "_id": {
+      "$oid": "87b02ae481244015880e4892"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 70,
+  "sessions": [
+    {
+      "label": "session langue extra 5",
+      "start": {
+        "$date": "2024-06-24T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-09T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "4db3a6d04fb446e9bb20d837"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme officiel",
+      "fileName": "programme_langue_extra_5.pdf",
+      "fileLink_Documents": "/docs/55a07e46-b54b-496b-ac59-3fc3dd5f54a2.pdf",
+      "_id": {
+        "$oid": "63739561d1954ee8bb50e58d"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "7984e756235d47a58fc9341b"
+  },
+  "titreFormation": "AWS Certified Solutions Architect – Associate",
+  "dateDebut": {
+    "$date": "2024-06-27T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-25T00:00:00.000Z"
+  },
+  "description": "Certification AWS qui valide la capacité à concevoir des solutions distribuées sur AWS à haute disponibilité et tolérance aux pannes.",
+  "domaine": "Certification IT",
+  "siteWeb": "https://aws.amazon.com/certification/certified-solutions-architect-associate/",
+  "prix": 150,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certificat officiel",
+      "_id": {
+        "$oid": "be414b6e144f43ac8d62ac42"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Fondamentaux",
+      "_id": {
+        "$oid": "4bcd07fbd8214ddcba38add0"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme officielle",
+  "centreDeFormation": "Amazon Web Services",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:13:01.962Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:13:01.962Z"
+  },
+  "logo": {
+    "fileName": "logo_cert_3.png",
+    "_id": {
+      "$oid": "2d35a3a5099d40cfb6f62914"
+    }
+  },
+  "duree": "3 mois",
+  "hoursNumber": 100,
+  "sessions": [
+    {
+      "label": "session certif 3",
+      "start": {
+        "$date": "2024-07-02T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-07T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "91590d427e5846728a2616d2"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus",
+      "fileName": "syllabus_cert_3.pdf",
+      "fileLink_Documents": "/docs/46b7134f-f120-4351-ad9e-df7cb2e2a912.pdf",
+      "_id": {
+        "$oid": "7cb5bc9a0f0d48059bb91e9d"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "379e78d59f3a4ab084d47d77"
+  },
+  "titreFormation": "Microsoft Certified: Azure Fundamentals (AZ-900)",
+  "dateDebut": {
+    "$date": "2024-06-17T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-01T00:00:00.000Z"
+  },
+  "description": "Certification d’entrée pour comprendre les services cloud Azure, les modèles de facturation et les bases de la sécurité cloud.",
+  "domaine": "Certification IT",
+  "siteWeb": "https://learn.microsoft.com/en-us/certifications/azure-fundamentals/",
+  "prix": 99,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certificat officiel",
+      "_id": {
+        "$oid": "b4975a40bd144bfabfb55752"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Intermédiaire",
+      "_id": {
+        "$oid": "9e5c8560f4a1421c8aac77da"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme officielle",
+  "centreDeFormation": "Microsoft Learn",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:13:01.963Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:13:01.963Z"
+  },
+  "logo": {
+    "fileName": "logo_cert_4.png",
+    "_id": {
+      "$oid": "d208bf76cc5a4e718c18ea0a"
+    }
+  },
+  "duree": "2 semaines",
+  "hoursNumber": 20,
+  "sessions": [
+    {
+      "label": "session certif 4",
+      "start": {
+        "$date": "2024-06-22T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-06-27T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "5f41050ff09e411b89c63d92"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus",
+      "fileName": "syllabus_cert_4.pdf",
+      "fileLink_Documents": "/docs/f8fceefb-1954-496c-b856-739ac5f9f3d1.pdf",
+      "_id": {
+        "$oid": "bc79649f4d93468c96934ed9"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "3e184e45efb447e58ab8da54"
+  },
+  "titreFormation": "Cisco Certified Network Associate (CCNA)",
+  "dateDebut": {
+    "$date": "2024-06-29T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-12T00:00:00.000Z"
+  },
+  "description": "Certification Cisco sur les fondamentaux des réseaux, les protocoles IP, la sécurité et les services réseau essentiels.",
+  "domaine": "Certification IT",
+  "siteWeb": "https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/associate/ccna.html",
+  "prix": 300,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certificat officiel",
+      "_id": {
+        "$oid": "f4dce8d477154c2a963dbec4"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Fondamentaux",
+      "_id": {
+        "$oid": "f23aeb3e20b04146aba73a66"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme officielle",
+  "centreDeFormation": "Cisco",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:13:01.963Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:13:01.963Z"
+  },
+  "logo": {
+    "fileName": "logo_cert_6.png",
+    "_id": {
+      "$oid": "bef9c87b9ee14102a07c9e57"
+    }
+  },
+  "duree": "10 semaines",
+  "hoursNumber": 80,
+  "sessions": [
+    {
+      "label": "session certif 6",
+      "start": {
+        "$date": "2024-07-04T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-09T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "5df7515480ce4ce79ce50a07"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus",
+      "fileName": "syllabus_cert_6.pdf",
+      "fileLink_Documents": "/docs/a60d49cd-0c24-4057-8bcf-9c480130b6d3.pdf",
+      "_id": {
+        "$oid": "3ce94cbad2584ed78e852d43"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "88fc4153870f45a3b5e8a764"
+  },
+  "titreFormation": "PMP® – Project Management Professional",
+  "dateDebut": {
+    "$date": "2024-06-21T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-07T00:00:00.000Z"
+  },
+  "description": "Certification mondialement reconnue en gestion de projet délivrée par le PMI (Project Management Institute).",
+  "domaine": "Certification IT",
+  "siteWeb": "https://www.pmi.org/certifications/project-management-pmp",
+  "prix": 555,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certificat officiel",
+      "_id": {
+        "$oid": "6790d28eeb0247c38aef3269"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Fondamentaux",
+      "_id": {
+        "$oid": "a948032a71d8444cb6c42eed"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme officielle",
+  "centreDeFormation": "PMI",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:13:01.963Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:13:01.963Z"
+  },
+  "logo": {
+    "fileName": "logo_cert_8.png",
+    "_id": {
+      "$oid": "51da4575be85471982aa90d6"
+    }
+  },
+  "duree": "3 mois",
+  "hoursNumber": 120,
+  "sessions": [
+    {
+      "label": "session certif 8",
+      "start": {
+        "$date": "2024-06-26T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-01T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "b2f77de66f6149369fa461b1"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus",
+      "fileName": "syllabus_cert_8.pdf",
+      "fileLink_Documents": "/docs/278b51ad-1396-4d79-a69e-d6c7f061d30d.pdf",
+      "_id": {
+        "$oid": "bec27d4f6bd6449caf8f5dc7"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "d672dfd46a604124a36c5a3c"
+  },
+  "titreFormation": "Microsoft Certified: Azure Fundamentals (AZ-900)",
+  "dateDebut": {
+    "$date": "2024-06-15T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-14T00:00:00.000Z"
+  },
+  "description": "Comprendre les concepts fondamentaux du cloud, les services Azure, la sécurité et la tarification.",
+  "domaine": "Certifications Microsoft",
+  "siteWeb": "https://learn.microsoft.com/en-us/certifications/azure-fundamentals/",
+  "prix": 99,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Microsoft",
+      "_id": {
+        "$oid": "b49bde9de55449aeabbd409d"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Expert",
+      "_id": {
+        "$oid": "336cdc25ddcc466f842eea35"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Plateforme Microsoft Learn",
+  "centreDeFormation": "Microsoft Learn",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:14:58.385Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:14:58.385Z"
+  },
+  "logo": {
+    "fileName": "logo_microsoft_cert_1.png",
+    "_id": {
+      "$oid": "a6d6e4b5d8df483881680781"
+    }
+  },
+  "duree": "2 semaines",
+  "hoursNumber": 20,
+  "sessions": [
+    {
+      "label": "session ms certif 1",
+      "start": {
+        "$date": "2024-06-18T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-06-25T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "7c0dd21e8f334270b764d2fd"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Syllabus officiel",
+      "fileName": "syllabus_ms_cert_1.pdf",
+      "fileLink_Documents": "/docs/aa25c078-5892-4641-9130-1ab910969863.pdf",
+      "_id": {
+        "$oid": "9641a3b660ff4952aba075d2"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "5a5b34ba7eca415cbe846ef2"
+  },
+  "titreFormation": "AWS Certified Cloud Practitioner",
+  "dateDebut": {
+    "$date": "2024-07-07T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-17T00:00:00.000Z"
+  },
+  "description": "Connaissances générales sur le cloud AWS, la facturation, les services de base, la sécurité et la conformité.",
+  "domaine": "Certifications AWS",
+  "siteWeb": "https://aws.amazon.com/certification/certified-cloud-practitioner/",
+  "prix": 100,
+  "criterias": [
+    {
+      "label": "Niveau",
+      "value": "Specialty",
+      "_id": {
+        "$oid": "d6605b16bcc04d25b2afc2f8"
+      }
+    },
+    {
+      "label": "Type",
+      "value": "Certification officielle AWS",
+      "_id": {
+        "$oid": "89724262980244d0a571b6d1"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "AWS Certification Portal",
+  "centreDeFormation": "AWS Training & Certification",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:16:09.139Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:16:09.139Z"
+  },
+  "logo": {
+    "fileName": "logo_aws_cert_1.png",
+    "_id": {
+      "$oid": "d65047ca106543cea05db753"
+    }
+  },
+  "duree": "2 semaines",
+  "hoursNumber": 20,
+  "sessions": [
+    {
+      "label": "session aws certif 1",
+      "start": {
+        "$date": "2024-07-11T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-17T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "e97894336a6143cf882bd45c"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Guide officiel",
+      "fileName": "guide_aws_cert_1.pdf",
+      "fileLink_Documents": "/docs/ae9e8aee-e101-47d8-933f-c2898c6ea71a.pdf",
+      "_id": {
+        "$oid": "d0cc7ebb8d59492bb0eba006"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "cca38e9334214ef2b287e8c4"
+  },
+  "titreFormation": "AWS Certified Solutions Architect – Professional",
+  "dateDebut": {
+    "$date": "2024-06-29T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-22T00:00:00.000Z"
+  },
+  "description": "Conception avancée de solutions complexes dans AWS, optimisation des performances et des coûts.",
+  "domaine": "Certifications AWS",
+  "siteWeb": "https://aws.amazon.com/certification/certified-solutions-architect-professional/",
+  "prix": 300,
+  "criterias": [
+    {
+      "label": "Niveau",
+      "value": "Professional",
+      "_id": {
+        "$oid": "4eb67032da584237b420db29"
+      }
+    },
+    {
+      "label": "Type",
+      "value": "Certification officielle AWS",
+      "_id": {
+        "$oid": "30268bdb50e1447e8833e4b5"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "AWS Certification Portal",
+  "centreDeFormation": "AWS Training & Certification",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:16:09.140Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:16:09.140Z"
+  },
+  "logo": {
+    "fileName": "logo_aws_cert_5.png",
+    "_id": {
+      "$oid": "e0d3796bdffd4ec4bc285e13"
+    }
+  },
+  "duree": "3 mois",
+  "hoursNumber": 120,
+  "sessions": [
+    {
+      "label": "session aws certif 5",
+      "start": {
+        "$date": "2024-07-03T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-09T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "76d731fa277643a99741f3b8"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Guide officiel",
+      "fileName": "guide_aws_cert_5.pdf",
+      "fileLink_Documents": "/docs/24a6f5b3-37b9-4278-b3e5-34a34dfb94f8.pdf",
+      "_id": {
+        "$oid": "1fb2d1644fc143548b7ff9e2"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "fa2617af0e25496ebba72f62"
+  },
+  "titreFormation": "AWS Certified Machine Learning – Specialty",
+  "dateDebut": {
+    "$date": "2024-07-07T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-20T00:00:00.000Z"
+  },
+  "description": "Conception, implémentation et maintenance de solutions ML sur AWS.",
+  "domaine": "Certifications AWS",
+  "siteWeb": "https://aws.amazon.com/certification/certified-machine-learning-specialty/",
+  "prix": 300,
+  "criterias": [
+    {
+      "label": "Niveau",
+      "value": "Associate",
+      "_id": {
+        "$oid": "c244ba1001a547f3a1a73e0b"
+      }
+    },
+    {
+      "label": "Type",
+      "value": "Certification officielle AWS",
+      "_id": {
+        "$oid": "9d41d01403c24d80a52581fb"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "AWS Certification Portal",
+  "centreDeFormation": "AWS Training & Certification",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:16:09.140Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:16:09.140Z"
+  },
+  "logo": {
+    "fileName": "logo_aws_cert_8.png",
+    "_id": {
+      "$oid": "f3c2d590a49f4edcb4e97b2b"
+    }
+  },
+  "duree": "3 mois",
+  "hoursNumber": 120,
+  "sessions": [
+    {
+      "label": "session aws certif 8",
+      "start": {
+        "$date": "2024-07-11T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-17T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "c1c8fc5b65834253af7ad898"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Guide officiel",
+      "fileName": "guide_aws_cert_8.pdf",
+      "fileLink_Documents": "/docs/24193897-9b93-4528-b3e8-784932a5d19e.pdf",
+      "_id": {
+        "$oid": "cd2e11b77a62482287618566"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "0f432a6c27e54182af4f4090"
+  },
+  "titreFormation": "Google Professional Cloud Security Engineer",
+  "dateDebut": {
+    "$date": "2024-06-17T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-15T00:00:00.000Z"
+  },
+  "description": "Conception et mise en œuvre de l'infrastructure sécurisée Google Cloud.",
+  "domaine": "Google Cloud",
+  "siteWeb": "https://cloud.google.com/certification/cloud-security-engineer",
+  "prix": 200,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Google Cloud",
+      "_id": {
+        "$oid": "a2c86b4cb345437ba3042ddc"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Associate",
+      "_id": {
+        "$oid": "16daf66e4c58414fb933805e"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Google Cloud Certification Portal",
+  "centreDeFormation": "Google Cloud",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:18:14.443Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:18:14.443Z"
+  },
+  "logo": {
+    "fileName": "logo_google cloud_4.png",
+    "_id": {
+      "$oid": "2a57765155bd4d21a32b4139"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 80,
+  "sessions": [
+    {
+      "label": "session google cloud 4",
+      "start": {
+        "$date": "2024-06-22T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-06-29T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "e634be4217964125ba18f897"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme",
+      "fileName": "programme_google cloud_4.pdf",
+      "fileLink_Documents": "/docs/63dd0a7f-42e0-401a-ac76-fd0362c60fd0.pdf",
+      "_id": {
+        "$oid": "2a7b92210dfd46bc9d10d75d"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "04854859efd8434ba9c8a44e"
+  },
+  "titreFormation": "Google Professional Cloud Architect",
+  "dateDebut": {
+    "$date": "2024-06-30T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-10T00:00:00.000Z"
+  },
+  "description": "Concevoir des solutions cloud robustes, sécurisées et évolutives sur Google Cloud.",
+  "domaine": "Google Cloud",
+  "siteWeb": "https://cloud.google.com/certification/cloud-architect",
+  "prix": 200,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Google Cloud",
+      "_id": {
+        "$oid": "01085ca61a5a4c0587876fb8"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Expert",
+      "_id": {
+        "$oid": "81cf6b5b4afb430ba12cb82d"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Google Cloud Certification Portal",
+  "centreDeFormation": "Google Cloud",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:18:14.443Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:18:14.443Z"
+  },
+  "logo": {
+    "fileName": "logo_google cloud_2.png",
+    "_id": {
+      "$oid": "d8c87a9ce79a42c7af58bf56"
+    }
+  },
+  "duree": "3 mois",
+  "hoursNumber": 90,
+  "sessions": [
+    {
+      "label": "session google cloud 2",
+      "start": {
+        "$date": "2024-07-05T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-12T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "df29b4ed36644b629fe7d669"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme",
+      "fileName": "programme_google cloud_2.pdf",
+      "fileLink_Documents": "/docs/cd286f5c-d386-49f7-a698-75ffa114b7b2.pdf",
+      "_id": {
+        "$oid": "92656b44a5ba40d78f6cb16c"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "bbf1bd79a2844b2096fcf583"
+  },
+  "titreFormation": "Google Associate Cloud Engineer",
+  "dateDebut": {
+    "$date": "2024-06-29T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-10T00:00:00.000Z"
+  },
+  "description": "Déployer et gérer des applications, surveiller les opérations et maintenir les projets Google Cloud.",
+  "domaine": "Google Cloud",
+  "siteWeb": "https://cloud.google.com/certification/cloud-engineer",
+  "prix": 125,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Google Cloud",
+      "_id": {
+        "$oid": "8e0c597256794cb7a0c98172"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Professional",
+      "_id": {
+        "$oid": "c0e4036a45af4c0080984b86"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Google Cloud Certification Portal",
+  "centreDeFormation": "Google Cloud",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:18:14.442Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:18:14.442Z"
+  },
+  "logo": {
+    "fileName": "logo_google cloud_1.png",
+    "_id": {
+      "$oid": "854ba45938c04adfba9cfdba"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 60,
+  "sessions": [
+    {
+      "label": "session google cloud 1",
+      "start": {
+        "$date": "2024-07-04T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-11T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "37e57d3784e14d9aba5ede31"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme",
+      "fileName": "programme_google cloud_1.pdf",
+      "fileLink_Documents": "/docs/c56a4056-48b7-46fa-b100-0789314986ee.pdf",
+      "_id": {
+        "$oid": "ccd152aab9af4c3d8ffc9f96"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "d9e10e0431434cc688f6c372"
+  },
+  "titreFormation": "Google Digital Marketing Certification (Fundamentals)",
+  "dateDebut": {
+    "$date": "2024-07-04T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-22T00:00:00.000Z"
+  },
+  "description": "Certification gratuite de Google sur les bases du marketing numérique, y compris le SEO, SEA et l’emailing.",
+  "domaine": "Marketing Digital",
+  "siteWeb": "https://skillshop.withgoogle.com",
+  "prix": 0,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Marketing Digital",
+      "_id": {
+        "$oid": "b08d4d76e798453086332eac"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Introductif",
+      "_id": {
+        "$oid": "5552ac2d47604a60ae539e5e"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Marketing Digital Learning Platform",
+  "centreDeFormation": "Google Skillshop",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:19:54.514Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:19:54.514Z"
+  },
+  "logo": {
+    "fileName": "logo_marketing digital_1.png",
+    "_id": {
+      "$oid": "1aa61cf47be044b886f2d727"
+    }
+  },
+  "duree": "40 heures",
+  "hoursNumber": 40,
+  "sessions": [
+    {
+      "label": "session marketing digital 1",
+      "start": {
+        "$date": "2024-07-07T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-14T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "58b10173c2764738aa514fc1"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme détaillé",
+      "fileName": "programme_marketing digital_1.pdf",
+      "fileLink_Documents": "/docs/9959fd81-ad8c-4370-8234-c5cd9e195ee2.pdf",
+      "_id": {
+        "$oid": "7fe96c6633ca4ac5bab64e11"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "2b5aae02a8e447a983ae16e4"
+  },
+  "titreFormation": "HubSpot Content Marketing Certification",
+  "dateDebut": {
+    "$date": "2024-07-07T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-08-02T00:00:00.000Z"
+  },
+  "description": "Apprendre à créer une stratégie de contenu efficace et à attirer des visiteurs qualifiés.",
+  "domaine": "Marketing Digital",
+  "siteWeb": "https://academy.hubspot.com",
+  "prix": 0,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Marketing Digital",
+      "_id": {
+        "$oid": "bf98fcef492b493989c2a30d"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Introductif",
+      "_id": {
+        "$oid": "fc858c789eb2423fa3d903df"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Marketing Digital Learning Platform",
+  "centreDeFormation": "HubSpot Academy",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:19:54.515Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:19:54.515Z"
+  },
+  "logo": {
+    "fileName": "logo_marketing digital_3.png",
+    "_id": {
+      "$oid": "f334266257a2475ab7895fa8"
+    }
+  },
+  "duree": "6 heures",
+  "hoursNumber": 6,
+  "sessions": [
+    {
+      "label": "session marketing digital 3",
+      "start": {
+        "$date": "2024-07-10T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-17T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "42f8cb4a0c814e428c611e09"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme détaillé",
+      "fileName": "programme_marketing digital_3.pdf",
+      "fileLink_Documents": "/docs/fd597f85-b3c8-45a5-9cf5-c3ec4a54b980.pdf",
+      "_id": {
+        "$oid": "cfacc37a76be481889be4951"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "c005ec832db64c8c8c462d4b"
+  },
+  "titreFormation": "Google UX Design Professional Certificate",
+  "dateDebut": {
+    "$date": "2024-07-12T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-08-09T00:00:00.000Z"
+  },
+  "description": "Concevoir des interfaces utilisateur conviviales avec une approche centrée sur l’utilisateur.",
+  "domaine": "UI/UX Design",
+  "siteWeb": "https://www.coursera.org/professional-certificates/google-ux-design",
+  "prix": 294,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle UI/UX Design",
+      "_id": {
+        "$oid": "4887a1ccdb3f4b5e914edebd"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Professionnel",
+      "_id": {
+        "$oid": "6aa13884736c404bac6023d8"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "UI/UX Design Learning Platform",
+  "centreDeFormation": "Google via Coursera",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:19:54.516Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:19:54.516Z"
+  },
+  "logo": {
+    "fileName": "logo_ui/ux design_1.png",
+    "_id": {
+      "$oid": "1317b35e6e964e8ab6a0048d"
+    }
+  },
+  "duree": "6 mois",
+  "hoursNumber": 180,
+  "sessions": [
+    {
+      "label": "session ui/ux design 1",
+      "start": {
+        "$date": "2024-07-15T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-22T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "a4bb3ec755d34fa99fef66d6"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme détaillé",
+      "fileName": "programme_ui/ux design_1.pdf",
+      "fileLink_Documents": "/docs/c435ba8a-b29b-4e86-b31a-ddecedc8ddd7.pdf",
+      "_id": {
+        "$oid": "e8a2d1762fdf4b20a4d3e44a"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "616c7df15e5a42cca345d30e"
+  },
+  "titreFormation": "UI/UX Design Specialization – California Institute of the Arts",
+  "dateDebut": {
+    "$date": "2024-06-16T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-07-15T00:00:00.000Z"
+  },
+  "description": "Introduction à la conception UI/UX, à la recherche utilisateur et à la création de wireframes.",
+  "domaine": "UI/UX Design",
+  "siteWeb": "https://www.coursera.org/specializations/ui-ux-design",
+  "prix": 245,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle UI/UX Design",
+      "_id": {
+        "$oid": "03a6533970d448098a3f31b4"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Professionnel",
+      "_id": {
+        "$oid": "39e4fc10db454758a098a1e6"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "UI/UX Design Learning Platform",
+  "centreDeFormation": "CalArts via Coursera",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:19:54.516Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:19:54.516Z"
+  },
+  "logo": {
+    "fileName": "logo_ui/ux design_2.png",
+    "_id": {
+      "$oid": "6f40a47519914d6db95cd953"
+    }
+  },
+  "duree": "5 mois",
+  "hoursNumber": 160,
+  "sessions": [
+    {
+      "label": "session ui/ux design 2",
+      "start": {
+        "$date": "2024-06-19T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-06-26T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "8465a0c9bc3d4b3086d54ce0"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme détaillé",
+      "fileName": "programme_ui/ux design_2.pdf",
+      "fileLink_Documents": "/docs/55ad62d1-2f40-4c06-b7d9-a47bfb3eb9b1.pdf",
+      "_id": {
+        "$oid": "dcfd182901fb4cfe91863d0f"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6f644f95c8fa450d9c6e6214"
+  },
+  "titreFormation": "Adobe Certified Professional in Video Design (Premiere Pro)",
+  "dateDebut": {
+    "$date": "2024-07-10T00:00:00.000Z"
+  },
+  "dateFin": {
+    "$date": "2024-08-09T00:00:00.000Z"
+  },
+  "description": "Certification officielle d’Adobe validant vos compétences professionnelles en montage vidéo avec Premiere Pro.",
+  "domaine": "Motion Design",
+  "siteWeb": "https://learning.adobe.com",
+  "prix": 180,
+  "criterias": [
+    {
+      "label": "Type",
+      "value": "Certification officielle Motion Design",
+      "_id": {
+        "$oid": "b4efbebb8b774e6eafd20fd6"
+      }
+    },
+    {
+      "label": "Niveau",
+      "value": "Intermédiaire",
+      "_id": {
+        "$oid": "beb3f4d6ccff4c67a50bf382"
+      }
+    }
+  ],
+  "ville": "Online",
+  "adresse": "Portail Motion Design",
+  "centreDeFormation": "Adobe Learning",
+  "isActif": true,
+  "isDeleted": false,
+  "presence": "en ligne",
+  "created_at": {
+    "$date": "2025-04-13T14:21:19.169Z"
+  },
+  "updated_at": {
+    "$date": "2025-04-13T14:21:19.169Z"
+  },
+  "logo": {
+    "fileName": "logo_motion design_1.png",
+    "_id": {
+      "$oid": "592356b4f3d4420ea63f7cb5"
+    }
+  },
+  "duree": "2 mois",
+  "hoursNumber": 60,
+  "sessions": [
+    {
+      "label": "session motion design 1",
+      "start": {
+        "$date": "2024-07-13T00:00:00.000Z"
+      },
+      "end": {
+        "$date": "2024-07-20T00:00:00.000Z"
+      },
+      "_id": {
+        "$oid": "12f467bfae7948849433e7eb"
+      }
+    }
+  ],
+  "files": [
+    {
+      "label": "Programme complet",
+      "fileName": "programme_motion design_1.pdf",
+      "fileLink_Documents": "/docs/d1dcffcf-cbab-49ef-bb8c-f1b23d27559b.pdf",
+      "_id": {
+        "$oid": "fd5036a103684e92a40b1177"
+      }
+    }
+  ]
+}]

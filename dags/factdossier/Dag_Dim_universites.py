@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.models import Variable
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
@@ -14,8 +15,10 @@ def get_postgres_connection():
     logger.info("PostgreSQL connection successful.")
     return conn
 
+
+
 def get_mongodb_connection():
-    MONGO_URI = "mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/"
+    MONGO_URI = Variable.get("MONGO_URI")
     MONGO_DB = "PowerBi"
     MONGO_COLLECTION = "universities"
     client = MongoClient(MONGO_URI)
@@ -23,6 +26,7 @@ def get_mongodb_connection():
     collection = mongo_db[MONGO_COLLECTION]
     logger.info("MongoDB connection successful.")
     return client, mongo_db, collection
+
 
 def generate_university_code(cursor):
     cursor.execute("SELECT MAX(CAST(SUBSTRING(code_universite FROM 5) AS INTEGER)) FROM public.dim_universite WHERE code_universite LIKE 'univ%'")

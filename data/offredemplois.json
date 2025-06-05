@@ -1,0 +1,6295 @@
+[{
+  "_id": {
+    "$oid": "65c5027128db862440986f68"
+  },
+  "status": "active",
+  "titre": "Conseiller en Assurance",
+  "soustitre": "Le conseiller en assurance sera responsable de la gestion des contrats d'assurance et du conseil aux clients.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "metier": {
+    "$oid": "f1a2b3c4d5e60708090a0b0c"
+  },
+  "experienceProfessionel": "Avec fonction d’encadrement",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "GreenEnergy Co",
+  "lieuSociete": "Paris",
+  "minSalaire": 30000,
+  "maxSalaire": 45000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (B2)",
+    "Anglais (B1)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le conseiller en assurance gère le portefeuille de clients et leur conseille les meilleurs produits d'assurance.",
+  "responsabilites": "Gérer le portefeuille clients\nProposer des produits d'assurance\nAnalyser les besoins des clients\nSuivre l'évolution des contrats",
+  "competenceRequises": "Compétences en gestion d'assurances, analyse des risques",
+  "qualificationRequises": "Bac +3 en Assurance ou équivalent, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "assurance"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd6c"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f1fd"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-08T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "bfc880b203f445a7832c7e05"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2026-07-25T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "f76b101d240b4532b4d574c5"
+  },
+  "status": "active",
+  "titre": "Développeur Web Full-Stack",
+  "soustitre": "Le développeur web sera responsable de la création et gestion des applications web à grande échelle.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439092"
+  },
+  "experienceProfessionel": "Junior",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "DigitalMinds",
+  "lieuSociete": "Tunis",
+  "minSalaire": 25000,
+  "maxSalaire": 35000,
+  "deviseSalaire": "TND",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Junior",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "Immediate",
+  "pays": "Tunisie",
+  "onSiteOrRemote": "Remote",
+  "description": "Le développeur web travaillera sur des applications web en utilisant les technologies modernes.",
+  "responsabilites": "Développer des applications web\nCollaborer avec l'équipe UX/UI\nAssurer la maintenance des sites web",
+  "competenceRequises": "Maîtrise de JavaScript, React, Node.js",
+  "qualificationRequises": "Bac+3 en Informatique ou équivalent, 1 an d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "web",
+    "développement"
+  ],
+  "diffusion": [
+    "dc-tunisia"
+  ],
+  "commentaires": [
+    {
+      "text": "Une première expérience en développement web est un plus.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-05-10T14:32:10.250Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd6d"
+      }
+    }
+  ],
+  "isUrgent": false,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f1fe"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-05-10T14:30:00.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-03-01T11:46:30.859Z"
+  },
+  "documentRequis": [
+    "CV",
+    "Portfolio",
+    "Références professionnelles"
+  ],
+  "entreprise": {
+    "$oid": "17252dd37c374c338fb25119"
+  },
+  "ville": "Tunis",
+  "dateLimite": {
+    "$date": "2025-07-30T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f69"
+  },
+  "status": "active",
+  "titre": "Ingénieur en Énergies Renouvelables",
+  "soustitre": "L'ingénieur en énergies renouvelables participera à la conception et à la gestion de projets en énergies renouvelables.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80497"
+  },
+  "metier": {
+    "$oid": "e1a2b3c4d5e60708090a0b0c"
+  },
+  "experienceProfessionel": "5 ans d'expérience en gestion de projets",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "GreenEnergy Co",
+  "lieuSociete": "Lyon",
+  "minSalaire": 35000,
+  "maxSalaire": 55000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Expérimenté",
+  "langue": [
+    "Français (B2)",
+    "Anglais (B1)"
+  ],
+  "disponibilite": "60 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'ingénieur en énergies renouvelables gère des projets et supervise la transition énergétique.",
+  "responsabilites": "Gérer les projets d’énergies renouvelables\nCoordonner les équipes\nAnalyser la faisabilité technique des projets",
+  "competenceRequises": "Compétences en gestion de projets, connaissances en énergies renouvelables",
+  "qualificationRequises": "Bac +5 en Énergies Renouvelables, 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "énergies renouvelables"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Urgent - Projet à démarrer prochainement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd6d"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f1fe"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-10T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80497"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2026-08-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f71"
+  },
+  "status": "active",
+  "titre": "Responsable Marketing",
+  "soustitre": "Le responsable marketing gère la stratégie de communication et de promotion de l'entreprise.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439142"
+  },
+  "experienceProfessionel": "5 ans en marketing",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "DigitalMinds",
+  "lieuSociete": "Lyon",
+  "minSalaire": 40000,
+  "maxSalaire": 60000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "60 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le responsable marketing gère les campagnes publicitaires, les événements et l'image de marque.",
+  "responsabilites": "Développer la stratégie marketing\nSuperviser les campagnes publicitaires\nAnalyser les tendances du marché",
+  "competenceRequises": "Compétences en stratégie marketing, gestion de projet",
+  "qualificationRequises": "Bac +5 en Marketing, 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "marketing"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd6f"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f200"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-14T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2026-08-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f72"
+  },
+  "status": "active",
+  "titre": "Développeur Full Stack",
+  "soustitre": "Le développeur full stack est responsable de la conception et du développement d'applications web.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439094"
+  },
+  "experienceProfessionel": "3 à 5 ans en développement web",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "TechSolutions",
+  "lieuSociete": "Paris",
+  "minSalaire": 45000,
+  "maxSalaire": 70000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (B2)",
+    "Anglais (B1)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "Mixte",
+  "description": "Le développeur full stack travaille sur les aspects front-end et back-end des applications.",
+  "responsabilites": "Développer des applications web\nGérer le développement front-end et back-end\nAssurer la maintenance et l'optimisation des applications",
+  "competenceRequises": "Compétences en JavaScript, HTML, CSS, Node.js, React, bases de données",
+  "qualificationRequises": "Bac +5 en Informatique, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "développement",
+    "full stack"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent pour démarrer un projet important.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd70"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f201"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-15T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2026-09-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f73"
+  },
+  "status": "active",
+  "titre": "Analyste Financier",
+  "soustitre": "L'analyste financier effectue des analyses financières et élabore des recommandations pour l'entreprise.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "metier": {
+    "$oid": "c3d4e5f60708090a0b0c1d2e"
+  },
+  "experienceProfessionel": "3 ans en analyse financière",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "TechSolutions",
+  "lieuSociete": "Paris",
+  "minSalaire": 40000,
+  "maxSalaire": 60000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (B2)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'analyste financier réalise des études économiques et propose des stratégies d'investissement.",
+  "responsabilites": "Analyser les données financières\nRéaliser des prévisions financières\nProposer des stratégies d'investissement",
+  "competenceRequises": "Compétences en analyse financière, Excel avancé",
+  "qualificationRequises": "Bac +5 en Finance, 3 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "finance"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement pour un projet stratégique.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd71"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f202"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-16T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2026-10-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f74"
+  },
+  "status": "active",
+  "titre": "Chargé de Ressources Humaines",
+  "soustitre": "Le chargé des ressources humaines gère le recrutement, la formation et le bien-être des employés.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439142"
+  },
+  "experienceProfessionel": "3 à 5 ans en gestion des ressources humaines",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "HumanTech",
+  "lieuSociete": "Paris",
+  "minSalaire": 35000,
+  "maxSalaire": 50000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le chargé des ressources humaines assure la gestion du recrutement et le suivi des dossiers du personnel.",
+  "responsabilites": "Recruter des talents\nMettre en place des formations\nGérer les conflits internes",
+  "competenceRequises": "Compétences en recrutement, gestion des conflits, législation du travail",
+  "qualificationRequises": "Bac +5 en Ressources Humaines, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "ressources humaines"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd72"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f203"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-17T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2026-11-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f75"
+  },
+  "status": "active",
+  "titre": "Responsable IT",
+  "soustitre": "Le responsable IT assure le bon fonctionnement des systèmes informatiques et de l'infrastructure.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439096"
+  },
+  "experienceProfessionel": "5 à 7 ans en gestion des systèmes informatiques",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "TechSolutions",
+  "lieuSociete": "Paris",
+  "minSalaire": 50000,
+  "maxSalaire": 80000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Très expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "Mixte",
+  "description": "Le responsable IT supervise la gestion des réseaux, des systèmes et des infrastructures informatiques.",
+  "responsabilites": "Assurer le bon fonctionnement des systèmes informatiques\nGérer les équipes IT\nMettre en œuvre les projets d'infrastructure",
+  "competenceRequises": "Gestion des systèmes informatiques, cybersécurité, cloud computing",
+  "qualificationRequises": "Bac +5 en Informatique, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "IT",
+    "gestion"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent pour renforcer l'équipe IT.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd73"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f204"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-18T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2026-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f76"
+  },
+  "status": "active",
+  "titre": "Chef de Projet Digital",
+  "soustitre": "Le chef de projet digital coordonne les projets numériques en lien avec la stratégie digitale.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439096"
+  },
+  "experienceProfessionel": "7 à 10 ans en gestion de projets digitaux",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "DigitalMinds",
+  "lieuSociete": "Paris",
+  "minSalaire": 55000,
+  "maxSalaire": 90000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Très expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "Mixte",
+  "description": "Le chef de projet digital est responsable de la gestion et de la mise en œuvre des projets digitaux.",
+  "responsabilites": "Coordonner les projets digitaux\nSuperviser les équipes projets\nMettre en place des outils numériques",
+  "competenceRequises": "Gestion de projet, transformation digitale, outils numériques",
+  "qualificationRequises": "Bac +5 en Management Digital, 7 à 10 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "digital",
+    "gestion de projet"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd74"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f205"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-19T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-01-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f77"
+  },
+  "status": "active",
+  "titre": "Responsable Commercial",
+  "soustitre": "Le responsable commercial gère les relations clients et développe les opportunités commerciales.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439142"
+  },
+  "experienceProfessionel": "5 ans en gestion commerciale",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "SalesPro",
+  "lieuSociete": "Marseille",
+  "minSalaire": 45000,
+  "maxSalaire": 70000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le responsable commercial développe des stratégies de vente et gère l'équipe commerciale.",
+  "responsabilites": "Gérer les équipes de vente\nDévelopper les stratégies commerciales\nAnalyser les performances commerciales",
+  "competenceRequises": "Compétences en gestion commerciale, négociation, analyse des ventes",
+  "qualificationRequises": "Bac +5 en Commerce, 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "commerce"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent pour renforcer l'équipe commerciale.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd75"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f206"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-20T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "ville": "Marseille",
+  "dateLimite": {
+    "$date": "2027-02-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f78"
+  },
+  "status": "active",
+  "titre": "Directeur Commercial",
+  "soustitre": "Le directeur commercial gère la stratégie commerciale et les relations avec les partenaires.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439144"
+  },
+  "experienceProfessionel": "10 ans en gestion commerciale",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "SalesPro",
+  "lieuSociete": "Paris",
+  "minSalaire": 60000,
+  "maxSalaire": 90000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Très expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "Mixte",
+  "description": "Le directeur commercial développe la stratégie de vente et supervise les équipes commerciales.",
+  "responsabilites": "Superviser les équipes commerciales\nDévelopper la stratégie commerciale\nAnalyser les tendances du marché",
+  "competenceRequises": "Compétences en gestion commerciale, leadership, stratégie",
+  "qualificationRequises": "Bac +5 en Commerce, 10 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "commerce",
+    "gestion"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent, à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd76"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f207"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-21T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-03-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f79"
+  },
+  "status": "active",
+  "titre": "Développeur Java",
+  "soustitre": "Le développeur Java est responsable de la création d'applications robustes et évolutives.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439094"
+  },
+  "experienceProfessionel": "3 à 5 ans en développement Java",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "TechSolutions",
+  "lieuSociete": "Paris",
+  "minSalaire": 40000,
+  "maxSalaire": 60000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (B2)",
+    "Anglais (B1)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le développeur Java crée et maintient des applications Java sécurisées et performantes.",
+  "responsabilites": "Développer des applications en Java\nAssurer la maintenance et la mise à jour des applications\nOptimiser les performances",
+  "competenceRequises": "Maîtrise de Java, Spring, Hibernate, MySQL, Docker",
+  "qualificationRequises": "Bac +5 en Informatique, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "Java",
+    "développement"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd77"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f208"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-22T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-04-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f7a"
+  },
+  "status": "active",
+  "titre": "Chef de Projet Marketing Digital",
+  "soustitre": "Le chef de projet marketing digital supervise les campagnes numériques et les stratégies de contenu.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439144"
+  },
+  "experienceProfessionel": "5 à 7 ans en gestion de projets marketing digital",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "MarketingPro",
+  "lieuSociete": "Lyon",
+  "minSalaire": 50000,
+  "maxSalaire": 75000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Très expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "60 jours",
+  "pays": "France",
+  "onSiteOrRemote": "Mixte",
+  "description": "Le chef de projet marketing digital pilote les projets numériques en lien avec la stratégie marketing.",
+  "responsabilites": "Développer la stratégie de marketing digital\nGérer les équipes projets\nAnalyser les résultats des campagnes",
+  "competenceRequises": "Compétences en SEO, SEM, Google Analytics, gestion de projets",
+  "qualificationRequises": "Bac +5 en Marketing Digital, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "marketing digital"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd78"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f209"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-23T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-05-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f7b"
+  },
+  "status": "active",
+  "titre": "Community Manager",
+  "soustitre": "Le community manager gère l'image de l'entreprise sur les réseaux sociaux et interagit avec la communauté.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439151"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439154"
+  },
+  "experienceProfessionel": "2 à 3 ans en gestion de communautés",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "MediaGroup",
+  "lieuSociete": "Marseille",
+  "minSalaire": 30000,
+  "maxSalaire": 45000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Junior",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "60 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le community manager anime les réseaux sociaux, crée du contenu et engage la communauté.",
+  "responsabilites": "Créer et partager du contenu\nGérer les interactions sur les réseaux sociaux\nAnalyser les résultats des campagnes",
+  "competenceRequises": "Maîtrise des réseaux sociaux, rédaction web, analyse de données",
+  "qualificationRequises": "Bac +3 en Communication ou Marketing, 2 à 3 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "community management"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd79"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f210"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-24T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439151"
+  },
+  "ville": "Marseille",
+  "dateLimite": {
+    "$date": "2027-06-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f80"
+  },
+  "status": "active",
+  "titre": "Conseiller clientèle bancaire",
+  "soustitre": "Le conseiller clientèle bancaire gère les relations avec les clients et propose des produits bancaires.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "metier": {
+    "$oid": "a1b2c3d4e5f60708090a0b0c"
+  },
+  "experienceProfessionel": "3 à 5 ans en banque",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "TechBank",
+  "lieuSociete": "Paris",
+  "minSalaire": 35000,
+  "maxSalaire": 50000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le conseiller bancaire gère un portefeuille clients et leur propose des produits bancaires adaptés.",
+  "responsabilites": "Gérer les portefeuilles clients\nProposer des produits bancaires\nAnalyser les besoins financiers des clients",
+  "competenceRequises": "Compétences en gestion bancaire, relation client, analyse financière",
+  "qualificationRequises": "Bac +3 en Banque, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "banque",
+    "gestion clientèle"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd80"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f211"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-25T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-06-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f81"
+  },
+  "status": "active",
+  "titre": "Chargé d’affaires entreprises",
+  "soustitre": "Le chargé d'affaires entreprises gère les relations bancaires des entreprises et propose des solutions financières adaptées.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "metier": {
+    "$oid": "b2c3d4e5f60708090a0b0c1d"
+  },
+  "experienceProfessionel": "5 à 7 ans en gestion bancaire pour entreprises",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "TechBank",
+  "lieuSociete": "Paris",
+  "minSalaire": 45000,
+  "maxSalaire": 70000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le chargé d'affaires entreprises conseille les entreprises sur leurs besoins financiers et gère les comptes d'entreprise.",
+  "responsabilites": "Gérer les portefeuilles clients entreprises\nAnalyser les besoins financiers des entreprises\nProposer des solutions financières adaptées",
+  "competenceRequises": "Compétences en gestion bancaire, analyse financière, relation client entreprise",
+  "qualificationRequises": "Bac +5 en Banque ou Gestion, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "banque",
+    "gestion d'affaires"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd81"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f212"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-26T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-07-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f82"
+  },
+  "status": "active",
+  "titre": "Analyste financier",
+  "soustitre": "L'analyste financier effectue des analyses économiques et financières pour guider les décisions d'investissement.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "metier": {
+    "$oid": "c3d4e5f60708090a0b0c1d2e"
+  },
+  "experienceProfessionel": "3 à 5 ans en analyse financière",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "FinancePro",
+  "lieuSociete": "Paris",
+  "minSalaire": 40000,
+  "maxSalaire": 60000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'analyste financier effectue des études économiques et financières pour l'entreprise et ses clients.",
+  "responsabilites": "Réaliser des études financières\nProposer des stratégies d'investissement\nÉvaluer les risques et les opportunités",
+  "competenceRequises": "Compétences en analyse financière, Excel, modélisation financière",
+  "qualificationRequises": "Bac +5 en Finance, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "finance",
+    "analyse"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement pour un projet stratégique.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd82"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f213"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-27T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-08-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f83"
+  },
+  "status": "active",
+  "titre": "Gestionnaire de patrimoine",
+  "soustitre": "Le gestionnaire de patrimoine conseille les clients dans la gestion de leur patrimoine financier et immobilier.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "metier": {
+    "$oid": "d4e5f60708090a0b0c1d2e3f"
+  },
+  "experienceProfessionel": "5 à 7 ans en gestion de patrimoine",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "WealthManagementCo",
+  "lieuSociete": "Paris",
+  "minSalaire": 50000,
+  "maxSalaire": 75000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le gestionnaire de patrimoine conseille ses clients sur la gestion et l'investissement de leur patrimoine.",
+  "responsabilites": "Gérer un portefeuille de clients\nProposer des investissements\nAnalyser les performances financières",
+  "competenceRequises": "Compétences en gestion de patrimoine, analyse financière",
+  "qualificationRequises": "Bac +5 en Gestion de Patrimoine, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "gestion de patrimoine"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd83"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f214"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-28T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-09-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f86"
+  },
+  "status": "active",
+  "titre": "Conseiller en investissements financiers",
+  "soustitre": "Le conseiller en investissements financiers guide les clients dans leurs décisions d'investissement.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "metier": {
+    "$oid": "a1b2c3d4e5f60708090a0b0c"
+  },
+  "experienceProfessionel": "3 à 5 ans en gestion d'investissements",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "InvestPro",
+  "lieuSociete": "Paris",
+  "minSalaire": 40000,
+  "maxSalaire": 60000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le conseiller en investissements financiers conseille les clients dans leurs choix d'investissement et gère leur portefeuille.",
+  "responsabilites": "Proposer des stratégies d'investissement\nAnalyser les besoins des clients\nSuivre l'évolution des investissements",
+  "competenceRequises": "Analyse financière, stratégie d'investissement",
+  "qualificationRequises": "Bac +5 en Finance, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "investissements",
+    "finance"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent avec des possibilités d'évolution rapide.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd86"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f217"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-02T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f87"
+  },
+  "status": "active",
+  "titre": "Chef de projet financier",
+  "soustitre": "Le chef de projet financier dirige des projets de gestion financière et d'analyse des risques.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80499"
+  },
+  "metier": {
+    "$oid": "b2c3d4e5f60708090a0b0c1d"
+  },
+  "experienceProfessionel": "5 à 7 ans en gestion de projets financiers",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "FinanceCorp",
+  "lieuSociete": "Paris",
+  "minSalaire": 50000,
+  "maxSalaire": 80000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le chef de projet financier gère des projets stratégiques de gestion financière, y compris l'évaluation des risques financiers.",
+  "responsabilites": "Superviser les projets financiers\nAnalyser les risques financiers\nProposer des stratégies d'optimisation des ressources",
+  "competenceRequises": "Gestion de projets, analyse financière, gestion des risques",
+  "qualificationRequises": "Bac +5 en Finance, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "projet financier",
+    "finance"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent, à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd87"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f218"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-03T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439141"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2028-01-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f88"
+  },
+  "status": "active",
+  "titre": "Conseiller en assurance",
+  "soustitre": "Le conseiller en assurance est responsable de la gestion des contrats d'assurance et du conseil aux clients.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "metier": {
+    "$oid": "f1a2b3c4d5e60708090a0b0c"
+  },
+  "experienceProfessionel": "3 à 5 ans en assurance",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "InsureTech",
+  "lieuSociete": "Paris",
+  "minSalaire": 30000,
+  "maxSalaire": 45000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le conseiller en assurance gère les contrats d'assurance et conseille les clients sur les meilleures solutions.",
+  "responsabilites": "Gérer les contrats d'assurance\nConseiller les clients sur les produits d'assurance\nSuivre les réclamations",
+  "competenceRequises": "Compétences en gestion des assurances, relation client",
+  "qualificationRequises": "Bac +3 en Assurance, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "assurance"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd89"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f219"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-04T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f89"
+  },
+  "status": "active",
+  "titre": "Gestionnaire de contrats d’assurance",
+  "soustitre": "Le gestionnaire de contrats d'assurance est responsable de la gestion des contrats et des réclamations des clients.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "metier": {
+    "$oid": "f2b3c4d5e60708090a0b0c1d"
+  },
+  "experienceProfessionel": "5 à 7 ans en gestion de contrats d'assurance",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "SecureLife",
+  "lieuSociete": "Lyon",
+  "minSalaire": 35000,
+  "maxSalaire": 55000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le gestionnaire de contrats d'assurance veille au bon suivi des contrats d'assurance et gère les réclamations des clients.",
+  "responsabilites": "Gérer les contrats d'assurance\nAnalyser les réclamations\nProposer des ajustements ou modifications de contrats",
+  "competenceRequises": "Compétences en gestion des assurances, suivi administratif",
+  "qualificationRequises": "Bac +3 en Assurance, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "assurance",
+    "gestion de contrats"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd8a"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f220"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-05T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f8a"
+  },
+  "status": "active",
+  "titre": "Souscripteur en assurance",
+  "soustitre": "Le souscripteur en assurance évalue les risques et les conditions d'assurances pour les clients.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "metier": {
+    "$oid": "f3c4d5e60708090a0b0c1d2e"
+  },
+  "experienceProfessionel": "5 à 7 ans en souscription d'assurance",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "AssureX",
+  "lieuSociete": "Marseille",
+  "minSalaire": 40000,
+  "maxSalaire": 60000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le souscripteur évalue les risques et les conditions des contrats d'assurance pour assurer un bon équilibre financier de l'entreprise.",
+  "responsabilites": "Évaluer les risques des assurés\nDéterminer les conditions d'assurances\nGérer les souscriptions",
+  "competenceRequises": "Compétences en évaluation des risques, connaissance des produits d'assurance",
+  "qualificationRequises": "Bac +5 en Assurance, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "assurance",
+    "souscription"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd8b"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f221"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-06T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Marseille",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f8c"
+  },
+  "status": "active",
+  "titre": "Actuaire",
+  "soustitre": "L'actuaire analyse les risques financiers et les calculs actuariels pour évaluer les primes et la rentabilité des produits d'assurance.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "metier": {
+    "$oid": "f4d5e60708090a0b0c1d2e3f"
+  },
+  "experienceProfessionel": "7 à 10 ans en actuariat",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "LifeAssure",
+  "lieuSociete": "Paris",
+  "minSalaire": 60000,
+  "maxSalaire": 100000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Très expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'actuaire évalue les risques liés aux produits d'assurance et détermine les primes à appliquer.",
+  "responsabilites": "Analyser les risques et les données financières\nCalculer les primes d'assurances\nÉvaluer la rentabilité des produits d'assurance",
+  "competenceRequises": "Compétences en mathématiques financières, modélisation statistique",
+  "qualificationRequises": "Bac +5 en Actuariat, 7 à 10 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "actuariat",
+    "finance"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd8c"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f222"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-07T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f8d"
+  },
+  "status": "active",
+  "titre": "Conseiller en assurance vie",
+  "soustitre": "Le conseiller en assurance vie propose des produits d'assurance vie adaptés aux besoins des clients.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "metier": {
+    "$oid": "f1a2b3c4d5e60708090a0b0c"
+  },
+  "experienceProfessionel": "3 à 5 ans en assurance vie",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "LifeSecure",
+  "lieuSociete": "Marseille",
+  "minSalaire": 35000,
+  "maxSalaire": 50000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le conseiller en assurance vie aide les clients à choisir les meilleures solutions pour leur assurance vie.",
+  "responsabilites": "Proposer des produits d'assurance vie\nAnalyser les besoins des clients\nGérer les contrats d'assurance vie",
+  "competenceRequises": "Compétences en gestion des assurances vie, relation client",
+  "qualificationRequises": "Bac +3 en Assurance, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "assurance vie"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd8d"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f223"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-08T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Marseille",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f8e"
+  },
+  "status": "active",
+  "titre": "Expert en sinistres",
+  "soustitre": "L'expert en sinistres évalue les dommages et les réclamations liées aux assurances.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "metier": {
+    "$oid": "f5e60708090a0b0c1d2e3f50"
+  },
+  "experienceProfessionel": "5 à 7 ans en gestion des sinistres",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "RiskAssure",
+  "lieuSociete": "Lyon",
+  "minSalaire": 40000,
+  "maxSalaire": 60000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'expert en sinistres évalue les réclamations d'assurance et travaille avec les clients pour résoudre les problèmes.",
+  "responsabilites": "Évaluer les dommages\nTraiter les réclamations d'assurance\nRégler les différends avec les clients",
+  "competenceRequises": "Compétences en gestion des sinistres, relation client, analyse des risques",
+  "qualificationRequises": "Bac +3 en Assurance, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "sinistres",
+    "assurance"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd8e"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f224"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-09T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f8f"
+  },
+  "status": "active",
+  "titre": "Souscripteur en assurance automobile",
+  "soustitre": "Le souscripteur en assurance automobile analyse les risques et gère les polices d'assurances automobiles.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "metier": {
+    "$oid": "f3c4d5e60708090a0b0c1d2e"
+  },
+  "experienceProfessionel": "3 à 5 ans en souscription d'assurance automobile",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "AutoRisk",
+  "lieuSociete": "Paris",
+  "minSalaire": 35000,
+  "maxSalaire": 50000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le souscripteur en assurance automobile analyse les risques des véhicules assurés et définit les conditions de couverture.",
+  "responsabilites": "Analyser les risques automobiles\nDéterminer les conditions des polices d'assurance automobile\nGérer les souscriptions",
+  "competenceRequises": "Compétences en gestion des assurances automobiles, analyse des risques",
+  "qualificationRequises": "Bac +3 en Assurance, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "assurance automobile",
+    "souscription"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd8f"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f225"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-10T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f90"
+  },
+  "status": "active",
+  "titre": "Actuaire en assurance santé",
+  "soustitre": "L'actuaire en assurance santé évalue les risques liés aux produits d'assurance santé et élabore des modèles statistiques.",
+  "secteur": {
+    "$oid": "c92b1ef2bd3c4d7aa9e80498"
+  },
+  "metier": {
+    "$oid": "f4d5e60708090a0b0c1d2e3f"
+  },
+  "experienceProfessionel": "5 à 7 ans en actuariat d'assurance santé",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "HealthRisk",
+  "lieuSociete": "Paris",
+  "minSalaire": 60000,
+  "maxSalaire": 100000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Très expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'actuaire en assurance santé analyse les risques financiers des produits d'assurance santé et calcule les primes.",
+  "responsabilites": "Évaluer les risques d'assurance santé\nCalculer les primes d'assurance santé\nÉlaborer des modèles statistiques pour les produits santé",
+  "competenceRequises": "Compétences en statistiques, actuariat, analyse de risques",
+  "qualificationRequises": "Bac +5 en Actuariat, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "actuariat",
+    "assurance santé"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd90"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f226"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-11T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f91"
+  },
+  "status": "active",
+  "titre": "Médecin généraliste",
+  "soustitre": "Le médecin généraliste diagnostique et traite une variété de conditions médicales pour ses patients.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439032"
+  },
+  "experienceProfessionel": "3 à 5 ans en médecine générale",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "HealthCarePro",
+  "lieuSociete": "Paris",
+  "minSalaire": 45000,
+  "maxSalaire": 70000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le médecin généraliste effectue des examens médicaux, diagnostique et traite diverses maladies.",
+  "responsabilites": "Examiner les patients\nPoser des diagnostics\nPrescrire des traitements",
+  "competenceRequises": "Compétences médicales, diagnostic, gestion des soins de santé",
+  "qualificationRequises": "Doctorat en médecine, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "médecine générale"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd91"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f227"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-12T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f92"
+  },
+  "status": "active",
+  "titre": "Médecin généraliste",
+  "soustitre": "Le médecin généraliste est responsable de la prise en charge médicale globale des patients.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439032"
+  },
+  "experienceProfessionel": "5 à 7 ans en médecine générale",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "GlobalHealth",
+  "lieuSociete": "Lyon",
+  "minSalaire": 50000,
+  "maxSalaire": 80000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le médecin généraliste s'assure de la bonne santé de ses patients en posant des diagnostics et en prescrivant des traitements.",
+  "responsabilites": "Consultations médicales\nPrescriptions médicales\nSuivi des patients",
+  "competenceRequises": "Compétences en diagnostic, relation client, médecine générale",
+  "qualificationRequises": "Doctorat en médecine, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "médecine générale"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir avec une excellente rémunération.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd92"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f228"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-13T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f93"
+  },
+  "status": "active",
+  "titre": "Infirmier",
+  "soustitre": "L'infirmier fournit des soins médicaux aux patients sous la supervision des médecins.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439034"
+  },
+  "experienceProfessionel": "1 à 3 ans en soins infirmiers",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "MediCare",
+  "lieuSociete": "Paris",
+  "minSalaire": 25000,
+  "maxSalaire": 40000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Débutant",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B1)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'infirmier prodigue des soins de qualité et assiste le personnel médical dans les tâches quotidiennes.",
+  "responsabilites": "Fournir des soins aux patients\nAssurer le suivi médical\nTravailler en collaboration avec les médecins",
+  "competenceRequises": "Compétences en soins infirmiers, relation patient",
+  "qualificationRequises": "Bac +3 en soins infirmiers, 1 à 3 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "soins infirmiers"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir dans un établissement médical de renom.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd93"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f229"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-14T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f94"
+  },
+  "status": "active",
+  "titre": "Infirmier",
+  "soustitre": "L'infirmier prodigue des soins à domicile et dans les établissements médicaux.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439034"
+  },
+  "experienceProfessionel": "3 à 5 ans en soins infirmiers",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "HomeCare",
+  "lieuSociete": "Lyon",
+  "minSalaire": 28000,
+  "maxSalaire": 42000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'infirmier fournit des soins aux patients à domicile et dans les établissements médicaux.",
+  "responsabilites": "Administrer des soins médicaux\nSuivi des patients\nÉvaluation des besoins médicaux",
+  "competenceRequises": "Compétences en soins infirmiers, relation patient",
+  "qualificationRequises": "Bac +3 en soins infirmiers, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "soins infirmiers"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd94"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f230"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-15T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f95"
+  },
+  "status": "active",
+  "titre": "Chirurgien",
+  "soustitre": "Le chirurgien réalise des interventions chirurgicales pour traiter diverses pathologies.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd79943903a"
+  },
+  "experienceProfessionel": "5 à 7 ans en chirurgie",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "SurgeryPro",
+  "lieuSociete": "Paris",
+  "minSalaire": 60000,
+  "maxSalaire": 100000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Très expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "60 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le chirurgien effectue des interventions chirurgicales pour traiter diverses pathologies médicales.",
+  "responsabilites": "Réaliser des interventions chirurgicales\nEffectuer des consultations pré-opératoires et post-opératoires\nÉvaluer les risques des interventions",
+  "competenceRequises": "Compétences en chirurgie, prise en charge des patients",
+  "qualificationRequises": "Doctorat en médecine, spécialisation en chirurgie, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "chirurgie"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement avec possibilité de collaboration internationale.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd95"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f231"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-16T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f96"
+  },
+  "status": "active",
+  "titre": "Chirurgien",
+  "soustitre": "Le chirurgien est responsable des interventions chirurgicales pour traiter des pathologies complexes.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd79943903a"
+  },
+  "experienceProfessionel": "7 à 10 ans en chirurgie",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "MedSurgery",
+  "lieuSociete": "Lyon",
+  "minSalaire": 70000,
+  "maxSalaire": 120000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Très expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "60 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le chirurgien effectue des opérations complexes et assure le suivi postopératoire des patients.",
+  "responsabilites": "Réaliser des interventions chirurgicales complexes\nEffectuer des bilans postopératoires\nAssurer le suivi des patients avant et après chirurgie",
+  "competenceRequises": "Compétences avancées en chirurgie, prise en charge postopératoire",
+  "qualificationRequises": "Doctorat en médecine, spécialisation en chirurgie, 7 à 10 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "chirurgie",
+    "pathologies complexes"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste hautement qualifié, à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd96"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f232"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-17T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f97"
+  },
+  "status": "active",
+  "titre": "Aide-soignant",
+  "soustitre": "L'aide-soignant fournit des soins de base aux patients sous la supervision d'infirmiers et de médecins.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439038"
+  },
+  "experienceProfessionel": "1 à 3 ans en soins infirmiers",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "CareSupport",
+  "lieuSociete": "Paris",
+  "minSalaire": 22000,
+  "maxSalaire": 35000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Débutant",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B1)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'aide-soignant aide au quotidien les patients dans leurs gestes de la vie courante et sous la supervision d'un infirmier.",
+  "responsabilites": "Aider les patients dans leurs déplacements\nAssurer le suivi des soins de base\nParticiper à la gestion des stocks médicaux",
+  "competenceRequises": "Compétences en soins de base, assistance aux patients",
+  "qualificationRequises": "Bac +2 en soins infirmiers, 1 à 3 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "soins de santé",
+    "aide-soignant"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent, à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd97"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f233"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-18T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f98"
+  },
+  "status": "active",
+  "titre": "Aide-soignant",
+  "soustitre": "L'aide-soignant assiste le personnel médical en dispensant des soins quotidiens aux patients.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439038"
+  },
+  "experienceProfessionel": "3 à 5 ans en soins infirmiers",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "MedCare",
+  "lieuSociete": "Lyon",
+  "minSalaire": 25000,
+  "maxSalaire": 40000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'aide-soignant assiste les patients dans leurs gestes quotidiens, effectue les soins de confort et aide à la gestion des besoins médicaux.",
+  "responsabilites": "Fournir des soins de confort\nAider à la gestion des médicaments\nAssister dans les soins de base",
+  "competenceRequises": "Soins de confort, relation avec les patients",
+  "qualificationRequises": "Bac +2 en soins infirmiers, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "aide-soignant",
+    "soins de santé"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd98"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f234"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-19T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f99"
+  },
+  "status": "active",
+  "titre": "Pharmacien",
+  "soustitre": "Le pharmacien conseille les patients sur les médicaments et leur usage approprié.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439036"
+  },
+  "experienceProfessionel": "3 à 5 ans en pharmacie",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "PharmaCare",
+  "lieuSociete": "Paris",
+  "minSalaire": 35000,
+  "maxSalaire": 55000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le pharmacien prépare et distribue des médicaments sur ordonnance et conseille les patients sur leur usage.",
+  "responsabilites": "Préparer et délivrer des médicaments\nConseiller les patients\nSuivre les traitements médicaux",
+  "competenceRequises": "Compétences en pharmacologie, relation client",
+  "qualificationRequises": "Doctorat en pharmacie, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "pharmacie",
+    "santé"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd99"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f235"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-20T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f9a"
+  },
+  "status": "active",
+  "titre": "Pharmacien",
+  "soustitre": "Le pharmacien assure la gestion des prescriptions et conseille les patients sur les traitements.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439036"
+  },
+  "experienceProfessionel": "5 à 7 ans en pharmacie",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "PharmaWorld",
+  "lieuSociete": "Lyon",
+  "minSalaire": 40000,
+  "maxSalaire": 60000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le pharmacien gère les prescriptions médicales et conseille les patients sur l'usage des médicaments.",
+  "responsabilites": "Gérer les prescriptions\nConseiller les patients\nVérifier les interactions médicamenteuses",
+  "competenceRequises": "Compétences en pharmacologie, gestion des stocks",
+  "qualificationRequises": "Doctorat en pharmacie, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "pharmacie",
+    "santé"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd9a"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f236"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-21T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f9b"
+  },
+  "status": "active",
+  "titre": "Médecin généraliste",
+  "soustitre": "Le médecin généraliste diagnostique et traite une variété de conditions médicales pour ses patients.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439032"
+  },
+  "experienceProfessionel": "1 à 3 ans en médecine générale",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "CareMed",
+  "lieuSociete": "Marseille",
+  "minSalaire": 40000,
+  "maxSalaire": 60000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le médecin généraliste consulte des patients pour diagnostiquer et traiter des maladies.",
+  "responsabilites": "Consultations médicales\nPoser des diagnostics\nPrescrire des traitements",
+  "competenceRequises": "Compétences médicales, gestion des soins de santé",
+  "qualificationRequises": "Doctorat en médecine, 1 à 3 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "médecine générale"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd9b"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f237"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-22T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Marseille",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f9c"
+  },
+  "status": "active",
+  "titre": "Médecin généraliste",
+  "soustitre": "Le médecin généraliste offre des soins médicaux primaires, diagnostique des maladies et prescrit des traitements.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439032"
+  },
+  "experienceProfessionel": "3 à 5 ans en médecine générale",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "GeneralHealth",
+  "lieuSociete": "Lyon",
+  "minSalaire": 45000,
+  "maxSalaire": 70000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le médecin généraliste s'occupe des consultations médicales et du suivi des patients pour des soins de santé globaux.",
+  "responsabilites": "Assurer la gestion des soins médicaux\nAnalyser les symptômes des patients\nPrescrire des médicaments et traitements",
+  "competenceRequises": "Diagnostic médical, gestion des soins de santé",
+  "qualificationRequises": "Doctorat en médecine, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "médecine générale"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd9c"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f238"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-23T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f9d"
+  },
+  "status": "active",
+  "titre": "Chirurgien",
+  "soustitre": "Le chirurgien effectue des opérations médicales pour traiter diverses pathologies.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd79943903a"
+  },
+  "experienceProfessionel": "5 à 7 ans en chirurgie",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "SurgicalPro",
+  "lieuSociete": "Paris",
+  "minSalaire": 60000,
+  "maxSalaire": 100000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Très expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "60 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le chirurgien pratique des interventions pour traiter des maladies complexes et effectuer des réparations sur le corps.",
+  "responsabilites": "Réaliser des interventions chirurgicales complexes\nEffectuer des bilans postopératoires",
+  "competenceRequises": "Compétences avancées en chirurgie, soins postopératoires",
+  "qualificationRequises": "Doctorat en médecine, spécialisation en chirurgie, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "chirurgie"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent, à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd9d"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f239"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-24T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f9e"
+  },
+  "status": "active",
+  "titre": "Chirurgien",
+  "soustitre": "Le chirurgien effectue des opérations de haute précision pour traiter des pathologies graves.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd79943903a"
+  },
+  "experienceProfessionel": "7 à 10 ans en chirurgie",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "Chirurgicare",
+  "lieuSociete": "Lyon",
+  "minSalaire": 70000,
+  "maxSalaire": 120000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Très expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "60 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le chirurgien effectue des interventions chirurgicales complexes dans divers domaines de la médecine.",
+  "responsabilites": "Réaliser des interventions chirurgicales hautement spécialisées\nParticiper aux consultations",
+  "competenceRequises": "Expertise en chirurgie, gestion postopératoire",
+  "qualificationRequises": "Doctorat en médecine, spécialisation en chirurgie, 7 à 10 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "chirurgie",
+    "pathologies graves"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste hautement qualifié, à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd9e"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f240"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-25T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f9f"
+  },
+  "status": "active",
+  "titre": "Pharmacien",
+  "soustitre": "Le pharmacien délivre des médicaments et conseille les patients sur les traitements appropriés.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439036"
+  },
+  "experienceProfessionel": "1 à 3 ans en pharmacie",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "PharmaCare",
+  "lieuSociete": "Paris",
+  "minSalaire": 30000,
+  "maxSalaire": 45000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Débutant",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le pharmacien conseille les patients sur les médicaments et leur administration.",
+  "responsabilites": "Délivrer des médicaments\nConseiller les patients\nAssurer le suivi des traitements",
+  "competenceRequises": "Connaissance en pharmacologie, relation client",
+  "qualificationRequises": "Doctorat en pharmacie, 1 à 3 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "pharmacie"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd9f"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f241"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-26T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986fa0"
+  },
+  "status": "active",
+  "titre": "Pharmacien",
+  "soustitre": "Le pharmacien est responsable de la gestion des prescriptions et de la délivrance des médicaments.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439036"
+  },
+  "experienceProfessionel": "3 à 5 ans en pharmacie",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "MedPharma",
+  "lieuSociete": "Lyon",
+  "minSalaire": 35000,
+  "maxSalaire": 55000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le pharmacien assure le bon fonctionnement de la pharmacie et gère les médicaments en stock.",
+  "responsabilites": "Gérer les stocks de médicaments\nDélivrer des prescriptions\nConseiller les patients sur les médicaments",
+  "competenceRequises": "Gestion des stocks, relation client, connaissance des médicaments",
+  "qualificationRequises": "Doctorat en pharmacie, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "pharmacie"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fda0"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f242"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-27T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986fa1"
+  },
+  "status": "active",
+  "titre": "Infirmier",
+  "soustitre": "L'infirmier assure les soins de base aux patients et travaille en collaboration avec les médecins.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439031"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439034"
+  },
+  "experienceProfessionel": "3 à 5 ans en soins infirmiers",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "MediCare",
+  "lieuSociete": "Paris",
+  "minSalaire": 25000,
+  "maxSalaire": 35000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'infirmier prodigue des soins de qualité et assiste le personnel médical dans les tâches quotidiennes.",
+  "responsabilites": "Fournir des soins aux patients\nAssurer le suivi médical\nTravailler en collaboration avec les médecins",
+  "competenceRequises": "Compétences en soins infirmiers, relation patient",
+  "qualificationRequises": "Bac +3 en soins infirmiers, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "soins infirmiers"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd9b"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f243"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-28T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986fa2"
+  },
+  "status": "active",
+  "titre": "Technicien télécoms",
+  "soustitre": "Le technicien télécoms installe et maintient les équipements et services de télécommunications.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439062"
+  },
+  "experienceProfessionel": "1 à 3 ans en télécommunications",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "TelecomSolutions",
+  "lieuSociete": "Paris",
+  "minSalaire": 25000,
+  "maxSalaire": 40000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Débutant",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B1)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le technicien télécoms est responsable de l'installation, de la maintenance et de la réparation des systèmes télécoms.",
+  "responsabilites": "Installer les équipements télécoms\nAssurer la maintenance des réseaux\nRésoudre les pannes et les problèmes techniques",
+  "competenceRequises": "Compétences en installation et maintenance de réseaux, dépannage",
+  "qualificationRequises": "Bac +2 en télécommunications, 1 à 3 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "télécommunications"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fda1"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f244"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-29T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986fa3"
+  },
+  "status": "active",
+  "titre": "Technicien télécoms",
+  "soustitre": "Le technicien télécoms est chargé de l'installation et de la maintenance des équipements télécoms.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439062"
+  },
+  "experienceProfessionel": "3 à 5 ans en télécommunications",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "NetworkTech",
+  "lieuSociete": "Lyon",
+  "minSalaire": 30000,
+  "maxSalaire": 50000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le technicien télécoms est responsable de l'installation, de la maintenance et du dépannage des équipements de communication.",
+  "responsabilites": "Installer des réseaux télécoms\nRésoudre les problèmes techniques\nEffectuer des tests de validation",
+  "competenceRequises": "Compétences techniques en réseaux, installation et maintenance",
+  "qualificationRequises": "Bac +2 en télécommunications, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "télécommunications",
+    "maintenance"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fda2"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f245"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-30T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986fa4"
+  },
+  "status": "active",
+  "titre": "Technicien télécoms",
+  "soustitre": "Le technicien télécoms installe et gère les infrastructures de communication pour les entreprises et particuliers.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439062"
+  },
+  "experienceProfessionel": "5 à 7 ans en télécommunications",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "TelecomPro",
+  "lieuSociete": "Marseille",
+  "minSalaire": 35000,
+  "maxSalaire": 55000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le technicien télécoms veille à l'installation et à la maintenance des équipements de télécommunication dans les locaux des clients.",
+  "responsabilites": "Installer des systèmes télécoms\nAssurer le bon fonctionnement des équipements\nRésoudre les problèmes techniques",
+  "competenceRequises": "Compétences en réseaux, dépannage, installation",
+  "qualificationRequises": "Bac +3 en télécommunications, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "télécommunications",
+    "réseaux"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fda3"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f246"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-31T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Marseille",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986fa5"
+  },
+  "status": "active",
+  "titre": "Technicien télécoms",
+  "soustitre": "Le technicien télécoms installe et maintient les équipements télécoms pour assurer leur bon fonctionnement.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439062"
+  },
+  "experienceProfessionel": "1 à 3 ans en télécommunications",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "TelecomPlus",
+  "lieuSociete": "Paris",
+  "minSalaire": 25000,
+  "maxSalaire": 40000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Débutant",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B1)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le technicien télécoms installe, configure et assure la maintenance des systèmes télécoms.",
+  "responsabilites": "Installer les équipements télécoms\nAssurer la maintenance des réseaux\nDépanner les problèmes techniques",
+  "competenceRequises": "Installation des équipements, gestion des réseaux, dépannage",
+  "qualificationRequises": "Bac +2 en télécommunications, 1 à 3 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "télécommunications",
+    "maintenance"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fda5"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f247"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-30T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986fa6"
+  },
+  "status": "active",
+  "titre": "Ingénieur réseaux",
+  "soustitre": "L'ingénieur réseaux gère et optimise les infrastructures de réseaux de télécommunications.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439064"
+  },
+  "experienceProfessionel": "3 à 5 ans en gestion de réseaux",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "NetworkWorld",
+  "lieuSociete": "Lyon",
+  "minSalaire": 40000,
+  "maxSalaire": 60000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'ingénieur réseaux optimise et maintient les infrastructures réseaux pour assurer une performance optimale.",
+  "responsabilites": "Gérer les réseaux télécoms\nOptimiser la bande passante\nAssurer la sécurité des infrastructures",
+  "competenceRequises": "Connaissances approfondies en réseaux, gestion de la sécurité, dépannage",
+  "qualificationRequises": "Bac +5 en ingénierie des réseaux, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "réseaux",
+    "télécommunications"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fda6"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f248"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-31T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986fa7"
+  },
+  "status": "active",
+  "titre": "Administrateur systèmes et réseaux",
+  "soustitre": "L'administrateur systèmes et réseaux gère et maintient les systèmes et réseaux informatiques de l'entreprise.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439066"
+  },
+  "experienceProfessionel": "5 à 7 ans en administration de réseaux",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "TechNetworks",
+  "lieuSociete": "Paris",
+  "minSalaire": 50000,
+  "maxSalaire": 75000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Très expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'administrateur systèmes et réseaux supervise la gestion et la sécurité des systèmes informatiques et des réseaux.",
+  "responsabilites": "Administrer les serveurs et réseaux\nOptimiser la performance des systèmes\nAssurer la sécurité des données",
+  "competenceRequises": "Connaissance approfondie des systèmes et réseaux, sécurité informatique",
+  "qualificationRequises": "Bac +5 en informatique, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "réseaux",
+    "systèmes"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fda7"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f249"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-01T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986fa8"
+  },
+  "status": "active",
+  "titre": "Technicien télécoms",
+  "soustitre": "Le technicien télécoms assure l'installation et la maintenance des équipements réseaux et télécommunications.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439062"
+  },
+  "experienceProfessionel": "1 à 3 ans en télécommunications",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "TechCom",
+  "lieuSociete": "Paris",
+  "minSalaire": 28000,
+  "maxSalaire": 42000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le technicien télécoms réalise l'installation des équipements, assure leur maintenance et support technique.",
+  "responsabilites": "Assurer l'installation des équipements\nEffectuer la maintenance préventive et corrective\nGérer les appels techniques",
+  "competenceRequises": "Installation des systèmes télécoms, gestion des incidents",
+  "qualificationRequises": "Bac +2 en télécommunications, 1 à 3 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "télécommunications",
+    "maintenance"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fda8"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f250"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-02T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986fa9"
+  },
+  "status": "active",
+  "titre": "Ingénieur réseaux",
+  "soustitre": "L'ingénieur réseaux conçoit, met en place et maintient les réseaux de télécommunication de l'entreprise.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439064"
+  },
+  "experienceProfessionel": "5 à 7 ans en gestion de réseaux",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "ComNetwork",
+  "lieuSociete": "Lyon",
+  "minSalaire": 50000,
+  "maxSalaire": 70000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'ingénieur réseaux planifie, gère et sécurise les réseaux télécoms pour une performance optimale.",
+  "responsabilites": "Concevoir des réseaux de télécommunications\nAssurer la gestion des infrastructures\nOptimiser les performances des réseaux",
+  "competenceRequises": "Connaissances des réseaux, sécurité informatique, optimisation",
+  "qualificationRequises": "Bac +5 en ingénierie des réseaux, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "réseaux",
+    "télécommunications"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fda9"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f251"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-03T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986faa"
+  },
+  "status": "active",
+  "titre": "Administrateur systèmes et réseaux",
+  "soustitre": "L'administrateur systèmes et réseaux veille à la gestion des systèmes et des réseaux de l'entreprise.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439061"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439066"
+  },
+  "experienceProfessionel": "5 à 7 ans en administration de systèmes et réseaux",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "NetCom",
+  "lieuSociete": "Marseille",
+  "minSalaire": 60000,
+  "maxSalaire": 85000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Très expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'administrateur systèmes et réseaux assure la gestion, la sécurité et l'optimisation des infrastructures informatiques.",
+  "responsabilites": "Gérer les systèmes et réseaux\nAssurer la sécurité des réseaux\nOptimiser les performances des serveurs",
+  "competenceRequises": "Compétences avancées en systèmes et réseaux, gestion des infrastructures",
+  "qualificationRequises": "Bac +5 en informatique, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "réseaux",
+    "systèmes"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste hautement qualifié, à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fdaa"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f252"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-04T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Marseille",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986fae"
+  },
+  "status": "active",
+  "titre": "Chef de projet informatique",
+  "soustitre": "Le chef de projet informatique supervise la planification, l'exécution et le suivi des projets IT.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439096"
+  },
+  "experienceProfessionel": "5 à 7 ans en gestion de projets informatiques",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "TechProject",
+  "lieuSociete": "Paris",
+  "minSalaire": 50000,
+  "maxSalaire": 75000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le chef de projet informatique coordonne les équipes de développement, définit les objectifs et gère les ressources.",
+  "responsabilites": "Coordonner les projets IT\nSuperviser les équipes de développement\nGérer les délais et le budget",
+  "competenceRequises": "Gestion de projets, leadership, outils de gestion de projets (Jira, Trello)",
+  "qualificationRequises": "Bac +5 en informatique, 5 à 7 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "gestion de projets",
+    "informatique"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fdb2"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f255"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-03T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986faf"
+  },
+  "status": "active",
+  "titre": "Architecte cloud",
+  "soustitre": "L'architecte cloud conçoit et implémente des solutions cloud adaptées aux besoins de l'entreprise.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439098"
+  },
+  "experienceProfessionel": "5 à 7 ans en architecture cloud",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "CloudMasters",
+  "lieuSociete": "Lyon",
+  "minSalaire": 60000,
+  "maxSalaire": 95000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'architecte cloud conçoit des solutions cloud personnalisées pour assurer la scalabilité, la sécurité et la performance.",
+  "responsabilites": "Concevoir des solutions cloud\nAssurer l'intégration des services cloud\nOptimiser la performance des infrastructures",
+  "competenceRequises": "Expérience avec AWS, Azure, Google Cloud, architecture de systèmes",
+  "qualificationRequises": "Bac +5 en informatique, 5 à 7 ans d'expérience en cloud",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "cloud",
+    "architecture"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fdb3"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f256"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-04T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986fb0"
+  },
+  "status": "active",
+  "titre": "Ingénieur cybersécurité",
+  "soustitre": "L'ingénieur cybersécurité assure la sécurité des réseaux et des systèmes informatiques contre les attaques.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439091"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd79943909a"
+  },
+  "experienceProfessionel": "3 à 5 ans en cybersécurité",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "CyberSecure",
+  "lieuSociete": "Paris",
+  "minSalaire": 50000,
+  "maxSalaire": 80000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "L'ingénieur cybersécurité met en place des politiques de sécurité pour protéger les données et les réseaux de l'entreprise.",
+  "responsabilites": "Mettre en place des solutions de cybersécurité\nAnalyser les risques\nRépondre aux incidents de sécurité",
+  "competenceRequises": "Sécurité des réseaux, gestion des incidents, cryptographie",
+  "qualificationRequises": "Bac +5 en cybersécurité, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "cybersécurité",
+    "sécurité des réseaux"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fdb4"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f257"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-05T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fd39d69b440ae677a608b0"
+  },
+  "status": "active",
+  "titre": "Big Data Engineer",
+  "soustitre": "Le Big Data Engineer gère des volumes massifs de données et met en place des solutions pour leur traitement.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439092"
+  },
+  "metier": {
+    "$oid": "d4e5f60708090a0b0c1d2e3f"
+  },
+  "experienceProfessionel": "5 à 7 ans en Big Data",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "BigDataTech",
+  "lieuSociete": "Paris",
+  "minSalaire": 60000,
+  "maxSalaire": 90000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le Big Data Engineer est responsable de la gestion et du traitement des données massives.",
+  "responsabilites": "Mettre en place des solutions Big Data\nGérer les clusters et les pipelines de données\nOptimiser les performances des systèmes",
+  "competenceRequises": "Hadoop, Spark, NoSQL, Java, Python",
+  "qualificationRequises": "Bac +5 en informatique, 5 à 7 ans d'expérience en Big Data",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "big data",
+    "data engineering"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-04T16:33:53.787Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fd39d69b440ae677a608b1"
+  },
+  "status": "active",
+  "titre": "Mobile Developer",
+  "soustitre": "Le développeur mobile crée des applications pour smartphones et tablettes.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439093"
+  },
+  "metier": {
+    "$oid": "a1b2c3d4e5f60708090a0b0c"
+  },
+  "experienceProfessionel": "1 à 3 ans en développement mobile",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "MobileTech",
+  "lieuSociete": "Lyon",
+  "minSalaire": 35000,
+  "maxSalaire": 50000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Débutant",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le développeur mobile crée des applications pour les systèmes Android et iOS.",
+  "responsabilites": "Développer des applications mobiles\nAssurer la compatibilité avec différentes plateformes\nMaintenir et optimiser les applications",
+  "competenceRequises": "Android, iOS, Kotlin, Java, Swift",
+  "qualificationRequises": "Bac +3 en informatique, 1 à 3 ans d'expérience en développement mobile",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "mobile",
+    "développement"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-02T16:33:53.787Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fd39d69b440ae677a608b2"
+  },
+  "status": "active",
+  "titre": "Web Developer",
+  "soustitre": "Le développeur Web crée et maintient des sites web.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439093"
+  },
+  "metier": {
+    "$oid": "b2c3d4e5f60708090a0b0c1d"
+  },
+  "experienceProfessionel": "1 à 3 ans en développement web",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "WebCorp",
+  "lieuSociete": "Paris",
+  "minSalaire": 30000,
+  "maxSalaire": 45000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Débutant",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le développeur web crée et optimise des sites internet.",
+  "responsabilites": "Concevoir et maintenir des sites web\nOptimiser les performances\nAssurer la compatibilité multi-navigateurs",
+  "competenceRequises": "HTML, CSS, JavaScript, React, PHP",
+  "qualificationRequises": "Bac +3 en informatique, 1 à 3 ans d'expérience en développement web",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "web",
+    "développement"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-01T16:33:53.787Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fd3a589b440ae677a608b3"
+  },
+  "status": "active",
+  "titre": "Big Data Engineer",
+  "soustitre": "Le Big Data Engineer gère des volumes massifs de données et met en place des solutions pour leur traitement.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439092"
+  },
+  "metier": {
+    "$oid": "d4e5f60708090a0b0c1d2e3f"
+  },
+  "experienceProfessionel": "5 à 7 ans en Big Data",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "BigDataTech",
+  "lieuSociete": "Paris",
+  "minSalaire": 60000,
+  "maxSalaire": 90000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le Big Data Engineer est responsable de la gestion et du traitement des données massives.",
+  "responsabilites": "Mettre en place des solutions Big Data\nGérer les clusters et les pipelines de données\nOptimiser les performances des systèmes",
+  "competenceRequises": "Hadoop, Spark, NoSQL, Java, Python",
+  "qualificationRequises": "Bac +5 en informatique, 5 à 7 ans d'expérience en Big Data",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "big data",
+    "data engineering"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-04T16:33:53.787Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fd3a589b440ae677a608b4"
+  },
+  "status": "active",
+  "titre": "Mobile Developer",
+  "soustitre": "Le développeur mobile crée des applications pour smartphones et tablettes.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439093"
+  },
+  "metier": {
+    "$oid": "a1b2c3d4e5f60708090a0b0c"
+  },
+  "experienceProfessionel": "1 à 3 ans en développement mobile",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "MobileTech",
+  "lieuSociete": "Lyon",
+  "minSalaire": 35000,
+  "maxSalaire": 50000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Débutant",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le développeur mobile crée des applications pour les systèmes Android et iOS.",
+  "responsabilites": "Développer des applications mobiles\nAssurer la compatibilité avec différentes plateformes\nMaintenir et optimiser les applications",
+  "competenceRequises": "Android, iOS, Kotlin, Java, Swift",
+  "qualificationRequises": "Bac +3 en informatique, 1 à 3 ans d'expérience en développement mobile",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "mobile",
+    "développement"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-02T16:33:53.787Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fd3a589b440ae677a608b5"
+  },
+  "status": "active",
+  "titre": "Web Developer",
+  "soustitre": "Le développeur Web crée et maintient des sites web.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439093"
+  },
+  "metier": {
+    "$oid": "b2c3d4e5f60708090a0b0c1d"
+  },
+  "experienceProfessionel": "1 à 3 ans en développement web",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "WebCorp",
+  "lieuSociete": "Paris",
+  "minSalaire": 30000,
+  "maxSalaire": 45000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Débutant",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le développeur web crée et optimise des sites internet.",
+  "responsabilites": "Concevoir et maintenir des sites web\nOptimiser les performances\nAssurer la compatibilité multi-navigateurs",
+  "competenceRequises": "HTML, CSS, JavaScript, React, PHP",
+  "qualificationRequises": "Bac +3 en informatique, 1 à 3 ans d'expérience en développement web",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "web",
+    "développement"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-01T16:33:53.787Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fd3b3d9b440ae677a608b6"
+  },
+  "status": "active",
+  "titre": "Big Data Engineer",
+  "soustitre": "Le Big Data Engineer gère des volumes massifs de données et met en place des solutions pour leur traitement.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439092"
+  },
+  "metier": {
+    "$oid": "d4e5f60708090a0b0c1d2e3f"
+  },
+  "experienceProfessionel": "5 à 7 ans en Big Data",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "BigDataTech",
+  "lieuSociete": "Paris",
+  "minSalaire": 60000,
+  "maxSalaire": 90000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Expérimenté",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le Big Data Engineer est responsable de la gestion et du traitement des données massives.",
+  "responsabilites": "Mettre en place des solutions Big Data\nGérer les clusters et les pipelines de données\nOptimiser les performances des systèmes",
+  "competenceRequises": "Hadoop, Spark, NoSQL, Java, Python",
+  "qualificationRequises": "Bac +5 en informatique, 5 à 7 ans d'expérience en Big Data",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "big data",
+    "data engineering"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste urgent à pourvoir.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-04T16:33:53.787Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fd3b3d9b440ae677a608b7"
+  },
+  "status": "active",
+  "titre": "Mobile Developer",
+  "soustitre": "Le développeur mobile crée des applications pour smartphones et tablettes.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439093"
+  },
+  "metier": {
+    "$oid": "a1b2c3d4e5f60708090a0b0c"
+  },
+  "experienceProfessionel": "1 à 3 ans en développement mobile",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "MobileTech",
+  "lieuSociete": "Lyon",
+  "minSalaire": 35000,
+  "maxSalaire": 50000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Débutant",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le développeur mobile crée des applications pour les systèmes Android et iOS.",
+  "responsabilites": "Développer des applications mobiles\nAssurer la compatibilité avec différentes plateformes\nMaintenir et optimiser les applications",
+  "competenceRequises": "Android, iOS, Kotlin, Java, Swift",
+  "qualificationRequises": "Bac +3 en informatique, 1 à 3 ans d'expérience en développement mobile",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "mobile",
+    "développement"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-02T16:33:53.787Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fd3b3d9b440ae677a608b8"
+  },
+  "status": "active",
+  "titre": "Web Developer",
+  "soustitre": "Le développeur Web crée et maintient des sites web.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439093"
+  },
+  "metier": {
+    "$oid": "b2c3d4e5f60708090a0b0c1d"
+  },
+  "experienceProfessionel": "1 à 3 ans en développement web",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "WebCorp",
+  "lieuSociete": "Paris",
+  "minSalaire": 30000,
+  "maxSalaire": 45000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Débutant",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le développeur web crée et optimise des sites internet.",
+  "responsabilites": "Concevoir et maintenir des sites web\nOptimiser les performances\nAssurer la compatibilité multi-navigateurs",
+  "competenceRequises": "HTML, CSS, JavaScript, React, PHP",
+  "qualificationRequises": "Bac +3 en informatique, 1 à 3 ans d'expérience en développement web",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "web",
+    "développement"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-01T16:33:53.787Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fd3b929b440ae677a608b9"
+  },
+  "status": "active",
+  "titre": "Data Analyst",
+  "soustitre": "Le Data Analyst analyse les données pour en extraire des informations pertinentes.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439092"
+  },
+  "metier": {
+    "$oid": "a1b2c3d4e5f60708090a0b0c"
+  },
+  "experienceProfessionel": "1 à 3 ans en analyse de données",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "DataCorp",
+  "lieuSociete": "Paris",
+  "minSalaire": 30000,
+  "maxSalaire": 45000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Débutant",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le Data Analyst transforme les données brutes en informations exploitables pour les entreprises.",
+  "responsabilites": "Analyser les données\nCréer des rapports et des graphiques\nIdentifier des tendances et des modèles",
+  "competenceRequises": "Analyse des données, SQL, Excel, Power BI",
+  "qualificationRequises": "Bac +3 en informatique, 1 à 3 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "data analyst",
+    "analyse des données"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-01T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fd3b929b440ae677a608ba"
+  },
+  "status": "active",
+  "titre": "Data Scientist",
+  "soustitre": "Le Data Scientist utilise des techniques avancées pour analyser et modéliser des données complexes.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439092"
+  },
+  "metier": {
+    "$oid": "b2c3d4e5f60708090a0b0c1d"
+  },
+  "experienceProfessionel": "3 à 5 ans en Data Science",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "TechData",
+  "lieuSociete": "Lyon",
+  "minSalaire": 40000,
+  "maxSalaire": 60000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le Data Scientist analyse les données complexes et crée des modèles prédictifs.",
+  "responsabilites": "Développer des modèles d'analyse avancée\nUtiliser des outils statistiques et de machine learning\nAnalyser les tendances des données",
+  "competenceRequises": "Machine learning, Python, R, Big Data",
+  "qualificationRequises": "Bac +5 en Data Science, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "data scientist",
+    "machine learning"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir immédiatement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-02T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67fd3b929b440ae677a608bb"
+  },
+  "status": "active",
+  "titre": "Data Engineer",
+  "soustitre": "Le Data Engineer est responsable de la gestion et de la transformation des données.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439092"
+  },
+  "metier": {
+    "$oid": "c3d4e5f60708090a0b0c1d2e"
+  },
+  "experienceProfessionel": "3 à 5 ans en Data Engineering",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "BigDataWorks",
+  "lieuSociete": "Marseille",
+  "minSalaire": 50000,
+  "maxSalaire": 75000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le Data Engineer conçoit et met en place les architectures de données.",
+  "responsabilites": "Construire des pipelines de données\nAssurer la collecte et le traitement des données\nOptimiser les processus de données",
+  "competenceRequises": "SQL, Python, Big Data, Spark",
+  "qualificationRequises": "Bac +5 en Data Engineering, 3 à 5 ans d'expérience",
+  "domaineDeCompetences": [],
+  "tagsRefernencement": [
+    "offres",
+    "data engineer",
+    "big data"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-03T16:33:53.787Z"
+  },
+  "__v": 0,
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "5090f2b5bc234eed8b519c49"
+  },
+  "ville": "Marseille",
+  "dateLimite": {
+    "$date": "2027-12-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f10"
+  },
+  "status": "active",
+  "titre": "Community Manager",
+  "soustitre": "Le community manager gère l'image de l'entreprise sur les réseaux sociaux et interagit avec la communauté.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439051"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439052"
+  },
+  "experienceProfessionel": "2 à 3 ans en gestion de communautés",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "MediaGroup",
+  "lieuSociete": "Marseille",
+  "minSalaire": 30000,
+  "maxSalaire": 45000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Junior",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "60 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le community manager anime les réseaux sociaux, crée du contenu et engage la communauté.",
+  "responsabilites": "Créer et partager du contenu\nGérer les interactions sur les réseaux sociaux\nAnalyser les résultats des campagnes",
+  "competenceRequises": "Maîtrise des réseaux sociaux, rédaction web, analyse de données",
+  "qualificationRequises": "Bac +3 en Communication ou Marketing, 2 à 3 ans d'expérience",
+  "tagsRefernencement": [
+    "offres",
+    "community management"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Poste à pourvoir rapidement.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-19T13:42:23.825Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd79"
+      }
+    }
+  ],
+  "isUrgent": true,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f210"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-24T16:33:53.787Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Références professionnelles",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439051"
+  },
+  "ville": "Marseille",
+  "dateLimite": {
+    "$date": "2027-06-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f20"
+  },
+  "status": "active",
+  "titre": "Rédacteur Web",
+  "soustitre": "Le rédacteur web rédige des articles, des contenus marketing et optimise le SEO.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439051"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439052"
+  },
+  "experienceProfessionel": "1 à 2 ans en rédaction web",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "Digital Media",
+  "lieuSociete": "Paris",
+  "minSalaire": 25000,
+  "maxSalaire": 35000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Débutant",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B1)"
+  ],
+  "disponibilite": "30 jours",
+  "pays": "France",
+  "onSiteOrRemote": "Remote",
+  "description": "Le rédacteur web rédige du contenu pour le web, optimise les articles pour le SEO et assure la qualité des publications.",
+  "responsabilites": "Rédiger des articles optimisés pour le SEO\nParticiper à la stratégie éditoriale\nAnalyser les performances des contenus",
+  "competenceRequises": "Excellente rédaction, maîtrise des outils SEO, bonne gestion du temps",
+  "qualificationRequises": "Bac +2 en Journalisme ou Communication, 1 à 2 ans d'expérience",
+  "tagsRefernencement": [
+    "offres",
+    "rédaction web"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "L'offre est ouverte à tous les profils jeunes diplômés.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-21T15:32:00.000Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd79"
+      }
+    }
+  ],
+  "isUrgent": false,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f210"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-24T16:33:53.787Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Portfolio",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439051"
+  },
+  "ville": "Paris",
+  "dateLimite": {
+    "$date": "2027-06-01T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "65c5027128db862440986f30"
+  },
+  "status": "active",
+  "titre": "Chargé de Communication",
+  "soustitre": "Le chargé de communication assure la gestion de l'image de l'entreprise dans les médias.",
+  "secteur": {
+    "$oid": "507f1f77bcf86cd799439051"
+  },
+  "metier": {
+    "$oid": "507f1f77bcf86cd799439052"
+  },
+  "experienceProfessionel": "3 à 5 ans en communication",
+  "typeContrat": "CDI",
+  "tempsDeTravail": "Temps plein",
+  "societe": "MediaPro",
+  "lieuSociete": "Lyon",
+  "minSalaire": 35000,
+  "maxSalaire": 50000,
+  "deviseSalaire": "EUR",
+  "salaireBrutPar": "An",
+  "isSalaryDependsOnOffre": true,
+  "niveauDexperience": "Confirmé",
+  "langue": [
+    "Français (C1)",
+    "Anglais (B2)"
+  ],
+  "disponibilite": "90 jours",
+  "pays": "France",
+  "onSiteOrRemote": "On-site",
+  "description": "Le chargé de communication met en place la stratégie de communication interne et externe de l'entreprise.",
+  "responsabilites": "Rédiger des communiqués de presse\nGérer les relations avec les médias\nOrganiser des événements de communication",
+  "competenceRequises": "Excellente rédaction, gestion de projet, relations presse",
+  "qualificationRequises": "Bac +4/5 en Communication, 3 à 5 ans d'expérience",
+  "tagsRefernencement": [
+    "offres",
+    "communication"
+  ],
+  "diffusion": [
+    "dc-france"
+  ],
+  "commentaires": [
+    {
+      "text": "Recherchons un profil créatif et dynamique.",
+      "user": {
+        "$oid": "645b6a37f46734bb41766b5c"
+      },
+      "created_at": {
+        "$date": "2024-03-22T12:10:00.000Z"
+      },
+      "_id": {
+        "$oid": "65f9963fa161306d4ca1fd79"
+      }
+    }
+  ],
+  "isUrgent": false,
+  "isDeleted": false,
+  "candidatures": [
+    {
+      "user": null,
+      "isValidated": false,
+      "_id": {
+        "$oid": "65fd9e8a28b464a6b860f210"
+      }
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-24T16:33:53.787Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-05T15:46:30.859Z"
+  },
+  "documentRequis": [
+    "Portfolio",
+    "Lettre de motivation",
+    "Curriculum Vitae"
+  ],
+  "entreprise": {
+    "$oid": "507f1f77bcf86cd799439051"
+  },
+  "ville": "Lyon",
+  "dateLimite": {
+    "$date": "2027-06-01T00:00:00.000Z"
+  }
+}]

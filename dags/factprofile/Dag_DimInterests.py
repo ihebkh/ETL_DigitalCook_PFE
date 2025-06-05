@@ -2,7 +2,10 @@ import re
 import logging
 from datetime import datetime
 from pymongo import MongoClient
+from bson import ObjectId
 from airflow import DAG
+from airflow.models import Variable
+
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
@@ -13,11 +16,14 @@ def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
 
+
 def get_mongodb_connection():
-    client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
+    mongo_uri = Variable.get("MONGO_URI")
+    client = MongoClient(mongo_uri)
     mongo_db = client["PowerBi"]
     collection = mongo_db["frontusers"]
     return client, collection
+
 
 def convert_bson(obj):
     if isinstance(obj, dict):

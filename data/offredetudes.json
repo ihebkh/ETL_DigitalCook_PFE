@@ -1,0 +1,1669 @@
+[{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b59"
+  },
+  "titre": "Offer 72",
+  "description": "Description for offer 69",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3241"
+  },
+  "disponibilite": "3 mois",
+  "status": "active",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    },
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    },
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-10-18T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-06-04T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b5a"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [
+    "Espagnol (B1) : intermédiaire",
+    "Allemand (C1) : avancé"
+  ],
+  "financement": "Partiel",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b61"
+  },
+  "titre": "Offer 42",
+  "description": "Description for offer 90",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3223"
+  },
+  "disponibilite": "6 mois",
+  "status": "active",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "double"
+    },
+    {
+      "label": "logement",
+      "value": "single"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-08-14T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-05-04T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b62"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [],
+  "financement": "Complet",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b69"
+  },
+  "titre": "Offer 24",
+  "description": "Description for offer 96",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3219"
+  },
+  "disponibilite": "3 mois",
+  "status": "inactive",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "single"
+    },
+    {
+      "label": "logement",
+      "value": "double"
+    },
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-11-22T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-02-20T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b6a"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Allemand (C1) : avancé",
+    "Anglais (A2) : pré-intermédiaire"
+  ],
+  "financement": "Frais de scolarité",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.644Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b6d"
+  },
+  "titre": "Offer 97",
+  "description": "Description for offer 6",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3232"
+  },
+  "disponibilite": "3 mois",
+  "status": "inactive",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    },
+    {
+      "label": "logement",
+      "value": "single"
+    },
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    }
+  ],
+  "created_at": {
+    "$date": "2025-02-19T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-01-28T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b6e"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [
+    "Espagnol (B1) : intermédiaire"
+  ],
+  "financement": "Partiel",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.644Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b83"
+  },
+  "titre": "Offer 84",
+  "description": "Description for offer 51",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3235"
+  },
+  "disponibilite": "3 mois",
+  "status": "active",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    },
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-12-26T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-05-14T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b84"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [
+    "Français (B2) : intermédiaire supérieur",
+    "Allemand (C1) : avancé"
+  ],
+  "financement": "Partiel",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.645Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b4b"
+  },
+  "titre": "Offer 95",
+  "description": "Description for offer 66",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3242"
+  },
+  "disponibilite": "Immédiate",
+  "status": "active",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "double"
+    },
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    },
+    {
+      "label": "logement",
+      "value": "double"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-10-22T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-05-01T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b4c"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Espagnol (B1) : intermédiaire"
+  ],
+  "financement": "Complet",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.643Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b51"
+  },
+  "titre": "Offer 58",
+  "description": "Description for offer 86",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3235"
+  },
+  "disponibilite": "6 mois",
+  "status": "active",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "double"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-17T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-01-12T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b52"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Français (B2) : intermédiaire supérieur"
+  ],
+  "financement": "Frais de scolarité",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b53"
+  },
+  "titre": "Offer 60",
+  "description": "Description for offer 40",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3234"
+  },
+  "disponibilite": "Immédiate",
+  "status": "inactive",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-05-14T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-01-16T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b54"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [
+    "Français (B2) : intermédiaire supérieur"
+  ],
+  "financement": "Complet",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.643Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b55"
+  },
+  "titre": "Offer 15",
+  "description": "Description for offer 77",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3233"
+  },
+  "disponibilite": "6 mois",
+  "status": "inactive",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-11-10T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-05-17T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b56"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [
+    "Anglais (A2) : pré-intermédiaire",
+    "Espagnol (B1) : intermédiaire"
+  ],
+  "financement": "Complet",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.643Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b7f"
+  },
+  "titre": "Offer 8",
+  "description": "Description for offer 58",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3230"
+  },
+  "disponibilite": "Immédiate",
+  "status": "inactive",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    },
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    },
+    {
+      "label": "logement",
+      "value": "double"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-17T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-03-05T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b80"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Allemand (C1) : avancé"
+  ],
+  "financement": "Complet",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b93"
+  },
+  "titre": "Offer 70",
+  "description": "Description for offer 13",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3236"
+  },
+  "disponibilite": "6 mois",
+  "status": "active",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "single"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-11-23T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-05-07T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b94"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [],
+  "financement": "Frais de scolarité",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b57"
+  },
+  "titre": "Offer 61",
+  "description": "Description for offer 50",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3232"
+  },
+  "disponibilite": "Immédiate",
+  "status": "inactive",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    }
+  ],
+  "created_at": {
+    "$date": "2025-01-10T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-05-08T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b58"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Anglais (A2) : pré-intermédiaire"
+  ],
+  "financement": "Partiel",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.643Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b5b"
+  },
+  "titre": "Offer 25",
+  "description": "Description for offer 57",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3221"
+  },
+  "disponibilite": "3 mois",
+  "status": "active",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "double"
+    },
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-11-27T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-01-28T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b5c"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [],
+  "financement": "Complet",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b5d"
+  },
+  "titre": "Offer 97",
+  "description": "Description for offer 53",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3230"
+  },
+  "disponibilite": "6 mois",
+  "status": "inactive",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    },
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    },
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    }
+  ],
+  "created_at": {
+    "$date": "2025-02-12T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-01-20T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b5e"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Français (B2) : intermédiaire supérieur"
+  ],
+  "financement": "Complet",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.644Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b5f"
+  },
+  "titre": "Offer 98",
+  "description": "Description for offer 65",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3236"
+  },
+  "disponibilite": "6 mois",
+  "status": "active",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "double"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-06-04T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-03-24T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b60"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [],
+  "financement": "Frais de scolarité",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b63"
+  },
+  "titre": "Offer 37",
+  "description": "Description for offer 27",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3241"
+  },
+  "disponibilite": "6 mois",
+  "status": "inactive",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    },
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    },
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-03T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-01-30T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b64"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [],
+  "financement": "Frais de scolarité",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.644Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b65"
+  },
+  "titre": "Offer 30",
+  "description": "Description for offer 1",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3233"
+  },
+  "disponibilite": "6 mois",
+  "status": "active",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "single"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-22T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-14T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b66"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Anglais (A2) : pré-intermédiaire"
+  ],
+  "financement": "Complet",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.644Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b67"
+  },
+  "titre": "Offer 67",
+  "description": "Description for offer 32",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3233"
+  },
+  "disponibilite": "Immédiate",
+  "status": "active",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    },
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-07-29T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-07-07T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b68"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [
+    "Allemand (C1) : avancé",
+    "Anglais (A2) : pré-intermédiaire"
+  ],
+  "financement": "Complet",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b6b"
+  },
+  "titre": "Offer 90",
+  "description": "Description for offer 11",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3223"
+  },
+  "disponibilite": "3 mois",
+  "status": "active",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    },
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-08-13T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-03-26T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b6c"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [],
+  "financement": "Complet",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.644Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b71"
+  },
+  "titre": "Offer 85",
+  "description": "Description for offer 12",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3221"
+  },
+  "disponibilite": "Immédiate",
+  "status": "inactive",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "single"
+    },
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-10-03T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-10-15T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b72"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Anglais (A2) : pré-intermédiaire"
+  ],
+  "financement": "Frais de scolarité",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b73"
+  },
+  "titre": "Offer 97",
+  "description": "Description for offer 74",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3221"
+  },
+  "disponibilite": "3 mois",
+  "status": "inactive",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-05-03T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-04-24T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b74"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Anglais (A2) : pré-intermédiaire",
+    "Français (B2) : intermédiaire supérieur"
+  ],
+  "financement": "Frais de scolarité",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.644Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b75"
+  },
+  "titre": "Offer 84",
+  "description": "Description for offer 28",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3221"
+  },
+  "disponibilite": "6 mois",
+  "status": "inactive",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "double"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-03-01T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-04-03T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b76"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [
+    "Français (B2) : intermédiaire supérieur",
+    "Anglais (A2) : pré-intermédiaire"
+  ],
+  "financement": "Frais de scolarité",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b77"
+  },
+  "titre": "Offer 58",
+  "description": "Description for offer 11",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3232"
+  },
+  "disponibilite": "6 mois",
+  "status": "active",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "single"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-01-06T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-05-19T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b78"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [
+    "Espagnol (B1) : intermédiaire",
+    "Français (B2) : intermédiaire supérieur"
+  ],
+  "financement": "Partiel",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.644Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b79"
+  },
+  "titre": "Offer 35",
+  "description": "Description for offer 37",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3222"
+  },
+  "disponibilite": "6 mois",
+  "status": "active",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    },
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-10T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-03-09T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b7a"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Espagnol (B1) : intermédiaire"
+  ],
+  "financement": "Complet",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b7b"
+  },
+  "titre": "Offer 44",
+  "description": "Description for offer 22",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3225"
+  },
+  "disponibilite": "Immédiate",
+  "status": "active",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    },
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    },
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-11T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-08-10T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b7c"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [
+    "Français (B2) : intermédiaire supérieur"
+  ],
+  "financement": "Complet",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.644Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b81"
+  },
+  "titre": "Offer 51",
+  "description": "Description for offer 98",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3224"
+  },
+  "disponibilite": "6 mois",
+  "status": "inactive",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    }
+  ],
+  "created_at": {
+    "$date": "2025-03-06T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-06-10T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b82"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Français (B2) : intermédiaire supérieur"
+  ],
+  "financement": "Partiel",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b85"
+  },
+  "titre": "Offer 42",
+  "description": "Description for offer 53",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3223"
+  },
+  "disponibilite": "3 mois",
+  "status": "inactive",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    }
+  ],
+  "created_at": {
+    "$date": "2025-01-30T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-10-05T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b86"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [
+    "Espagnol (B1) : intermédiaire"
+  ],
+  "financement": "Frais de scolarité",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b89"
+  },
+  "titre": "Offer 50",
+  "description": "Description for offer 9",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3234"
+  },
+  "disponibilite": "Immédiate",
+  "status": "inactive",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-26T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-03-17T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b8a"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [
+    "Espagnol (B1) : intermédiaire"
+  ],
+  "financement": "Partiel",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b8b"
+  },
+  "titre": "Offer 20",
+  "description": "Description for offer 91",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3221"
+  },
+  "disponibilite": "3 mois",
+  "status": "inactive",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    },
+    {
+      "label": "logement",
+      "value": "double"
+    },
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    }
+  ],
+  "created_at": {
+    "$date": "2025-02-17T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-01-24T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b8c"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [
+    "Allemand (C1) : avancé"
+  ],
+  "financement": "Partiel",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b8f"
+  },
+  "titre": "Offer 26",
+  "description": "Description for offer 72",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3221"
+  },
+  "disponibilite": "3 mois",
+  "status": "inactive",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "double"
+    },
+    {
+      "label": "logement",
+      "value": "double"
+    },
+    {
+      "label": "logement",
+      "value": "double"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-01-11T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-06-19T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b90"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Français (B2) : intermédiaire supérieur"
+  ],
+  "financement": "Partiel",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b47"
+  },
+  "titre": "Offer 7",
+  "description": "Description for offer 20",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3230"
+  },
+  "disponibilite": "Immédiate",
+  "status": "active",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "single"
+    },
+    {
+      "label": "logement",
+      "value": "double"
+    }
+  ],
+  "created_at": {
+    "$date": "2025-02-26T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-03-16T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b48"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Allemand (C1) : avancé"
+  ],
+  "financement": "Complet",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b49"
+  },
+  "titre": "Offer 1",
+  "description": "Description for offer 41",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3222"
+  },
+  "disponibilite": "Immédiate",
+  "status": "active",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    },
+    {
+      "label": "logement",
+      "value": "single"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-11-24T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-03-26T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b4a"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Français (B2) : intermédiaire supérieur"
+  ],
+  "financement": "Frais de scolarité",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b4d"
+  },
+  "titre": "Offer 45",
+  "description": "Description for offer 36",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3234"
+  },
+  "disponibilite": "6 mois",
+  "status": "inactive",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "double"
+    },
+    {
+      "label": "logement",
+      "value": "double"
+    },
+    {
+      "label": "logement",
+      "value": "double"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-11-05T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-02-03T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b4e"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [],
+  "financement": "Partiel",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b4f"
+  },
+  "titre": "Offer 97",
+  "description": "Description for offer 20",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3233"
+  },
+  "disponibilite": "6 mois",
+  "status": "active",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "single"
+    },
+    {
+      "label": "logement",
+      "value": "double"
+    },
+    {
+      "label": "logement",
+      "value": "double"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-05-07T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-12-07T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b50"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Anglais (A2) : pré-intermédiaire",
+    "Espagnol (B1) : intermédiaire"
+  ],
+  "financement": "Partiel",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.643Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b6f"
+  },
+  "titre": "Offer 70",
+  "description": "Description for offer 65",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3229"
+  },
+  "disponibilite": "6 mois",
+  "status": "active",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    },
+    {
+      "label": "logement",
+      "value": "double"
+    },
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-04-24T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-10-05T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b70"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [
+    "Français (B2) : intermédiaire supérieur"
+  ],
+  "financement": "Frais de scolarité",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b7d"
+  },
+  "titre": "Offer 2",
+  "description": "Description for offer 83",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3226"
+  },
+  "disponibilite": "Immédiate",
+  "status": "inactive",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    },
+    {
+      "label": "logement",
+      "value": "single"
+    },
+    {
+      "label": "logement",
+      "value": "double"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-10-25T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-03-07T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b7e"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [],
+  "financement": "Partiel",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.644Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b87"
+  },
+  "titre": "Offer 46",
+  "description": "Description for offer 36",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3240"
+  },
+  "disponibilite": "Immédiate",
+  "status": "active",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "double"
+    },
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    },
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    }
+  ],
+  "created_at": {
+    "$date": "2025-02-12T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-03-19T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b88"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": true,
+  "langue": [
+    "Allemand (C1) : avancé"
+  ],
+  "financement": "Partiel",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b8d"
+  },
+  "titre": "Offer 35",
+  "description": "Description for offer 77",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3237"
+  },
+  "disponibilite": "Immédiate",
+  "status": "inactive",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "languages",
+      "value": "anglais, espagnol"
+    }
+  ],
+  "created_at": {
+    "$date": "2024-02-23T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-06-20T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b8e"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [],
+  "financement": "Frais de scolarité",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.645Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b91"
+  },
+  "titre": "Offer 36",
+  "description": "Description for offer 59",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3222"
+  },
+  "disponibilite": "Immédiate",
+  "status": "active",
+  "isDeleted": true,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "double"
+    }
+  ],
+  "created_at": {
+    "$date": "2025-03-17T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2025-03-20T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b92"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [],
+  "financement": "Complet",
+  "dateLimite": {
+    "$date": null
+  }
+},
+{
+  "_id": {
+    "$oid": "6808eaeeef487371deb90b95"
+  },
+  "titre": "Offer 80",
+  "description": "Description for offer 93",
+  "university": {
+    "$oid": "64f7f4d72d314122bdfb3233"
+  },
+  "disponibilite": "Immédiate",
+  "status": "active",
+  "isDeleted": false,
+  "criterias": [
+    {
+      "label": "logement",
+      "value": "single"
+    },
+    {
+      "label": "languages",
+      "value": "francais, anglais"
+    }
+  ],
+  "created_at": {
+    "$date": "2025-03-29T23:00:00.000Z"
+  },
+  "updated_at": {
+    "$date": "2024-10-17T23:00:00.000Z"
+  },
+  "filiere": {
+    "$oid": "6808eaeeef487371deb90b96"
+  },
+  "candidatures": [],
+  "commentaires": [],
+  "isUrgent": false,
+  "langue": [
+    "Anglais (A2) : pré-intermédiaire"
+  ],
+  "financement": "Frais de scolarité",
+  "dateLimite": {
+    "$date": "2025-04-23T23:59:14.645Z"
+  }
+}]

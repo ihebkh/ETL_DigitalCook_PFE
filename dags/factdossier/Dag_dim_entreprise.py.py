@@ -5,13 +5,14 @@ from pymongo import MongoClient
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+from airflow.models import Variable
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# ---------------------- EXTRACT ----------------------
 def get_mongo_collections():
-    client = MongoClient("mongodb+srv://iheb:Kt7oZ4zOW4Fg554q@cluster0.5zmaqup.mongodb.net/")
+    mongo_uri = Variable.get("MONGO_URI")
+    client = MongoClient(mongo_uri)
     db = client["PowerBi"]
     return client, db["offredemplois"], db["frontusers"], db["entreprises"]
 
@@ -49,7 +50,7 @@ def extract_from_frontusers(frontusers_col):
                     pays = pays.strip()
                     if nom:
                         entreprises.add((nom, "", None))
-    logger.info(f"{len(entreprises)} entreprises extraites de 'frontusers' avec pays.")
+    logger.info(f"{len(entreprises)} entreprises extraites de 'frontusers'.")
     return entreprises
 
 def extract_from_entreprises(entreprises_col):
@@ -59,7 +60,7 @@ def extract_from_entreprises(entreprises_col):
         nombre_employes = normalize_nombre_employes(doc.get("nombreEmployes"))
         if nom:
             entreprises.add((nom, "", nombre_employes))
-    logger.info(f"{len(entreprises)} entreprises extraites de 'entreprises' avec nombre d'employés.")
+    logger.info(f"{len(entreprises)} entreprises extraites de 'entreprises'.")
     return entreprises
 
 def normalize_nombre_employes(nombre_employes):
@@ -73,34 +74,34 @@ def normalize_nombre_employes(nombre_employes):
 
 def extract_all_entreprises(ti):
     client, offres_col, frontusers_col, entreprises_col = get_mongo_collections()
-    entreprises = set()
     villes_list = []
     for doc in offres_col.find({"isDeleted": False}, {"ville": 1}):
         ville = doc.get("ville", None)
         if ville and ville.strip() and ville not in villes_list:
             villes_list.append(ville.strip())
-    # Extraction depuis toutes les sources
-    entreprises_from_offres = extract_from_offredemplois(offres_col, villes_list=villes_list)
-    entreprises_from_frontusers = extract_from_frontusers(frontusers_col)
-    entreprises_from_entreprises = extract_from_entreprises(entreprises_col)
-    # Fusionner les données extraites
+    entreprises = set()
+    for sources in [
+        extract_from_offredemplois(offres_col, villes_list),
+        extract_from_frontusers(frontusers_col),
+        extract_from_entreprises(entreprises_col)
+    ]:
+        entreprises.update(sources)
     merged_entreprises = {}
-    for sources in [entreprises_from_offres, entreprises_from_frontusers, entreprises_from_entreprises]:
-        for nom, ville, nombre_employes in sources:
-            if nom not in merged_entreprises:
-                merged_entreprises[nom] = {"ville": "", "nombre_employes": None}
-            if ville:
-                merged_entreprises[nom]["ville"] = ville
-            if nombre_employes is not None:
-                merged_entreprises[nom]["nombre_employes"] = nombre_employes
-    entreprises = {(nom, data["ville"], data["nombre_employes"]) for nom, data in merged_entreprises.items()}
+    for nom, ville, nombre_employes in entreprises:
+        if nom not in merged_entreprises:
+            merged_entreprises[nom] = {"ville": "", "nombre_employes": None}
+        if ville:
+            merged_entreprises[nom]["ville"] = ville
+        if nombre_employes is not None:
+            merged_entreprises[nom]["nombre_employes"] = nombre_employes
     client.close()
-    entreprises_list = list(entreprises)
-    ti.xcom_push(key='entreprises', value=entreprises_list)
-    logger.info(f"{len(entreprises_list)} entreprises extraites au total.")
+    result = [(nom, data["ville"], data["nombre_employes"]) for nom, data in merged_entreprises.items()]
+    ti.xcom_push(key='entreprises', value=result)
+    logger.info(f"{len(result)} entreprises extraites au total.")
 
-# ---------------------- TRANSFORM ----------------------
-def fetch_country_from_osm(city_name):
+def fetch_country_from_osm(city_name, cache):
+    if city_name in cache:
+        return cache[city_name]
     try:
         url = f"https://nominatim.openstreetmap.org/search?format=json&limit=1&q={city_name}"
         headers = {
@@ -109,25 +110,21 @@ def fetch_country_from_osm(city_name):
         }
         response = requests.get(url, headers=headers)
         if response.status_code != 200:
-            logger.error(f"Error fetching data from Nominatim for {city_name}: {response.status_code}")
             return "Error"
         data = response.json()
         if data:
             display_name = data[0].get("display_name", "")
             country = display_name.split(",")[-1].strip()
-            logger.info(f"Extracted country for {city_name}: {country}")
+            cache[city_name] = country
             return country
         else:
-            logger.warning(f"No data found for city: {city_name}")
             return "Unknown"
-    except Exception as e:
-        logger.error(f"Error fetching data from Nominatim for {city_name}: {e}")
+    except Exception:
         return "Error"
 
 def fetch_pays_data(cursor):
     cursor.execute("SELECT pays_id, nom_pays_en FROM public.dim_pays")
-    pays_data = cursor.fetchall()
-    return {country_name.lower(): pays_id for pays_id, country_name in pays_data}
+    return {country_name.lower(): pays_id for pays_id, country_name in cursor.fetchall()}
 
 def generate_entreprise_code(counter):
     return f"entre{str(counter).zfill(4)}"
@@ -144,27 +141,27 @@ def get_next_entreprise_pk_and_code_counter(conn):
     next_pk = (max_pk or 0) + 1
     return next_pk, next_pk
 
-# ---------------------- LOAD (avec gestion de la redondance) ----------------------
 def insert_entreprises(ti):
     entreprises = ti.xcom_pull(task_ids='extract_all_entreprises', key='entreprises')
     if not entreprises:
-        logger.info("Aucune entreprise à insérer.")
         return
     conn = get_postgres_connection()
     cur = conn.cursor()
     pays_mapping = fetch_pays_data(cur)
     counter_pk, counter_code = get_next_entreprise_pk_and_code_counter(conn)
+    cur.execute("SELECT nom_entreprise FROM public.dim_entreprise")
+    existing_names = {row[0].strip().lower() for row in cur.fetchall()}
+    osm_cache = {}
     total = 0
     for nom, ville, nombre_employes in entreprises:
-        nom_clean = nom.strip() if nom else None
-        if not nom_clean:
+        nom_clean = nom.strip()
+        if not nom_clean or nom_clean.lower() in existing_names:
             continue
         pays_id = None
         if ville:
-            country = fetch_country_from_osm(ville)
+            country = fetch_country_from_osm(ville, osm_cache)
             pays_id = pays_mapping.get(country.lower())
         codeentreprise = generate_entreprise_code(counter_code)
-        # La clause ON CONFLICT permet d'éviter la redondance (doublons)
         cur.execute("""
             INSERT INTO public.dim_entreprise (entreprise_id, code_entreprise, nom_entreprise, nombre_employes, pays_id)
             VALUES (%s, %s, %s, %s, %s)
@@ -186,9 +183,8 @@ def insert_entreprises(ti):
     conn.commit()
     cur.close()
     conn.close()
-    logger.info(f"{total} entreprises insérées ou mises à jour dans dim_entreprise.")
+    logger.info(f"{total} entreprises insérées ou mises à jour.")
 
-# ---------------------- DAG DEFINITION ----------------------
 dag = DAG(
     dag_id='dag_dim_entreprise',
     start_date=datetime(2025, 1, 1),
@@ -221,5 +217,4 @@ end_task = PythonOperator(
     dag=dag,
 )
 
-# Dépendances du DAG
-start_task >> extract_task >> insert_task >> end_task 
+start_task >> extract_task >> insert_task >> end_task
