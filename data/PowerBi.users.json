@@ -1,0 +1,110 @@
+[{
+  "_id": {
+    "$oid": "66bde90035f3f26fe4abd3df"
+  },
+  "name": "Jean",
+  "last_name": "Dupont",
+  "privilege": {
+    "$oid": "66bde90035f3f26fe4abd3df"
+  }
+},
+{
+  "_id": {
+    "$oid": "680651bc082692eb2ffe1ce2"
+  },
+  "name": "Marie",
+  "last_name": "Durand",
+  "privilege": {
+    "$oid": "66bde90035f3f26fe4abd3df"
+  }
+},
+{
+  "_id": {
+    "$oid": "680651bc082692eb2ffe1ce3"
+  },
+  "name": "Luc",
+  "last_name": "Martin",
+  "privilege": {
+    "$oid": "66bde90035f3f26fe4abd3df"
+  }
+},
+{
+  "_id": {
+    "$oid": "680651bc082692eb2ffe1ce4"
+  },
+  "name": "Sophie",
+  "last_name": "Lemoine",
+  "privilege": {
+    "$oid": "66bde90035f3f26fe4abd3df"
+  }
+},
+{
+  "_id": {
+    "$oid": "680651bc082692eb2ffe1ce5"
+  },
+  "name": "Pierre",
+  "last_name": "Rousseau",
+  "privilege": {
+    "$oid": "66bde90035f3f26fe4abd3df"
+  }
+},
+{
+  "_id": {
+    "$oid": "680651bc082692eb2ffe1ce6"
+  },
+  "name": "Claire",
+  "last_name": "Faure",
+  "privilege": {
+    "$oid": "66bde90035f3f26fe4abd3df"
+  }
+},
+{
+  "_id": {
+    "$oid": "680651bc082692eb2ffe1ce7"
+  },
+  "name": "Antoine",
+  "last_name": "Guerin",
+  "privilege": {
+    "$oid": "66bde90035f3f26fe4abd3df"
+  }
+},
+{
+  "_id": {
+    "$oid": "680651bc082692eb2ffe1ce8"
+  },
+  "name": "Élise",
+  "last_name": "Lemoine",
+  "privilege": {
+    "$oid": "66bde90035f3f26fe4abd3df"
+  }
+},
+{
+  "_id": {
+    "$oid": "680651bc082692eb2ffe1ce9"
+  },
+  "name": "Bernard",
+  "last_name": "Lefevre",
+  "privilege": {
+    "$oid": "66bde90035f3f26fe4abd3df"
+  }
+},
+{
+  "_id": {
+    "$oid": "680651bc082692eb2ffe1cea"
+  },
+  "name": "Julien",
+  "last_name": "Petit",
+  "privilege": {
+    "$oid": "66bde90035f3f26fe4abd3df"
+  }
+},
+{
+  "_id": {
+    "$oid": "680651bc082692eb2ffe1ceb"
+  },
+  "name": "Clara",
+  "last_name": "Michel",
+  "privilege": {
+    "$oid": "66bde90035f3f26fe4abd3df"
+  }
+}]
