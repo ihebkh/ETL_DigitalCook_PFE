@@ -29,7 +29,7 @@ def run_segmentation_update():
         FROM 
             dim_client c
         JOIN 
-            fact_client_profile fcp ON c.client_id = fcp.client_id
+            dim_client_profile fcp ON c.client_id = fcp.client_id
         JOIN 
             dim_secteur s ON fcp.secteur_id = s.secteur_id
         JOIN 
