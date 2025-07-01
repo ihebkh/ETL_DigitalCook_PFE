@@ -35,13 +35,13 @@ def get_service_pk_from_nom_service(pg_cursor, nom_service):
     return result[0] if result else None
 
 def load_ville_mapping(pg_cursor):
-    pg_cursor.execute("SELECT LOWER(nom_pays_en), pays_id FROM public.dim_pays")
+    pg_cursor.execute("SELECT LOWER(nom_pays), pays_id FROM public.dim_pays")
     return {row[0]: row[1] for row in pg_cursor.fetchall()}
 
 def get_pays_id_from_country(pg_cursor, country_name):
     if not country_name:
         return None
-    pg_cursor.execute("SELECT pays_id FROM public.dim_pays WHERE LOWER(nom_pays_en) = LOWER(%s)", (country_name,))
+    pg_cursor.execute("SELECT pays_id FROM public.dim_pays WHERE LOWER(nom_pays) = LOWER(%s)", (country_name,))
     result = pg_cursor.fetchone()
     return result[0] if result else None
 
@@ -102,9 +102,7 @@ def get_services_for_dossier(dossier_id, factures_collection, pg_cursor):
         nom_service = s.get("nomService")
         service_pk = get_service_pk_from_nom_service(pg_cursor, nom_service)
         prix = s.get("prix")
-        discount = s.get("discount")
-        extra_fee = s.get("extraFee", {}).get("value")
-        result.append((service_pk, prix, discount, extra_fee))
+        result.append((service_pk, prix))
     return result
 
 def get_formation_title_and_price_by_id(formation_id, formations_collection):
@@ -192,18 +190,18 @@ def get_formation_pk_by_title(titre_formation, pg_cursor):
 def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_step, type_de_contrat,
                          influencer_pk, destination_pk, date_depart_pk,
                          offre_emploi_step2, offre_etude_step2,
-                         offre_emploi_step4, offre_etude_step4, service_pk, service_prix, service_discount, service_extra,
+                         offre_emploi_step4, offre_etude_step4, service_pk, service_prix,
                          formation_pk, formation_prix, created_at, updated_at, minSalaire, maxSalaire,
                          status):
     pg_cursor.execute("""
         INSERT INTO public.fact_recrutement(
             dossier_id, client_id, code_fact, etape_actuelle, type_contrat, recruteur_id, destination_id, date_depart_id,
             offre_emploi_step2_id, offre_etude_step2_id, offre_emploi_step4_id, offre_etude_step4_id,
-            service_id, service_prix, remise_service, extra_service, formation_id, prix_formation, date_creation, date_mise_a_jour,
+            service_id, service_prix, formation_id, prix_formation, date_creation, date_mise_a_jour,
             minsalaire, maxsalaire,
             status
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                 %s)
         ON CONFLICT (dossier_id) DO UPDATE SET
             client_id = EXCLUDED.client_id,
@@ -219,8 +217,6 @@ def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_ste
             offre_etude_step4_id = EXCLUDED.offre_etude_step4_id,
             service_id = EXCLUDED.service_id,
             service_prix = EXCLUDED.service_prix,
-            remise_service = EXCLUDED.remise_service,
-            extra_service = EXCLUDED.extra_service,
             formation_id = EXCLUDED.formation_id,
             prix_formation = EXCLUDED.prix_formation,
             date_creation = EXCLUDED.date_creation,
@@ -235,7 +231,7 @@ def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_ste
         offre_etude_step2[0] if isinstance(offre_etude_step2, tuple) else offre_etude_step2,
         offre_emploi_step4[0] if isinstance(offre_emploi_step4, tuple) else offre_emploi_step4,
         offre_etude_step4[0] if isinstance(offre_etude_step4, tuple) else offre_etude_step4,
-        service_pk, service_prix, service_discount, service_extra,
+        service_pk, service_prix,
         formation_pk, formation_prix, created_at, updated_at,
         minSalaire, maxSalaire,
         status
@@ -419,8 +415,7 @@ def extract_fields():
 
             service_pk = services_info[i][0] if i < len(services_info) else None
             service_prix = services_info[i][1] if i < len(services_info) else None
-            service_discount = services_info[i][2] if i < len(services_info) else None
-            service_extra = services_info[i][3] if i < len(services_info) else None
+         
 
             upsert_fact_dossier(
                 pg_cursor,
@@ -438,8 +433,6 @@ def extract_fields():
                 offre_etude_step4,
                 service_pk,
                 service_prix,
-                service_discount,
-                service_extra,
                 formation_pk,
                 formation_prix_value,
                 created_at_str,

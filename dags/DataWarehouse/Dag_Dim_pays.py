@@ -47,10 +47,10 @@ def insert_pays_to_postgres(**kwargs):
         with get_postgres_connection() as conn:
             with conn.cursor() as cur:
                 insert_query = """
-                INSERT INTO dim_pays (code_pays, nom_pays_en)
+                INSERT INTO dim_pays (code_pays, nom_pays)
                 VALUES (%s, %s)
-                ON CONFLICT (nom_pays_en) DO UPDATE
-                SET nom_pays_en = EXCLUDED.nom_pays_en;
+                ON CONFLICT (nom_pays) DO UPDATE
+                SET nom_pays = EXCLUDED.nom_pays;
                 """
 
                 for index, nom in enumerate(noms, start=1):

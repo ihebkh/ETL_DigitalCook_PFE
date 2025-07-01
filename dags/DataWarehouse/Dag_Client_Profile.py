@@ -47,9 +47,7 @@ def load_dim_secteur(cur):
     cur.execute("SELECT secteur_id, nom_secteur FROM public.dim_secteur;")
     return {label.lower(): pk for pk, label in cur if label}
 
-def load_dim_metier(cur):
-    cur.execute("SELECT metier_id, nom_metier FROM public.dim_metier;")
-    return {label.lower(): pk for pk, label in cur if label}
+
 
 def get_client_fk_from_postgres(cur, matricule):
     matricule_str = str(matricule).strip()
@@ -60,10 +58,6 @@ def get_client_fk_from_postgres(cur, matricule):
     """, (matricule_str,))
     result = cur.fetchone()
     return result[0] if result else None
-
-def load_dim_etudes(cur):
-    cur.execute("SELECT niveau_etude_id, LOWER(nom_diplome) FROM public.dim_niveau_d_etudes;")
-    return {label: pk for pk, label in cur.fetchall() if label}
 
 def get_projet_pk_from_postgres(cur, nom_projet):
     if not nom_projet:
@@ -200,8 +194,6 @@ def matchclient():
         with conn.cursor() as cur:
             collection, secteur_collection = get_mongodb_connection()
             secteur_label_to_pk = load_dim_secteur(cur)
-            metier_label_to_pk = load_dim_metier(cur)
-            etude_label_to_pk = load_dim_etudes(cur)
             langue_label_level_to_pk = load_dim_languages(cur)
             competence_label_to_pk = load_dim_competences(cur)
 
@@ -213,12 +205,9 @@ def matchclient():
                 "profile.languages": 1, "simpleProfile.languages": 1,
                 "profile.interests": 1, "simpleProfile.interests": 1,
                 "profile.preferedJobLocations": 1, "simpleProfile.preferedJobLocations": 1,
-                "profile.niveauDetudes": 1, "simpleProfile.niveauDetudes": 1,
                 "profile.projets": 1, "simpleProfile.projets": 1,
                 "profile.secteur": 1, "simpleProfile.secteur": 1,
-                "profile.metier": 1, "simpleProfile.metier": 1,
                 "created_at": 1,
-                "profile.disponibilite": 1, "simpleProfile.disponibilite": 1,
                 "profile.birthDate": 1, "simpleProfile.birthDate": 1,
                 "profile.experiences": 1, "simpleProfile.experiences": 1,
             })
@@ -235,18 +224,15 @@ def matchclient():
                 language_fk_list = []
                 interest_pk_list = []
                 job_location_pk_list = []
-                study_level_fk_list = []
                 project_pk_list = []
                 certification_pk_list = []
                 experience_fk_list = []
                 secteur_id_list = []
-                metier_id_list = []
 
                 competenceGenerales = get_combined_profile_field(user, "competenceGenerales")
                 languages = get_combined_profile_field(user, "languages")
                 interests = get_combined_profile_field(user, "interests")
                 preferedJobLocations = get_combined_profile_field(user, "preferedJobLocations")
-                niveau_etudes = get_combined_profile_field(user, "niveauDetudes")
                 projets = get_combined_profile_field(user, "projets")
                 experiences = get_combined_profile_field(user, "experiences")
                 certifications = get_combined_profile_field(user, "certifications")
@@ -254,14 +240,11 @@ def matchclient():
                 experience_year = None
                 experience_month = None
 
-                metier_profile = user.get("profile", {}).get("metier")
-                metier_simple = user.get("simpleProfile", {}).get("metier")
 
                 duree_exp_profile = user.get("profile", {}).get("dureeExperience")
                 duree_exp_simple = user.get("simpleProfile", {}).get("dureeExperience")
 
                 created_at = user.get("created_at")
-                disponibilite = user.get("profile", {}).get("disponibilite") or user.get("simpleProfile", {}).get("disponibilite")
                 birth_date = user.get("profile", {}).get("birthDate") or user.get("simpleProfile", {}).get("birthDate")
 
                 secteur_profile = user.get("profile", {}).get("secteur")
@@ -279,28 +262,6 @@ def matchclient():
                             if pk:
                                 secteur_pk_list.append(pk)
 
-                # Process metier
-                metier_pk_list = []
-                for metier_id in [metier_profile]:
-                    if metier_id:
-                        metier_obj_id = safe_object_id(str(metier_id))
-                        if metier_obj_id:
-                            secteur_doc = secteur_collection.find_one({"jobs._id": metier_obj_id})
-                            if secteur_doc:
-                                for job in secteur_doc.get("jobs", []):
-                                    if job["_id"] == metier_obj_id:
-                                        label = job.get("label", "").lower()
-                                        pk = metier_label_to_pk.get(label)
-                                        if pk:
-                                            metier_pk_list.append(pk)
-
-                # Process other fields
-                for niveau in niveau_etudes:
-                    if isinstance(niveau, dict):
-                        niveau_label = niveau.get("label", "").strip().lower()
-                        etude_fk = etude_label_to_pk.get(niveau_label)
-                        if etude_fk and str(etude_fk) not in study_level_fk_list:
-                            study_level_fk_list.append(str(etude_fk))
 
                 if duree_exp_profile and isinstance(duree_exp_profile, dict):
                     experience_year = duree_exp_profile.get("year", None)
@@ -364,22 +325,18 @@ def matchclient():
 
                 max_length = max(len(competence_fk_list), len(language_fk_list),
                                len(interest_pk_list), len(job_location_pk_list),
-                               len(study_level_fk_list),
                                len(project_pk_list), len(certification_pk_list),
-                               len(experience_fk_list), len(secteur_id_list),
-                               len(metier_id_list), 1)
+                               len(experience_fk_list), len(secteur_id_list), 1)
 
                 for i in range(max_length):
                     competence_fk = competence_fk_list[i] if i < len(competence_fk_list) else None
                     language_fk = language_fk_list[i] if i < len(language_fk_list) else None
                     interest_pk = interest_pk_list[i] if i < len(interest_pk_list) else None
                     job_location_pk = job_location_pk_list[i] if i < len(job_location_pk_list) else None
-                    study_level_fk = study_level_fk_list[i] if i < len(study_level_fk_list) else None
                     project_pk = project_pk_list[i] if i < len(project_pk_list) else None
                     certification_pk = certification_pk_list[i] if i < len(certification_pk_list) else None
                     experience_fk = experience_fk_list[i] if i < len(experience_fk_list) else None
                     secteur_id = secteur_pk_list[i] if i < len(secteur_pk_list) else None
-                    metier_id = metier_pk_list[i] if i < len(metier_pk_list) else None
 
                     # Calculate values for first iteration only
                     if i == 0:
@@ -392,12 +349,11 @@ def matchclient():
 
                     # Insert into fact table
                     load_fact_date(
-                        client_fk, secteur_id, metier_id, counter,
+                        client_fk, secteur_id, counter,
                         competence_fk, language_fk, interest_pk,
                         certification_pk, job_location_pk,
                         project_pk, experience_fk, experience_year,
-                        experience_month, study_level_fk,
-                        disponibilite, age, dim_date_pk
+                        experience_month, age, dim_date_pk
                     )
 
                     line_count += 1
@@ -405,10 +361,9 @@ def matchclient():
 
             print(f"\nTotal lines: {line_count}")
 
-def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk,
+def load_fact_date(client_fk, secteur_fk, counter, competence_fk,
                   language_fk, interest_fk, certification_pk,
-                  job_location_pk, project_pk, experience_fk, year, month,
-                  study_level_fk, dispo, age, dim_date_pk):
+                  job_location_pk, project_pk, experience_fk, year, month, age, dim_date_pk):
     try:
         fact_pk = generate_fact_pk(counter)
         conn = get_postgres_connection()
@@ -416,20 +371,18 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk,
 
         cur.execute("""
             INSERT INTO dim_client_profile (
-                client_id, secteur_id, metier_id, fact_id,
-                competence_generale_id, langue_id, interet_id,
+                client_id, secteur_id, fact_id,
+                competence_id, langue_id, interet_id,
                 certification_id, location_preferee_emploi_id,
                 projet_id, experience_id, annee_experience,
-                mois_experience, etude_id,
-                disponibilite, age_client, date_id
+                mois_experience, age_client, date_id
             )
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s,
-                    %s, %s, %s, %s, %s, %s, %s, %s)
+                    %s, %s, %s, %s, %s)
             ON CONFLICT (fact_id) DO UPDATE SET
                 client_id = EXCLUDED.client_id,
                 secteur_id = EXCLUDED.secteur_id,
-                metier_id = EXCLUDED.metier_id,
-                competence_generale_id = EXCLUDED.competence_generale_id,
+                competence_id = EXCLUDED.competence_id,
                 langue_id = EXCLUDED.langue_id,
                 interet_id = EXCLUDED.interet_id,
                 certification_id = EXCLUDED.certification_id,
@@ -438,16 +391,13 @@ def load_fact_date(client_fk, secteur_fk, metier_fk, counter, competence_fk,
                 experience_id = EXCLUDED.experience_id,
                 annee_experience = EXCLUDED.annee_experience,
                 mois_experience = EXCLUDED.mois_experience,
-                etude_id = EXCLUDED.etude_id,
-                disponibilite = EXCLUDED.disponibilite,
                 age_client = EXCLUDED.age_client,
                 date_id = EXCLUDED.date_id;
         """, (
-            client_fk, secteur_fk, metier_fk, fact_pk,
+            client_fk, secteur_fk, fact_pk,
             competence_fk, language_fk, interest_fk,
             certification_pk, job_location_pk,
-            project_pk, experience_fk, year, month,
-            study_level_fk, dispo, age, dim_date_pk
+            project_pk, experience_fk, year, month, age, dim_date_pk
         ))
 
         conn.commit()

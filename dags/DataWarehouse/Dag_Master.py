@@ -123,19 +123,6 @@ with DAG(
         wait_for_completion=True
     )
 
-    trigger_metier = TriggerDagRunOperator(
-        task_id="trigger_dag_dim_metier",
-        trigger_dag_id="dag_dim_metier",
-        conf={"manual_trigger": True},
-        wait_for_completion=True
-    )
-
-    trigger_niveau_etudes = TriggerDagRunOperator(
-        task_id="trigger_dag_dim_niveau_etudes",
-        trigger_dag_id="dag_dim_niveau_etudes",
-        conf={"manual_trigger": True},
-        wait_for_completion=True
-    )
 
     trigger_projets = TriggerDagRunOperator(
         task_id='trigger_dag_dim_projet',
@@ -159,7 +146,7 @@ with DAG(
     )
 
     trigger_client_profile = TriggerDagRunOperator(
-    task_id='trigger_dag_fact_client_profile',
+    task_id='trigger_dag_dim_client_profile',
     trigger_dag_id='dag_client_profile',
     conf={"manual_trigger": True},
     wait_for_completion=True
@@ -171,7 +158,7 @@ with DAG(
         dag=dag
     )
     first_layer = [trigger_certifications, trigger_competences, trigger_experience,
-                   trigger_formations, trigger_interet, trigger_langues, trigger_metier, trigger_niveau_etudes,
+                   trigger_formations, trigger_interet, trigger_langues,
                    trigger_projets, trigger_recruteur, trigger_secteur, trigger_services]
     second_layer = [trigger_entreprise, trigger_villes, trigger_universites]
     third_layer = [trigger_offres_emplois, trigger_offres_etude]

@@ -12,7 +12,6 @@ from airflow.models import Variable
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
 def get_mongodb_connection():
     mongo_uri = Variable.get("MONGO_URI")
     mongo_db_name = "PowerBi"
@@ -26,21 +25,6 @@ def get_mongodb_connection():
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
-
-def parse_date(date_value):
-    if isinstance(date_value, dict):
-        year = date_value.get("year")
-        month = date_value.get("month")
-        year = int(year) if isinstance(year, (int, str)) and str(year).isdigit() else None
-        month = int(month) if isinstance(month, (int, str)) and str(month).isdigit() else None
-        return year, month
-    elif isinstance(date_value, str):
-        if re.match(r"^\d{4}-\d{2}$", date_value):
-            year, month = map(int, date_value.split("-"))
-            return year, month
-        elif re.match(r"^\d{4}$", date_value):
-            return int(date_value), None
-    return None, None
 
 def generate_code_experience(pk):
     return f"EXPR{pk:04d}"
@@ -60,7 +44,7 @@ def get_max_experience_pk(cursor):
 
 def load_existing_experiences(cursor):
     cursor.execute("""
-        SELECT experience_id, role_experience, annee_debut, mois_debut, annee_fin, mois_fin, type_contrat
+        SELECT experience_id, role_experience, type_contrat
         FROM public.dim_experience
     """)
     rows = cursor.fetchall()
@@ -68,11 +52,7 @@ def load_existing_experiences(cursor):
     for row in rows:
         key = (
             str(row[1] or '').lower(),
-            str(row[6] or '').lower(),
-            str(row[2] or ''),
-            str(row[3] or ''),
-            str(row[4] or ''),
-            str(row[5] or '')
+            str(row[2] or '').lower()
         )
         mapping[key] = row[0]
     return mapping
@@ -102,16 +82,10 @@ def extract_experiences(**kwargs):
                                     if not role and not type_contrat:
                                         continue
 
-                                    start_year, start_month = parse_date(experience.get("du", ""))
-                                    end_year, end_month = parse_date(experience.get("au", ""))
-
+                                    # Removed start_date and end_date related fields
                                     experience_key = (
                                         str(role or '').lower(),
-                                        str(type_contrat or '').lower(),
-                                        str(start_year or ''),
-                                        str(start_month or ''),
-                                        str(end_year or ''),
-                                        str(end_month or '')
+                                        str(type_contrat or '').lower()
                                     )
                                     if experience_key in seen_experiences:
                                         continue
@@ -123,13 +97,10 @@ def extract_experiences(**kwargs):
                                         current_pk += 1
                                         experience_pk = current_pk
 
+                                    # Removed start_date and end_date logic
                                     filtered_experience = {
                                         "role": role,
                                         "typeContrat": type_contrat,
-                                        "du_year": start_year,
-                                        "du_month": start_month,
-                                        "au_year": end_year,
-                                        "au_month": end_month,
                                         "experience_pk": experience_pk,
                                         "code_experience": generate_code_experience(experience_pk)
                                     }
@@ -149,24 +120,16 @@ def insert_experiences_into_postgres(**kwargs):
     upsert_query = """
         INSERT INTO public.dim_experience (
             experience_id, code_experience, role_experience,
-            annee_debut, mois_debut, annee_fin, mois_fin, type_contrat
+            type_contrat
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s)
         ON CONFLICT (experience_id) DO UPDATE SET
             code_experience = EXCLUDED.code_experience,
             role_experience = EXCLUDED.role_experience,
-            annee_debut = EXCLUDED.annee_debut,
-            mois_debut = EXCLUDED.mois_debut,
-            annee_fin = EXCLUDED.annee_fin,
-            mois_fin = EXCLUDED.mois_fin,
             type_contrat = EXCLUDED.type_contrat
         WHERE (
             dim_experience.role_experience IS DISTINCT FROM EXCLUDED.role_experience OR
-            dim_experience.type_contrat IS DISTINCT FROM EXCLUDED.type_contrat OR
-            dim_experience.annee_debut IS DISTINCT FROM EXCLUDED.annee_debut OR
-            dim_experience.mois_debut IS DISTINCT FROM EXCLUDED.mois_debut OR
-            dim_experience.annee_fin IS DISTINCT FROM EXCLUDED.annee_fin OR
-            dim_experience.mois_fin IS DISTINCT FROM EXCLUDED.mois_fin
+            dim_experience.type_contrat IS DISTINCT FROM EXCLUDED.type_contrat
         );
     """
     with hook.get_conn() as conn:
@@ -176,10 +139,6 @@ def insert_experiences_into_postgres(**kwargs):
                     exp["experience_pk"],
                     exp["code_experience"],
                     exp["role"],
-                    int(exp["du_year"]) if exp["du_year"] else None,
-                    int(exp["du_month"]) if exp["du_month"] else None,
-                    int(exp["au_year"]) if exp["au_year"] else None,
-                    int(exp["au_month"]) if exp["au_month"] else None,
                     exp["typeContrat"]
                 ))
             conn.commit()
@@ -218,4 +177,4 @@ end_task = PythonOperator(
     dag=dag
 )
 
-start_task >> extract_task >> load_task >> end_task 
+start_task >> extract_task >> load_task >> end_task

@@ -24,7 +24,7 @@ def extract_from_offredemplois(offres_col, villes_list=None):
         nom = doc.get("societe", "").strip()
         ville_doc = doc.get("ville", "").strip()
         if nom and (ville_doc in villes_list or not villes_list):
-            entreprises.add((nom, ville_doc, None))
+            entreprises.add((nom, ville_doc, None))  # Removed nombre_employes
     logger.info(f"{len(entreprises)} entreprises extraites de 'offredemplois'.")
     return entreprises
 
@@ -49,28 +49,18 @@ def extract_from_frontusers(frontusers_col):
                     nom = nom.strip() if isinstance(nom, str) else ""
                     pays = pays.strip()
                     if nom:
-                        entreprises.add((nom, "", None))
+                        entreprises.add((nom, "", None))  # Removed nombre_employes
     logger.info(f"{len(entreprises)} entreprises extraites de 'frontusers'.")
     return entreprises
 
 def extract_from_entreprises(entreprises_col):
     entreprises = set()
-    for doc in entreprises_col.find({}, {"nom": 1, "nombreEmployes": 1}):
+    for doc in entreprises_col.find({}, {"nom": 1}):  # Only retrieve "nom"
         nom = doc.get("nom", "").strip()
-        nombre_employes = normalize_nombre_employes(doc.get("nombreEmployes"))
         if nom:
-            entreprises.add((nom, "", nombre_employes))
+            entreprises.add((nom, "", None))  # Removed nombre_employes
     logger.info(f"{len(entreprises)} entreprises extraites de 'entreprises'.")
     return entreprises
-
-def normalize_nombre_employes(nombre_employes):
-    if not nombre_employes:
-        return None
-    try:
-        clean_number = ''.join(c for c in str(nombre_employes) if c.isdigit() or c == '.')
-        return int(float(clean_number))
-    except (ValueError, TypeError):
-        return None
 
 def extract_all_entreprises(ti):
     client, offres_col, frontusers_col, entreprises_col = get_mongo_collections()
@@ -87,15 +77,13 @@ def extract_all_entreprises(ti):
     ]:
         entreprises.update(sources)
     merged_entreprises = {}
-    for nom, ville, nombre_employes in entreprises:
+    for nom, ville, _ in entreprises:  # No longer consider nombre_employes
         if nom not in merged_entreprises:
-            merged_entreprises[nom] = {"ville": "", "nombre_employes": None}
+            merged_entreprises[nom] = {"ville": ""}
         if ville:
             merged_entreprises[nom]["ville"] = ville
-        if nombre_employes is not None:
-            merged_entreprises[nom]["nombre_employes"] = nombre_employes
     client.close()
-    result = [(nom, data["ville"], data["nombre_employes"]) for nom, data in merged_entreprises.items()]
+    result = [(nom, data["ville"], None) for nom, data in merged_entreprises.items()]  # Set nombre_employes to None
     ti.xcom_push(key='entreprises', value=result)
     logger.info(f"{len(result)} entreprises extraites au total.")
 
@@ -123,7 +111,7 @@ def fetch_country_from_osm(city_name, cache):
         return "Error"
 
 def fetch_pays_data(cursor):
-    cursor.execute("SELECT pays_id, nom_pays_en FROM public.dim_pays")
+    cursor.execute("SELECT pays_id, nom_pays FROM public.dim_pays")
     return {country_name.lower(): pays_id for pays_id, country_name in cursor.fetchall()}
 
 def generate_entreprise_code(counter):
@@ -153,7 +141,7 @@ def insert_entreprises(ti):
     existing_names = {row[0].strip().lower() for row in cur.fetchall()}
     osm_cache = {}
     total = 0
-    for nom, ville, nombre_employes in entreprises:
+    for nom, ville, _ in entreprises:  # No longer handle nombre_employes
         nom_clean = nom.strip()
         if not nom_clean or nom_clean.lower() in existing_names:
             continue
@@ -163,18 +151,16 @@ def insert_entreprises(ti):
             pays_id = pays_mapping.get(country.lower())
         codeentreprise = generate_entreprise_code(counter_code)
         cur.execute("""
-            INSERT INTO public.dim_entreprise (entreprise_id, code_entreprise, nom_entreprise, nombre_employes, pays_id)
-            VALUES (%s, %s, %s, %s, %s)
+            INSERT INTO public.dim_entreprise (entreprise_id, code_entreprise, nom_entreprise, pays_id)
+            VALUES (%s, %s, %s, %s)
             ON CONFLICT (nom_entreprise) DO UPDATE
             SET 
                 code_entreprise = EXCLUDED.code_entreprise,
-                nombre_employes = COALESCE(EXCLUDED.nombre_employes, dim_entreprise.nombre_employes),
                 pays_id = COALESCE(EXCLUDED.pays_id, dim_entreprise.pays_id);
         """, (
             counter_pk,
             codeentreprise,
             nom_clean,
-            nombre_employes,
             pays_id
         ))
         counter_pk += 1

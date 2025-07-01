@@ -43,7 +43,7 @@ def convert_bson(value):
 
 def load_dim_pays(conn):
     cur = conn.cursor()
-    cur.execute("SELECT pays_id, nom_pays_en FROM public.dim_pays;")
+    cur.execute("SELECT pays_id, nom_pays FROM public.dim_pays;")
     rows = cur.fetchall()
     cur.close()
     return {label.lower(): pk for pk, label in rows if label}
@@ -90,15 +90,12 @@ def transform_data(**kwargs):
             "matricule": matricule,
             "nom": record.get("nom"),
             "prenom": record.get("prenom"),
-            "birthdate": profile_data.get("birthDate"),
             "nationality": profile_data.get("nationality"),
             "pays": pays_id,
             "situation": profile_data.get("situation"),
             "etatcivile": profile_data.get("etatCivil"),
-            "photo": record.get("google_Photo", profile_data.get("google_Photo")),
             "niveau_etude_actuelle": profile_data.get("niveauDetudeActuel"),
-            "gender": profile_data.get("gender"),
-            "profileType": profile_data.get("profileType"),
+            "gender": profile_data.get("gender")
         })
 
     conn.close()
@@ -108,28 +105,7 @@ def transform_data(**kwargs):
 
     kwargs['ti'].xcom_push(key='transformed_clients', value=transformed)
 
-def get_date_id_from_dim_dates(date_value, conn):
-    cur = conn.cursor()
-    formatted_date = None
-    if isinstance(date_value, str):
-        try:
-            dt = datetime.fromisoformat(date_value)
-            formatted_date = dt.strftime('%Y-%m-%d')
-        except Exception:
-            formatted_date = date_value
-    elif isinstance(date_value, datetime):
-        formatted_date = date_value.strftime('%Y-%m-%d')
 
-    if not formatted_date:
-        cur.close()
-        return None, None
-
-    cur.execute("SELECT date_id, code_date FROM public.dim_dates WHERE code_date = %s", (formatted_date,))
-    date_data = cur.fetchone()
-    cur.close()
-    if date_data:
-        return date_data[0], date_data[1]
-    return None, None
 
 def load_data(**kwargs):
     data = kwargs['ti'].xcom_pull(task_ids='transform_data', key='transformed_clients')
@@ -140,44 +116,33 @@ def load_data(**kwargs):
     cur = conn.cursor()
     insert_query = """
     INSERT INTO dim_client (
-        client_id, matricule_client, nom_client, prenom_client, date_naissance, nationalite,
-        pays_residence, situation, etat_civil, photo_client, niveau_etudes_actuel,sexe,type_de_profil
-    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s, %s, %s ,%s,%s)
+        client_id, matricule_client, nom_client, prenom_client, nationalite,
+        pays_residence, situation, etat_civil, niveau_etudes_actuel,sexe
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s ,%s)
     ON CONFLICT (matricule_client) DO UPDATE SET
         matricule_client = EXCLUDED.matricule_client,
         nom_client = EXCLUDED.nom_client,
         prenom_client = EXCLUDED.prenom_client,
-        date_naissance = EXCLUDED.date_naissance,
         nationalite = EXCLUDED.nationalite,
         pays_residence = EXCLUDED.pays_residence,
         situation = EXCLUDED.situation,
         etat_civil = EXCLUDED.etat_civil,
-        photo_client = EXCLUDED.photo_client,
         niveau_etudes_actuel = EXCLUDED.niveau_etudes_actuel,
-        sexe = EXCLUDED.sexe,
-        type_de_profil = EXCLUDED.type_de_profil
+        sexe = EXCLUDED.sexe
     """
     inserted_count = 0
     for row in data:
-        birthdate = row.get("birthdate")
-        date_id = None
-        if birthdate:
-            date_id, _ = get_date_id_from_dim_dates(birthdate, conn)
-        # On insère None (NULL en PG) si date_id introuvable ou birthdate manquante
         cur.execute(insert_query, (
             row["client_pk"],
             row["matricule"],
             row.get("nom"),
             row.get("prenom"),
-            date_id,
             row.get("nationality"),
             row.get("pays"),
             row.get("situation"),
             row.get("etatcivile"),
-            row.get("photo"),
             row.get("niveau_etude_actuelle"),
-            row.get("gender"),
-            row.get("profileType")
+            row.get("gender")
         ))
         inserted_count += 1
     conn.commit()

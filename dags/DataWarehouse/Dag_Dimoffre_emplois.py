@@ -44,13 +44,6 @@ def get_secteur_map(cursor):
     except Exception as e:
         return {}
 
-def get_metier_map(cursor):
-    try:
-        cursor.execute("SELECT metier_id, LOWER(nom_metier) FROM public.dim_metier;")
-        return {label: pk for pk, label in cursor.fetchall()}
-    except Exception as e:
-        return {}
-
 def get_entreprise_map(cursor):
     try:
         cursor.execute("SELECT entreprise_id, LOWER(nom_entreprise) FROM public.dim_entreprise;")
@@ -91,7 +84,6 @@ def extract_offres_from_mongo():
                 "titre": doc.get("titre", "").strip(),
                 "entreprise": doc.get("entreprise"),
                 "secteur": doc.get("secteur"),
-                "metier": doc.get("metier", []),
                 "typeContrat": doc.get("typeContrat", "—"),
                 "societe": doc.get("societe", "—"),
                 "lieuSociete": doc.get("lieuSociete", "—"),
@@ -114,7 +106,6 @@ def get_last_offre_id(cursor):
 def transform_offres(raw_offres, cursor):
     try:
         secteur_map = get_secteur_map(cursor)
-        metier_map = get_metier_map(cursor)
         entreprise_map = get_entreprise_map(cursor)
         country_map = get_country_map(cursor)
         last_id = get_last_offre_id(cursor)
@@ -127,23 +118,15 @@ def transform_offres(raw_offres, cursor):
                 continue
             seen_titles.add(titre.lower())
             offre_code = f"OFFR{str(counter).zfill(4)}"
-            secteur_fk = metier_fk = entreprise_fk = None
+            secteur_fk = entreprise_fk = None
             entreprise_fk = entreprise_map.get(doc["societe"].strip().lower())
             secteur_id = doc.get("secteur")
-            metier_ids = doc.get("metier", [])
-            if not isinstance(metier_ids, list):
-                metier_ids = [metier_ids]
             if secteur_id and ObjectId.is_valid(secteur_id):
                 client, _, secteurs_col = get_mongo_collections()
                 secteur_doc = secteurs_col.find_one({"_id": ObjectId(secteur_id)})
                 if secteur_doc:
                     label = secteur_doc.get("label", "").strip().lower()
                     secteur_fk = secteur_map.get(label)
-                    for job in secteur_doc.get("jobs", []):
-                        if str(job.get("_id")) in metier_ids:
-                            metier_label = job.get("label", "").strip().lower()
-                            metier_fk = metier_map.get(metier_label)
-                            break
             city_name = doc.get("lieuSociete", "").strip()
             country = fetch_country_from_osm(city_name) if city_name else "Unknown"
             country_id = country_map.get(country.lower(), None)
@@ -153,7 +136,6 @@ def transform_offres(raw_offres, cursor):
                 "offre_code": offre_code,
                 "titre": titre,
                 "secteur_fk": secteur_fk,
-                "metier_fk": metier_fk,
                 "entreprise_fk": entreprise_fk,
                 "typeContrat": doc["typeContrat"],
                 "pays_id": country_id,
@@ -172,25 +154,23 @@ def load_offres_to_postgres(transformed_offres, cursor, conn):
                 offre.get('offre_code'),
                 offre.get('titre'),
                 offre.get('secteur_fk', None),
-                offre.get('metier_fk', None),
                 offre.get('entreprise_fk', None),
                 offre.get('typeContrat'),
                 offre.get('pays_id'),
                 offre.get('niveauDexperience', "—")
             )
-            if len(record) != 9:
+            if len(record) != 8:
                 continue
             cursor.execute("""
                 INSERT INTO public.dim_offre_emploi (
-                    offre_emploi_id, code_offre_emploi, titre_offre_emploi, secteur_id, metier_id, entreprise_id,
+                    offre_emploi_id, code_offre_emploi, titre_offre_emploi, secteur_id, entreprise_id,
                     type_contrat_emploi, pays_emploi, niveau_experience
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                 ON CONFLICT (offre_emploi_id) DO UPDATE SET
                     code_offre_emploi = EXCLUDED.code_offre_emploi,
                     titre_offre_emploi = EXCLUDED.titre_offre_emploi,
                     secteur_id = EXCLUDED.secteur_id,
-                    metier_id = EXCLUDED.metier_id,
                     entreprise_id = EXCLUDED.entreprise_id,
                     type_contrat_emploi = EXCLUDED.type_contrat_emploi,
                     pays_emploi = EXCLUDED.pays_emploi,
@@ -200,7 +180,6 @@ def load_offres_to_postgres(transformed_offres, cursor, conn):
     except Exception as e:
         logger.error(f"Erreur insertion en base: {e}")
         raise
-
 
 dag = DAG(
     dag_id='dag_dim_offre_emplois',
@@ -266,4 +245,4 @@ end_task = PythonOperator(
     dag=dag
 )
 
-start_task>> extract >> transform >> load >> end_task
+start_task >> extract >> transform >> load >> end_task

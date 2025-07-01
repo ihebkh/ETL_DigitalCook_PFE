@@ -37,7 +37,7 @@ def generate_university_code(cursor):
     return f"univ{str(new_number).zfill(4)}"
 
 def fetch_pays_data(cursor):
-    cursor.execute("SELECT pays_id, nom_pays_en FROM public.dim_pays")
+    cursor.execute("SELECT pays_id, nom_pays FROM public.dim_pays")
     pays_data = cursor.fetchall()
     return {country_name.lower(): pays_id for pays_id, country_name in pays_data}
 
