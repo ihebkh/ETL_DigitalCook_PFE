@@ -85,9 +85,25 @@ dag = DAG(
     schedule_interval=None
 )
 
+start_task = PythonOperator(
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting region extraction process..."),
+    dag=dag
+)
+
+
+
 load_task = PythonOperator(
     task_id='load_dim_dates',
     python_callable=load_dim_dates_to_postgres,
     provide_context=True,
     dag=dag
 )
+
+end_task = PythonOperator(
+    task_id='end_task',
+    python_callable=lambda: logger.info("Region extraction process completed."),
+    dag=dag
+)
+
+start_task >> load_task >> end_task

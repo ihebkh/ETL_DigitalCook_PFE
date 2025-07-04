@@ -9,13 +9,12 @@ from datetime import datetime
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     conn = hook.get_conn()
     logger.info("PostgreSQL connection successful.")
     return conn
-
-
 
 def get_mongodb_connection():
     MONGO_URI = Variable.get("MONGO_URI")
@@ -26,7 +25,6 @@ def get_mongodb_connection():
     collection = mongo_db[MONGO_COLLECTION]
     logger.info("MongoDB connection successful.")
     return client, mongo_db, collection
-
 
 def generate_university_code(cursor):
     cursor.execute("SELECT MAX(CAST(SUBSTRING(code_universite FROM 5) AS INTEGER)) FROM public.dim_universite WHERE code_universite LIKE 'univ%'")
@@ -41,6 +39,7 @@ def fetch_pays_data(cursor):
     pays_data = cursor.fetchall()
     return {country_name.lower(): pays_id for pays_id, country_name in pays_data}
 
+
 def extract_universities(**kwargs):
     client, _, collection = get_mongodb_connection()
     universities = []
@@ -53,11 +52,30 @@ def extract_universities(**kwargs):
     kwargs['ti'].xcom_push(key='universities', value=universities)
     logger.info(f"{len(universities)} universities extracted.")
 
-def load_universities_to_postgres(**kwargs):
+
+def transform_universities(**kwargs):
     universities = kwargs['ti'].xcom_pull(task_ids='extract_universities', key='universities')
+    if not universities:
+        logger.warning("No universities to transform.")
+        return []
+
+    transformed_universities = []
+    for university in universities:
+        nom = university['nom'].strip().title() 
+        pays = university['pays'].strip().title()  
+        transformed_universities.append({"nom": nom, "pays": pays})
+
+    logger.info(f"{len(transformed_universities)} universities transformed.")
+    kwargs['ti'].xcom_push(key='transformed_universities', value=transformed_universities)
+    return transformed_universities
+
+
+def load_universities_to_postgres(**kwargs):
+    universities = kwargs['ti'].xcom_pull(task_ids='transform_universities_task', key='transformed_universities')
     if not universities:
         logger.info("No universities to insert.")
         return
+
     conn = get_postgres_connection()
     cursor = conn.cursor()
     pays_mapping = fetch_pays_data(cursor)
@@ -88,36 +106,51 @@ def load_universities_to_postgres(**kwargs):
     conn.close()
     logger.info(f"{inserted_count} universities inserted or updated in PostgreSQL.")
 
-dag = DAG(
-    'dag_dim_universites',
-    start_date=datetime(2025, 1, 1),
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2025, 1, 1),
+    'retries': 1,
+}
+
+with DAG(
+    dag_id='dag_dim_universites',
+    default_args=default_args,
     catchup=False,
     schedule_interval=None
-)
+) as dag:
 
-extract_task = PythonOperator(
-    task_id='extract_universities',
-    python_callable=extract_universities,
-    provide_context=True,
-    dag=dag,
-)
+    start_task = PythonOperator(
+        task_id='start_task',
+        python_callable=lambda: logger.info("Starting university extraction process..."),
+        dag=dag
+    )
 
-load_task = PythonOperator(
-    task_id='load_universities',
-    python_callable=load_universities_to_postgres,
-    provide_context=True,
-    dag=dag,
-)
+    extract_task = PythonOperator(
+        task_id='extract_universities',
+        python_callable=extract_universities,
+        provide_context=True,
+        dag=dag
+    )
 
-start_task = PythonOperator(
-    task_id='start_task',
-    python_callable=lambda: logger.info("Starting university extraction process..."),
-    dag=dag
-)
-end_task = PythonOperator(
-    task_id='end_task',
-    python_callable=lambda: logger.info("University extraction process completed."),
-    dag=dag
-)
+    transform_task = PythonOperator(
+        task_id='transform_universities_task',
+        python_callable=transform_universities,
+        provide_context=True,
+        dag=dag
+    )
 
-start_task >> extract_task >> load_task >> end_task
+    load_task = PythonOperator(
+        task_id='load_universities',
+        python_callable=load_universities_to_postgres,
+        provide_context=True,
+        dag=dag
+    )
+
+    end_task = PythonOperator(
+        task_id='end_task',
+        python_callable=lambda: logger.info("University extraction process completed."),
+        dag=dag
+    )
+
+    start_task >> extract_task >> transform_task >> load_task >> end_task

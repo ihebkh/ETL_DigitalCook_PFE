@@ -6,15 +6,12 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.models import Variable
 
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
-
-
 
 def get_mongodb_connection():
     MONGO_URI = Variable.get("MONGO_URI")
@@ -52,13 +49,15 @@ def generate_service_with_pk():
     return service_details
 
 def transform(service_details):
-    seen_service_pks = set()
+    seen_service_pks = set()  
     unique_services = []
+
     for service in service_details:
         if service['service_pk'] not in seen_service_pks:
-            unique_services.append(service)
-            seen_service_pks.add(service['service_pk'])
-    return unique_services
+            unique_services.append(service) 
+            seen_service_pks.add(service['service_pk']) 
+
+    return unique_services  
 
 def check_service_exists(cursor, nom_service):
     cursor.execute("""SELECT 1 FROM public.dim_service WHERE nom_service = %s""", (nom_service,))
@@ -67,10 +66,10 @@ def check_service_exists(cursor, nom_service):
 def insert_or_update_postgres(service_details):
     conn = get_postgres_connection()
     cursor = conn.cursor()
-    unique_service_details = transform(service_details)
+    unique_service_details = transform(service_details) 
     for service in unique_service_details:
         if not check_service_exists(cursor, service['nomService']):
-            cursor.execute("""
+            cursor.execute(""" 
                 INSERT INTO public.dim_service (service_id, code_service, nom_service)
                 VALUES (%s, %s, %s)
                 ON CONFLICT (service_id)
@@ -89,16 +88,28 @@ def extract_services(**kwargs):
     kwargs['ti'].xcom_push(key='service_details', value=service_details)
     logger.info(f"{len(service_details)} services extraits.")
 
-def load_services_to_postgres(**kwargs):
+def transform_services(**kwargs):
     service_details = kwargs['ti'].xcom_pull(task_ids='extract_services', key='service_details')
-    insert_or_update_postgres(service_details)
-    logger.info(f"{len(service_details)} services insérés ou mis à jour dans PostgreSQL.")
+    transformed_services = transform(service_details)  
+    kwargs['ti'].xcom_push(key='transformed_services', value=transformed_services)
+    logger.info(f"{len(transformed_services)} services après transformation.")
+
+def load_services_to_postgres(**kwargs):
+    transformed_services = kwargs['ti'].xcom_pull(task_ids='transform_services', key='transformed_services')
+    insert_or_update_postgres(transformed_services)
+    logger.info(f"{len(transformed_services)} services insérés ou mis à jour dans PostgreSQL.")
 
 dag = DAG(
     'dag_dim_service',
     start_date=datetime(2025, 1, 1),
     catchup=False,
     schedule_interval=None
+)
+
+start_task = PythonOperator(
+    task_id='start_task',
+    python_callable=lambda: logger.info("Starting region extraction process..."),
+    dag=dag
 )
 
 extract_task = PythonOperator(
@@ -108,17 +119,18 @@ extract_task = PythonOperator(
     dag=dag,
 )
 
+transform_task = PythonOperator(
+    task_id='transform_services',
+    python_callable=transform_services,
+    provide_context=True,
+    dag=dag
+)
+
 load_task = PythonOperator(
-    task_id='load_services_to_postgres',
+    task_id='load_services',
     python_callable=load_services_to_postgres,
     provide_context=True,
     dag=dag,
-)
-
-start_task = PythonOperator(
-    task_id='start_task',
-    python_callable=lambda: logger.info("Starting region extraction process..."),
-    dag=dag
 )
 
 end_task = PythonOperator(
@@ -127,4 +139,4 @@ end_task = PythonOperator(
     dag=dag
 )
 
-start_task >> extract_task >> load_task >> end_task
+start_task >> extract_task >> transform_task >> load_task >> end_task

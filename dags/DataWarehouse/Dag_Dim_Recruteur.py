@@ -9,6 +9,7 @@ from airflow.models import Variable
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def get_postgres_connection():
     hook = PostgresHook(postgres_conn_id='postgres')
     return hook.get_conn()
@@ -29,6 +30,7 @@ def get_next_users_pk(cursor):
 
 def generate_codeusers(index):
     return f"influ{index:04d}"
+
 
 def extract_users(**kwargs):
     try:
@@ -73,66 +75,103 @@ def extract_users(**kwargs):
         logger.error(f"Erreur lors de l'extraction des utilisateurs: {str(e)}")
         raise
 
+
+def transform_users(**kwargs):
+    users_data = kwargs['ti'].xcom_pull(task_ids='extract_users', key='users_data')
+    if not users_data:
+        logger.warning("Aucune donnée à transformer.")
+        return []
+
+    transformed_users = []
+
+    for user in users_data:
+        index, codeinflu, nom, prenom, privilege_label = user
+
+        nom = nom.strip()
+        prenom = prenom.strip()
+        privilege_label = privilege_label.strip()
+
+        nom = nom.upper()
+        prenom = prenom.upper()
+
+        transformed_users.append((index, codeinflu, nom, prenom, privilege_label))
+
+    logger.info(f"{len(transformed_users)} utilisateurs transformés.")
+    kwargs['ti'].xcom_push(key='transformed_users_data', value=transformed_users)
+    return transformed_users
+
+
 def insert_users_to_dim_users(**kwargs):
+    users_data = kwargs['ti'].xcom_pull(task_ids='transform_users_task', key='transformed_users_data')
+    if not users_data:
+        logger.warning("Aucun utilisateur transformé à insérer.")
+        return
+
+    conn = get_postgres_connection()
     try:
-        users = kwargs['ti'].xcom_pull(task_ids='extract_users', key='users_data')
-        if not users:
-            logger.info("Aucun nouvel utilisateur à insérer.")
-            return
-
-        conn = get_postgres_connection()
-        cursor = conn.cursor()
-
-        insert_query = """
-            INSERT INTO dim_recruteur (
-                recruteur_id, code_recruteur, nom_recruteur, prenom_recruteur, privilege_recruteur
-            )
-            VALUES (%s, %s, %s, %s, %s)
-            ON CONFLICT (recruteur_id) DO UPDATE SET
-                code_recruteur = EXCLUDED.code_recruteur,
-                nom_recruteur = EXCLUDED.nom_recruteur,
-                prenom_recruteur = EXCLUDED.prenom_recruteur,
-                privilege_recruteur = EXCLUDED.privilege_recruteur;
-        """
-
-        for user in users:
-            cursor.execute(insert_query, user)
-
-        conn.commit()
-        cursor.close()
+        with conn.cursor() as cursor:
+            insert_query = """
+                INSERT INTO dim_recruteur (
+                    recruteur_id, code_recruteur, nom_recruteur, prenom_recruteur, privilege_recruteur
+                )
+                VALUES (%s, %s, %s, %s, %s)
+                ON CONFLICT (recruteur_id) DO UPDATE SET
+                    code_recruteur = EXCLUDED.code_recruteur,
+                    nom_recruteur = EXCLUDED.nom_recruteur,
+                    prenom_recruteur = EXCLUDED.prenom_recruteur,
+                    privilege_recruteur = EXCLUDED.privilege_recruteur;
+            """
+            cursor.executemany(insert_query, users_data)
+            conn.commit()
+            logger.info(f"{len(users_data)} utilisateurs insérés ou mis à jour dans PostgreSQL.")
+    finally:
         conn.close()
-        logger.info(f"{len(users)} utilisateurs insérés/mis à jour dans PostgreSQL.")
-    except Exception as e:
-        logger.error(f"Erreur lors de l'insertion des utilisateurs: {str(e)}")
-        raise
+
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': datetime(2025, 1, 1),
+    'retries': 1,
+}
 
 with DAG(
     dag_id='Dag_dim_recruteur',
-    start_date=datetime(2025, 1, 1),
+    default_args=default_args,
     catchup=False,
     schedule_interval=None
 ) as dag:
 
     start_task = PythonOperator(
         task_id='start_task',
-        python_callable=lambda: logger.info("Démarrage du processus d'extraction des recruteurs...")
+        python_callable=lambda: logger.info("Démarrage du processus d'extraction des recruteurs..."),
+        dag=dag
     )
 
     extract_task = PythonOperator(
         task_id='extract_users',
         python_callable=extract_users,
-        provide_context=True
+        provide_context=True,
+        dag=dag
+    )
+
+    transform_task = PythonOperator(
+        task_id='transform_task',
+        python_callable=transform_users,
+        provide_context=True,
+        dag=dag
     )
 
     load_task = PythonOperator(
-        task_id='load_users_to_postgres',
+        task_id='insert_task',
         python_callable=insert_users_to_dim_users,
-        provide_context=True
+        provide_context=True,
+        dag=dag
     )
 
     end_task = PythonOperator(
         task_id='end_task',
-        python_callable=lambda: logger.info("Processus d'extraction des recruteurs terminé.")
+        python_callable=lambda: logger.info("Processus d'extraction des recruteurs terminé."),
+        dag=dag
     )
 
-    start_task >> extract_task >> load_task >> end_task
+    start_task >> extract_task >> transform_task >> load_task >> end_task

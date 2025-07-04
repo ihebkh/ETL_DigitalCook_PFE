@@ -18,11 +18,11 @@ for row in table.find_all("tr")[1:]:
         raw_country = cols[0].text.strip()
         raw_code = cols[1].text.strip()
 
-        # Nettoyage de la colonne "country"
+      
         clean_country = re.sub(r'\[.*?\]', '', raw_country)
         clean_country = re.sub(r'\(.*?\)', '', clean_country).strip()
 
-        # Nettoyage de la colonne "alpha2_code"
+   
         clean_code = re.sub(r'\[.*?\]', '', raw_code)
         clean_code = re.sub(r'\(.*?\)', '', clean_code).strip().upper()
 
@@ -50,6 +50,6 @@ operations = [
 
 if operations:
     result = collection.bulk_write(operations)
-    print(f"✅ MongoDB : {result.upserted_count} insérés, {result.modified_count} mis à jour.")
+    print(f" MongoDB : {result.upserted_count} insérés, {result.modified_count} mis à jour.")
 else:
-    print("⚠️ Aucune opération MongoDB effectuée.")
+    print(" Aucune opération MongoDB effectuée.")
