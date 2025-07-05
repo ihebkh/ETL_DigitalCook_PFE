@@ -29,10 +29,6 @@ def get_next_dossier_pk(pg_cursor):
     last_id = pg_cursor.fetchone()[0]
     return last_id + 1
 
-def get_service_pk_from_nom_service(pg_cursor, nom_service):
-    pg_cursor.execute("SELECT service_id FROM public.dim_service WHERE nom_service = %s", (nom_service,))
-    result = pg_cursor.fetchone()
-    return result[0] if result else None
 
 def load_ville_mapping(pg_cursor):
     pg_cursor.execute("SELECT LOWER(nom_pays), pays_id FROM public.dim_pays")
@@ -87,7 +83,7 @@ def get_offre_pk_from_id(oid, mongo_collection, titre_to_pk):
     doc = mongo_collection.find_one({"_id": ObjectId(oid)})
     if not doc:
         return None, None, None
-    titre = (doc.get("titre") or doc.get("titreFormation") or "").strip().lower()
+    titre = (doc.get("titre") or "").strip().lower()
     min_salaire = doc.get("minSalaire")
     max_salaire = doc.get("maxSalaire")
     return titre_to_pk.get(titre, None), min_salaire, max_salaire
@@ -97,13 +93,8 @@ def get_services_for_dossier(dossier_id, factures_collection, pg_cursor):
     if not facture or "services" not in facture:
         return []
     
-    result = []
-    for s in facture["services"]:
-        nom_service = s.get("nomService")
-        service_pk = get_service_pk_from_nom_service(pg_cursor, nom_service)
-        prix = s.get("prix")
-        result.append((service_pk, prix))
-    return result
+    return [s.get("prix") for s in facture["services"]]
+
 
 def get_formation_title_and_price_by_id(formation_id, formations_collection):
     formation_object_id = ObjectId(formation_id)
@@ -190,19 +181,18 @@ def get_formation_pk_by_title(titre_formation, pg_cursor):
 def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_step, type_de_contrat,
                          influencer_pk, destination_pk, date_depart_pk,
                          offre_emploi_step2, offre_etude_step2,
-                         offre_emploi_step4, offre_etude_step4, service_pk, service_prix,
+                         offre_emploi_step4, offre_etude_step4, service_prix,
                          formation_pk, formation_prix, created_at, updated_at, minSalaire, maxSalaire,
                          status):
     pg_cursor.execute("""
         INSERT INTO public.fact_recrutement(
             dossier_id, client_id, code_fact, etape_actuelle, type_contrat, recruteur_id, destination_id, date_depart_id,
-            offre_emploi_step2_id, offre_etude_step2_id, offre_emploi_step4_id, offre_etude_step4_id,
-            service_id, service_prix, formation_id, prix_formation, date_creation, date_mise_a_jour,
+            offre_emploi_step2_id, offre_etude_step2_id, offre_emploi_step4_id, offre_etude_step4_id
+                      , service_prix, formation_id, prix_formation, date_creation, date_mise_a_jour,
             minsalaire, maxsalaire,
             status
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (dossier_id) DO UPDATE SET
             client_id = EXCLUDED.client_id,
             code_fact = EXCLUDED.code_fact,
@@ -215,7 +205,6 @@ def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_ste
             offre_etude_step2_id = EXCLUDED.offre_etude_step2_id,
             offre_emploi_step4_id = EXCLUDED.offre_emploi_step4_id,
             offre_etude_step4_id = EXCLUDED.offre_etude_step4_id,
-            service_id = EXCLUDED.service_id,
             service_prix = EXCLUDED.service_prix,
             formation_id = EXCLUDED.formation_id,
             prix_formation = EXCLUDED.prix_formation,
@@ -231,7 +220,7 @@ def upsert_fact_dossier(pg_cursor, dossier_pk, client_pk, fact_code, current_ste
         offre_etude_step2[0] if isinstance(offre_etude_step2, tuple) else offre_etude_step2,
         offre_emploi_step4[0] if isinstance(offre_emploi_step4, tuple) else offre_emploi_step4,
         offre_etude_step4[0] if isinstance(offre_etude_step4, tuple) else offre_etude_step4,
-        service_pk, service_prix,
+          service_prix,
         formation_pk, formation_prix, created_at, updated_at,
         minSalaire, maxSalaire,
         status
@@ -413,9 +402,7 @@ def extract_fields():
             offre_emploi_step4 = offres_emploi_step4[i] if i < len(offres_emploi_step4) else None
             offre_etude_step4 = offres_etude_step4[i] if i < len(offres_etude_step4) else None
 
-            service_pk = services_info[i][0] if i < len(services_info) else None
-            service_prix = services_info[i][1] if i < len(services_info) else None
-         
+            service_prix = services_info[i] if i < len(services_info) else None
 
             upsert_fact_dossier(
                 pg_cursor,
@@ -431,7 +418,6 @@ def extract_fields():
                 offre_etude_step2,
                 offre_emploi_step4,
                 offre_etude_step4,
-                service_pk,
                 service_prix,
                 formation_pk,
                 formation_prix_value,

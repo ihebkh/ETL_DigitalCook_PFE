@@ -79,7 +79,7 @@ def transform_offres(**context):
     
     for offre in offres_data:
         offre_etude_pk, code_offre, titre, universite_pk = offre
-        titre_transformed = f"Offre d'étude - {titre}" 
+        titre_transformed = titre
         transformed_rows.append((offre_etude_pk, code_offre, titre_transformed, universite_pk))
 
     logger.info(f"{len(transformed_rows)} offres transformées.")
